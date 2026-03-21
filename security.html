@@ -1,521 +1,593 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Plata Tech Security | Sistemas de seguridad profesionales. Cámaras Hikvision, alarmas y domótica en Santo Domingo." />
-  <title>Plata Tech Security — Seguridad Inteligente para tu Hogar y Negocio</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Plata Tech Security - Camaras Hikvision ColorVu, alarmas, CCTV y control de acceso. Instalacion profesional en Santo Domingo."/>
+  <title>Plata Tech Security | Seguridad Inteligente</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700&family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet"/>
 
   <style>
-    /* ═══════════════════════════════════════════════════════
-       VARIABLES
-    ═══════════════════════════════════════════════════════ */
-    :root {
-      --bg:          #05080f;
-      --bg-2:        #09101e;
-      --bg-3:        #0e1628;
-      --bg-card:     rgba(255,255,255,0.04);
+  :root {
+    --navy:        #0b1d3e;
+    --navy-2:      #0f2450;
+    --navy-3:      #162d5e;
+    --navy-4:      #1a3470;
+    --blue:        #1e50d4;
+    --blue-2:      #3b6ef6;
+    --blue-3:      #6090ff;
+    --blue-pale:   rgba(30,80,212,.12);
+    --blue-border: rgba(59,110,246,.25);
 
-      --gold:        #D4A843;
-      --gold-light:  #F0D470;
-      --gold-bright: #FFE899;
-      --silver:      #C4C4E4;
-      --silver-light:#E8E8FF;
-      --chrome:      linear-gradient(135deg, #D4A843 0%, #F0D470 20%, #C4C4E0 40%, #E8E8FF 55%, #C4C4E0 70%, #F0D470 80%, #D4A843 100%);
+    --white:       #ffffff;
+    --text:        rgba(255,255,255,.92);
+    --text-mid:    rgba(255,255,255,.6);
+    --text-dim:    rgba(255,255,255,.35);
 
-      --blue:        #3b82f6;
-      --blue-light:  #60a5fa;
-      --blue-bright: #93c5fd;
+    --gold:        #c8922a;
+    --gold-l:      #e6aa3c;
+    --gold-pale:   rgba(200,146,42,.12);
+    --gold-border: rgba(200,146,42,.25);
 
-      --text:        #F2F4FC;
-      --text-mid:    rgba(242,244,252,0.68);
-      --text-dim:    rgba(242,244,252,0.35);
+    --border-b:    rgba(255,255,255,.09);
 
-      --nav-h:       72px;
-      --r:           1.25rem;
-    }
+    --r:           14px;
+    --nav-h:       70px;
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; scroll-padding-top: var(--nav-h); }
-    body {
-      font-family: 'Inter', system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-    }
-    a { color: inherit; text-decoration: none; }
-    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    --shadow-blue: 0 8px 32px rgba(30,80,212,.35);
+    --shadow-lg:   0 20px 60px rgba(0,0,0,.4);
 
-    /* Canvas */
-    #particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.5; }
+    --chrome: linear-gradient(135deg,
+      #c8922a 0%, #e6aa3c 20%, #9ab4ff 40%,
+      #d0d8ff 55%, #9ab4ff 70%, #e6aa3c 85%, #c8922a 100%);
+  }
 
-    /* ═══════════════════════════════════════════════════════
-       UTILS
-    ═══════════════════════════════════════════════════════ */
-    .container { max-width: 1160px; margin-inline: auto; padding-inline: 1.5rem; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: var(--nav-h); }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--navy);
+    color: var(--text);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    cursor: none;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: none; border: none; background: none; }
 
-    /* Chrome border */
-    .chrome-border { position: relative; z-index: 0; }
-    .chrome-border::before {
-      content: ''; position: absolute; inset: -1.5px;
-      border-radius: inherit;
-      background: var(--chrome); background-size: 300% 300%;
-      animation: chromeShimmer 8s ease infinite;
-      z-index: -1; opacity: 0.4; transition: opacity 0.4s;
-    }
-    .chrome-border:hover::before { opacity: 0.9; animation-duration: 3s; }
-    @keyframes chromeShimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+  /* ── Custom Cursor ────────────────────────────────────── */
+  .cur {
+    position: fixed; width: 9px; height: 9px;
+    background: var(--blue-2); border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%,-50%);
+    transition: width .2s, height .2s, background .2s;
+  }
+  .cur-ring {
+    position: fixed; width: 38px; height: 38px;
+    border: 1.5px solid rgba(59,110,246,.4);
+    border-radius: 50%; pointer-events: none; z-index: 9998;
+    transform: translate(-50%,-50%);
+    transition: width .35s, height .35s, border-color .25s;
+  }
+  body:has(a:hover) .cur, body:has(button:hover) .cur { width: 14px; height: 14px; background: var(--gold); }
+  body:has(a:hover) .cur-ring, body:has(button:hover) .cur-ring { width: 52px; height: 52px; border-color: rgba(200,146,42,.4); }
+  @media (hover: none) { .cur, .cur-ring { display: none; } body { cursor: auto; } button { cursor: pointer; } }
 
-    .text-gold {
-      background: linear-gradient(135deg, var(--gold), var(--gold-light), var(--gold-bright));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
-    .text-blue {
-      background: linear-gradient(135deg, var(--blue), var(--blue-light), var(--blue-bright));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
-    .text-chrome {
-      background: var(--chrome); background-size: 300% 300%;
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      animation: chromeShimmer 6s ease infinite;
-    }
+  /* ── FOUC prevention ──────────────────────────────────── */
+  #heroBadge, #heroTitle, #heroDesc, #heroBtns { opacity: 0; transform: translateY(20px); }
+  #heroStats .hstat { opacity: 0; transform: translateY(30px); }
+  [data-reveal] { opacity: 0; transform: translateY(40px); }
+  .pcard { opacity: 0; transform: translateY(50px); }
+  .wcard { opacity: 0; transform: translateY(40px); }
 
-    /* Buttons */
-    .btn {
-      display: inline-flex; align-items: center; gap: 0.55rem;
-      padding: 0.85rem 2rem; border-radius: 3rem;
-      font-size: 0.92rem; font-weight: 600; letter-spacing: 0.01em;
-      transition: all 0.3s ease; cursor: pointer; white-space: nowrap;
-    }
-    .btn-gold {
-      background: linear-gradient(135deg, var(--gold), #B88C2A);
-      color: #05080f;
-      box-shadow: 0 4px 24px rgba(212,168,67,0.35);
-    }
-    .btn-gold:hover { transform: translateY(-3px); box-shadow: 0 8px 36px rgba(212,168,67,0.5); }
-    .btn-wa {
-      background: linear-gradient(135deg, #25D366, #128C7E);
-      color: #fff;
-      box-shadow: 0 4px 24px rgba(37,211,102,0.3);
-    }
-    .btn-wa:hover { transform: translateY(-3px); box-shadow: 0 8px 36px rgba(37,211,102,0.45); }
-    .btn-outline {
-      border: 1.5px solid rgba(242,244,252,0.2); color: var(--text-mid);
-    }
-    .btn-outline:hover { border-color: var(--gold); color: var(--gold-light); transform: translateY(-3px); }
+  /* ── Container ─────────────────────────────────────────── */
+  .container { max-width: 1140px; margin-inline: auto; padding-inline: 1.5rem; }
 
-    /* Eyebrow */
-    .eyebrow {
-      display: inline-flex; align-items: center; gap: 0.6rem;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase;
-      color: var(--gold); margin-bottom: 1rem;
-    }
-    .eyebrow::before { content: ''; width: 28px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold)); }
+  /* ── Label ──────────────────────────────────────────────── */
+  .label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: .7rem; font-weight: 600;
+    letter-spacing: .18em; text-transform: uppercase;
+    color: var(--gold); display: inline-block;
+  }
+  .label::before { content: ''; display: inline-block; width: 24px; height: 1px; background: var(--gold); vertical-align: middle; margin-right: .5rem; opacity: .6; }
 
-    .section-title {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: clamp(1.9rem, 4vw, 3rem);
-      font-weight: 800; line-height: 1.1; letter-spacing: -0.02em;
-      color: var(--text); margin-bottom: 1rem;
-    }
+  /* ── Headings ───────────────────────────────────────────── */
+  .h1 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800; line-height: 1.08; letter-spacing: -.025em;
+  }
+  .h2 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800; line-height: 1.12; letter-spacing: -.02em;
+    font-size: clamp(1.9rem, 3.5vw, 2.8rem); color: var(--white);
+  }
 
-    /* ═══════════════════════════════════════════════════════
-       NAV
-    ═══════════════════════════════════════════════════════ */
-    .nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-      height: var(--nav-h); transition: all 0.4s;
-    }
-    .nav-bg {
-      position: absolute; inset: 0;
-      background: rgba(5,8,15,0); backdrop-filter: blur(0px);
-      border-bottom: 1px solid transparent; transition: all 0.4s;
-    }
-    .nav.scrolled .nav-bg {
-      background: rgba(5,8,15,0.9); backdrop-filter: blur(20px);
-      border-bottom-color: rgba(212,168,67,0.15);
-    }
-    .nav-inner {
-      position: relative; z-index: 1; height: var(--nav-h);
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .nav-logo { display: flex; align-items: center; gap: 0.7rem; }
-    .nav-logo-mark {
-      width: 38px; height: 38px; border-radius: 10px;
-      background: linear-gradient(135deg, var(--blue), #1d4ed8);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.1rem;
-      box-shadow: 0 4px 16px rgba(59,130,246,0.4);
-    }
-    .nav-logo-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 0.95rem; color: var(--text); }
-    .nav-logo-sub  { font-size: 0.62rem; color: var(--blue-light); letter-spacing: 0.08em; display: block; }
-    .nav-back {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      font-size: 0.8rem; font-weight: 500; color: var(--text-dim);
-      transition: color 0.2s; margin-right: 1rem;
-    }
-    .nav-back:hover { color: var(--gold); }
-    .nav-links { display: flex; gap: 2rem; list-style: none; }
-    .nav-links a { font-size: 0.87rem; font-weight: 500; color: var(--text-mid); transition: color 0.2s; }
-    .nav-links a:hover { color: var(--blue-light); }
-    .nav-right { display: flex; align-items: center; gap: 0.5rem; }
-    .nav-toggle { display: none; flex-direction: column; gap: 5px; padding: 8px; }
-    .nav-toggle span { display: block; width: 22px; height: 2px; background: var(--text-mid); border-radius: 2px; }
-    .nav-mobile {
-      display: none; flex-direction: column;
-      background: rgba(5,8,15,0.97); border-bottom: 1px solid rgba(212,168,67,0.12);
-      padding: 1rem 1.5rem 1.5rem; position: relative; z-index: 1;
-    }
-    .nav-mobile.open { display: flex; }
-    .nav-mobile a { padding: 0.7rem 0; font-size: 1rem; color: var(--text-mid); border-bottom: 1px solid rgba(255,255,255,0.05); transition: color 0.2s; }
-    .nav-mobile a:hover { color: var(--blue-light); }
+  /* ── Buttons ───────────────────────────────────────────── */
+  .btn {
+    display: inline-flex; align-items: center; gap: .5rem;
+    padding: .85rem 1.9rem; border-radius: 100px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: .875rem; font-weight: 700;
+    transition: transform .25s ease, box-shadow .25s ease;
+    white-space: nowrap;
+  }
+  .btn-blue { background: var(--blue); color: var(--white); box-shadow: var(--shadow-blue); }
+  .btn-blue:hover { background: var(--blue-2); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(30,80,212,.5); }
+  .btn-outline-w { border: 1.5px solid var(--border-b); color: var(--text-mid); }
+  .btn-outline-w:hover { border-color: rgba(255,255,255,.35); color: var(--white); transform: translateY(-3px); }
+  .btn-wa {
+    background: #25d366; color: #fff;
+    box-shadow: 0 8px 28px rgba(37,211,102,.35);
+  }
+  .btn-wa:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(37,211,102,.5); }
+  .btn-gold { background: linear-gradient(135deg, var(--gold), var(--gold-l)); color: var(--navy); }
+  .btn-gold:hover { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(200,146,42,.4); }
 
-    /* ═══════════════════════════════════════════════════════
-       HERO
-    ═══════════════════════════════════════════════════════ */
-    .hero {
-      position: relative; min-height: 100svh;
-      display: flex; align-items: center;
-      padding-top: var(--nav-h); overflow: hidden;
-    }
-    .hero-aurora {
-      position: absolute; inset: 0;
-      background:
-        radial-gradient(ellipse 110% 70% at 50% -5%, rgba(59,130,246,0.16) 0%, transparent 55%),
-        radial-gradient(ellipse 60% 50% at 90% 20%, rgba(212,168,67,0.08) 0%, transparent 50%),
-        radial-gradient(ellipse 50% 60% at 5% 80%, rgba(59,82,200,0.1) 0%, transparent 50%);
-      animation: auroraBlue 14s ease-in-out infinite alternate;
-    }
-    @keyframes auroraBlue {
-      0%   { filter: hue-rotate(0deg); }
-      100% { filter: hue-rotate(20deg) brightness(1.08); }
-    }
-    .hero-grid {
-      position: absolute; inset: 0;
-      background-image:
-        linear-gradient(rgba(59,130,246,0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(59,130,246,0.05) 1px, transparent 1px);
-      background-size: 60px 60px;
-      mask-image: radial-gradient(ellipse 85% 75% at 50% 40%, black 20%, transparent 80%);
-    }
-    .hero-content {
-      position: relative; z-index: 1;
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 4rem; align-items: center;
-      padding-block: 6rem 4rem;
-    }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 0.6rem;
-      padding: 0.4rem 1.1rem;
-      background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.25);
-      border-radius: 3rem;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase;
-      color: var(--blue-light); margin-bottom: 1.75rem;
-    }
-    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue-bright); animation: pulseBlue 2s ease-in-out infinite; }
-    @keyframes pulseBlue { 0%,100% { opacity:1; box-shadow:0 0 0 0 rgba(59,130,246,0.4); } 50% { opacity:0.5; box-shadow:0 0 0 6px rgba(59,130,246,0); } }
-    .hero-title {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: clamp(2.6rem, 6vw, 4.8rem);
-      font-weight: 800; line-height: 1.08; letter-spacing: -0.02em;
-      margin-bottom: 1.25rem;
-    }
-    .hero-desc {
-      font-size: 1.05rem; color: var(--text-mid); line-height: 1.75;
-      margin-bottom: 2.25rem; max-width: 480px;
-    }
-    .hero-btns { display: flex; gap: 0.85rem; flex-wrap: wrap; }
-    .hero-stats { display: grid; grid-template-columns: repeat(2,1fr); gap: 1rem; }
-    .hstat {
-      padding: 1.5rem;
-      background: rgba(255,255,255,0.03);
-      border-radius: var(--r);
-      position: relative; z-index: 0;
-    }
-    .hstat::before {
-      content: ''; position: absolute; inset: -1px; border-radius: var(--r);
-      background: var(--chrome); background-size: 300% 300%;
-      animation: chromeShimmer 10s ease infinite; z-index: -1; opacity: 0.25;
-    }
-    .hstat-num {
-      font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2.2rem; font-weight: 800;
-      line-height: 1;
-      background: linear-gradient(135deg, var(--gold), var(--gold-light));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      margin-bottom: 0.25rem;
-    }
-    .hstat-label { font-size: 0.78rem; color: var(--text-dim); }
+  /* ── Section header ─────────────────────────────────────── */
+  .sec-head { text-align: center; margin-bottom: 4rem; }
+  .sec-head .label { margin-bottom: 1rem; }
+  .sec-head .h2 { margin-bottom: .9rem; }
+  .sec-sub { color: var(--text-mid); max-width: 520px; margin-inline: auto; font-size: .95rem; line-height: 1.7; }
 
-    /* ═══════════════════════════════════════════════════════
-       SERVICES BAR
-    ═══════════════════════════════════════════════════════ */
-    .sbar {
-      background: var(--bg-2);
-      border-top: 1px solid rgba(212,168,67,0.1);
-      border-bottom: 1px solid rgba(212,168,67,0.1);
-      padding: 2rem 0;
-    }
-    .sbar-grid { display: grid; grid-template-columns: repeat(4,1fr); }
-    .sbar-item {
-      display: flex; align-items: center; gap: 0.85rem;
-      padding: 1rem 1.5rem;
-      border-right: 1px solid rgba(255,255,255,0.06);
-    }
-    .sbar-item:last-child { border-right: none; }
-    .sbar-icon {
-      width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0;
-      background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.2);
-      display: flex; align-items: center; justify-content: center; color: var(--blue-light);
-    }
-    .sbar-name { font-size: 0.88rem; font-weight: 600; color: var(--text); }
-    .sbar-sub  { font-size: 0.72rem; color: var(--text-dim); }
+  /* ── Chrome border utility ──────────────────────────────── */
+  .chrome-ring { position: relative; }
+  .chrome-ring::before {
+    content: ''; position: absolute; inset: -1.5px;
+    border-radius: inherit;
+    background: var(--chrome); background-size: 300% 300%;
+    animation: chromeShimmer 9s ease infinite;
+    z-index: -1; opacity: .3; transition: opacity .4s;
+  }
+  .chrome-ring:hover::before { opacity: .8; animation-duration: 3s; }
+  @keyframes chromeShimmer {
+    0%,100% { background-position: 0% 50%; }
+    50%      { background-position: 100% 50%; }
+  }
 
-    /* ═══════════════════════════════════════════════════════
-       PRODUCTS
-    ═══════════════════════════════════════════════════════ */
-    .products { padding: 8rem 0; position: relative; z-index: 1; }
-    .products-header { text-align: center; margin-bottom: 4.5rem; }
-    .products-header p { color: var(--text-mid); max-width: 580px; margin-inline: auto; }
-    .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
+  /* ╔══════════════════════════════════════════════════════════╗
+     ║  NAV                                                     ║
+     ╚══════════════════════════════════════════════════════════╝ */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    height: var(--nav-h); transition: all .35s;
+  }
+  .nav-bg {
+    position: absolute; inset: 0;
+    background: rgba(11,29,62,0); backdrop-filter: blur(0px);
+    border-bottom: 1px solid transparent; transition: all .35s;
+  }
+  .nav.scrolled .nav-bg {
+    background: rgba(11,29,62,.95); backdrop-filter: blur(20px);
+    border-bottom-color: var(--border-b);
+  }
+  .nav-inner {
+    position: relative; z-index: 1; height: var(--nav-h);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-left { display: flex; align-items: center; gap: .85rem; }
+  .nav-back {
+    display: inline-flex; align-items: center; gap: .35rem;
+    font-size: .78rem; color: var(--text-dim); transition: color .2s;
+    padding: .4rem .75rem; border-radius: 8px;
+    border: 1px solid rgba(255,255,255,.07);
+  }
+  .nav-back:hover { color: var(--gold-l); border-color: var(--gold-border); }
+  .nav-sep { width: 1px; height: 22px; background: var(--border-b); }
+  .nav-logo { display: flex; align-items: center; gap: .6rem; }
+  .nav-mark {
+    width: 36px; height: 36px; border-radius: 9px;
+    background: linear-gradient(135deg, var(--blue), var(--navy-3));
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 12px rgba(30,80,212,.45);
+  }
+  .nav-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: .9rem; color: var(--white); }
+  .nav-sub  { font-size: .56rem; color: var(--blue-3); letter-spacing: .07em; display: block; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { font-size: .84rem; font-weight: 500; color: var(--text-mid); transition: color .2s; }
+  .nav-links a:hover { color: var(--white); }
+  .nav-toggle { display: none; flex-direction: column; gap: 5px; padding: 6px; }
+  .nav-toggle span { display: block; width: 22px; height: 2px; background: var(--text-mid); border-radius: 2px; }
+  .nav-mobile {
+    display: none; flex-direction: column;
+    background: var(--navy-2); padding: 1rem 1.5rem 1.5rem;
+    border-bottom: 1px solid var(--border-b); position: relative; z-index: 1;
+  }
+  .nav-mobile.open { display: flex; }
+  .nav-mobile a { padding: .7rem 0; font-size: 1rem; color: var(--text-mid); border-bottom: 1px solid var(--border-b); transition: color .2s; }
+  .nav-mobile a:last-child { border-bottom: none; }
+  .nav-mobile a:hover { color: var(--white); }
 
-    .product-card {
-      border-radius: var(--r); overflow: hidden;
-      background: rgba(10,14,26,0.9);
-      position: relative; z-index: 0;
-      display: flex; flex-direction: column;
-      transition: transform 0.08s ease;
-    }
-    .product-card::before {
-      content: ''; position: absolute; inset: -1.5px;
-      border-radius: calc(var(--r) + 1.5px);
-      background: var(--chrome); background-size: 300% 300%;
-      animation: chromeShimmer 9s ease infinite;
-      z-index: -1; opacity: 0.35; transition: opacity 0.4s;
-    }
-    .product-card:hover::before { opacity: 0.85; animation-duration: 3s; }
-    .product-card.featured { background: rgba(10,14,30,0.95); }
+  /* ╔══════════════════════════════════════════════════════════╗
+     ║  HERO                                                    ║
+     ╚══════════════════════════════════════════════════════════╝ */
+  .hero {
+    position: relative; min-height: 100svh;
+    display: flex; align-items: center;
+    padding-top: var(--nav-h); overflow: hidden;
+    background: var(--navy);
+  }
+  .hero-orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(90px); opacity: .5; pointer-events: none;
+    animation: orbDrift 20s ease-in-out infinite alternate;
+  }
+  .hero-orb-1 { width: 700px; height: 700px; background: radial-gradient(circle, #1e50d4, transparent); top: -250px; right: -150px; animation-delay: 0s; }
+  .hero-orb-2 { width: 500px; height: 500px; background: radial-gradient(circle, #0a1e5e, transparent); bottom: -150px; left: -100px; animation-delay: -7s; }
+  .hero-orb-3 { width: 350px; height: 350px; background: radial-gradient(circle, rgba(200,146,42,.4), transparent); top: 35%; left: 35%; animation-delay: -14s; opacity: .2; }
+  @keyframes orbDrift {
+    0%   { transform: translate(0,0) scale(1); }
+    100% { transform: translate(40px,25px) scale(1.08); }
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(59,110,246,.12) 1px, transparent 1px);
+    background-size: 36px 36px;
+    mask-image: radial-gradient(ellipse 85% 85% at 50% 50%, black, transparent);
+  }
+  .hero-inner {
+    position: relative; z-index: 1;
+    display: grid; grid-template-columns: 1.1fr 1fr;
+    gap: 4rem; align-items: center;
+    padding-block: 6rem 5rem; width: 100%;
+  }
+  /* Badge */
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: .6rem;
+    padding: .38rem 1rem; border-radius: 100px;
+    background: rgba(59,110,246,.1); border: 1px solid var(--blue-border);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: .7rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--blue-3); margin-bottom: 1.5rem;
+  }
+  .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue-3); animation: blink 2s ease-in-out infinite; }
+  @keyframes blink { 0%,100% { opacity:1; box-shadow:0 0 0 0 rgba(96,144,255,.5); } 50% { opacity:.5; box-shadow:0 0 0 5px rgba(96,144,255,0); } }
+  /* Title */
+  .hero-title {
+    font-size: clamp(2.8rem, 5.5vw, 4.8rem);
+    color: var(--white); margin-bottom: 1.4rem;
+  }
+  .hero-title em { font-style: normal; color: var(--gold-l); }
+  /* Desc */
+  .hero-desc {
+    font-size: 1.05rem; color: var(--text-mid);
+    line-height: 1.75; max-width: 460px; margin-bottom: 2.5rem;
+  }
+  .hero-btns { display: flex; gap: .85rem; flex-wrap: wrap; }
+  /* Stats grid */
+  .hero-stats {
+    display: grid; grid-template-columns: repeat(2,1fr);
+    gap: 1rem;
+  }
+  .hstat {
+    padding: 1.5rem;
+    background: rgba(255,255,255,.04);
+    border: 1px solid var(--border-b);
+    border-radius: var(--r);
+    position: relative; z-index: 0;
+    transition: border-color .3s, background .3s;
+  }
+  .hstat::before {
+    content: ''; position: absolute; inset: -1.5px;
+    border-radius: calc(var(--r) + 1.5px);
+    background: var(--chrome); background-size: 300% 300%;
+    animation: chromeShimmer 11s ease infinite;
+    z-index: -1; opacity: .2; transition: opacity .4s;
+  }
+  .hstat:hover::before { opacity: .7; animation-duration: 3.5s; }
+  .hstat-num {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 2.2rem; font-weight: 800; line-height: 1;
+    color: var(--gold-l); margin-bottom: .3rem;
+  }
+  .hstat-label { font-size: .76rem; color: var(--text-dim); }
 
-    .product-visual {
-      background: rgba(0,0,0,0.3);
-      padding: 2rem; aspect-ratio: 16/7;
-      display: flex; align-items: center; justify-content: center;
-      position: relative;
-    }
-    .product-badge {
-      position: absolute; top: 1rem; right: 1rem;
-      padding: 0.3rem 0.8rem; border-radius: 2rem;
-      font-size: 0.7rem; font-weight: 700;
-      background: linear-gradient(135deg, var(--gold), #C49030);
-      color: #05080f;
-    }
-    .product-badge.new {
-      background: linear-gradient(135deg, #25D366, #128C7E);
-      color: #fff;
-    }
-    .product-content { padding: 2rem; flex: 1; display: flex; flex-direction: column; }
-    .product-type {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase;
-      color: var(--blue-light); margin-bottom: 0.4rem;
-    }
-    .product-name {
-      font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.4rem; font-weight: 800;
-      color: var(--text); margin-bottom: 0.6rem;
-    }
-    .product-desc { font-size: 0.9rem; color: var(--text-mid); line-height: 1.65; margin-bottom: 1.5rem; }
-    .product-prices { margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
-    .price-row {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 0.55rem 0.85rem; border-radius: 0.5rem;
-      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
-    }
-    .price-label { font-size: 0.83rem; color: var(--text-mid); }
-    .price-cams  { color: var(--blue-light); font-weight: 600; }
-    .price-val   {
-      font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 0.95rem;
-      color: var(--gold-light);
-    }
-    .product-features { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.75rem; flex: 1; }
-    .pf {
-      padding: 0.28rem 0.65rem; border-radius: 0.35rem;
-      background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.15);
-      font-size: 0.72rem; color: var(--blue-light);
-    }
-    .product-cta {
-      display: flex; align-items: center; justify-content: center; gap: 0.6rem;
-      padding: 0.9rem 1.5rem; border-radius: 3rem;
-      background: linear-gradient(135deg, #25D366, #128C7E);
-      color: #fff; font-size: 0.9rem; font-weight: 700;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 20px rgba(37,211,102,0.25);
-    }
-    .product-cta:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(37,211,102,0.4); }
+  /* scroll indicator */
+  .hero-scroll {
+    position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: .35rem;
+    color: var(--text-dim); font-size: .62rem; letter-spacing: .15em; text-transform: uppercase;
+    opacity: 0;
+  }
+  .scroll-line {
+    width: 1px; height: 44px;
+    background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+    animation: scrollPulse 2.2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0%,100% { transform: scaleY(0); transform-origin: top; opacity: 0; }
+    40%      { transform: scaleY(1); transform-origin: top; opacity: 1; }
+    60%      { transform: scaleY(1); transform-origin: bottom; opacity: 1; }
+    99%      { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+  }
 
-    /* ═══════════════════════════════════════════════════════
-       WHY US
-    ═══════════════════════════════════════════════════════ */
-    .why {
-      padding: 8rem 0;
-      background: var(--bg-2);
-      position: relative; z-index: 1;
-    }
-    .why::before, .why::after {
-      content: ''; position: absolute; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(212,168,67,0.18), transparent);
-    }
-    .why::before { top: 0; } .why::after { bottom: 0; }
-    .why-header { text-align: center; margin-bottom: 4rem; }
-    .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-    .why-card {
-      padding: 2rem; border-radius: var(--r);
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.07);
-      transition: all 0.3s ease;
-    }
-    .why-card:hover {
-      background: rgba(255,255,255,0.06);
-      border-color: rgba(212,168,67,0.25);
-      transform: translateY(-4px);
-    }
-    .why-icon-wrap {
-      width: 52px; height: 52px; border-radius: 12px;
-      background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.2);
-      display: flex; align-items: center; justify-content: center; color: var(--blue-light);
-      margin-bottom: 1.25rem;
-    }
-    .why-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: 0.6rem; }
-    .why-desc { font-size: 0.88rem; color: var(--text-mid); line-height: 1.7; }
+  /* ╔══════════════════════════════════════════════════════════╗
+     ║  SERVICES BAR                                            ║
+     ╚══════════════════════════════════════════════════════════╝ */
+  .sbar {
+    background: var(--navy-2);
+    border-top: 1px solid var(--border-b);
+    border-bottom: 1px solid var(--border-b);
+    padding: 2rem 0;
+  }
+  .sbar-row { display: grid; grid-template-columns: repeat(4,1fr); }
+  .sbar-item {
+    display: flex; align-items: center; gap: .85rem;
+    padding: 1rem 1.5rem;
+    border-right: 1px solid var(--border-b);
+  }
+  .sbar-item:last-child { border-right: none; }
+  .sbar-icon {
+    width: 44px; height: 44px; border-radius: 11px; flex-shrink: 0;
+    background: var(--blue-pale); border: 1px solid var(--blue-border);
+    display: flex; align-items: center; justify-content: center; color: var(--blue-3);
+  }
+  .sbar-name { font-family: 'Plus Jakarta Sans', sans-serif; font-size: .87rem; font-weight: 700; color: var(--white); }
+  .sbar-sub  { font-size: .72rem; color: var(--text-dim); }
 
-    /* ═══════════════════════════════════════════════════════
-       CTA
-    ═══════════════════════════════════════════════════════ */
-    .cta-sec { padding: 8rem 0; position: relative; z-index: 1; text-align: center; }
-    .cta-inner {
-      max-width: 700px; margin-inline: auto;
-      padding: 4rem 3rem; border-radius: 1.5rem;
-      background: rgba(10,14,26,0.8);
-      position: relative; z-index: 0;
-    }
-    .cta-inner::before {
-      content: ''; position: absolute; inset: -2px; border-radius: 1.6rem;
-      background: var(--chrome); background-size: 300% 300%;
-      animation: chromeShimmer 6s ease infinite; z-index: -1; opacity: 0.6;
-    }
-    .cta-inner .section-title { margin-bottom: 1rem; font-size: clamp(1.7rem, 4vw, 2.5rem); }
-    .cta-inner p { color: var(--text-mid); margin-bottom: 1rem; }
-    .cta-phone {
-      font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2rem; font-weight: 800;
-      margin-bottom: 2rem;
-      background: linear-gradient(135deg, var(--gold), var(--gold-light));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
-    .cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  /* ╔══════════════════════════════════════════════════════════╗
+     ║  PRODUCTS                                                ║
+     ╚══════════════════════════════════════════════════════════╝ */
+  .products { padding: 7rem 0; background: var(--navy); }
 
-    /* ═══════════════════════════════════════════════════════
-       FOOTER
-    ═══════════════════════════════════════════════════════ */
-    .footer {
-      border-top: 1px solid rgba(212,168,67,0.1);
-      background: var(--bg-2); padding: 2.5rem 0; position: relative; z-index: 1;
-    }
-    .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 3rem; margin-bottom: 2rem; }
-    .footer-brand-name {
-      font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.1rem; font-weight: 800; color: var(--text);
-      display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.75rem;
-    }
-    .footer-brand-name span { color: var(--blue-light); }
-    .footer-desc { font-size: 0.85rem; color: var(--text-dim); line-height: 1.6; }
-    .footer-col-title { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
-    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
-    .footer-links a { font-size: 0.85rem; color: var(--text-dim); transition: color 0.2s; }
-    .footer-links a:hover { color: var(--gold-light); }
-    .footer-contact-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-dim); margin-bottom: 0.5rem; }
-    .footer-bottom {
-      border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1.5rem;
-      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
-    }
-    .footer-copy { font-size: 0.78rem; color: var(--text-dim); }
-    .footer-socials { display: flex; gap: 0.6rem; }
-    .fsocial {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--text-dim); font-size: 15px; transition: all 0.25s;
-    }
-    .fsocial:hover { background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.3); color: var(--blue-light); }
+  .products-grid {
+    display: grid; grid-template-columns: repeat(3,1fr);
+    gap: 1.75rem;
+  }
+  .pcard {
+    border-radius: 18px; overflow: hidden;
+    background: rgba(15,36,80,.8);
+    border: 1px solid var(--border-b);
+    display: flex; flex-direction: column;
+    position: relative; z-index: 0;
+    transition: transform .35s cubic-bezier(.16,1,.3,1),
+                box-shadow .35s, border-color .25s;
+    will-change: transform;
+  }
+  .pcard::before {
+    content: ''; position: absolute; inset: -1.5px;
+    border-radius: 19px;
+    background: var(--chrome); background-size: 300% 300%;
+    animation: chromeShimmer 10s ease infinite;
+    z-index: -1; opacity: .25; transition: opacity .4s;
+  }
+  .pcard:hover { transform: translateY(-10px); box-shadow: var(--shadow-lg); }
+  .pcard:hover::before { opacity: .75; animation-duration: 3s; }
+  .pcard.featured { background: rgba(11,29,62,.95); border-color: rgba(59,110,246,.3); }
 
-    /* WA Float */
-    .wa-float {
-      position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 999;
-      width: 60px; height: 60px; border-radius: 50%;
-      background: linear-gradient(135deg, #25D366, #128C7E);
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 4px 24px rgba(37,211,102,0.4);
-      animation: waFloat 3s ease-in-out infinite; transition: transform 0.3s;
-    }
-    .wa-float:hover { animation: none; transform: scale(1.1); }
-    @keyframes waFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-    .wa-tooltip {
-      position: absolute; right: 70px; top: 50%; transform: translateY(-50%);
-      background: #fff; color: #333; padding: 7px 14px; border-radius: 8px;
-      font-size: 12px; font-weight: 600; white-space: nowrap;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
-      opacity: 0; pointer-events: none; transition: opacity 0.3s;
-    }
-    .wa-tooltip::after {
-      content: ''; position: absolute; right: -6px; top: 50%; transform: translateY(-50%);
-      border: 6px solid transparent; border-left-color: #fff;
-    }
-    .wa-float:hover .wa-tooltip { opacity: 1; }
+  .pcard-vis {
+    background: linear-gradient(135deg, rgba(30,80,212,.15), rgba(11,29,62,.9));
+    padding: 2rem; aspect-ratio: 16/7;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; border-bottom: 1px solid var(--border-b);
+  }
+  .pcard-badge {
+    position: absolute; top: 1rem; right: 1rem;
+    padding: .28rem .75rem; border-radius: 100px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: .65rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  }
+  .pcard-badge.popular { background: linear-gradient(135deg, var(--gold), var(--gold-l)); color: var(--navy); }
+  .pcard-badge.new     { background: #25d366; color: #fff; }
 
-    /* ═══════════════════════════════════════════════════════
-       RESPONSIVE
-    ═══════════════════════════════════════════════════════ */
-    @media (max-width: 1000px) {
-      .hero-content { grid-template-columns: 1fr; gap: 3rem; }
-      .hero-stats { grid-template-columns: repeat(4,1fr); }
-    }
-    @media (max-width: 768px) {
-      .nav-links, .nav-right .btn { display: none; }
-      .nav-toggle { display: flex; }
-      .sbar-grid { grid-template-columns: repeat(2,1fr); }
-      .sbar-item:nth-child(2) { border-right: none; }
-      .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
-      .hero-stats { grid-template-columns: repeat(2,1fr); }
-    }
-    @media (max-width: 500px) {
-      .sbar-grid { grid-template-columns: 1fr 1fr; }
-      .cta-inner { padding: 2.5rem 1.5rem; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation: none !important; transition-duration: 0.01ms !important; }
-    }
+  .pcard-body { padding: 1.75rem 1.75rem 2rem; flex: 1; display: flex; flex-direction: column; }
+  .pcard-type {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: .67rem; font-weight: 600; letter-spacing: .15em; text-transform: uppercase;
+    color: var(--blue-3); margin-bottom: .4rem;
+  }
+  .pcard-name {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.35rem; font-weight: 800;
+    color: var(--white); margin-bottom: .65rem;
+  }
+  .pcard-desc { font-size: .875rem; color: var(--text-mid); line-height: 1.7; margin-bottom: 1.5rem; }
+
+  .price-table { display: flex; flex-direction: column; gap: .45rem; margin-bottom: 1.5rem; }
+  .price-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: .6rem .85rem; border-radius: 9px;
+    background: rgba(255,255,255,.04); border: 1px solid var(--border-b);
+    transition: background .2s, border-color .2s;
+  }
+  .price-row:hover { background: rgba(59,110,246,.08); border-color: var(--blue-border); }
+  .price-cam  { font-size: .82rem; color: var(--text-mid); }
+  .price-cams { color: var(--blue-3); font-weight: 600; }
+  .price-val  {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700; font-size: .92rem; color: var(--gold-l);
+  }
+
+  .pcard-tags { display: flex; flex-wrap: wrap; gap: .35rem; margin-bottom: 1.75rem; flex: 1; }
+  .ptag {
+    padding: .25rem .65rem; border-radius: 7px;
+    background: var(--blue-pale); border: 1px solid var(--blue-border);
+    font-size: .7rem; color: var(--blue-3);
+  }
+
+  .pcard-cta {
+    display: flex; align-items: center; justify-content: center; gap: .55rem;
+    padding: .85rem 1.5rem; border-radius: 100px;
+    background: #25d366; color: #fff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: .875rem; font-weight: 700;
+    box-shadow: 0 6px 24px rgba(37,211,102,.3);
+    transition: transform .25s, box-shadow .25s;
+  }
+  .pcard-cta:hover { transform: translateY(-3px); box-shadow: 0 10px 36px rgba(37,211,102,.45); }
+
+  /* ╔══════════════════════════════════════════════════════════╗
+     ║  WHY US                                                  ║
+     ╚══════════════════════════════════════════════════════════╝ */
+  .why {
+    padding: 7rem 0;
+    background: var(--navy-2);
+    border-top: 1px solid var(--border-b);
+    border-bottom: 1px solid var(--border-b);
+  }
+  .why-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; margin-top: 0; }
+  .wcard {
+    padding: 1.75rem;
+    background: rgba(255,255,255,.03);
+    border: 1px solid var(--border-b);
+    border-radius: var(--r);
+    transition: background .3s, border-color .3s, transform .3s;
+  }
+  .wcard:hover { background: rgba(59,110,246,.06); border-color: var(--blue-border); transform: translateY(-4px); }
+  .wcard-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    background: var(--blue-pale); border: 1px solid var(--blue-border);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--blue-3); margin-bottom: 1.25rem;
+  }
+  .wcard-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: .55rem; }
+  .wcard-desc  { font-size: .845rem; color: var(--text-mid); line-height: 1.7; }
+
+  /* ╔══════════════════════════════════════════════════════════╗
+     ║  CTA                                                     ║
+     ╚══════════════════════════════════════════════════════════╝ */
+  .cta-sec {
+    padding: 7rem 0; background: var(--navy);
+    position: relative; overflow: hidden;
+  }
+  .cta-orb { position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none; opacity: .4; }
+  .cta-orb-1 { width: 500px; height: 500px; background: radial-gradient(circle, #1e50d4, transparent); top: -150px; right: -100px; }
+  .cta-orb-2 { width: 350px; height: 350px; background: radial-gradient(circle, rgba(200,146,42,.5), transparent); bottom: -100px; left: 5%; opacity: .2; }
+  .cta-inner {
+    position: relative; z-index: 1;
+    max-width: 660px; margin-inline: auto; text-align: center;
+    padding: 3.5rem; border-radius: 22px;
+    background: rgba(15,36,80,.7);
+    border: 1px solid var(--border-b);
+    position: relative; z-index: 0;
+  }
+  .cta-inner::before {
+    content: ''; position: absolute; inset: -1.5px;
+    border-radius: 23px;
+    background: var(--chrome); background-size: 300% 300%;
+    animation: chromeShimmer 7s ease infinite;
+    z-index: -1; opacity: .45;
+  }
+  .cta-label { margin-bottom: 1rem; }
+  .cta-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 800; line-height: 1.1;
+    color: var(--white); margin-bottom: 1rem;
+  }
+  .cta-desc { color: var(--text-mid); line-height: 1.75; margin-bottom: .75rem; }
+  .cta-phone {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.8rem; font-weight: 800;
+    color: var(--gold-l); margin-bottom: 2rem; display: block;
+  }
+  .cta-btns { display: flex; gap: .85rem; justify-content: center; flex-wrap: wrap; }
+
+  /* ╔══════════════════════════════════════════════════════════╗
+     ║  FOOTER                                                  ║
+     ╚══════════════════════════════════════════════════════════╝ */
+  .footer {
+    background: #050e1e; padding: 2rem 0;
+    border-top: 1px solid var(--border-b);
+  }
+  .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .footer-logo {
+    display: flex; align-items: center; gap: .6rem;
+    font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: .88rem; color: var(--text-mid);
+  }
+  .footer-mark {
+    width: 30px; height: 30px; border-radius: 7px;
+    background: var(--blue); color: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    font-size: .7rem; font-weight: 800;
+  }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a { font-size: .78rem; color: var(--text-dim); transition: color .2s; }
+  .footer-links a:hover { color: var(--gold-l); }
+  .footer-copy { font-size: .72rem; color: rgba(255,255,255,.18); }
+
+  /* WA Float */
+  .wa-float {
+    position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 999;
+    width: 58px; height: 58px; border-radius: 50%;
+    background: #25d366; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 24px rgba(37,211,102,.45);
+    animation: waFloat 3s ease-in-out infinite; transition: transform .3s;
+    cursor: none;
+  }
+  .wa-float:hover { animation: none; transform: scale(1.12); }
+  @keyframes waFloat { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-6px); } }
+  .wa-tooltip {
+    position: absolute; right: 68px; top: 50%; transform: translateY(-50%);
+    background: var(--white); color: var(--navy); padding: 7px 13px; border-radius: 8px;
+    font-size: .75rem; font-weight: 700; white-space: nowrap;
+    box-shadow: 0 4px 14px rgba(0,0,0,.2);
+    opacity: 0; pointer-events: none; transition: opacity .3s;
+  }
+  .wa-tooltip::after {
+    content: ''; position: absolute; right: -5px; top: 50%; transform: translateY(-50%);
+    border: 5px solid transparent; border-left-color: var(--white);
+  }
+  .wa-float:hover .wa-tooltip { opacity: 1; }
+
+  /* ── Responsive ─────────────────────────────────────────── */
+  @media (max-width: 1024px) {
+    .products-grid { grid-template-columns: repeat(2,1fr); }
+    .why-grid      { grid-template-columns: repeat(2,1fr); }
+  }
+  @media (max-width: 860px) {
+    .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .hero-stats { grid-template-columns: repeat(4,1fr); }
+    .sbar-row   { grid-template-columns: repeat(2,1fr); }
+    .sbar-item:nth-child(2) { border-right: none; }
+    .nav-links, .nav-right .btn { display: none; }
+    .nav-toggle { display: flex; }
+  }
+  @media (max-width: 640px) {
+    .products-grid { grid-template-columns: 1fr; }
+    .why-grid      { grid-template-columns: 1fr; }
+    .hero-stats    { grid-template-columns: repeat(2,1fr); }
+    .cta-inner     { padding: 2.5rem 1.5rem; }
+    .hero-btns     { flex-direction: column; }
+    .footer-inner  { flex-direction: column; align-items: flex-start; }
+    .cta-btns      { flex-direction: column; align-items: center; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+  }
   </style>
 </head>
 <body>
 
-<canvas id="particles"></canvas>
+<div class="cur" id="cur"></div>
+<div class="cur-ring" id="curRing"></div>
 
-<!-- ═══ NAV ════════════════════════════════════════════════ -->
+<!-- WA float -->
+<a href="https://wa.me/18494950959?text=Hola%2C%20quiero%20cotizar%20un%20sistema%20de%20seguridad" target="_blank" class="wa-float">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+  <div class="wa-tooltip">Cotizar ahora</div>
+</a>
+
+<!-- ── NAV ──────────────────────────────────────────────── -->
 <nav class="nav" id="nav">
   <div class="nav-bg"></div>
   <div class="container nav-inner">
-    <div style="display:flex;align-items:center;gap:0.75rem;">
+    <div class="nav-left">
       <a href="index.html" class="nav-back">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-        PlataTechs
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        PlataTechs.com
       </a>
+      <div class="nav-sep"></div>
       <a href="#inicio" class="nav-logo">
-        <div class="nav-logo-mark">🛡️</div>
+        <div class="nav-mark">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
         <div>
-          <div class="nav-logo-name">Plata Tech <span style="color:var(--blue-light)">Security</span></div>
-          <span class="nav-logo-sub">Sistemas de Seguridad Profesional</span>
+          <span class="nav-name">Plata Tech Security</span>
+          <span class="nav-sub">Seguridad Profesional</span>
         </div>
       </a>
     </div>
@@ -525,250 +597,259 @@
       <li><a href="#contacto">Contacto</a></li>
     </ul>
     <div class="nav-right">
-      <a href="https://wa.me/18494950959?text=Hola%2C%20quiero%20cotizar%20un%20sistema%20de%20seguridad"
-         target="_blank" class="btn btn-wa" style="padding:0.55rem 1.3rem;font-size:0.82rem;">
-        💬 Cotizar Ahora
+      <a href="https://wa.me/18494950959?text=Hola%2C%20quiero%20cotizar%20un%20sistema%20de%20seguridad" target="_blank" class="btn btn-blue" style="padding:.52rem 1.3rem;font-size:.8rem;">
+        Cotizar ahora
       </a>
     </div>
-    <button class="nav-toggle" id="navToggle" aria-label="Menú">
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
   </div>
   <div class="nav-mobile" id="navMobile">
-    <a href="index.html">← Volver a PlataTechs</a>
-    <a href="#productos" onclick="closeNav()">Productos</a>
-    <a href="#nosotros" onclick="closeNav()">Nosotros</a>
-    <a href="#contacto" onclick="closeNav()">Contacto</a>
+    <a href="index.html">← PlataTechs.com</a>
+    <a href="#productos"  onclick="closeNav()">Productos</a>
+    <a href="#nosotros"   onclick="closeNav()">Nosotros</a>
+    <a href="#contacto"   onclick="closeNav()">Contacto</a>
   </div>
 </nav>
 
 <main>
-
-<!-- ═══ HERO ═════════════════════════════════════════════ -->
+<!-- ── HERO ─────────────────────────────────────────────── -->
 <section id="inicio" class="hero">
-  <div class="hero-aurora"></div>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-orb hero-orb-3"></div>
   <div class="hero-grid"></div>
-  <div class="container hero-content">
+
+  <div class="container hero-inner">
     <div>
       <div class="hero-badge" id="heroBadge">
         <span class="badge-dot"></span>
-        Líder en Seguridad Electrónica
+        Lider en Seguridad Electronica
       </div>
-      <h1 class="hero-title" id="heroTitle">
-        Seguridad<br/>
-        <span class="text-chrome">Inteligente</span><br/>
-        para tu Hogar<br/>y Negocio
+      <h1 class="h1 hero-title" id="heroTitle">
+        Seguridad<br/><em>inteligente</em><br/>para tu hogar<br/>y negocio
       </h1>
       <p class="hero-desc" id="heroDesc">
-        Instalación profesional de cámaras Hikvision ColorVu, alarmas y sistemas de domótica.
-        Visión a color 24/7, acceso remoto y soporte técnico garantizado en Santo Domingo.
+        Instalacion profesional de camaras Hikvision ColorVu, alarmas
+        y CCTV. Vision a color 24/7, acceso remoto y soporte tecnico
+        garantizado en Santo Domingo.
       </p>
       <div class="hero-btns" id="heroBtns">
-        <a href="https://wa.me/18494950959?text=Hola%2C%20quiero%20información%20sobre%20sistemas%20de%20seguridad"
-           target="_blank" class="btn btn-wa">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <a href="https://wa.me/18494950959?text=Hola%2C%20quiero%20cotizar%20un%20sistema%20de%20seguridad" target="_blank" class="btn btn-wa js-magnetic">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
           Cotizar por WhatsApp
         </a>
-        <a href="#productos" class="btn btn-outline">Ver Productos</a>
+        <a href="#productos" class="btn btn-outline-w js-magnetic">Ver productos</a>
       </div>
     </div>
+
     <div class="hero-stats" id="heroStats">
       <div class="hstat">
         <div class="hstat-num" data-count="500" data-suffix="+">500+</div>
-        <div class="hstat-label">Instalaciones Completadas</div>
+        <div class="hstat-label">Instalaciones completadas</div>
       </div>
       <div class="hstat">
         <div class="hstat-num">24/7</div>
-        <div class="hstat-label">Monitoreo Continuo</div>
+        <div class="hstat-label">Monitoreo continuo</div>
       </div>
       <div class="hstat">
         <div class="hstat-num">100%</div>
-        <div class="hstat-label">Garantía en Equipos</div>
+        <div class="hstat-label">Garantia en equipos</div>
       </div>
       <div class="hstat">
-        <div class="hstat-num" data-count="3" data-suffix="+">3+</div>
-        <div class="hstat-label">Años de Experiencia</div>
+        <div class="hstat-num" data-count="8" data-suffix="+">8+</div>
+        <div class="hstat-label">Anos de experiencia</div>
       </div>
     </div>
   </div>
+
+  <div class="hero-scroll" id="heroScroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
 </section>
 
-<!-- ═══ SERVICES BAR ══════════════════════════════════════ -->
+<!-- ── SERVICES BAR ──────────────────────────────────────── -->
 <div class="sbar">
   <div class="container">
-    <div class="sbar-grid">
+    <div class="sbar-row">
       <div class="sbar-item">
         <div class="sbar-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
         </div>
         <div>
-          <div class="sbar-name">Cámaras CCTV</div>
-          <div class="sbar-sub">ColorVu 24/7</div>
+          <div class="sbar-name">Camaras CCTV</div>
+          <div class="sbar-sub">Hikvision ColorVu HD</div>
         </div>
       </div>
       <div class="sbar-item">
         <div class="sbar-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
         </div>
         <div>
           <div class="sbar-name">Alarmas</div>
-          <div class="sbar-sub">Hikvision Pro</div>
+          <div class="sbar-sub">Sistemas perimetrales</div>
         </div>
       </div>
       <div class="sbar-item">
         <div class="sbar-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
         </div>
         <div>
-          <div class="sbar-name">Domótica</div>
-          <div class="sbar-sub">Hogar Inteligente</div>
+          <div class="sbar-name">Control de Acceso</div>
+          <div class="sbar-sub">Biometrico y tarjetas</div>
         </div>
       </div>
       <div class="sbar-item">
         <div class="sbar-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49M7.76 7.76a6 6 0 0 0 0 8.49M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
         </div>
         <div>
-          <div class="sbar-name">Mantenimiento</div>
-          <div class="sbar-sub">Soporte Técnico</div>
+          <div class="sbar-name">Monitoreo Remoto</div>
+          <div class="sbar-sub">App movil incluida</div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ═══ PRODUCTS ══════════════════════════════════════════ -->
+<!-- ── PRODUCTS ──────────────────────────────────────────── -->
 <section id="productos" class="products">
   <div class="container">
-    <div class="products-header" data-gsap="fadeUp">
-      <div class="eyebrow">Nuestros Kits</div>
-      <h2 class="section-title">Combos de Seguridad <span class="text-gold">Todo Incluido</span></h2>
-      <p>Cada kit incluye grabador, cámaras ColorVu, disco duro, cables, accesorios e instalación profesional. Precios sujetos a ITBIS.</p>
+    <div class="sec-head" data-reveal>
+      <p class="label">Nuestros Kits</p>
+      <h2 class="h2">Elige el sistema ideal<br/>para tu proyecto</h2>
+      <p class="sec-sub">Todos los kits incluyen instalacion, configuracion de app y garantia. Cotizacion sin costo.</p>
     </div>
+
     <div class="products-grid">
 
       <!-- Kit Tradicional -->
-      <div class="product-card" data-gsap="fadeUp" data-gsap-delay="0.05" data-tilt>
-        <div class="product-visual">
-          <svg viewBox="0 0 400 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-            <defs>
-              <linearGradient id="bg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#050a16"/><stop offset="100%" stop-color="#0a0e20"/></linearGradient>
-              <radialGradient id="glow1" cx="50%" cy="50%"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.15"/><stop offset="100%" stop-color="#3b82f6" stop-opacity="0"/></radialGradient>
-            </defs>
-            <rect width="400" height="160" fill="url(#bg1)"/>
-            <rect x="145" y="50" width="110" height="66" rx="5" fill="#141c2e" stroke="#1e2a42" stroke-width="1"/>
-            <rect x="152" y="57" width="45" height="27" rx="2" fill="#0a1428"/>
-            <text x="200" y="108" text-anchor="middle" font-family="monospace" font-size="8" fill="#3b82f6" opacity="0.5" letter-spacing="1">DVR HIKVISION</text>
-            <g transform="translate(60,80)"><rect x="-10" y="-6" width="20" height="12" rx="4" fill="#b0b8c8"/><circle cx="12" cy="0" r="5" fill="#222"/><circle cx="12" cy="0" r="2.5" fill="#0d0d18"/></g>
-            <g transform="translate(340,80)"><rect x="-10" y="-6" width="20" height="12" rx="4" fill="#b0b8c8"/><circle cx="-12" cy="0" r="5" fill="#222"/><circle cx="-12" cy="0" r="2.5" fill="#0d0d18"/></g>
-            <line x1="80" y1="80" x2="145" y2="88" stroke="#3b82f6" stroke-width="0.5" opacity="0.25" stroke-dasharray="3,3"/>
-            <line x1="320" y1="80" x2="255" y2="88" stroke="#3b82f6" stroke-width="0.5" opacity="0.25" stroke-dasharray="3,3"/>
-            <circle cx="200" cy="80" r="55" fill="url(#glow1)"/>
+      <div class="pcard js-tilt">
+        <div class="pcard-vis">
+          <svg width="110" height="70" viewBox="0 0 110 70" fill="none">
+            <rect x="15" y="10" width="80" height="50" rx="6" fill="rgba(30,80,212,.15)" stroke="rgba(59,110,246,.3)" stroke-width="1.2"/>
+            <circle cx="55" cy="35" r="16" fill="rgba(30,80,212,.2)" stroke="rgba(59,110,246,.4)" stroke-width="1.2"/>
+            <circle cx="55" cy="35" r="8" fill="rgba(30,80,212,.3)" stroke="rgba(96,144,255,.5)" stroke-width="1"/>
+            <circle cx="55" cy="35" r="3" fill="rgba(96,144,255,.8)"/>
+            <line x1="55" y1="10" x2="55" y2="19" stroke="rgba(59,110,246,.4)" stroke-width="1"/>
+            <line x1="55" y1="51" x2="55" y2="60" stroke="rgba(59,110,246,.4)" stroke-width="1"/>
+            <line x1="15" y1="35" x2="39" y2="35" stroke="rgba(59,110,246,.4)" stroke-width="1"/>
+            <line x1="71" y1="35" x2="95" y2="35" stroke="rgba(59,110,246,.4)" stroke-width="1"/>
           </svg>
         </div>
-        <div class="product-content">
-          <div class="product-type">Sistema Analógico</div>
-          <div class="product-name">Kit Tradicional</div>
-          <div class="product-desc">DVR Hikvision + Cámaras HiLook ColorVu 2MP con audio. Ideal para hogares y pequeños negocios.</div>
-          <div class="product-prices">
-            <div class="price-row"><span class="price-label">Kit <span class="price-cams">4 cámaras</span></span><span class="price-val">RD$16,300</span></div>
-            <div class="price-row"><span class="price-label">Kit <span class="price-cams">8 cámaras</span></span><span class="price-val">RD$28,200</span></div>
-            <div class="price-row"><span class="price-label">Kit <span class="price-cams">16 cámaras</span></span><span class="price-val">RD$50,300</span></div>
+        <div class="pcard-body">
+          <div class="pcard-type">Camaras Analogicas</div>
+          <div class="pcard-name">Kit Tradicional</div>
+          <p class="pcard-desc">Sistema analogico HD ideal para hogares y pequenos negocios. Grabacion continua, vision nocturna y acceso remoto.</p>
+          <div class="price-table">
+            <div class="price-row">
+              <span class="price-cam"><span class="price-cams">4</span> camaras</span>
+              <span class="price-val">RD$ 16,300</span>
+            </div>
+            <div class="price-row">
+              <span class="price-cam"><span class="price-cams">8</span> camaras</span>
+              <span class="price-val">RD$ 28,200</span>
+            </div>
+            <div class="price-row">
+              <span class="price-cam"><span class="price-cams">16</span> camaras</span>
+              <span class="price-val">RD$ 50,300</span>
+            </div>
           </div>
-          <div class="product-features">
-            <span class="pf">✓ DVR Hikvision</span><span class="pf">✓ ColorVu 24/7</span>
-            <span class="pf">✓ Audio</span><span class="pf">✓ Disco 1TB</span><span class="pf">✓ Instalación</span>
+          <div class="pcard-tags">
+            <span class="ptag">DVR incluido</span>
+            <span class="ptag">Vision nocturna</span>
+            <span class="ptag">App movil</span>
+            <span class="ptag">Garantia</span>
           </div>
-          <a href="https://wa.me/18494950959?text=Hola%2C%20me%20interesa%20el%20Kit%20Tradicional"
-             class="product-cta" target="_blank">
-            💬 Cotizar por WhatsApp
+          <a href="https://wa.me/18494950959?text=Hola%2C%20me%20interesa%20el%20Kit%20Tradicional" target="_blank" class="pcard-cta">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+            Cotizar este kit
           </a>
         </div>
       </div>
 
       <!-- Kit IP Premium -->
-      <div class="product-card featured" data-gsap="fadeUp" data-gsap-delay="0.15" data-tilt>
-        <div class="product-visual">
-          <div class="product-badge">⭐ Recomendado</div>
-          <svg viewBox="0 0 400 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-            <defs>
-              <linearGradient id="bg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#030714"/><stop offset="100%" stop-color="#07101e"/></linearGradient>
-              <radialGradient id="glow2" cx="50%" cy="50%"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.2"/><stop offset="100%" stop-color="#3b82f6" stop-opacity="0"/></radialGradient>
-            </defs>
-            <rect width="400" height="160" fill="url(#bg2)"/>
-            <rect x="145" y="48" width="110" height="70" rx="5" fill="#101828" stroke="rgba(59,130,246,0.2)" stroke-width="1"/>
-            <rect x="152" y="55" width="45" height="28" rx="2" fill="#081422"/>
-            <circle cx="230" cy="69" r="2.5" fill="#3b82f6" opacity="0.7"><animate attributeName="opacity" values="0.7;0.2;0.7" dur="2s" repeatCount="indefinite"/></circle>
-            <text x="200" y="110" text-anchor="middle" font-family="monospace" font-size="7.5" fill="#3b82f6" letter-spacing="0.5" opacity="0.6">NVR POE HIKVISION</text>
-            <g transform="translate(55,78)"><rect x="-12" y="-8" width="24" height="14" rx="4" fill="#c0c8d0"/><circle cx="14" cy="0" r="6" fill="#111" stroke="#3b82f6" stroke-width="0.5"/><circle cx="14" cy="0" r="2.5" fill="#3b82f6" opacity="0.4"/></g>
-            <g transform="translate(345,78)"><rect x="-12" y="-8" width="24" height="14" rx="4" fill="#c0c8d0"/><circle cx="-14" cy="0" r="6" fill="#111" stroke="#3b82f6" stroke-width="0.5"/><circle cx="-14" cy="0" r="2.5" fill="#3b82f6" opacity="0.4"/></g>
-            <line x1="79" y1="78" x2="145" y2="90" stroke="#60a5fa" stroke-width="0.8" opacity="0.2" stroke-dasharray="3,3"/>
-            <line x1="321" y1="78" x2="255" y2="90" stroke="#60a5fa" stroke-width="0.8" opacity="0.2" stroke-dasharray="3,3"/>
-            <circle cx="200" cy="83" r="60" fill="url(#glow2)"/>
+      <div class="pcard featured js-tilt">
+        <div class="pcard-vis">
+          <span class="pcard-badge popular">Mas Popular</span>
+          <svg width="110" height="70" viewBox="0 0 110 70" fill="none">
+            <rect x="10" y="8" width="90" height="54" rx="7" fill="rgba(30,80,212,.18)" stroke="rgba(96,144,255,.4)" stroke-width="1.5"/>
+            <circle cx="55" cy="35" r="18" fill="rgba(30,80,212,.25)" stroke="rgba(96,144,255,.5)" stroke-width="1.5"/>
+            <circle cx="55" cy="35" r="10" fill="rgba(30,80,212,.4)" stroke="rgba(96,144,255,.7)" stroke-width="1.2"/>
+            <circle cx="55" cy="35" r="4" fill="rgba(150,180,255,.9)"/>
+            <circle cx="55" cy="35" r="1.5" fill="white"/>
+            <circle cx="28" cy="20" r="4" fill="rgba(30,80,212,.3)" stroke="rgba(96,144,255,.4)" stroke-width="1"/>
+            <circle cx="82" cy="20" r="4" fill="rgba(30,80,212,.3)" stroke="rgba(96,144,255,.4)" stroke-width="1"/>
+            <circle cx="28" cy="50" r="4" fill="rgba(30,80,212,.3)" stroke="rgba(96,144,255,.4)" stroke-width="1"/>
+            <circle cx="82" cy="50" r="4" fill="rgba(30,80,212,.3)" stroke="rgba(96,144,255,.4)" stroke-width="1"/>
           </svg>
         </div>
-        <div class="product-content">
-          <div class="product-type">Sistema IP de Alta Definición</div>
-          <div class="product-name">Kit IP Premium</div>
-          <div class="product-desc">NVR POE Hikvision + Cámaras IP ColorVu 2MP. Un solo cable por cámara. Máxima calidad y acceso remoto vía app.</div>
-          <div class="product-prices">
-            <div class="price-row"><span class="price-label">Kit <span class="price-cams">4 cámaras</span></span><span class="price-val">RD$30,700</span></div>
-            <div class="price-row"><span class="price-label">Kit <span class="price-cams">8 cámaras</span></span><span class="price-val">RD$54,200</span></div>
-            <div class="price-row"><span class="price-label">Kit <span class="price-cams">16 cámaras</span></span><span class="price-val">RD$104,900</span></div>
+        <div class="pcard-body">
+          <div class="pcard-type">Camaras IP / PoE</div>
+          <div class="pcard-name">Kit IP Premium</div>
+          <p class="pcard-desc">Sistema IP con camaras ColorVu Hikvision. Imagen a color 24/7, resolucion 4K y conexion PoE para instalacion limpia.</p>
+          <div class="price-table">
+            <div class="price-row">
+              <span class="price-cam"><span class="price-cams">4</span> camaras</span>
+              <span class="price-val">RD$ 30,700</span>
+            </div>
+            <div class="price-row">
+              <span class="price-cam"><span class="price-cams">8</span> camaras</span>
+              <span class="price-val">RD$ 54,200</span>
+            </div>
+            <div class="price-row">
+              <span class="price-cam"><span class="price-cams">16</span> camaras</span>
+              <span class="price-val">RD$ 104,900</span>
+            </div>
           </div>
-          <div class="product-features">
-            <span class="pf">✓ NVR POE</span><span class="pf">✓ IP Hikvision</span>
-            <span class="pf">✓ 1 cable/cámara</span><span class="pf">✓ App móvil</span>
-            <span class="pf">✓ Disco 1TB</span><span class="pf">✓ Instalación</span>
+          <div class="pcard-tags">
+            <span class="ptag">NVR incluido</span>
+            <span class="ptag">ColorVu 24/7</span>
+            <span class="ptag">4K disponible</span>
+            <span class="ptag">PoE</span>
+            <span class="ptag">App movil</span>
           </div>
-          <a href="https://wa.me/18494950959?text=Hola%2C%20me%20interesa%20el%20Kit%20IP%20Premium"
-             class="product-cta" target="_blank">
-            💬 Cotizar por WhatsApp
+          <a href="https://wa.me/18494950959?text=Hola%2C%20me%20interesa%20el%20Kit%20IP%20Premium" target="_blank" class="pcard-cta">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+            Cotizar este kit
           </a>
         </div>
       </div>
 
       <!-- Kit Alarma -->
-      <div class="product-card" data-gsap="fadeUp" data-gsap-delay="0.25" data-tilt>
-        <div class="product-visual">
-          <div class="product-badge new">🔔 Disponible</div>
-          <svg viewBox="0 0 400 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-            <defs>
-              <linearGradient id="bg3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#050a10"/><stop offset="100%" stop-color="#08101a"/></linearGradient>
-            </defs>
-            <rect width="400" height="160" fill="url(#bg3)"/>
-            <rect x="155" y="25" width="90" height="115" rx="7" fill="#101828" stroke="#1a2438" stroke-width="1"/>
-            <rect x="166" y="38" width="68" height="38" rx="3" fill="#08122a"/>
-            <text x="200" y="63" text-anchor="middle" font-family="monospace" font-size="10" fill="#25D366" opacity="0.85">ARMED</text>
-            <circle cx="182" cy="99" r="7" fill="#101828" stroke="#2a3848" stroke-width="1"/>
-            <circle cx="200" cy="99" r="7" fill="#101828" stroke="#2a3848" stroke-width="1"/>
-            <circle cx="218" cy="99" r="7" fill="#101828" stroke="#2a3848" stroke-width="1"/>
-            <circle cx="182" cy="118" r="7" fill="#101828" stroke="#2a3848" stroke-width="1"/>
-            <circle cx="200" cy="118" r="7" fill="#101828" stroke="#2a3848" stroke-width="1"/>
-            <circle cx="218" cy="118" r="7" fill="#101828" stroke="#2a3848" stroke-width="1"/>
-            <rect x="55" y="58" width="28" height="16" rx="3" fill="#c4ccd4" stroke="#888" stroke-width="0.5"/>
-            <circle cx="69" cy="66" r="2" fill="#25D366" opacity="0.9"><animate attributeName="opacity" values="0.9;0.2;0.9" dur="3s" repeatCount="indefinite"/></circle>
-            <rect x="317" y="58" width="28" height="16" rx="3" fill="#c4ccd4" stroke="#888" stroke-width="0.5"/>
-            <circle cx="331" cy="66" r="2" fill="#25D366" opacity="0.9"><animate attributeName="opacity" values="0.2;0.9;0.2" dur="3s" repeatCount="indefinite"/></circle>
-            <line x1="83" y1="66" x2="155" y2="76" stroke="#25D366" stroke-width="0.5" opacity="0.2" stroke-dasharray="3,3"/>
-            <line x1="317" y1="66" x2="245" y2="76" stroke="#25D366" stroke-width="0.5" opacity="0.2" stroke-dasharray="3,3"/>
+      <div class="pcard js-tilt">
+        <div class="pcard-vis">
+          <span class="pcard-badge new">Nuevo</span>
+          <svg width="110" height="70" viewBox="0 0 110 70" fill="none">
+            <rect x="35" y="12" width="40" height="46" rx="5" fill="rgba(200,146,42,.1)" stroke="rgba(230,170,60,.3)" stroke-width="1.2"/>
+            <rect x="42" y="20" width="26" height="16" rx="3" fill="rgba(200,146,42,.15)" stroke="rgba(230,170,60,.25)" stroke-width="1"/>
+            <circle cx="55" cy="44" r="5" fill="rgba(200,146,42,.2)" stroke="rgba(230,170,60,.4)" stroke-width="1"/>
+            <path d="M50 52 Q55 58 60 52" stroke="rgba(230,170,60,.35)" stroke-width="1" fill="none"/>
+            <path d="M45 56 Q55 65 65 56" stroke="rgba(230,170,60,.2)" stroke-width="1" fill="none"/>
+            <path d="M40 60 Q55 72 70 60" stroke="rgba(230,170,60,.1)" stroke-width="1" fill="none"/>
           </svg>
         </div>
-        <div class="product-content">
-          <div class="product-type">Protección Perimetral</div>
-          <div class="product-name">Kit Alarma Hikvision</div>
-          <div class="product-desc">Sistema de alarma inalámbrica con sensores PIR, contactos magnéticos y sirena. Control total desde tu celular.</div>
-          <div class="product-prices">
-            <div class="price-row"><span class="price-label">Kit Básico <span class="price-cams">4 zonas</span></span><span class="price-val" style="color:var(--blue-light)">Consultar</span></div>
-            <div class="price-row"><span class="price-label">Kit Pro <span class="price-cams">8 zonas</span></span><span class="price-val" style="color:var(--blue-light)">Consultar</span></div>
+        <div class="pcard-body">
+          <div class="pcard-type">Sistema de Alarma</div>
+          <div class="pcard-name">Kit Alarma Hikvision</div>
+          <p class="pcard-desc">Central de alarma Hikvision con sensores de movimiento, contactos magneticos, sirena y comunicacion GSM. Precio segun necesidad.</p>
+          <div class="price-table">
+            <div class="price-row" style="background:rgba(200,146,42,.06);border-color:rgba(200,146,42,.2);">
+              <span class="price-cam">Cotizacion personalizada</span>
+              <span class="price-val" style="color:var(--gold-l);">Consultar</span>
+            </div>
           </div>
-          <div class="product-features">
-            <span class="pf">✓ Panel Hikvision</span><span class="pf">✓ Sensores PIR</span>
-            <span class="pf">✓ Sirena</span><span class="pf">✓ App celular</span><span class="pf">✓ Instalación</span>
+          <div class="pcard-tags">
+            <span class="ptag" style="background:var(--gold-pale);border-color:var(--gold-border);color:var(--gold-l);">Sensores</span>
+            <span class="ptag" style="background:var(--gold-pale);border-color:var(--gold-border);color:var(--gold-l);">GSM</span>
+            <span class="ptag" style="background:var(--gold-pale);border-color:var(--gold-border);color:var(--gold-l);">Sirena</span>
+            <span class="ptag" style="background:var(--gold-pale);border-color:var(--gold-border);color:var(--gold-l);">App</span>
           </div>
-          <a href="https://wa.me/18494950959?text=Hola%2C%20me%20interesa%20el%20Kit%20de%20Alarma%20Hikvision"
-             class="product-cta" target="_blank">
-            💬 Consultar Precio
+          <a href="https://wa.me/18494950959?text=Hola%2C%20me%20interesa%20el%20Kit%20de%20Alarma%20Hikvision" target="_blank" class="pcard-cta">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+            Solicitar cotizacion
           </a>
         </div>
       </div>
@@ -777,243 +858,192 @@
   </div>
 </section>
 
-<!-- ═══ WHY US ════════════════════════════════════════════ -->
+<!-- ── WHY US ─────────────────────────────────────────────── -->
 <section id="nosotros" class="why">
   <div class="container">
-    <div class="why-header" data-gsap="fadeUp">
-      <div class="eyebrow">¿Por qué elegirnos?</div>
-      <h2 class="section-title">La Diferencia <span class="text-chrome">Plata Tech</span></h2>
+    <div class="sec-head" data-reveal>
+      <p class="label">Por Que Elegirnos</p>
+      <h2 class="h2">El equipo que protege<br/>lo que mas te importa</h2>
     </div>
     <div class="why-grid">
-      <div class="why-card" data-gsap="fadeUp" data-gsap-delay="0.05">
-        <div class="why-icon-wrap">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
-        </div>
-        <div class="why-title">Visión ColorVu 24/7</div>
-        <div class="why-desc">Nuestras cámaras capturan a color incluso en total oscuridad. Identifica personas, vehículos y detalles importantes sin importar la hora.</div>
+      <div class="wcard">
+        <div class="wcard-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="wcard-title">Instalacion Certificada</div>
+        <div class="wcard-desc">Tecnicos capacitados con anos de experiencia en instalaciones residenciales y comerciales.</div>
       </div>
-      <div class="why-card" data-gsap="fadeUp" data-gsap-delay="0.1">
-        <div class="why-icon-wrap">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-        </div>
-        <div class="why-title">Acceso Remoto</div>
-        <div class="why-desc">Monitorea tu hogar o negocio desde cualquier lugar del mundo con la app en tu celular. Notificaciones en tiempo real.</div>
+      <div class="wcard">
+        <div class="wcard-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+        <div class="wcard-title">Camaras Hikvision ColorVu</div>
+        <div class="wcard-desc">Equipos de la marca #1 en seguridad mundial. Imagen a color incluso de noche sin luz infrarroja.</div>
       </div>
-      <div class="why-card" data-gsap="fadeUp" data-gsap-delay="0.15">
-        <div class="why-icon-wrap">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-        </div>
-        <div class="why-title">Instalación Profesional</div>
-        <div class="why-desc">Técnicos certificados con años de experiencia. Instalación limpia, organizada y con acabado profesional garantizado.</div>
+      <div class="wcard">
+        <div class="wcard-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke-linecap="round" stroke-width="2.5"/></svg></div>
+        <div class="wcard-title">Acceso Remoto 24/7</div>
+        <div class="wcard-desc">Ve tu propiedad desde cualquier lugar con la app. Notificaciones en tiempo real en tu celular.</div>
       </div>
-      <div class="why-card" data-gsap="fadeUp" data-gsap-delay="0.05">
-        <div class="why-icon-wrap">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </div>
-        <div class="why-title">Garantía Total</div>
-        <div class="why-desc">3 meses de garantía en equipos y 6 meses en servicio técnico. Tu inversión está protegida desde el primer día.</div>
+      <div class="wcard">
+        <div class="wcard-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <div class="wcard-title">Precios Transparentes</div>
+        <div class="wcard-desc">Precios fijos sin sorpresas. Lo que cotizamos es lo que pagas. Presupuesto detallado sin costo.</div>
       </div>
-      <div class="why-card" data-gsap="fadeUp" data-gsap-delay="0.1">
-        <div class="why-icon-wrap">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-        </div>
-        <div class="why-title">Tecnología POE</div>
-        <div class="why-desc">Un solo cable para video y energía. Menos cableado, instalación más rápida y sistema más confiable y ordenado.</div>
+      <div class="wcard">
+        <div class="wcard-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.72a16 16 0 0 0 6.29 6.29l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+        <div class="wcard-title">Soporte Rapido</div>
+        <div class="wcard-desc">Respondemos al mismo dia. Soporte tecnico y garantia post-instalacion incluidos en cada proyecto.</div>
       </div>
-      <div class="why-card" data-gsap="fadeUp" data-gsap-delay="0.15">
-        <div class="why-icon-wrap">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        </div>
-        <div class="why-title">Marcas Premium</div>
-        <div class="why-desc">Trabajamos exclusivamente con Hikvision y HiLook, líderes mundiales en videovigilancia con calidad certificada.</div>
+      <div class="wcard">
+        <div class="wcard-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="wcard-title">Garantia Total</div>
+        <div class="wcard-desc">Garantia en equipos y mano de obra. Trabajamos hasta que estes 100% satisfecho con el resultado.</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══ CTA ════════════════════════════════════════════════ -->
+<!-- ── CTA ───────────────────────────────────────────────── -->
 <section id="contacto" class="cta-sec">
-  <div class="container">
-    <div class="cta-inner" data-gsap="fadeUp">
-      <div class="eyebrow" style="justify-content:center;">Contáctenos</div>
-      <h2 class="section-title">¿Listo para proteger<br/><span class="text-gold">lo que más importa?</span></h2>
-      <p>Escríbenos por WhatsApp y recibe una cotización personalizada en minutos. Sin compromisos.</p>
-      <div class="cta-phone">849-495-0959</div>
+  <div class="cta-orb cta-orb-1"></div>
+  <div class="cta-orb cta-orb-2"></div>
+  <div class="container" style="position:relative;z-index:1;">
+    <div class="cta-inner" data-reveal>
+      <p class="label cta-label">Contacto</p>
+      <h2 class="cta-title">Solicita tu cotizacion<br/>sin compromiso</h2>
+      <p class="cta-desc">Cuentanos que necesitas proteger y te preparamos un presupuesto detallado el mismo dia.</p>
+      <a href="tel:8494950959" class="cta-phone">849-495-0959</a>
       <div class="cta-btns">
-        <a href="https://wa.me/18494950959?text=Hola%2C%20quiero%20una%20cotización%20de%20seguridad"
-           target="_blank" class="btn btn-wa" style="font-size:1rem;padding:1rem 2.5rem;">
-          💬 Escribir por WhatsApp
+        <a href="https://wa.me/18494950959?text=Hola%2C%20quiero%20cotizar%20un%20sistema%20de%20seguridad" target="_blank" class="btn btn-wa js-magnetic">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+          WhatsApp
         </a>
-        <a href="index.html" class="btn btn-outline">← Ver más marcas</a>
+        <a href="tel:8494950959" class="btn btn-outline-w js-magnetic">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.72a16 16 0 0 0 6.29 6.29l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          Llamar
+        </a>
       </div>
     </div>
   </div>
 </section>
-
 </main>
 
-<!-- ═══ FOOTER ════════════════════════════════════════════ -->
+<!-- ── FOOTER ────────────────────────────────────────────── -->
 <footer class="footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div>
-        <div class="footer-brand-name">🛡️ Plata Tech <span>Security</span></div>
-        <p class="footer-desc">Soluciones integrales de seguridad electrónica y domótica. Protegemos hogares y negocios con tecnología de punta en Santo Domingo, RD.</p>
+  <div class="container footer-inner">
+    <div class="footer-logo">
+      <div class="footer-mark">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       </div>
-      <div>
-        <div class="footer-col-title">Servicios</div>
-        <ul class="footer-links">
-          <li><a href="#productos">Cámaras CCTV</a></li>
-          <li><a href="#productos">Kit IP Premium</a></li>
-          <li><a href="#productos">Alarmas Hikvision</a></li>
-          <li><a href="#nosotros">Domótica</a></li>
-          <li><a href="#contacto">Mantenimiento</a></li>
-        </ul>
-      </div>
-      <div>
-        <div class="footer-col-title">Contacto</div>
-        <div class="footer-contact-item">💬 849-495-0959</div>
-        <div class="footer-contact-item">📷 @PlataTec</div>
-        <div class="footer-contact-item">📍 Santo Domingo, RD</div>
-        <div style="margin-top:0.75rem;">
-          <a href="index.html" style="font-size:0.82rem;color:var(--gold);display:flex;align-items:center;gap:0.4rem;">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-            Volver a PlataTechs
-          </a>
-        </div>
-      </div>
+      Plata Tech Security
     </div>
-    <div class="footer-bottom">
-      <span class="footer-copy">© 2025 Plata Tech Security | PlataTechs.com. Precios sujetos a cambios. ITBIS no incluido.</span>
-      <div class="footer-socials">
-        <a href="https://wa.me/18494950959" class="fsocial" target="_blank">💬</a>
-        <a href="https://instagram.com/PlataTec" class="fsocial" target="_blank">📷</a>
-      </div>
+    <div class="footer-links">
+      <a href="index.html">PlataTechs.com</a>
+      <a href="#productos">Productos</a>
+      <a href="https://instagram.com/PlataTec" target="_blank">@PlataTec</a>
+      <a href="#contacto">Contacto</a>
     </div>
+    <p class="footer-copy">&copy; 2025 Plata Tech Solutions - Santo Domingo, RD</p>
   </div>
 </footer>
-
-<!-- Floating WhatsApp -->
-<a href="https://wa.me/18494950959?text=Hola%2C%20necesito%20información%20sobre%20seguridad"
-   class="wa-float" target="_blank">
-  <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
-  <span class="wa-tooltip">¡Cotizar ahora!</span>
-</a>
 
 <!-- GSAP -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
 <script>
-/* ─── Particles ────────────────────────────────────── */
-(function() {
-  const c = document.getElementById('particles');
-  const ctx = c.getContext('2d');
-  let W = c.width = window.innerWidth, H = c.height = window.innerHeight;
-  const pts = Array.from({length: 50}, () => ({
-    x: Math.random()*W, y: Math.random()*H,
-    r: Math.random()*1.3+0.3,
-    vx: (Math.random()-0.5)*0.22, vy: (Math.random()-0.5)*0.22,
-    a: Math.random()*0.4+0.06,
-    blue: Math.random() > 0.35
-  }));
-  function draw() {
-    ctx.clearRect(0,0,W,H);
-    pts.forEach(p => {
-      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle = p.blue
-        ? `rgba(59,130,246,${p.a})`
-        : `rgba(212,168,67,${p.a*0.7})`;
-      ctx.fill();
-      p.x+=p.vx; p.y+=p.vy;
-      if(p.x<0||p.x>W)p.vx*=-1; if(p.y<0||p.y>H)p.vy*=-1;
-    });
-    requestAnimationFrame(draw);
-  }
-  draw();
-  window.addEventListener('resize', () => { W=c.width=window.innerWidth; H=c.height=window.innerHeight; }, {passive:true});
+gsap.registerPlugin(ScrollTrigger);
+
+/* ── Custom cursor ──────────────────────────────────── */
+const cur = document.getElementById('cur');
+const ring = document.getElementById('curRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cur.style.left = mx + 'px'; cur.style.top = my + 'px';
+});
+(function tick() {
+  rx += (mx - rx) * 0.09; ry += (my - ry) * 0.09;
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+  requestAnimationFrame(tick);
 })();
 
-/* ─── Nav ───────────────────────────────────────────── */
+/* ── Nav ────────────────────────────────────────────── */
 const nav = document.getElementById('nav');
-window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 30); }, {passive:true});
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 24);
+}, { passive: true });
 document.getElementById('navToggle').addEventListener('click', () => {
   document.getElementById('navMobile').classList.toggle('open');
 });
 function closeNav() { document.getElementById('navMobile').classList.remove('open'); }
 
-/* ─── GSAP ─────────────────────────────────────────── */
-gsap.registerPlugin(ScrollTrigger);
+/* ── Hero entrance ──────────────────────────────────── */
+gsap.timeline({ defaults: { ease: 'power4.out' } })
+  .to('#heroBadge', { opacity: 1, y: 0, duration: .6 })
+  .to('#heroTitle', { opacity: 1, y: 0, duration: .75 }, '-=.3')
+  .to('#heroDesc',  { opacity: 1, y: 0, duration: .65 }, '-=.35')
+  .to('#heroBtns',  { opacity: 1, y: 0, duration: .55 }, '-=.35')
+  .to('#heroStats .hstat', { opacity: 1, y: 0, stagger: .1, duration: .6 }, '-=.5')
+  .to('#heroScroll', { opacity: 1, duration: .5 }, '-=.1');
 
-// Hero entrance
-const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-tl.from('#heroBadge',           { opacity:0, y:20, duration:0.7 })
-  .from('#heroTitle',           { opacity:0, y:45, duration:0.9 }, '-=0.35')
-  .from('#heroDesc',            { opacity:0, y:18, duration:0.6 }, '-=0.35')
-  .from('#heroBtns .btn',       { opacity:0, y:16, stagger:0.12, duration:0.6 }, '-=0.3')
-  .from('#heroStats .hstat',    { opacity:0, y:28, stagger:0.1, duration:0.6 }, '-=0.5');
-
-// Scroll reveals
-document.querySelectorAll('[data-gsap="fadeUp"]').forEach(el => {
-  const delay = parseFloat(el.dataset.gsapDelay || 0);
-  gsap.from(el, {
-    opacity:0, y:48, duration:0.85, delay, ease:'power3.out',
-    scrollTrigger: { trigger:el, start:'top 85%', toggleActions:'play none none none' }
+/* ── Scroll reveals ─────────────────────────────────── */
+document.querySelectorAll('[data-reveal]').forEach(el => {
+  gsap.to(el, {
+    opacity: 1, y: 0, duration: .8, ease: 'power3.out',
+    scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
   });
 });
 
-// Counters
-document.querySelectorAll('.hstat-num[data-count], .stat-number[data-count]').forEach(el => {
+/* ── Stats counter ──────────────────────────────────── */
+document.querySelectorAll('[data-count]').forEach(el => {
   const target = parseInt(el.dataset.count);
   const suffix = el.dataset.suffix || '';
   let done = false;
   ScrollTrigger.create({
     trigger: el, start: 'top 90%',
-    onEnter: () => {
-      if(done) return; done = true;
-      const o = {v:0};
-      gsap.to(o, {v:target, duration:1.8, ease:'power2.out',
-        onUpdate: () => { el.textContent = Math.round(o.v) + suffix; }
+    onEnter() {
+      if (done) return; done = true;
+      const o = { v: 0 };
+      gsap.to(o, { v: target, duration: 1.8, ease: 'power2.out',
+        onUpdate() { el.textContent = Math.round(o.v) + suffix; }
       });
     }
   });
 });
 
-// Products stagger
-gsap.from('.product-card', {
-  opacity:0, y:60, stagger:0.13, duration:0.9, ease:'power3.out',
-  scrollTrigger: { trigger:'.products-grid', start:'top 80%' }
+/* ── Product cards stagger ──────────────────────────── */
+gsap.to('.pcard', {
+  opacity: 1, y: 0, stagger: .13, duration: .85, ease: 'power3.out',
+  scrollTrigger: { trigger: '.products-grid', start: 'top 82%' }
 });
 
-// Why cards stagger
-gsap.from('.why-card', {
-  opacity:0, y:40, stagger:0.08, duration:0.75, ease:'power2.out',
-  scrollTrigger: { trigger:'.why-grid', start:'top 80%' }
+/* ── Why cards stagger ──────────────────────────────── */
+gsap.to('.wcard', {
+  opacity: 1, y: 0, stagger: .09, duration: .75, ease: 'power3.out',
+  scrollTrigger: { trigger: '.why-grid', start: 'top 82%' }
 });
 
-/* ─── 3D Tilt ──────────────────────────────────────── */
-document.querySelectorAll('[data-tilt]').forEach(card => {
+/* ── Card tilt ──────────────────────────────────────── */
+document.querySelectorAll('.js-tilt').forEach(card => {
   card.addEventListener('mousemove', e => {
     const r = card.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width  - 0.5;
-    const y = (e.clientY - r.top)  / r.height - 0.5;
-    gsap.to(card, { rotateY:x*12, rotateX:-y*12, transformPerspective:900, duration:0.25, ease:'power2.out' });
+    const x = (e.clientX - r.left) / r.width  - .5;
+    const y = (e.clientY - r.top)  / r.height - .5;
+    gsap.to(card, { rotateY: x * 9, rotateX: -y * 9, transformPerspective: 800, duration: .3, ease: 'power2.out' });
   });
   card.addEventListener('mouseleave', () => {
-    gsap.to(card, { rotateY:0, rotateX:0, duration:0.7, ease:'elastic.out(1,0.6)' });
+    gsap.to(card, { rotateY: 0, rotateX: 0, duration: .7, ease: 'elastic.out(1,.6)' });
   });
 });
 
-/* ─── Magnetic CTA buttons ─────────────────────────── */
-document.querySelectorAll('.btn-wa, .btn-gold').forEach(btn => {
+/* ── Magnetic buttons ───────────────────────────────── */
+document.querySelectorAll('.js-magnetic').forEach(btn => {
   btn.addEventListener('mousemove', e => {
     const r = btn.getBoundingClientRect();
-    const x = (e.clientX - r.left - r.width/2) * 0.22;
-    const y = (e.clientY - r.top - r.height/2) * 0.22;
-    gsap.to(btn, {x, y, duration:0.3, ease:'power2.out'});
+    const x = (e.clientX - r.left - r.width/2) * .28;
+    const y = (e.clientY - r.top - r.height/2) * .28;
+    gsap.to(btn, { x, y, duration: .35, ease: 'power2.out' });
   });
   btn.addEventListener('mouseleave', () => {
-    gsap.to(btn, {x:0, y:0, duration:0.6, ease:'elastic.out(1,0.5)'});
+    gsap.to(btn, { x: 0, y: 0, duration: .65, ease: 'elastic.out(1,.5)' });
   });
 });
 </script>
