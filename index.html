@@ -885,16 +885,27 @@ document.getElementById('navToggle').addEventListener('click', () => {
 });
 function closeNav() { document.getElementById('navMobile').classList.remove('open'); }
 
-/* ── Hero: split title chars ────────────────────────── */
+/* ── Hero: split title chars (TreeWalker — safe for nested tags) ── */
 (function() {
   const title = document.getElementById('heroTitle');
-  const html = title.innerHTML;
-  title.innerHTML = html.replace(/([^<>\n]+)/g, (match, text) =>
-    [...text].map(c => c === ' ' ? ' '
-      : `<span class="char" style="display:inline-block">${c}</span>`
-    ).join('')
-  );
-  // immediately set chars to start-of-animation state (invisible, offset)
+  const walker = document.createTreeWalker(title, NodeFilter.SHOW_TEXT);
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+  textNodes.forEach(node => {
+    const frag = document.createDocumentFragment();
+    [...node.textContent].forEach(c => {
+      if (c === ' ' || c === '\n') {
+        frag.appendChild(document.createTextNode(c === '\n' ? '' : ' '));
+      } else {
+        const span = document.createElement('span');
+        span.className = 'char';
+        span.style.display = 'inline-block';
+        span.textContent = c;
+        frag.appendChild(span);
+      }
+    });
+    node.parentNode.replaceChild(frag, node);
+  });
   gsap.set('#heroTitle .char', { opacity: 0, y: 40, rotateX: -60, transformOrigin: '0% 50% -20px' });
 })();
 
