@@ -82,7 +82,7 @@
 
   /* ── FOUC prevention: hide animated elements until GSAP runs ── */
   #heroLabel                { opacity:0; transform:translateY(16px); }
-  #heroTitle                { opacity:0; }
+  /* #heroTitle opacity managed by GSAP after char-split */
   #heroDesc                 { opacity:0; transform:translateY(20px); }
   #heroActions .btn         { opacity:0; transform:translateY(14px); }
   #heroPanel .hpc           { opacity:0; transform:translateX(28px); }
@@ -891,17 +891,17 @@ function closeNav() { document.getElementById('navMobile').classList.remove('ope
   const html = title.innerHTML;
   title.innerHTML = html.replace(/([^<>\n]+)/g, (match, text) =>
     [...text].map(c => c === ' ' ? ' '
-      : `<span class="char" style="display:inline-block;opacity:0">${c}</span>`
+      : `<span class="char" style="display:inline-block">${c}</span>`
     ).join('')
   );
-  // reveal container so chars can be individually animated
-  gsap.set('#heroTitle', { opacity: 1 });
+  // immediately set chars to start-of-animation state (invisible, offset)
+  gsap.set('#heroTitle .char', { opacity: 0, y: 40, rotateX: -60, transformOrigin: '0% 50% -20px' });
 })();
 
 /* ── Hero entrance ──────────────────────────────────── */
 gsap.timeline({ defaults: { ease: 'power4.out' } })
   .to('#heroLabel',            { opacity: 1, y: 0, duration: .6 })
-  .to('#heroTitle .char',      { opacity: 1, y: 0, rotateX: 0, stagger: .018, duration: .7, transformOrigin: '0% 50% -20px' }, '-=.3')
+  .to('#heroTitle .char',      { opacity: 1, y: 0, rotateX: 0, stagger: .018, duration: .7 }, '-=.3')
   .to('#heroDesc',             { opacity: 1, y: 0, duration: .65 }, '-=.3')
   .to('#heroActions .btn',     { opacity: 1, y: 0, stagger: .1, duration: .5 }, '-=.35')
   .to('#heroPanel .hpc',       { opacity: 1, x: 0, stagger: .1, duration: .55 }, '-=.65')
