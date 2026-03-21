@@ -80,6 +80,18 @@
   body:has(a:hover) .cur-ring, body:has(button:hover) .cur-ring { width: 52px; height: 52px; border-color: rgba(200,146,42,.4); }
   @media (hover: none) { .cur, .cur-ring { display: none; } body { cursor: auto; } button { cursor: pointer; } }
 
+  /* ── FOUC prevention: hide animated elements until GSAP runs ── */
+  #heroLabel                { opacity:0; transform:translateY(16px); }
+  #heroTitle                { opacity:0; }
+  #heroDesc                 { opacity:0; transform:translateY(20px); }
+  #heroActions .btn         { opacity:0; transform:translateY(14px); }
+  #heroPanel .hpc           { opacity:0; transform:translateX(28px); }
+  #heroPanel .hero-trust    { opacity:0; transform:translateX(18px); }
+  .hero-scroll              { opacity:0; }
+  [data-reveal]             { opacity:0; transform:translateY(40px); }
+  .bcard                    { opacity:0; transform:translateY(50px); }
+  .feat                     { opacity:0; transform:translateX(-24px); }
+
   /* ── Container ─────────────────────────────────────────── */
   .container { max-width: 1140px; margin-inline: auto; padding-inline: 1.5rem; }
 
@@ -877,29 +889,30 @@ function closeNav() { document.getElementById('navMobile').classList.remove('ope
 (function() {
   const title = document.getElementById('heroTitle');
   const html = title.innerHTML;
-  // wrap each text node char by char, skip tags
   title.innerHTML = html.replace(/([^<>\n]+)/g, (match, text) =>
     [...text].map(c => c === ' ' ? ' '
-      : `<span class="char" style="display:inline-block">${c}</span>`
+      : `<span class="char" style="display:inline-block;opacity:0">${c}</span>`
     ).join('')
   );
+  // reveal container so chars can be individually animated
+  gsap.set('#heroTitle', { opacity: 1 });
 })();
 
 /* ── Hero entrance ──────────────────────────────────── */
 gsap.timeline({ defaults: { ease: 'power4.out' } })
-  .from('#heroLabel',           { opacity: 0, y: 16, duration: .6 })
-  .from('#heroTitle .char',     { opacity: 0, y: 40, rotateX: -60, stagger: .018, duration: .7, transformOrigin: '0% 50% -20px' }, '-=.3')
-  .from('#heroDesc',            { opacity: 0, y: 20, duration: .65 }, '-=.3')
-  .from('#heroActions .btn',    { opacity: 0, y: 14, stagger: .1, duration: .5 }, '-=.35')
-  .from('#heroPanel .hpc',      { opacity: 0, x: 28, stagger: .1, duration: .55 }, '-=.65')
-  .from('#heroPanel .hero-trust',{ opacity: 0, x: 18, duration: .45 }, '-=.15')
-  .from('.hero-scroll',         { opacity: 0, duration: .5 }, '-=.2');
+  .to('#heroLabel',            { opacity: 1, y: 0, duration: .6 })
+  .to('#heroTitle .char',      { opacity: 1, y: 0, rotateX: 0, stagger: .018, duration: .7, transformOrigin: '0% 50% -20px' }, '-=.3')
+  .to('#heroDesc',             { opacity: 1, y: 0, duration: .65 }, '-=.3')
+  .to('#heroActions .btn',     { opacity: 1, y: 0, stagger: .1, duration: .5 }, '-=.35')
+  .to('#heroPanel .hpc',       { opacity: 1, x: 0, stagger: .1, duration: .55 }, '-=.65')
+  .to('#heroPanel .hero-trust',{ opacity: 1, x: 0, duration: .45 }, '-=.15')
+  .to('.hero-scroll',          { opacity: 1, duration: .5 }, '-=.2');
 
-/* ── Scroll reveals (clip-path) ─────────────────────── */
+/* ── Scroll reveals ─────────────────────────────────── */
 document.querySelectorAll('[data-reveal]').forEach(el => {
   const delay = parseFloat(el.dataset.revealDelay || 0);
-  gsap.from(el, {
-    opacity: 0, y: 40, duration: .8, delay,
+  gsap.to(el, {
+    opacity: 1, y: 0, duration: .8, delay,
     ease: 'power3.out',
     scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
   });
@@ -923,8 +936,8 @@ document.querySelectorAll('.stat-n[data-count]').forEach(el => {
 });
 
 /* ── Brand cards stagger ────────────────────────────── */
-gsap.from('.bcard', {
-  opacity: 0, y: 50, stagger: .13, duration: .85, ease: 'power3.out',
+gsap.to('.bcard', {
+  opacity: 1, y: 0, stagger: .13, duration: .85, ease: 'power3.out',
   scrollTrigger: { trigger: '.brands-grid', start: 'top 82%' }
 });
 
@@ -955,8 +968,8 @@ document.querySelectorAll('.js-magnetic').forEach(btn => {
 });
 
 /* ── Feat cards hover ───────────────────────────────── */
-gsap.from('.feat', {
-  opacity: 0, x: -24, stagger: .1, duration: .7, ease: 'power2.out',
+gsap.to('.feat', {
+  opacity: 1, x: 0, stagger: .1, duration: .7, ease: 'power2.out',
   scrollTrigger: { trigger: '.feat-list', start: 'top 85%' }
 });
 </script>
