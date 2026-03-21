@@ -1,13 +1,27 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="7" fill="#0055ff"/>
-  <!-- Smartphone outline -->
-  <rect x="10" y="5" width="12" height="22" rx="2.5" fill="none" stroke="white" stroke-width="1.8"/>
-  <!-- Screen area -->
-  <rect x="12" y="8.5" width="8" height="13" rx="1" fill="white" opacity=".15"/>
-  <!-- Home button -->
-  <circle cx="16" cy="24" r="1.2" fill="white" opacity=".8"/>
-  <!-- Signal lines on screen (gadget display) -->
-  <line x1="13.5" y1="11.5" x2="18.5" y2="11.5" stroke="white" stroke-width="1.2" stroke-linecap="round" opacity=".9"/>
-  <line x1="13.5" y1="14" x2="18.5" y2="14" stroke="white" stroke-width="1" stroke-linecap="round" opacity=".6"/>
-  <line x1="13.5" y1="16.5" x2="16.5" y2="16.5" stroke="white" stroke-width="1" stroke-linecap="round" opacity=".4"/>
+  <defs>
+    <linearGradient id="phone-grad" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0"   stop-color="#0066ff"/>
+      <stop offset="1"   stop-color="#0044cc"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="white" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="white" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Outer white/black border (like in the logo) -->
+  <rect width="32" height="32" rx="8" fill="#111111"/>
+
+  <!-- Blue phone/tablet shape — the key brand element -->
+  <rect x="3" y="3" width="26" height="26" rx="7" fill="url(#phone-grad)"/>
+
+  <!-- Camera notch pill at top (dark, like in the logo) -->
+  <rect x="10" y="6.5" width="12" height="3.5" rx="1.75" fill="#001a66"/>
+
+  <!-- Screen body -->
+  <rect x="5" y="12" width="22" height="14" rx="2" fill="#003acc" opacity="0.5"/>
+
+  <!-- Shine reflection -->
+  <path d="M4 4 Q4 3 5 3 L17 3 Q5 8 4 20 Z" fill="url(#shine)" rx="7"/>
 </svg>
