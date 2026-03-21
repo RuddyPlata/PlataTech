@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Plata Tech Solutions — Tecnología con Propósito. Seguridad, plataformas digitales y gadgets." />
-  <title>Plata Tech Solutions — PlataTechs.com</title>
+  <meta name="description" content="Plata Tech Solutions, Tecnología con Propósito. Seguridad, plataformas digitales y gadgets." />
+  <title>Plata Tech Solutions | PlataTechs.com</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
 
   <style>
     /* ═══════════════════════════════════════════════════════
@@ -159,7 +159,7 @@
     }
 
     .section-title {
-      font-family: 'Syne', sans-serif;
+      font-family: 'Plus Jakarta Sans', sans-serif;
       font-size: clamp(2rem, 4vw, 3rem);
       font-weight: 800;
       line-height: 1.1;
@@ -200,11 +200,11 @@
       border-radius: 10px;
       background: linear-gradient(135deg, var(--gold), #C49030);
       display: flex; align-items: center; justify-content: center;
-      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.9rem;
+      font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 0.9rem;
       color: #06070f;
       box-shadow: 0 4px 16px rgba(212,168,67,0.4);
     }
-    .nav-logo-text { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; color: var(--text); }
+    .nav-logo-text { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 1rem; color: var(--text); }
     .nav-logo-sub  { font-size: 0.62rem; color: var(--gold); letter-spacing: 0.08em; display: block; }
     .nav-links { display: flex; gap: 2rem; list-style: none; }
     .nav-links a {
@@ -259,9 +259,56 @@
     }
     .hero-content {
       position: relative; z-index: 1;
-      text-align: center;
-      padding-block: 6rem 4rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      padding-block: 7rem 5rem;
     }
+    .hero-left { text-align: left; }
+
+    /* Hero brand panel (right side) */
+    .hero-panel {
+      display: flex; flex-direction: column; gap: 1rem;
+    }
+    .hero-panel-card {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1.1rem 1.4rem;
+      border-radius: 1rem;
+      background: rgba(255,255,255,0.04);
+      position: relative; z-index: 0;
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+    .hero-panel-card::before {
+      content: '';
+      position: absolute; inset: -1px; border-radius: 1.05rem;
+      background: var(--chrome); background-size: 300% 300%;
+      animation: chromeShimmer 9s ease infinite;
+      z-index: -1; opacity: 0.2; transition: opacity 0.3s;
+    }
+    .hero-panel-card:hover { background: rgba(255,255,255,0.07); transform: translateX(6px); }
+    .hero-panel-card:hover::before { opacity: 0.7; }
+    .hpc-icon {
+      width: 48px; height: 48px; border-radius: 12px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .hpc-text { flex: 1; }
+    .hpc-name { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--text); }
+    .hpc-sub  { font-size: 0.75rem; color: var(--text-dim); margin-top: 0.1rem; }
+    .hpc-arrow { color: var(--text-dim); transition: color 0.2s, transform 0.2s; }
+    .hero-panel-card:hover .hpc-arrow { color: var(--gold); transform: translateX(4px); }
+
+    .hero-trust {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.85rem 1.2rem;
+      background: rgba(212,168,67,0.06);
+      border: 1px solid rgba(212,168,67,0.15);
+      border-radius: 0.85rem;
+      margin-top: 0.5rem;
+    }
+    .hero-trust-icon { font-size: 1.1rem; }
+    .hero-trust-text { font-size: 0.8rem; color: var(--text-mid); line-height: 1.4; }
+    .hero-trust-text strong { color: var(--gold-light); font-weight: 600; }
     .hero-badge {
       display: inline-flex; align-items: center; gap: 0.6rem;
       padding: 0.45rem 1.2rem;
@@ -281,13 +328,12 @@
     }
     @keyframes pulse { 0%,100% { opacity:1; box-shadow: 0 0 0 0 rgba(212,168,67,0.4); } 50% { opacity:0.5; box-shadow: 0 0 0 6px rgba(212,168,67,0); } }
     .hero-title {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(2.8rem, 5.5vw, 5rem);
       font-weight: 800;
-      line-height: 1.02;
+      line-height: 1.05;
       letter-spacing: -0.03em;
       margin-bottom: 0.5rem;
-      overflow: hidden;
     }
     .hero-title-line { display: block; }
     .hero-domain {
@@ -339,7 +385,7 @@
     }
     .stat-item:last-child { border-right: none; }
     .stat-number {
-      font-family: 'Syne', sans-serif; font-size: 2.4rem; font-weight: 800;
+      font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2.4rem; font-weight: 800;
       line-height: 1;
       background: linear-gradient(135deg, var(--gold), var(--gold-light));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
@@ -418,7 +464,6 @@
       z-index: 0;
       display: flex; flex-direction: column;
       transition: transform 0.08s ease;
-      transform-style: preserve-3d;
     }
     /* Chrome-gold gradient border */
     .brand-card::before {
@@ -462,7 +507,7 @@
       position: relative; z-index: 1;
     }
     .card-name {
-      font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800;
+      font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.4rem; font-weight: 800;
       color: var(--text); margin-bottom: 0.3rem;
       position: relative; z-index: 1;
     }
@@ -585,13 +630,19 @@
       .contact-grid { grid-template-columns: 1fr; }
       .about-visual { display: none; }
     }
+    @media (max-width: 1000px) {
+      .hero-content { grid-template-columns: 1fr; gap: 3rem; }
+      .hero-left { text-align: center; }
+      .hero-actions { justify-content: center; }
+    }
     @media (max-width: 768px) {
       .nav-links, .nav > .container > .btn { display: none; }
       .nav-toggle { display: flex; }
       .stats-row { grid-template-columns: 1fr; }
       .stat-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
       .stat-item:last-child { border-bottom: none; }
-      .hero-actions { flex-direction: column; align-items: center; }
+      .hero-actions { flex-direction: column; align-items: stretch; max-width: 320px; margin-inline: auto; }
+      .hero-panel { display: none; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition-duration: 0.01ms !important; }
@@ -637,26 +688,71 @@
   <div class="hero-aurora"></div>
   <div class="hero-grid"></div>
   <div class="container hero-content">
-    <div class="hero-badge" id="heroBadge">
-      <span class="hero-badge-dot"></span>
-      Tecnología con Propósito
+
+    <!-- Left: text -->
+    <div class="hero-left">
+      <div class="hero-badge" id="heroBadge">
+        <span class="hero-badge-dot"></span>
+        Tecnología con Propósito
+      </div>
+      <h1 class="hero-title" id="heroTitle">
+        <span class="hero-title-line text-chrome">Plata Tech</span>
+        <span class="hero-title-line" style="color:var(--text)">Solutions</span>
+      </h1>
+      <p class="hero-domain">PlataTechs.com</p>
+      <p class="hero-desc" id="heroDesc">
+        Tres marcas, una visión: soluciones tecnológicas de clase mundial
+        para empresas y personas. Seguridad, movilidad y gadgets.
+      </p>
+      <div class="hero-actions" id="heroActions">
+        <a href="#marcas" class="btn btn-gold">
+          Ver Nuestras Marcas
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#contacto" class="btn btn-outline">Contáctenos</a>
+      </div>
     </div>
-    <h1 class="hero-title" id="heroTitle">
-      <span class="hero-title-line text-chrome">Plata Tech</span>
-      <span class="hero-title-line" style="color:var(--text)">Solutions</span>
-    </h1>
-    <p class="hero-domain">PlataTechs.com</p>
-    <p class="hero-desc" id="heroDesc">
-      Tres marcas, una visión: llevar soluciones tecnológicas de clase mundial
-      a empresas y personas. Seguridad, movilidad y gadgets bajo un mismo techo.
-    </p>
-    <div class="hero-actions" id="heroActions">
-      <a href="#marcas" class="btn btn-gold">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-        Ver Nuestras Marcas
+
+    <!-- Right: brand preview panel -->
+    <div class="hero-panel" id="heroPanel">
+      <a href="security.html" class="hero-panel-card">
+        <div class="hpc-icon" style="background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.2);color:#60a5fa;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="hpc-text">
+          <div class="hpc-name">Plata Tech Security</div>
+          <div class="hpc-sub">Cámaras, alarmas y domótica</div>
+        </div>
+        <svg class="hpc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
-      <a href="#contacto" class="btn btn-outline">Contáctenos</a>
+      <a href="https://mekafix.com" target="_blank" rel="noopener" class="hero-panel-card">
+        <div class="hpc-icon" style="background:rgba(249,115,22,0.12);border:1px solid rgba(249,115,22,0.2);color:#fb923c;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        </div>
+        <div class="hpc-text">
+          <div class="hpc-name">MekaFix</div>
+          <div class="hpc-sub">Plataforma automotriz con IA</div>
+        </div>
+        <svg class="hpc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+      <a href="https://instagram.com/ultimogadget" target="_blank" rel="noopener" class="hero-panel-card">
+        <div class="hpc-icon" style="background:rgba(168,85,247,0.12);border:1px solid rgba(168,85,247,0.2);color:#c084fc;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        </div>
+        <div class="hpc-text">
+          <div class="hpc-name">Ultimo Gadget</div>
+          <div class="hpc-sub">Gadgets, celulares y accesorios</div>
+        </div>
+        <svg class="hpc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      </a>
+      <div class="hero-trust">
+        <span class="hero-trust-icon">🛡️</span>
+        <div class="hero-trust-text">
+          <strong>+500 clientes</strong> confian en nuestras soluciones. Santo Domingo, RD.
+        </div>
+      </div>
     </div>
+
   </div>
   <div class="hero-scroll-hint">
     <div class="scroll-line"></div>
@@ -696,7 +792,7 @@
       </p>
       <p>
         Desde la seguridad de tu hogar o negocio, hasta el mantenimiento inteligente
-        de tu vehículo y los gadgets del día a día — tenemos la solución exacta.
+        de tu vehículo y los gadgets del día a día - tenemos la solución exacta.
       </p>
       <div class="about-pills">
         <span class="about-pill">🔒 Seguridad</span>
@@ -723,7 +819,7 @@
     <div class="brands-header" data-gsap="fadeUp">
       <div class="eyebrow">Nuestro Portafolio</div>
       <h2 class="section-title">Tres Marcas, Una Misión</h2>
-      <p>Cada marca diseñada para resolver un desafío específico — con la calidad y confianza que nos caracterizan.</p>
+      <p>Cada marca diseñada para resolver un desafío específico, con la calidad y confianza que nos caracterizan.</p>
     </div>
 
     <div class="brands-grid">
@@ -864,7 +960,7 @@
 <!-- ═══ FOOTER ════════════════════════════════════════════ -->
 <footer class="footer">
   <div class="container footer-inner">
-    <p class="footer-copy">&copy; 2025 Plata Tech Solutions — PlataTechs.com. Todos los derechos reservados.</p>
+    <p class="footer-copy">&copy; 2025 Plata Tech Solutions | PlataTechs.com. Todos los derechos reservados.</p>
     <div class="footer-links">
       <a href="#inicio">Inicio</a>
       <a href="#marcas">Marcas</a>
@@ -935,12 +1031,14 @@ gsap.registerPlugin(ScrollTrigger);
 
 // Hero entrance
 const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-tl.from('#heroBadge',   { opacity: 0, y: 20, duration: 0.7 })
+tl.from('#heroBadge',              { opacity: 0, y: 20, duration: 0.7 })
   .from('#heroTitle .hero-title-line', { opacity: 0, y: 40, stagger: 0.15, duration: 0.9 }, '-=0.3')
-  .from('.hero-domain', { opacity: 0, y: 16, duration: 0.6 }, '-=0.4')
-  .from('#heroDesc',    { opacity: 0, y: 16, duration: 0.6 }, '-=0.35')
-  .from('#heroActions .btn', { opacity: 0, y: 16, stagger: 0.12, duration: 0.6 }, '-=0.3')
-  .from('.hero-scroll-hint', { opacity: 0, duration: 0.8 }, '-=0.2');
+  .from('.hero-domain',            { opacity: 0, y: 14, duration: 0.6 }, '-=0.4')
+  .from('#heroDesc',               { opacity: 0, y: 14, duration: 0.6 }, '-=0.35')
+  .from('#heroActions .btn',       { opacity: 0, y: 14, stagger: 0.12, duration: 0.6 }, '-=0.3')
+  .from('#heroPanel .hero-panel-card', { opacity: 0, x: 30, stagger: 0.1, duration: 0.6 }, '-=0.7')
+  .from('#heroPanel .hero-trust',  { opacity: 0, x: 20, duration: 0.5 }, '-=0.2')
+  .from('.hero-scroll-hint',       { opacity: 0, duration: 0.6 }, '-=0.3');
 
 // ScrollTrigger reveals
 document.querySelectorAll('[data-gsap="fadeUp"]').forEach(el => {
