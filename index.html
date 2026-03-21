@@ -910,7 +910,19 @@ function closeNav() { document.getElementById('navMobile').classList.remove('ope
 })();
 
 /* ── Hero entrance ──────────────────────────────────── */
-gsap.timeline({ defaults: { ease: 'power4.out' } })
+gsap.timeline({
+  defaults: { ease: 'power4.out' },
+  onComplete() {
+    // Gold shimmer wave that sweeps across letters continuously
+    const chars = document.querySelectorAll('#heroTitle .char');
+    function goldWave() {
+      gsap.timeline({ repeatDelay: 2.5, repeat: -1 })
+        .to(chars, { color: '#e6aa3c', stagger: .04, duration: .3, ease: 'power2.inOut' })
+        .to(chars, { color: '#ffffff', stagger: .04, duration: .3, ease: 'power2.inOut' });
+    }
+    goldWave();
+  }
+})
   .to('#heroLabel',            { opacity: 1, y: 0, duration: .6 })
   .to('#heroTitle .char',      { opacity: 1, y: 0, rotateX: 0, stagger: .018, duration: .7 }, '-=.3')
   .to('#heroDesc',             { opacity: 1, y: 0, duration: .65 }, '-=.3')
