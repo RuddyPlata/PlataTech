@@ -4,7 +4,9 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="Plata Tech Solutions - Domótica, electricidad residencial y comercial, portones eléctricos, inversores, aire acondicionado y remodelación en Santo Domingo."/>
-  <title>Plata Tech Solutions | Servicios Tecnológicos</title>
+  <link rel="icon" type="image/png" href="images/logo-platatech.png"/>
+  <link rel="shortcut icon" href="images/logo-platatech.png"/>
+  <title>Plata Tech Solutions SRL | Servicios Tecnológicos</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700&family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet"/>
@@ -81,6 +83,7 @@
   @media (hover: none) { .cur, .cur-ring { display: none; } body { cursor: auto; } button { cursor: pointer; } }
 
   /* ── FOUC prevention ──────────────────────────────────── */
+  #heroLogo                 { opacity:0; transform:translateY(-20px); }
   #heroLabel                { opacity:0; transform:translateY(16px); }
   #heroDesc                 { opacity:0; transform:translateY(20px); }
   #heroActions .btn         { opacity:0; transform:translateY(14px); }
@@ -214,11 +217,21 @@
     position: relative; z-index: 1;
     display: grid; grid-template-columns: 1.1fr 1fr;
     gap: 4rem; align-items: center;
-    padding-block: 6rem 5rem; width: 100%;
+    padding-block: 4rem 5rem; width: 100%;
+  }
+  .hero-logo-big {
+    grid-column: 1 / -1;
+    width: min(420px, 70vw);
+    margin: 0 auto 1rem;
+  }
+  .hero-logo-big img {
+    width: 100%; height: auto; object-fit: contain;
+    filter: drop-shadow(0 0 40px rgba(30,80,212,.5))
+            drop-shadow(0 0 80px rgba(30,80,212,.2));
   }
   .hero-label { margin-bottom: 1.25rem; }
   .hero-title {
-    font-size: clamp(2.8rem, 5.5vw, 5rem);
+    font-size: clamp(2.2rem, 4.5vw, 4.2rem);
     color: var(--white); margin-bottom: 1.5rem; overflow: hidden;
   }
   .hero-title em {
@@ -314,8 +327,23 @@
     content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
     opacity: 0; transition: opacity .3s;
   }
+  .svc-card { cursor: pointer; }
   .svc-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); border-color: transparent; }
   .svc-card:hover::before { opacity: 1; }
+  .svc-card.selected { border-color: rgba(37,99,235,.5); box-shadow: 0 0 0 2px rgba(37,99,235,.25), var(--shadow-lg); transform: translateY(-6px); }
+  .svc-card.selected::before { opacity: 1; }
+  .svc-card.selected::after {
+    content: '✓'; position: absolute; top: .85rem; right: .9rem;
+    width: 1.35rem; height: 1.35rem; border-radius: 50%;
+    background: #2563eb; color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .6rem; font-weight: 800; line-height: 1;
+  }
+  .svc-hint {
+    font-size: .82rem; color: var(--text-muted); margin-top: .5rem;
+    display: flex; align-items: center; gap: .4rem; justify-content: center;
+  }
+  .svc-hint svg { opacity: .6; }
 
   .svc-card-1::before { background: linear-gradient(90deg, #1e50d4, #3b6ef6); }
   .svc-card-2::before { background: linear-gradient(90deg, #d97706, #f59e0b); }
@@ -416,15 +444,27 @@
   .div-name { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.15rem; font-weight: 800; color: var(--ink); margin-bottom: .3rem; }
   .div-tagline { font-size: .76rem; font-weight: 600; margin-bottom: .9rem; }
   .div-desc { font-size: .85rem; color: var(--ink-2); line-height: 1.7; flex: 1; margin-bottom: 1.5rem; }
+  .div-card { cursor: pointer; }
+  .div-btns { display: flex; gap: .6rem; flex-wrap: wrap; }
   .div-btn {
     display: inline-flex; align-items: center; gap: .4rem;
     padding: .6rem 1.2rem; border-radius: 100px;
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: .8rem; font-weight: 700;
-    color: var(--white); align-self: flex-start;
+    color: var(--white); position: relative; z-index: 1;
     transition: transform .25s, opacity .2s;
   }
   .div-btn:hover { transform: translateX(4px); opacity: .88; }
+  .div-btn-ig {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .6rem 1.1rem; border-radius: 100px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: .8rem; font-weight: 700;
+    background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+    color: var(--white); position: relative; z-index: 1;
+    transition: transform .25s, opacity .2s;
+  }
+  .div-btn-ig:hover { transform: translateX(4px); opacity: .88; }
 
   /* ╔══════════════════════════════════════════════════════════╗
      ║  CTA                                                     ║
@@ -524,11 +564,7 @@
   <div class="nav-bg"></div>
   <div class="container nav-inner">
     <a href="#inicio" class="nav-logo">
-      <div class="nav-mark">PT</div>
-      <div>
-        <span class="nav-name">Plata Tech</span>
-        <span class="nav-sub">Solutions</span>
-      </div>
+      <img src="images/logo-platatech.png" alt="Plata Tech Solutions" style="height:40px;width:auto;object-fit:contain;"/>
     </a>
     <ul class="nav-links">
       <li><a href="#servicios">Servicios</a></li>
@@ -562,6 +598,10 @@
   <div class="hero-grid"></div>
 
   <div class="container hero-inner">
+    <div class="hero-logo-big" id="heroLogo">
+      <img src="images/logo-platatech.png" alt="Plata Tech Solutions"/>
+    </div>
+
     <div>
       <p class="label label-blue hero-label" id="heroLabel">Santo Domingo, RD</p>
       <h1 class="h1 hero-title" id="heroTitle">
@@ -655,32 +695,86 @@
     <div class="section-header" data-reveal>
       <p class="label">Nuestros Servicios</p>
       <h2 class="h2">Todo lo que necesitas<br/>en un solo lugar</h2>
-      <p class="section-sub">Domótica, electricidad, redes, servidores, remodelación, desarrollo digital e Inteligencia Artificial. Todo bajo el mismo estándar.</p>
+      <p class="svc-hint">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 15l6 6m-11-4a7 7 0 1 1 0-14 7 7 0 0 1 0 14z"/></svg>
+        Toca un servicio para personalizar tu mensaje de WhatsApp
+      </p>
     </div>
 
     <div class="svc-grid">
 
-      <!-- 1. Domótica -->
-      <div class="svc-card svc-card-1 js-tilt">
-        <div class="svc-icon svc-icon-1">
+      <!-- 1. Electricidad -->
+      <div class="svc-card svc-card-3 js-tilt" data-msg="Hola, me interesa una instalación eléctrica (residencial o comercial). ¿Pueden darme más información y un presupuesto?">
+        <div class="svc-icon svc-icon-3">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-            <polyline points="9 22 9 12 15 12 15 22"/>
-            <circle cx="17" cy="7" r="1.5"/>
-            <path d="M14.5 4.5a3.5 3.5 0 0 1 5 5"/>
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
           </svg>
         </div>
-        <div class="svc-name">Domótica y Automatización</div>
-        <p class="svc-desc">Control inteligente de tu hogar desde tu celular. Luces, climatización, seguridad y más integrados en un solo sistema.</p>
+        <div class="svc-name">Electricidad Residencial y Comercial</div>
+        <p class="svc-desc">Instalaciones electricas completas para casas, negocios y edificios enteros. Tableros, cableado, tomas, emergencia y mucho mas.</p>
         <div class="svc-tags">
-          <span class="svc-tag">Smart Home</span>
-          <span class="svc-tag">Control remoto</span>
-          <span class="svc-tag">Iluminación</span>
+          <span class="svc-tag" style="background:#fdf5e6;color:#c8922a;border-color:rgba(200,146,42,.2)">Residencial</span>
+          <span class="svc-tag" style="background:#fdf5e6;color:#c8922a;border-color:rgba(200,146,42,.2)">Comercial</span>
+          <span class="svc-tag" style="background:#fdf5e6;color:#c8922a;border-color:rgba(200,146,42,.2)">Edificios</span>
         </div>
       </div>
 
-      <!-- 2. Portones -->
-      <div class="svc-card svc-card-2 js-tilt">
+      <!-- 2. A/C -->
+      <div class="svc-card svc-card-5 js-tilt" data-msg="Hola, necesito información sobre instalación o mantenimiento de aire acondicionado. ¿Me pueden ayudar con un presupuesto?">
+        <div class="svc-icon svc-icon-5">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M19.07 4.93L4.93 19.07"/>
+          </svg>
+        </div>
+        <div class="svc-name">Aire Acondicionado</div>
+        <p class="svc-desc">Instalacion, mantenimiento y reparacion de sistemas de aire acondicionado tipo split, cassette, central y de ventana para cualquier espacio.</p>
+        <div class="svc-tags">
+          <span class="svc-tag" style="background:#ecfeff;color:#0891b2;border-color:rgba(8,145,178,.15)">Split</span>
+          <span class="svc-tag" style="background:#ecfeff;color:#0891b2;border-color:rgba(8,145,178,.15)">Central</span>
+          <span class="svc-tag" style="background:#ecfeff;color:#0891b2;border-color:rgba(8,145,178,.15)">Mantenimiento</span>
+        </div>
+      </div>
+
+      <!-- 3. Inversores -->
+      <div class="svc-card svc-card-4 js-tilt" data-msg="Hola, me interesa instalar un inversor o sistema de baterías en mi hogar o negocio. ¿Cuánto cuesta y qué marcas manejan?">
+        <div class="svc-icon svc-icon-4">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="2" y="7" width="16" height="10" rx="2"/>
+            <path d="M22 11v2"/>
+            <path d="M6 11v2"/>
+            <path d="M10 11v2"/>
+            <path d="M14 11v2"/>
+          </svg>
+        </div>
+        <div class="svc-name">Instalacion de Inversores</div>
+        <p class="svc-desc">Energia sin interrupciones para tu hogar o negocio. Instalamos y configuramos inversores y sistemas de baterias de todas las marcas.</p>
+        <div class="svc-tags">
+          <span class="svc-tag" style="background:#ecfdf5;color:#059669;border-color:rgba(5,150,105,.15)">Solar</span>
+          <span class="svc-tag" style="background:#ecfdf5;color:#059669;border-color:rgba(5,150,105,.15)">Baterias</span>
+          <span class="svc-tag" style="background:#ecfdf5;color:#059669;border-color:rgba(5,150,105,.15)">UPS</span>
+        </div>
+      </div>
+
+      <!-- 4. Redes -->
+      <div class="svc-card svc-card-1 js-tilt" data-msg="Hola, necesito instalar o mejorar la red WiFi/LAN de mi hogar o empresa. ¿Pueden ayudarme con un presupuesto?">
+        <div class="svc-icon svc-icon-1">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/>
+            <line x1="12" y1="7" x2="5" y2="17"/><line x1="12" y1="7" x2="19" y2="17"/>
+            <line x1="5" y1="19" x2="19" y2="19"/>
+          </svg>
+        </div>
+        <div class="svc-name">Redes Privadas</div>
+        <p class="svc-desc">Instalacion y administracion de redes LAN/WiFi para hogares y empresas. Configuracion de VPN, routers, switches y puntos de acceso profesionales.</p>
+        <div class="svc-tags">
+          <span class="svc-tag">LAN / WiFi</span>
+          <span class="svc-tag">VPN</span>
+          <span class="svc-tag">Cableado</span>
+        </div>
+      </div>
+
+      <!-- 5. Portones -->
+      <div class="svc-card svc-card-2 js-tilt" data-msg="Hola, me interesa instalar un portón eléctrico. ¿Qué opciones manejan (corredizo, abatible) y cuánto cuesta?">
         <div class="svc-icon svc-icon-2">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
             <rect x="2" y="7" width="20" height="14" rx="2"/>
@@ -700,60 +794,27 @@
         </div>
       </div>
 
-      <!-- 3. Electricidad -->
-      <div class="svc-card svc-card-3 js-tilt">
-        <div class="svc-icon svc-icon-3">
+      <!-- 6. Domótica -->
+      <div class="svc-card svc-card-1 js-tilt" data-msg="Hola, me interesa automatizar mi hogar con domótica (luces, climatización, seguridad). ¿Qué sistemas tienen disponibles?">
+        <div class="svc-icon svc-icon-1">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+            <circle cx="17" cy="7" r="1.5"/>
+            <path d="M14.5 4.5a3.5 3.5 0 0 1 5 5"/>
           </svg>
         </div>
-        <div class="svc-name">Electricidad Residencial y Comercial</div>
-        <p class="svc-desc">Instalaciones electricas completas para casas, negocios y edificios enteros. Tableros, cableado, tomas, emergencia y mucho mas.</p>
+        <div class="svc-name">Domótica y Automatización</div>
+        <p class="svc-desc">Control inteligente de tu hogar desde tu celular. Luces, climatización, seguridad y más integrados en un solo sistema.</p>
         <div class="svc-tags">
-          <span class="svc-tag" style="background:#fdf5e6;color:#c8922a;border-color:rgba(200,146,42,.2)">Residencial</span>
-          <span class="svc-tag" style="background:#fdf5e6;color:#c8922a;border-color:rgba(200,146,42,.2)">Comercial</span>
-          <span class="svc-tag" style="background:#fdf5e6;color:#c8922a;border-color:rgba(200,146,42,.2)">Edificios</span>
+          <span class="svc-tag">Smart Home</span>
+          <span class="svc-tag">Control remoto</span>
+          <span class="svc-tag">Iluminación</span>
         </div>
       </div>
 
-      <!-- 4. Inversores -->
-      <div class="svc-card svc-card-4 js-tilt">
-        <div class="svc-icon svc-icon-4">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <rect x="2" y="7" width="16" height="10" rx="2"/>
-            <path d="M22 11v2"/>
-            <path d="M6 11v2"/>
-            <path d="M10 11v2"/>
-            <path d="M14 11v2"/>
-          </svg>
-        </div>
-        <div class="svc-name">Instalacion de Inversores</div>
-        <p class="svc-desc">Energia sin interrupciones para tu hogar o negocio. Instalamos y configuramos inversores y sistemas de baterias de todas las marcas.</p>
-        <div class="svc-tags">
-          <span class="svc-tag" style="background:#ecfdf5;color:#059669;border-color:rgba(5,150,105,.15)">Solar</span>
-          <span class="svc-tag" style="background:#ecfdf5;color:#059669;border-color:rgba(5,150,105,.15)">Baterias</span>
-          <span class="svc-tag" style="background:#ecfdf5;color:#059669;border-color:rgba(5,150,105,.15)">UPS</span>
-        </div>
-      </div>
-
-      <!-- 5. A/C -->
-      <div class="svc-card svc-card-5 js-tilt">
-        <div class="svc-icon svc-icon-5">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M19.07 4.93L4.93 19.07"/>
-          </svg>
-        </div>
-        <div class="svc-name">Aire Acondicionado</div>
-        <p class="svc-desc">Instalacion, mantenimiento y reparacion de sistemas de aire acondicionado tipo split, cassette, central y de ventana para cualquier espacio.</p>
-        <div class="svc-tags">
-          <span class="svc-tag" style="background:#ecfeff;color:#0891b2;border-color:rgba(8,145,178,.15)">Split</span>
-          <span class="svc-tag" style="background:#ecfeff;color:#0891b2;border-color:rgba(8,145,178,.15)">Central</span>
-          <span class="svc-tag" style="background:#ecfeff;color:#0891b2;border-color:rgba(8,145,178,.15)">Mantenimiento</span>
-        </div>
-      </div>
-
-      <!-- 6. Remodelación -->
-      <div class="svc-card svc-card-6 js-tilt">
+      <!-- 7. Remodelación -->
+      <div class="svc-card svc-card-6 js-tilt" data-msg="Hola, necesito información sobre remodelación de interiores (PVC, sheetrock, drywall, cielos rasos). ¿Pueden cotizarme?">
         <div class="svc-icon svc-icon-6">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
@@ -771,26 +832,24 @@
         </div>
       </div>
 
-      <!-- 7. Redes -->
-      <div class="svc-card svc-card-1 js-tilt">
-        <div class="svc-icon svc-icon-1">
+      <!-- 8. Web y Software -->
+      <div class="svc-card svc-card-2 js-tilt" data-msg="Hola, necesito una página web, tienda en línea o solución de software para mi negocio. ¿Pueden ayudarme?">
+        <div class="svc-icon svc-icon-2">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/>
-            <line x1="12" y1="7" x2="5" y2="17"/><line x1="12" y1="7" x2="19" y2="17"/>
-            <line x1="5" y1="19" x2="19" y2="19"/>
+            <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
           </svg>
         </div>
-        <div class="svc-name">Redes Privadas</div>
-        <p class="svc-desc">Instalacion y administracion de redes LAN/WiFi para hogares y empresas. Configuracion de VPN, routers, switches y puntos de acceso profesionales.</p>
+        <div class="svc-name">Paginas Web y Software</div>
+        <p class="svc-desc">Desarrollo de sitios web profesionales, tiendas en linea y aplicaciones a medida. Soluciones digitales que hacen crecer tu negocio.</p>
         <div class="svc-tags">
-          <span class="svc-tag">LAN / WiFi</span>
-          <span class="svc-tag">VPN</span>
-          <span class="svc-tag">Cableado</span>
+          <span class="svc-tag" style="background:#fffbeb;color:#d97706;border-color:rgba(217,119,6,.15)">Paginas Web</span>
+          <span class="svc-tag" style="background:#fffbeb;color:#d97706;border-color:rgba(217,119,6,.15)">E-Commerce</span>
+          <span class="svc-tag" style="background:#fffbeb;color:#d97706;border-color:rgba(217,119,6,.15)">Software</span>
         </div>
       </div>
 
-      <!-- 8. Servidores e Infraestructura -->
-      <div class="svc-card svc-card-4 js-tilt">
+      <!-- 9. Servidores e Infraestructura -->
+      <div class="svc-card svc-card-4 js-tilt" data-msg="Hola, necesito instalar o configurar servidores para mi empresa. ¿Qué servicios de infraestructura IT ofrecen?">
         <div class="svc-icon svc-icon-4">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
             <rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/>
@@ -807,24 +866,8 @@
         </div>
       </div>
 
-      <!-- 9. Desarrollo Web y Software -->
-      <div class="svc-card svc-card-2 js-tilt">
-        <div class="svc-icon svc-icon-2">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
-          </svg>
-        </div>
-        <div class="svc-name">Paginas Web y Software</div>
-        <p class="svc-desc">Desarrollo de sitios web profesionales, tiendas en linea y aplicaciones a medida. Soluciones digitales que hacen crecer tu negocio.</p>
-        <div class="svc-tags">
-          <span class="svc-tag" style="background:#fffbeb;color:#d97706;border-color:rgba(217,119,6,.15)">Paginas Web</span>
-          <span class="svc-tag" style="background:#fffbeb;color:#d97706;border-color:rgba(217,119,6,.15)">E-Commerce</span>
-          <span class="svc-tag" style="background:#fffbeb;color:#d97706;border-color:rgba(217,119,6,.15)">Software</span>
-        </div>
-      </div>
-
       <!-- 10. Inteligencia Artificial -->
-      <div class="svc-card svc-card-5 js-tilt" style="grid-column: 1 / -1; max-width: 680px; margin-inline: auto; width: 100%;">
+      <div class="svc-card svc-card-5 js-tilt" style="grid-column: 1 / -1; max-width: 680px; margin-inline: auto; width: 100%;" data-msg="Hola, me interesa implementar Inteligencia Artificial en mi negocio (chatbots, automatización, análisis de datos). ¿Qué soluciones tienen?">
         <div class="svc-icon svc-icon-5">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
             <path d="M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 3 3v2a3 3 0 0 1-3 3h-1v1a4 4 0 0 1-8 0v-1H7a3 3 0 0 1-3-3v-2a3 3 0 0 1 3-3h1V6a4 4 0 0 1 4-4z"/>
@@ -927,62 +970,74 @@
     <div class="div-grid">
 
       <!-- Plata Tech Security -->
-      <div class="div-card js-tilt">
+      <div class="div-card js-tilt" data-href="security.html">
         <div class="div-stripe" style="background:linear-gradient(90deg,#1e50d4,#3b6ef6);"></div>
         <div class="div-body">
           <div class="div-head">
-            <div class="div-icon" style="background:#eef3ff;color:#1e50d4;">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            </div>
+            <img src="images/logo-platatech.png" alt="Plata Tech Security" style="height:60px;width:auto;object-fit:contain;"/>
             <span class="div-badge">Activo</span>
           </div>
           <div class="div-name">Plata Tech Security</div>
           <div class="div-tagline" style="color:#1e50d4;">Proteccion Inteligente 24/7</div>
           <p class="div-desc">Camaras Hikvision ColorVu, alarmas, CCTV y control de acceso. Instalacion certificada para hogares y negocios.</p>
-          <a href="security.html" class="div-btn" style="background:#1e50d4;">
-            Ver cotizaciones
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
+          <div class="div-btns">
+            <a href="security.html" class="div-btn" style="background:#1e50d4;">
+              Ver cotizaciones
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="https://www.instagram.com/platatec/" target="_blank" rel="noopener" class="div-btn-ig">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              Instagram
+            </a>
+          </div>
         </div>
       </div>
 
       <!-- MekaFix -->
-      <div class="div-card js-tilt">
+      <div class="div-card js-tilt" data-href="https://mekafix.com">
         <div class="div-stripe" style="background:linear-gradient(90deg,#ea580c,#f97316);"></div>
         <div class="div-body">
           <div class="div-head">
-            <div class="div-icon" style="background:#fff7ed;color:#ea580c;">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
-            </div>
+            <img src="images/logo-mekafix.jpg" alt="MekaFix" style="height:60px;width:auto;object-fit:contain;"/>
             <span class="div-badge">Beta</span>
           </div>
           <div class="div-name">MekaFix</div>
           <div class="div-tagline" style="color:#ea580c;">Tu mecanico en un clic</div>
           <p class="div-desc">Plataforma digital que conecta propietarios de vehiculos con mecanicos certificados. IA para diagnostico, marketplace y citas online.</p>
-          <a href="https://mekafix.com" target="_blank" rel="noopener" class="div-btn" style="background:#ea580c;">
-            Visitar mekafix.com
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          </a>
+          <div class="div-btns">
+            <a href="https://mekafix.com" target="_blank" rel="noopener" class="div-btn" style="background:#ea580c;">
+              Visitar mekafix.com
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+            <a href="https://www.instagram.com/mekafixglobal/" target="_blank" rel="noopener" class="div-btn-ig">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              Instagram
+            </a>
+          </div>
         </div>
       </div>
 
-      <!-- Ultimo Gadget -->
-      <div class="div-card js-tilt">
-        <div class="div-stripe" style="background:linear-gradient(90deg,#9333ea,#a855f7);"></div>
+      <!-- UltimoGadget -->
+      <div class="div-card js-tilt" data-href="ultimogadget.html">
+        <div class="div-stripe" style="background:linear-gradient(90deg,#0055ff,#3378ff);"></div>
         <div class="div-body">
           <div class="div-head">
-            <div class="div-icon" style="background:#faf5ff;color:#9333ea;">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke-linecap="round" stroke-width="2.5"/></svg>
-            </div>
+            <img src="images/logo-ug.png" alt="UltimoGadget" style="height:60px;width:auto;object-fit:contain;"/>
             <span class="div-badge">Activo</span>
           </div>
-          <div class="div-name">Ultimo Gadget</div>
-          <div class="div-tagline" style="color:#9333ea;">Gadgets y Reparacion</div>
-          <p class="div-desc">Venta de accesorios, celulares y gadgets. Servicio tecnico confiable para reparacion de dispositivos moviles y electronicos.</p>
-          <a href="https://instagram.com/ultimogadget" target="_blank" rel="noopener" class="div-btn" style="background:#9333ea;">
-            @ultimogadget
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-          </a>
+          <div class="div-name">UltimoGadget</div>
+          <div class="div-tagline" style="color:#0055ff;">Tech Store & Reparacion</div>
+          <p class="div-desc">Celulares, laptops, auriculares, accesorios y drones. Servicio tecnico profesional para dispositivos moviles y electronicos.</p>
+          <div class="div-btns">
+            <a href="ultimogadget.html" class="div-btn" style="background:#0055ff;">
+              Ver tienda
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="https://www.instagram.com/ultimogadged" target="_blank" rel="noopener" class="div-btn-ig">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              Instagram
+            </a>
+          </div>
         </div>
       </div>
 
@@ -999,9 +1054,9 @@
     <h2 class="cta-title">Solicita tu presupuesto<br/>sin costo</h2>
     <p class="cta-desc">Cuentanos tu proyecto y te respondemos hoy mismo. Trabajamos en Santo Domingo y zonas aledanas.</p>
     <div class="cta-actions">
-      <a href="https://wa.me/18494950959" target="_blank" class="btn-whatsapp js-magnetic">
+      <a id="waBtn" href="https://wa.me/18494950959" target="_blank" class="btn-whatsapp js-magnetic">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
-        Escribir al WhatsApp
+        <span id="waBtnText">Escribir al WhatsApp</span>
       </a>
       <a href="tel:8494950959" class="btn btn-outline-white js-magnetic">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.72a16 16 0 0 0 6.29 6.29l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -1024,7 +1079,7 @@
 <!-- ── FOOTER ────────────────────────────────────────────── -->
 <footer class="footer">
   <div class="container footer-inner">
-    <div class="footer-logo"><div class="footer-mark">PT</div>Plata Tech Solutions</div>
+    <div class="footer-logo"><img src="images/logo-platatech.png" alt="Plata Tech Solutions SRL" style="height:32px;width:auto;object-fit:contain;"/>Plata Tech Solutions SRL</div>
     <div class="footer-links">
       <a href="#inicio">Inicio</a>
       <a href="#servicios">Servicios</a>
@@ -1101,7 +1156,8 @@ gsap.timeline({
       .to(chars, { color: '#ffffff', stagger: .04, duration: .3, ease: 'power2.inOut' });
   }
 })
-  .to('#heroLabel',            { opacity: 1, y: 0, duration: .6 })
+  .to('#heroLogo',             { opacity: 1, y: 0, duration: .8 })
+  .to('#heroLabel',            { opacity: 1, y: 0, duration: .6 }, '-=.4')
   .to('#heroTitle .char',      { opacity: 1, y: 0, rotateX: 0, stagger: .018, duration: .7 }, '-=.3')
   .to('#heroDesc',             { opacity: 1, y: 0, duration: .65 }, '-=.3')
   .to('#heroActions .btn',     { opacity: 1, y: 0, stagger: .1, duration: .5 }, '-=.35')
@@ -1148,6 +1204,17 @@ gsap.to('.div-card', {
   scrollTrigger: { trigger: '.div-grid', start: 'top 82%' }
 });
 
+/* ── Division cards: toda la card es clickeable ─────── */
+document.querySelectorAll('.div-card[data-href]').forEach(card => {
+  card.addEventListener('click', e => {
+    if (!e.target.closest('a')) {
+      const href = card.dataset.href;
+      if (href.startsWith('http')) window.open(href, '_blank');
+      else window.location.href = href;
+    }
+  });
+});
+
 /* ── Card tilt on mousemove ─────────────────────────── */
 document.querySelectorAll('.js-tilt').forEach(card => {
   card.addEventListener('mousemove', e => {
@@ -1178,6 +1245,20 @@ document.querySelectorAll('.js-magnetic').forEach(btn => {
 gsap.to('.feat', {
   opacity: 1, x: 0, stagger: .1, duration: .7, ease: 'power2.out',
   scrollTrigger: { trigger: '.feat-list', start: 'top 85%' }
+});
+
+/* ── Service selection → WhatsApp preload ───────────── */
+const WA_BASE = 'https://wa.me/18494950959?text=';
+const waBtn   = document.getElementById('waBtn');
+const waBtnTx = document.getElementById('waBtnText');
+document.querySelectorAll('.svc-card[data-msg]').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.svc-card.selected').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    waBtn.href = WA_BASE + encodeURIComponent(card.dataset.msg);
+    waBtnTx.textContent = 'Preguntar por ' + card.querySelector('.svc-name').textContent;
+    document.getElementById('contacto').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
 });
 </script>
 

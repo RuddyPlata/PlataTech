@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sed -i 's/Plata Tech Solutions — Tecnología/Plata Tech Solutions, Tecnología/g; s/Plata Tech Solutions — PlataTechs/Plata Tech Solutions | PlataTechs/g; s/ — tenemos/ - tenemos/g; s/ — con la calidad/, con la calidad/g' index.html)",
+      "Bash(sed -i 's/Plata Tech Security — Sistemas/Plata Tech Security | Sistemas/g; s/Plata Tech Security — PlataTechs/Plata Tech Security | PlataTechs/g' security.html)"
+    ]
+  }
+}

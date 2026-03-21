@@ -4,6 +4,8 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="Plata Tech Security - Camaras Hikvision ColorVu, alarmas, CCTV y control de acceso. Instalacion profesional en Santo Domingo."/>
+  <link rel="icon" type="image/png" href="images/logo-platatech.png"/>
+  <link rel="shortcut icon" href="images/logo-platatech.png"/>
   <title>Plata Tech Security | Seguridad Inteligente</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -77,6 +79,7 @@
   @media (hover: none) { .cur, .cur-ring { display: none; } body { cursor: auto; } button { cursor: pointer; } }
 
   /* ── FOUC prevention ──────────────────────────────────── */
+  #heroLogo { opacity: 0; transform: translateY(-20px); }
   #heroBadge, #heroTitle, #heroDesc, #heroBtns { opacity: 0; transform: translateY(20px); }
   #heroStats .hstat { opacity: 0; transform: translateY(30px); }
   [data-reveal] { opacity: 0; transform: translateY(40px); }
@@ -232,7 +235,17 @@
     position: relative; z-index: 1;
     display: grid; grid-template-columns: 1.1fr 1fr;
     gap: 4rem; align-items: center;
-    padding-block: 6rem 5rem; width: 100%;
+    padding-block: 4rem 5rem; width: 100%;
+  }
+  .hero-logo-big {
+    grid-column: 1 / -1;
+    width: min(420px, 70vw);
+    margin: 0 auto 1rem;
+  }
+  .hero-logo-big img {
+    width: 100%; height: auto; object-fit: contain;
+    filter: drop-shadow(0 0 40px rgba(30,80,212,.5))
+            drop-shadow(0 0 80px rgba(30,80,212,.2));
   }
   /* Badge */
   .hero-badge {
@@ -334,7 +347,7 @@
   .products { padding: 7rem 0; background: var(--navy); }
 
   .products-grid {
-    display: grid; grid-template-columns: repeat(3,1fr);
+    display: grid; grid-template-columns: repeat(2,1fr);
     gap: 1.75rem;
   }
   .pcard {
@@ -354,9 +367,83 @@
     animation: chromeShimmer 10s ease infinite;
     z-index: -1; opacity: .25; transition: opacity .4s;
   }
+  .pcard { cursor: pointer; }
   .pcard:hover { transform: translateY(-10px); box-shadow: var(--shadow-lg); }
   .pcard:hover::before { opacity: .75; animation-duration: 3s; }
   .pcard.featured { background: rgba(11,29,62,.95); border-color: rgba(59,110,246,.3); }
+  .pcard.selected { overflow: visible; box-shadow: 0 0 0 2px rgba(59,110,246,.5), var(--shadow-lg); transform: translateY(-8px); }
+  .pcard.selected::before { opacity: 1; animation-duration: 3s; }
+  .pcard.selected::after {
+    content: '✓'; position: absolute; top: -.55rem; right: -.55rem;
+    width: 1.5rem; height: 1.5rem; border-radius: 50%;
+    background: var(--blue-2); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .65rem; font-weight: 800; line-height: 1;
+    box-shadow: var(--shadow-blue); z-index: 2;
+  }
+  .sec-hint {
+    font-size: .82rem; color: var(--text-mid); margin-top: .6rem;
+    display: flex; align-items: center; gap: .4rem; justify-content: center;
+  }
+  .sec-hint svg { opacity: .55; flex-shrink: 0; }
+
+  /* ── Config form ────────────────────────────────── */
+  .config-form {
+    max-width: 540px; margin: 2.5rem auto 0;
+    animation: cfIn .4s cubic-bezier(.16,1,.3,1);
+  }
+  @keyframes cfIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .cf-inner {
+    background: var(--navy-2);
+    border: 1px solid var(--blue-border);
+    border-radius: 18px; padding: 1.75rem 2rem;
+    position: relative;
+  }
+  .cf-inner::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    border-radius: 18px 18px 0 0;
+    background: linear-gradient(90deg, var(--blue), var(--blue-2));
+  }
+  .cf-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1rem; font-weight: 700; color: var(--white);
+    margin-bottom: 1.25rem;
+    display: flex; align-items: center; gap: .5rem;
+  }
+  .cf-title svg { color: var(--blue-3); flex-shrink: 0; }
+  .cf-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: .85rem 0; border-bottom: 1px solid var(--border-b);
+  }
+  .cf-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .cf-row label { font-size: .875rem; color: var(--text-mid); font-weight: 500; }
+  .cf-counter { display: flex; align-items: center; gap: .75rem; }
+  .cf-dec, .cf-inc {
+    width: 2rem; height: 2rem; border-radius: 50%;
+    border: 1px solid var(--blue-border);
+    background: var(--blue-pale); color: var(--blue-2);
+    font-size: 1.1rem; font-weight: 600; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .2s, transform .15s; user-select: none;
+  }
+  .cf-dec:hover, .cf-inc:hover { background: rgba(59,110,246,.25); transform: scale(1.1); }
+  .cf-val {
+    min-width: 2.2rem; text-align: center;
+    font-size: 1.05rem; font-weight: 700; color: var(--white);
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .cf-select {
+    background: var(--navy-3); border: 1px solid var(--blue-border);
+    color: var(--text); border-radius: 8px; padding: .45rem .8rem;
+    font-size: .85rem; cursor: pointer; outline: none;
+  }
+  .cf-hint-down {
+    font-size: .78rem; color: var(--text-dim);
+    text-align: center; margin-top: 1.2rem;
+  }
 
   .pcard-vis {
     background: linear-gradient(135deg, rgba(30,80,212,.15), rgba(11,29,62,.9));
@@ -391,9 +478,21 @@
     display: flex; justify-content: space-between; align-items: center;
     padding: .6rem .85rem; border-radius: 9px;
     background: rgba(255,255,255,.04); border: 1px solid var(--border-b);
-    transition: background .2s, border-color .2s;
+    transition: background .2s, border-color .2s, box-shadow .2s;
+    cursor: pointer; user-select: none;
   }
-  .price-row:hover { background: rgba(59,110,246,.08); border-color: var(--blue-border); }
+  .price-row:hover { background: rgba(59,110,246,.1); border-color: var(--blue-border); }
+  .price-row.selected {
+    background: rgba(59,110,246,.18); border-color: rgba(59,110,246,.6);
+    box-shadow: 0 0 0 1px rgba(59,110,246,.25);
+  }
+  .price-row.selected .price-cam  { color: var(--text); }
+  .price-row.selected .price-cams { color: var(--white); }
+  .price-row.selected .price-val  { color: var(--white); }
+  .price-row.selected::after {
+    content: '✓'; font-size: .7rem; font-weight: 800;
+    color: var(--blue-2); margin-left: .5rem; flex-shrink: 0;
+  }
   .price-cam  { font-size: .82rem; color: var(--text-mid); }
   .price-cams { color: var(--blue-3); font-weight: 600; }
   .price-val  {
@@ -535,8 +634,7 @@
 
   /* ── Responsive ─────────────────────────────────────────── */
   @media (max-width: 1024px) {
-    .products-grid { grid-template-columns: repeat(2,1fr); }
-    .why-grid      { grid-template-columns: repeat(2,1fr); }
+    .why-grid { grid-template-columns: repeat(2,1fr); }
   }
   @media (max-width: 860px) {
     .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
@@ -582,13 +680,7 @@
       </a>
       <div class="nav-sep"></div>
       <a href="#inicio" class="nav-logo">
-        <div class="nav-mark">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </div>
-        <div>
-          <span class="nav-name">Plata Tech Security</span>
-          <span class="nav-sub">Seguridad Profesional</span>
-        </div>
+        <img src="images/logo-platatech.png" alt="Plata Tech Security" style="height:40px;width:auto;object-fit:contain;"/>
       </a>
     </div>
     <ul class="nav-links">
@@ -622,6 +714,10 @@
   <div class="hero-grid"></div>
 
   <div class="container hero-inner">
+    <div class="hero-logo-big" id="heroLogo">
+      <img src="images/logo-platatech.png" alt="Plata Tech Security"/>
+    </div>
+
     <div>
       <div class="hero-badge" id="heroBadge">
         <span class="badge-dot"></span>
@@ -721,28 +817,86 @@
       <p class="label">Nuestros Kits</p>
       <h2 class="h2">Elige el sistema ideal<br/>para tu proyecto</h2>
       <p class="sec-sub">Todos los kits incluyen instalacion, configuracion de app y garantia. Cotizacion sin costo.</p>
+      <p class="sec-hint">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        Selecciona un kit para configurar y personalizar tu cotización de WhatsApp
+      </p>
     </div>
 
     <div class="products-grid">
 
-      <!-- Kit Tradicional -->
-      <div class="pcard js-tilt">
+      <!-- Kit Analógico Estándar (B/N nocturno) -->
+      <div class="pcard js-tilt" data-type="camera" data-kit="Kit Analógico Estándar (B/N nocturno)">
         <div class="pcard-vis">
+          <span class="pcard-badge" style="background:rgba(255,255,255,.12);color:var(--text-mid);border:1px solid var(--border-b);">Más económico</span>
           <svg width="110" height="70" viewBox="0 0 110 70" fill="none">
-            <rect x="15" y="10" width="80" height="50" rx="6" fill="rgba(30,80,212,.15)" stroke="rgba(59,110,246,.3)" stroke-width="1.2"/>
-            <circle cx="55" cy="35" r="16" fill="rgba(30,80,212,.2)" stroke="rgba(59,110,246,.4)" stroke-width="1.2"/>
-            <circle cx="55" cy="35" r="8" fill="rgba(30,80,212,.3)" stroke="rgba(96,144,255,.5)" stroke-width="1"/>
-            <circle cx="55" cy="35" r="3" fill="rgba(96,144,255,.8)"/>
-            <line x1="55" y1="10" x2="55" y2="19" stroke="rgba(59,110,246,.4)" stroke-width="1"/>
-            <line x1="55" y1="51" x2="55" y2="60" stroke="rgba(59,110,246,.4)" stroke-width="1"/>
-            <line x1="15" y1="35" x2="39" y2="35" stroke="rgba(59,110,246,.4)" stroke-width="1"/>
-            <line x1="71" y1="35" x2="95" y2="35" stroke="rgba(59,110,246,.4)" stroke-width="1"/>
+            <rect x="15" y="10" width="80" height="50" rx="6" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.15)" stroke-width="1.2"/>
+            <circle cx="55" cy="35" r="16" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.18)" stroke-width="1.2"/>
+            <circle cx="55" cy="35" r="8" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.22)" stroke-width="1"/>
+            <circle cx="55" cy="35" r="3" fill="rgba(255,255,255,.5)"/>
+            <line x1="55" y1="10" x2="55" y2="19" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+            <line x1="55" y1="51" x2="55" y2="60" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+            <line x1="15" y1="35" x2="39" y2="35" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+            <line x1="71" y1="35" x2="95" y2="35" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
           </svg>
         </div>
         <div class="pcard-body">
-          <div class="pcard-type">Camaras Analogicas</div>
-          <div class="pcard-name">Kit Tradicional</div>
-          <p class="pcard-desc">Sistema analogico HD ideal para hogares y pequenos negocios. Grabacion continua, vision nocturna y acceso remoto.</p>
+          <div class="pcard-type">Analogico Estandar</div>
+          <div class="pcard-name">Kit Analogico B/N</div>
+          <p class="pcard-desc">Sistema analogico HD a precio accesible. Imagen a color de dia, blanco y negro en la noche con vision IR. Ideal para presupuestos ajustados.</p>
+          <div class="price-table">
+            <div class="price-row">
+              <span class="price-cam"><span class="price-cams">4</span> camaras</span>
+              <span class="price-val">RD$ 13,000</span>
+            </div>
+            <div class="price-row">
+              <span class="price-cam"><span class="price-cams">8</span> camaras</span>
+              <span class="price-val">RD$ 22,600</span>
+            </div>
+            <div class="price-row">
+              <span class="price-cam"><span class="price-cams">16</span> camaras</span>
+              <span class="price-val">RD$ 40,200</span>
+            </div>
+          </div>
+          <div class="pcard-tags">
+            <span class="ptag">DVR incluido</span>
+            <span class="ptag">IR nocturno</span>
+            <span class="ptag">App movil</span>
+            <span class="ptag">Garantia</span>
+          </div>
+          <a href="https://wa.me/18494950959?text=Hola%2C%20me%20interesa%20el%20Kit%20Anal%C3%B3gico%20Est%C3%A1ndar" target="_blank" class="pcard-cta">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+            Cotizar este kit
+          </a>
+        </div>
+      </div>
+
+      <!-- Kit Turbo HD Color -->
+      <div class="pcard js-tilt" data-type="camera" data-kit="Kit Turbo HD Color (Iluminación integrada)">
+        <div class="pcard-vis">
+          <span class="pcard-badge" style="background:linear-gradient(135deg,#f59e0b,#fcd34d);color:#1a1000;">Color 24/7</span>
+          <svg width="110" height="70" viewBox="0 0 110 70" fill="none">
+            <!-- warm glow rings representing integrated lighting -->
+            <circle cx="55" cy="35" r="28" fill="rgba(245,158,11,.06)" stroke="rgba(245,158,11,.15)" stroke-width="1"/>
+            <rect x="15" y="10" width="80" height="50" rx="6" fill="rgba(245,158,11,.08)" stroke="rgba(245,158,11,.3)" stroke-width="1.2"/>
+            <circle cx="55" cy="35" r="16" fill="rgba(245,158,11,.12)" stroke="rgba(252,211,77,.4)" stroke-width="1.2"/>
+            <circle cx="55" cy="35" r="8" fill="rgba(245,158,11,.2)" stroke="rgba(252,211,77,.55)" stroke-width="1"/>
+            <circle cx="55" cy="35" r="3" fill="rgba(252,211,77,.9)"/>
+            <!-- light rays -->
+            <line x1="55" y1="7" x2="55" y2="14" stroke="rgba(252,211,77,.4)" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="55" y1="56" x2="55" y2="63" stroke="rgba(252,211,77,.4)" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="12" y1="35" x2="19" y2="35" stroke="rgba(252,211,77,.4)" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="91" y1="35" x2="98" y2="35" stroke="rgba(252,211,77,.4)" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="23" y1="14" x2="28" y2="19" stroke="rgba(252,211,77,.3)" stroke-width="1" stroke-linecap="round"/>
+            <line x1="82" y1="51" x2="87" y2="56" stroke="rgba(252,211,77,.3)" stroke-width="1" stroke-linecap="round"/>
+            <line x1="87" y1="14" x2="82" y2="19" stroke="rgba(252,211,77,.3)" stroke-width="1" stroke-linecap="round"/>
+            <line x1="23" y1="56" x2="28" y2="51" stroke="rgba(252,211,77,.3)" stroke-width="1" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="pcard-body">
+          <div class="pcard-type">Turbo HD · Iluminacion Integrada</div>
+          <div class="pcard-name">Kit Turbo HD Color</div>
+          <p class="pcard-desc">Camaras con iluminacion LED integrada que producen imagen a color incluso de noche, sin infrarrojos. Color real 24/7, DVR incluido y acceso remoto.</p>
           <div class="price-table">
             <div class="price-row">
               <span class="price-cam"><span class="price-cams">4</span> camaras</span>
@@ -758,12 +912,13 @@
             </div>
           </div>
           <div class="pcard-tags">
+            <span class="ptag" style="background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.3);color:#fcd34d;">Color de noche</span>
+            <span class="ptag" style="background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.3);color:#fcd34d;">LED integrado</span>
             <span class="ptag">DVR incluido</span>
-            <span class="ptag">Vision nocturna</span>
             <span class="ptag">App movil</span>
             <span class="ptag">Garantia</span>
           </div>
-          <a href="https://wa.me/18494950959?text=Hola%2C%20me%20interesa%20el%20Kit%20Tradicional" target="_blank" class="pcard-cta">
+          <a href="https://wa.me/18494950959?text=Hola%2C%20me%20interesa%20el%20Kit%20Turbo%20HD%20Color" target="_blank" class="pcard-cta">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
             Cotizar este kit
           </a>
@@ -771,7 +926,7 @@
       </div>
 
       <!-- Kit IP Premium -->
-      <div class="pcard featured js-tilt">
+      <div class="pcard featured js-tilt" data-type="camera" data-kit="Kit IP Premium (ColorVu Hikvision)">
         <div class="pcard-vis">
           <span class="pcard-badge popular">Mas Popular</span>
           <svg width="110" height="70" viewBox="0 0 110 70" fill="none">
@@ -819,7 +974,7 @@
       </div>
 
       <!-- Kit Alarma -->
-      <div class="pcard js-tilt">
+      <div class="pcard js-tilt" data-type="alarm" data-kit="Kit Alarma Hikvision">
         <div class="pcard-vis">
           <span class="pcard-badge new">Nuevo</span>
           <svg width="110" height="70" viewBox="0 0 110 70" fill="none">
@@ -855,6 +1010,77 @@
       </div>
 
     </div>
+
+    <!-- ── Config form (shown on kit selection) ─────── -->
+    <div id="configForm" class="config-form" style="display:none;">
+      <div class="cf-inner">
+        <p class="cf-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          <span id="cfKitName">Configura tu sistema</span>
+        </p>
+
+        <!-- Cámaras -->
+        <div id="cfCamera" style="display:none;">
+          <div class="cf-row">
+            <label>Cámaras de interior</label>
+            <div class="cf-counter">
+              <button type="button" class="cf-dec" data-target="camInt">−</button>
+              <span id="camInt" class="cf-val">0</span>
+              <button type="button" class="cf-inc" data-target="camInt">+</button>
+            </div>
+          </div>
+          <div class="cf-row">
+            <label>Cámaras de exterior</label>
+            <div class="cf-counter">
+              <button type="button" class="cf-dec" data-target="camExt">−</button>
+              <span id="camExt" class="cf-val">0</span>
+              <button type="button" class="cf-inc" data-target="camExt">+</button>
+            </div>
+          </div>
+          <div class="cf-row">
+            <label>Almacenamiento</label>
+            <select id="cfStorage" class="cf-select">
+              <option value="No sé, recomiéndenme">No sé, recomiéndenme</option>
+              <option value="500 GB">500 GB</option>
+              <option value="1 TB">1 TB</option>
+              <option value="2 TB">2 TB</option>
+              <option value="4 TB">4 TB</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Alarma -->
+        <div id="cfAlarm" style="display:none;">
+          <div class="cf-row">
+            <label>Sensores de movimiento</label>
+            <div class="cf-counter">
+              <button type="button" class="cf-dec" data-target="senMov">−</button>
+              <span id="senMov" class="cf-val">0</span>
+              <button type="button" class="cf-inc" data-target="senMov">+</button>
+            </div>
+          </div>
+          <div class="cf-row">
+            <label>Sensores de puerta / ventana</label>
+            <div class="cf-counter">
+              <button type="button" class="cf-dec" data-target="senPV">−</button>
+              <span id="senPV" class="cf-val">0</span>
+              <button type="button" class="cf-inc" data-target="senPV">+</button>
+            </div>
+          </div>
+          <div class="cf-row">
+            <label>Sensores de humo / CO₂</label>
+            <div class="cf-counter">
+              <button type="button" class="cf-dec" data-target="senCO2">−</button>
+              <span id="senCO2" class="cf-val">0</span>
+              <button type="button" class="cf-inc" data-target="senCO2">+</button>
+            </div>
+          </div>
+        </div>
+
+        <p class="cf-hint-down">Cuando estés listo, usa el botón de WhatsApp abajo ↓</p>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -911,9 +1137,9 @@
       <p class="cta-desc">Cuentanos que necesitas proteger y te preparamos un presupuesto detallado el mismo dia.</p>
       <a href="tel:8494950959" class="cta-phone">849-495-0959</a>
       <div class="cta-btns">
-        <a href="https://wa.me/18494950959?text=Hola%2C%20quiero%20cotizar%20un%20sistema%20de%20seguridad" target="_blank" class="btn btn-wa js-magnetic">
+        <a id="waBtn" href="https://wa.me/18494950959?text=Hola%2C%20quiero%20cotizar%20un%20sistema%20de%20seguridad" target="_blank" class="btn btn-wa js-magnetic">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
-          WhatsApp
+          <span id="waBtnText">WhatsApp</span>
         </a>
         <a href="tel:8494950959" class="btn btn-outline-w js-magnetic">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.72a16 16 0 0 0 6.29 6.29l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -929,9 +1155,7 @@
 <footer class="footer">
   <div class="container footer-inner">
     <div class="footer-logo">
-      <div class="footer-mark">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      </div>
+      <img src="images/logo-platatech.png" alt="Plata Tech Security" style="height:32px;width:auto;object-fit:contain;"/>
       Plata Tech Security
     </div>
     <div class="footer-links">
@@ -977,7 +1201,8 @@ function closeNav() { document.getElementById('navMobile').classList.remove('ope
 
 /* ── Hero entrance ──────────────────────────────────── */
 gsap.timeline({ defaults: { ease: 'power4.out' } })
-  .to('#heroBadge', { opacity: 1, y: 0, duration: .6 })
+  .to('#heroLogo',  { opacity: 1, y: 0, duration: .8 })
+  .to('#heroBadge', { opacity: 1, y: 0, duration: .6 }, '-=.4')
   .to('#heroTitle', { opacity: 1, y: 0, duration: .75 }, '-=.3')
   .to('#heroDesc',  { opacity: 1, y: 0, duration: .65 }, '-=.35')
   .to('#heroBtns',  { opacity: 1, y: 0, duration: .55 }, '-=.35')
@@ -1046,6 +1271,103 @@ document.querySelectorAll('.js-magnetic').forEach(btn => {
     gsap.to(btn, { x: 0, y: 0, duration: .65, ease: 'elastic.out(1,.5)' });
   });
 });
+
+/* ── Kit selection + config form → WhatsApp ─────── */
+const WA_SEC  = 'https://wa.me/18494950959?text=';
+const waBtn   = document.getElementById('waBtn');
+const waBtnTx = document.getElementById('waBtnText');
+const cfForm  = document.getElementById('configForm');
+const cfCam   = document.getElementById('cfCamera');
+const cfAlrm  = document.getElementById('cfAlarm');
+let selType     = null;
+let selCamCount = null;
+let selCamPrice = null;
+
+function selectKit(card, scrollToForm) {
+  document.querySelectorAll('.pcard.selected').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  selType = card.dataset.type;
+  document.getElementById('cfKitName').textContent = 'Configura: ' + card.dataset.kit;
+
+  cfForm.style.display = 'block';
+  cfCam.style.display  = selType === 'camera' ? 'block' : 'none';
+  cfAlrm.style.display = selType === 'alarm'  ? 'block' : 'none';
+
+  // Reset counters (not price-row selection — that persists if same kit)
+  document.querySelectorAll('#configForm .cf-val').forEach(v => v.textContent = '0');
+  document.getElementById('cfStorage').selectedIndex = 0;
+  selCamCount = null; selCamPrice = null;
+
+  waBtnTx.textContent = 'Cotizar ' + card.dataset.kit;
+  buildMsg();
+  if (scrollToForm) cfForm.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// Click on card body (not a price row or CTA link)
+document.querySelectorAll('.pcard[data-type]').forEach(card => {
+  card.addEventListener('click', e => {
+    if (e.target.closest('a') || e.target.closest('.price-row')) return;
+    selectKit(card, true);
+  });
+});
+
+// Click on a price row → selects kit + records camera count
+document.querySelectorAll('.pcard[data-type="camera"] .price-row').forEach(row => {
+  row.addEventListener('click', e => {
+    e.stopPropagation();
+    const card = row.closest('.pcard');
+
+    // Select kit first (this resets selCamCount internally)
+    if (!card.classList.contains('selected')) selectKit(card, false);
+
+    // Set camera count AFTER selectKit so it doesn't get wiped
+    card.querySelectorAll('.price-row').forEach(r => r.classList.remove('selected'));
+    row.classList.add('selected');
+    selCamCount = row.querySelector('.price-cams').textContent;
+    selCamPrice = row.querySelector('.price-val').textContent;
+
+    buildMsg();
+    cfForm.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+});
+
+// Counter buttons
+document.querySelectorAll('#configForm .cf-inc').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const el = document.getElementById(btn.dataset.target);
+    el.textContent = parseInt(el.textContent) + 1;
+    buildMsg();
+  });
+});
+document.querySelectorAll('#configForm .cf-dec').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const el = document.getElementById(btn.dataset.target);
+    const v = parseInt(el.textContent);
+    if (v > 0) { el.textContent = v - 1; buildMsg(); }
+  });
+});
+document.getElementById('cfStorage').addEventListener('change', buildMsg);
+
+function buildMsg() {
+  if (!selType) return;
+  const kit = document.querySelector('.pcard.selected').dataset.kit;
+  let msg;
+  if (selType === 'camera') {
+    const qty = selCamCount ? `${selCamCount} cámaras (${selCamPrice})` : 'cantidad por definir';
+    const ci  = document.getElementById('camInt').textContent;
+    const ce  = document.getElementById('camExt').textContent;
+    const st  = document.getElementById('cfStorage').value;
+    const dist = (parseInt(ci) + parseInt(ce)) > 0
+      ? `\n📷 Interior: ${ci}  |  Exterior: ${ce}` : '';
+    msg = `Hola, me interesa el ${kit}.\n🎥 Cantidad: ${qty}${dist}\n💾 Almacenamiento: ${st}\n¿Me pueden preparar una cotización?`;
+  } else {
+    const sm = document.getElementById('senMov').textContent;
+    const sp = document.getElementById('senPV').textContent;
+    const sc = document.getElementById('senCO2').textContent;
+    msg = `Hola, me interesa el ${kit}.\n🔊 Sensores de movimiento: ${sm}\n🚪 Sensores de puerta/ventana: ${sp}\n💨 Sensores de humo/CO₂: ${sc}\n¿Me pueden preparar una cotización?`;
+  }
+  waBtn.href = WA_SEC + encodeURIComponent(msg);
+}
 </script>
 
 </body>
