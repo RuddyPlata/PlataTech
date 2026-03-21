@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="Plata Tech Solutions | Tecnología con Propósito. Seguridad, plataformas digitales y gadgets."/>
-  <title>Plata Tech Solutions | PlataTechs.com</title>
+  <meta name="description" content="Plata Tech Solutions - Domótica, electricidad residencial y comercial, portones eléctricos, inversores, aire acondicionado y remodelación en Santo Domingo."/>
+  <title>Plata Tech Solutions | Servicios Tecnológicos</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700&family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet"/>
@@ -67,29 +67,29 @@
     background: var(--blue);
     border-radius: 50%; pointer-events: none; z-index: 9999;
     transform: translate(-50%,-50%);
-    transition: width .2s, height .2s, background .2s, opacity .2s;
+    transition: width .2s, height .2s, background .2s;
   }
   .cur-ring {
     position: fixed; width: 38px; height: 38px;
     border: 1.5px solid rgba(30,80,212,.35);
     border-radius: 50%; pointer-events: none; z-index: 9998;
     transform: translate(-50%,-50%);
-    transition: width .35s, height .35s, border-color .25s, opacity .2s;
+    transition: width .35s, height .35s, border-color .25s;
   }
   body:has(a:hover) .cur, body:has(button:hover) .cur { width: 14px; height: 14px; background: var(--gold); }
   body:has(a:hover) .cur-ring, body:has(button:hover) .cur-ring { width: 52px; height: 52px; border-color: rgba(200,146,42,.4); }
   @media (hover: none) { .cur, .cur-ring { display: none; } body { cursor: auto; } button { cursor: pointer; } }
 
-  /* ── FOUC prevention: hide animated elements until GSAP runs ── */
+  /* ── FOUC prevention ──────────────────────────────────── */
   #heroLabel                { opacity:0; transform:translateY(16px); }
-  /* #heroTitle opacity managed by GSAP after char-split */
   #heroDesc                 { opacity:0; transform:translateY(20px); }
   #heroActions .btn         { opacity:0; transform:translateY(14px); }
   #heroPanel .hpc           { opacity:0; transform:translateX(28px); }
   #heroPanel .hero-trust    { opacity:0; transform:translateX(18px); }
   .hero-scroll              { opacity:0; }
   [data-reveal]             { opacity:0; transform:translateY(40px); }
-  .bcard                    { opacity:0; transform:translateY(50px); }
+  .svc-card                 { opacity:0; transform:translateY(50px); }
+  .div-card                 { opacity:0; transform:translateY(40px); }
   .feat                     { opacity:0; transform:translateX(-24px); }
 
   /* ── Container ─────────────────────────────────────────── */
@@ -103,6 +103,7 @@
     color: var(--gold); display: inline-block;
   }
   .label-blue { color: rgba(255,255,255,.55); }
+  .label-dark { color: var(--blue); }
 
   /* ── Headline ──────────────────────────────────────────── */
   .h1 {
@@ -126,27 +127,13 @@
     transition: transform .25s ease, box-shadow .25s ease, background .2s ease;
     white-space: nowrap;
   }
-  .btn-white {
-    background: var(--white); color: var(--navy);
-    box-shadow: var(--shadow-sm);
-  }
+  .btn-white { background: var(--white); color: var(--navy); box-shadow: var(--shadow-sm); }
   .btn-white:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
-  .btn-outline-white {
-    border: 1.5px solid rgba(255,255,255,.3); color: rgba(255,255,255,.85);
-  }
+  .btn-outline-white { border: 1.5px solid rgba(255,255,255,.3); color: rgba(255,255,255,.85); }
   .btn-outline-white:hover { border-color: rgba(255,255,255,.7); color: var(--white); transform: translateY(-3px); }
-  .btn-navy {
-    background: var(--navy); color: var(--white);
-  }
-  .btn-navy:hover { background: var(--navy-2); transform: translateY(-3px); box-shadow: var(--shadow-md); }
-  .btn-blue {
-    background: var(--blue); color: var(--white);
-    box-shadow: var(--shadow-blue);
-  }
-  .btn-blue:hover { background: var(--blue-2); transform: translateY(-3px); box-shadow: 0 12px 36px rgba(30,80,212,.35); }
-  .btn-outline {
-    border: 1.5px solid var(--border); color: var(--ink-2);
-  }
+  .btn-blue { background: var(--blue); color: var(--white); box-shadow: var(--shadow-blue); }
+  .btn-blue:hover { background: var(--blue-2); transform: translateY(-3px); }
+  .btn-outline { border: 1.5px solid var(--border); color: var(--ink-2); }
   .btn-outline:hover { border-color: var(--blue); color: var(--blue); transform: translateY(-2px); }
 
   /* ╔══════════════════════════════════════════════════════════╗
@@ -154,24 +141,19 @@
      ╚══════════════════════════════════════════════════════════╝ */
   .nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-    height: var(--nav-h);
-    transition: all .35s ease;
+    height: var(--nav-h); transition: all .35s ease;
   }
   .nav-bg {
     position: absolute; inset: 0;
-    background: rgba(11,29,62,0);
-    backdrop-filter: blur(0px);
-    border-bottom: 1px solid transparent;
-    transition: all .35s ease;
+    background: rgba(11,29,62,0); backdrop-filter: blur(0px);
+    border-bottom: 1px solid transparent; transition: all .35s ease;
   }
   .nav.scrolled .nav-bg {
-    background: rgba(11,29,62,.92);
-    backdrop-filter: blur(20px);
+    background: rgba(11,29,62,.92); backdrop-filter: blur(20px);
     border-bottom-color: var(--border-b);
   }
   .nav-inner {
-    position: relative; z-index: 1;
-    height: var(--nav-h);
+    position: relative; z-index: 1; height: var(--nav-h);
     display: flex; align-items: center; justify-content: space-between;
   }
   .nav-logo { display: flex; align-items: center; gap: .65rem; }
@@ -202,21 +184,17 @@
   .nav-mobile a:hover { color: var(--white); }
 
   /* ╔══════════════════════════════════════════════════════════╗
-     ║  HERO  (navy/blue background)                            ║
+     ║  HERO                                                    ║
      ╚══════════════════════════════════════════════════════════╝ */
   .hero {
-    position: relative;
-    min-height: 100svh;
+    position: relative; min-height: 100svh;
     display: flex; align-items: center;
     padding-top: var(--nav-h);
-    background: var(--navy);
-    overflow: hidden;
+    background: var(--navy); overflow: hidden;
   }
-  /* Animated gradient orbs */
   .hero-orb {
     position: absolute; border-radius: 50%;
-    filter: blur(80px); opacity: .4;
-    pointer-events: none;
+    filter: blur(80px); opacity: .4; pointer-events: none;
     animation: orbDrift 18s ease-in-out infinite alternate;
   }
   .hero-orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, #1e50d4, transparent); top: -200px; right: -100px; animation-delay: 0s; }
@@ -224,9 +202,8 @@
   .hero-orb-3 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(200,146,42,.5), transparent); top: 40%; left: 30%; animation-delay: -12s; opacity: .15; }
   @keyframes orbDrift {
     0%   { transform: translate(0,0) scale(1); }
-    100% { transform: translate(30px, 20px) scale(1.1); }
+    100% { transform: translate(30px,20px) scale(1.1); }
   }
-  /* Dot grid */
   .hero-grid {
     position: absolute; inset: 0;
     background-image: radial-gradient(circle, rgba(255,255,255,.07) 1px, transparent 1px);
@@ -237,18 +214,13 @@
     position: relative; z-index: 1;
     display: grid; grid-template-columns: 1.1fr 1fr;
     gap: 4rem; align-items: center;
-    padding-block: 6rem 5rem;
-    width: 100%;
+    padding-block: 6rem 5rem; width: 100%;
   }
-  /* Left text */
   .hero-label { margin-bottom: 1.25rem; }
   .hero-title {
     font-size: clamp(2.8rem, 5.5vw, 5rem);
-    color: var(--white); margin-bottom: 1.5rem;
-    overflow: hidden;
+    color: var(--white); margin-bottom: 1.5rem; overflow: hidden;
   }
-  .hero-title .word { display: inline-block; overflow: hidden; }
-  .hero-title .char { display: inline-block; }
   .hero-title em {
     font-style: normal;
     background: linear-gradient(120deg, var(--gold), var(--gold-l));
@@ -281,11 +253,8 @@
   .hpc {
     display: flex; align-items: center; gap: 1rem;
     padding: 1rem 1.25rem;
-    background: rgba(255,255,255,.06);
-    border: 1px solid rgba(255,255,255,.1);
-    border-radius: var(--r);
-    backdrop-filter: blur(8px);
-    transition: all .3s ease;
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+    border-radius: var(--r); backdrop-filter: blur(8px); transition: all .3s ease;
   }
   .hpc:hover { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.22); transform: translateX(6px); }
   .hpc-icon { width: 44px; height: 44px; border-radius: 11px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
@@ -297,36 +266,103 @@
     display: flex; align-items: center; gap: .75rem;
     padding: .85rem 1.2rem;
     background: rgba(200,146,42,.08); border: 1px solid rgba(200,146,42,.2);
-    border-radius: var(--r);
-    font-size: .8rem; color: rgba(255,255,255,.55);
+    border-radius: var(--r); font-size: .8rem; color: rgba(255,255,255,.55);
   }
   .hero-trust strong { color: var(--gold-l); font-weight: 600; }
 
   /* ╔══════════════════════════════════════════════════════════╗
-     ║  STATS (white)                                           ║
+     ║  STATS                                                   ║
      ╚══════════════════════════════════════════════════════════╝ */
   .stats { background: var(--white); border-bottom: 1px solid var(--border); padding: 3rem 0; }
-  .stats-row { display: grid; grid-template-columns: repeat(3,1fr); }
+  .stats-row { display: grid; grid-template-columns: repeat(4,1fr); }
   .stat {
-    text-align: center; padding: 1rem 2rem;
+    text-align: center; padding: 1rem 1.5rem;
     border-right: 1px solid var(--border);
   }
   .stat:last-child { border-right: none; }
   .stat-n {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 2.8rem; font-weight: 800; line-height: 1;
+    font-size: 2.5rem; font-weight: 800; line-height: 1;
     color: var(--navy); margin-bottom: .25rem;
   }
-  .stat-l { font-size: .78rem; color: var(--ink-3); letter-spacing: .04em; }
+  .stat-l { font-size: .75rem; color: var(--ink-3); letter-spacing: .04em; }
 
   /* ╔══════════════════════════════════════════════════════════╗
-     ║  ABOUT  (white)                                          ║
+     ║  SERVICES                                                ║
      ╚══════════════════════════════════════════════════════════╝ */
-  .about { padding: 7rem 0; background: var(--white); }
-  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
-  .about-label { margin-bottom: 1rem; }
-  .about-title { margin-bottom: 1.25rem; }
-  .about-body { color: var(--ink-2); font-size: 1rem; line-height: 1.78; margin-bottom: 1rem; }
+  .services { padding: 7rem 0; background: var(--white); }
+  .section-header { text-align: center; margin-bottom: 4rem; }
+  .section-header .label { margin-bottom: .8rem; }
+  .section-header .h2 { margin-bottom: .9rem; }
+  .section-sub { color: var(--ink-2); max-width: 520px; margin-inline: auto; font-size: .95rem; line-height: 1.7; }
+
+  .svc-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .svc-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 2rem 1.75rem;
+    display: flex; flex-direction: column;
+    box-shadow: var(--shadow-sm);
+    transition: transform .35s cubic-bezier(.16,1,.3,1),
+                box-shadow .35s cubic-bezier(.16,1,.3,1),
+                border-color .25s;
+    will-change: transform; position: relative; overflow: hidden;
+  }
+  .svc-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    opacity: 0; transition: opacity .3s;
+  }
+  .svc-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); border-color: transparent; }
+  .svc-card:hover::before { opacity: 1; }
+
+  .svc-card-1::before { background: linear-gradient(90deg, #1e50d4, #3b6ef6); }
+  .svc-card-2::before { background: linear-gradient(90deg, #d97706, #f59e0b); }
+  .svc-card-3::before { background: linear-gradient(90deg, #c8922a, #e6aa3c); }
+  .svc-card-4::before { background: linear-gradient(90deg, #059669, #10b981); }
+  .svc-card-5::before { background: linear-gradient(90deg, #0891b2, #06b6d4); }
+  .svc-card-6::before { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
+
+  .svc-icon {
+    width: 54px; height: 54px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1.5rem; flex-shrink: 0;
+  }
+  .svc-icon-1 { background: #eef3ff; color: #1e50d4; }
+  .svc-icon-2 { background: #fffbeb; color: #d97706; }
+  .svc-icon-3 { background: #fdf5e6; color: #c8922a; }
+  .svc-icon-4 { background: #ecfdf5; color: #059669; }
+  .svc-icon-5 { background: #ecfeff; color: #0891b2; }
+  .svc-icon-6 { background: #f5f3ff; color: #7c3aed; }
+
+  .svc-name {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800; font-size: 1.1rem;
+    color: var(--ink); margin-bottom: .55rem;
+  }
+  .svc-desc {
+    font-size: .875rem; color: var(--ink-2);
+    line-height: 1.72; flex: 1; margin-bottom: 1.5rem;
+  }
+  .svc-tags { display: flex; flex-wrap: wrap; gap: .35rem; }
+  .svc-tag {
+    padding: .22rem .6rem; border-radius: 6px;
+    font-size: .7rem; font-weight: 500;
+    background: var(--blue-tint); border: 1px solid rgba(30,80,212,.12);
+    color: var(--blue);
+  }
+
+  /* ╔══════════════════════════════════════════════════════════╗
+     ║  WHY US                                                  ║
+     ╚══════════════════════════════════════════════════════════╝ */
+  .why { padding: 7rem 0; background: var(--blue-tint); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
+  .why-label { margin-bottom: 1rem; }
+  .why-title { margin-bottom: 1.25rem; }
+  .why-body { color: var(--ink-2); font-size: 1rem; line-height: 1.78; margin-bottom: 1rem; }
   .about-pills { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: 1.5rem; }
   .pill {
     padding: .32rem .9rem; border-radius: 100px;
@@ -334,14 +370,12 @@
     background: var(--blue-pale); color: var(--blue);
     border: 1px solid rgba(30,80,212,.15);
   }
-  /* Feature cards */
   .feat-list { display: flex; flex-direction: column; gap: 1rem; }
   .feat {
     display: flex; gap: 1rem; align-items: flex-start;
     padding: 1.25rem; border-radius: var(--r);
     border: 1px solid var(--border);
-    background: var(--white);
-    box-shadow: var(--shadow-sm);
+    background: var(--white); box-shadow: var(--shadow-sm);
     transition: box-shadow .3s, border-color .3s, transform .3s;
   }
   .feat:hover { box-shadow: var(--shadow-md); border-color: rgba(30,80,212,.25); transform: translateX(4px); }
@@ -354,108 +388,75 @@
   .feat-desc  { font-size: .8rem; color: var(--ink-3); }
 
   /* ╔══════════════════════════════════════════════════════════╗
-     ║  BRANDS  (off-white/blue tint)                           ║
+     ║  DIVISIONS                                               ║
      ╚══════════════════════════════════════════════════════════╝ */
-  .brands {
-    padding: 7rem 0;
-    background: var(--blue-tint);
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
+  .divisions { padding: 7rem 0; background: var(--white); }
+  .div-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem; margin-top: 3.5rem;
   }
-  .brands-header { text-align: center; margin-bottom: 4rem; }
-  .brands-hdr-label { margin-bottom: .8rem; }
-  .brands-sub { color: var(--ink-2); max-width: 500px; margin-inline: auto; margin-top: .75rem; font-size: .95rem; }
-
-  .brands-grid {
-    display: grid;
-    grid-template-columns: repeat(3,1fr);
-    gap: 1.75rem;
-  }
-
-  /* Brand card */
-  .bcard {
-    background: var(--white);
-    border-radius: 18px;
-    border: 1px solid var(--border);
-    overflow: hidden;
+  .div-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 18px; overflow: hidden;
     display: flex; flex-direction: column;
     box-shadow: var(--shadow-sm);
     transition: transform .35s cubic-bezier(.16,1,.3,1),
-                box-shadow .35s cubic-bezier(.16,1,.3,1),
-                border-color .25s;
+                box-shadow .35s, border-color .25s;
     will-change: transform;
   }
-  .bcard:hover { transform: translateY(-10px); box-shadow: var(--shadow-lg); border-color: rgba(30,80,212,.2); }
-
-  .bcard-stripe { height: 4px; }
-
-  .bcard-body { padding: 2rem; display: flex; flex-direction: column; flex: 1; }
-
-  .bcard-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-  .bcard-icon {
-    width: 52px; height: 52px; border-radius: 13px;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .bcard-badge {
-    padding: .25rem .7rem; border-radius: 100px;
+  .div-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); border-color: rgba(30,80,212,.2); }
+  .div-stripe { height: 4px; }
+  .div-body { padding: 1.75rem; display: flex; flex-direction: column; flex: 1; }
+  .div-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; }
+  .div-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+  .div-badge {
+    padding: .22rem .65rem; border-radius: 100px;
     font-family: 'Space Grotesk', sans-serif;
-    font-size: .62rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+    font-size: .6rem; font-weight: 600; letter-spacing: .07em; text-transform: uppercase;
     border: 1px solid var(--border); color: var(--ink-3); background: var(--off-white);
   }
-
-  .bcard-name {
-    font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.25rem; font-weight: 800;
-    color: var(--ink); margin-bottom: .3rem;
-  }
-  .bcard-tagline { font-size: .78rem; font-weight: 600; margin-bottom: 1rem; letter-spacing: .01em; }
-  .bcard-desc { font-size: .88rem; color: var(--ink-2); line-height: 1.7; flex: 1; margin-bottom: 1.5rem; }
-
-  .bcard-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1.75rem; }
-  .btag {
-    padding: .27rem .65rem; border-radius: 6px;
-    font-size: .71rem; font-weight: 500;
-    background: var(--blue-tint); border: 1px solid rgba(30,80,212,.12);
-    color: var(--blue);
-  }
-
-  .bcard-btn {
-    display: inline-flex; align-items: center; gap: .45rem;
-    padding: .7rem 1.4rem; border-radius: 100px;
+  .div-name { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.15rem; font-weight: 800; color: var(--ink); margin-bottom: .3rem; }
+  .div-tagline { font-size: .76rem; font-weight: 600; margin-bottom: .9rem; }
+  .div-desc { font-size: .85rem; color: var(--ink-2); line-height: 1.7; flex: 1; margin-bottom: 1.5rem; }
+  .div-btn {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .6rem 1.2rem; border-radius: 100px;
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: .83rem; font-weight: 700;
+    font-size: .8rem; font-weight: 700;
     color: var(--white); align-self: flex-start;
-    transition: transform .25s, box-shadow .25s, opacity .2s;
+    transition: transform .25s, opacity .2s;
   }
-  .bcard-btn:hover { transform: translateX(5px); opacity: .9; }
+  .div-btn:hover { transform: translateX(4px); opacity: .88; }
 
   /* ╔══════════════════════════════════════════════════════════╗
-     ║  CTA  (navy background)                                  ║
+     ║  CTA                                                     ║
      ╚══════════════════════════════════════════════════════════╝ */
   .cta-sec {
-    background: var(--navy);
-    padding: 7rem 0;
+    background: var(--navy); padding: 7rem 0;
     position: relative; overflow: hidden;
   }
-  .cta-orb {
-    position: absolute; border-radius: 50%;
-    filter: blur(70px); pointer-events: none; opacity: .3;
-  }
+  .cta-orb { position: absolute; border-radius: 50%; filter: blur(70px); pointer-events: none; opacity: .3; }
   .cta-orb-1 { width: 400px; height: 400px; background: var(--blue); top: -100px; right: -50px; }
   .cta-orb-2 { width: 300px; height: 300px; background: rgba(200,146,42,.6); bottom: -80px; left: 5%; }
-  .cta-grid { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+  .cta-inner { position: relative; z-index: 1; text-align: center; max-width: 640px; margin-inline: auto; }
   .cta-label { margin-bottom: 1rem; }
-  .cta-title { font-size: clamp(1.9rem, 3.5vw, 2.8rem); color: var(--white); margin-bottom: 1.25rem; }
-  .cta-desc { color: rgba(255,255,255,.55); line-height: 1.75; margin-bottom: 2rem; }
-  .cta-email {
-    display: inline-flex; align-items: center; gap: .65rem;
-    padding: .9rem 1.5rem; border-radius: var(--r);
-    background: rgba(255,255,255,.07); border: 1.5px solid rgba(255,255,255,.15);
-    font-size: .95rem; font-weight: 600; color: var(--white);
-    transition: all .25s;
+  .cta-title { font-size: clamp(2rem, 4vw, 3.2rem); color: var(--white); margin-bottom: 1.25rem;
+               font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; line-height: 1.1; }
+  .cta-desc { color: rgba(255,255,255,.55); line-height: 1.75; margin-bottom: 2.5rem; font-size: 1rem; }
+  .cta-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2.5rem; }
+  .btn-whatsapp {
+    display: inline-flex; align-items: center; gap: .6rem;
+    padding: .9rem 2rem; border-radius: 100px;
+    background: #25d366; color: #fff;
+    font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: .9rem;
+    box-shadow: 0 8px 28px rgba(37,211,102,.35);
+    transition: transform .25s, box-shadow .25s;
   }
-  .cta-email:hover { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.35); transform: translateY(-2px); }
-  .cta-email svg { color: var(--gold-l); }
-  .socials { display: flex; gap: .65rem; margin-top: 1.25rem; }
+  .btn-whatsapp:hover { transform: translateY(-3px); box-shadow: 0 14px 36px rgba(37,211,102,.45); }
+  .cta-contact { color: rgba(255,255,255,.4); font-size: .82rem; }
+  .cta-contact a { color: rgba(255,255,255,.65); transition: color .2s; }
+  .cta-contact a:hover { color: var(--gold-l); }
+  .socials { display: flex; gap: .65rem; justify-content: center; margin-top: 1.5rem; }
   .soc {
     width: 42px; height: 42px; border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
@@ -463,20 +464,6 @@
     color: rgba(255,255,255,.5); transition: all .25s;
   }
   .soc:hover { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.25); color: var(--white); transform: translateY(-3px); }
-  /* Brand links right side */
-  .cta-brands { display: flex; flex-direction: column; gap: .85rem; }
-  .cbrand {
-    display: flex; align-items: center; gap: 1rem;
-    padding: 1rem 1.25rem; border-radius: var(--r);
-    background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.09);
-    transition: all .25s;
-  }
-  .cbrand:hover { background: rgba(255,255,255,.09); border-color: rgba(255,255,255,.18); transform: translateX(5px); }
-  .cbrand-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-  .cbrand-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: .88rem; color: var(--white); }
-  .cbrand-sub  { font-size: .72rem; color: rgba(255,255,255,.4); }
-  .cbrand-arr  { color: rgba(255,255,255,.25); margin-left: auto; flex-shrink: 0; transition: transform .2s, color .2s; }
-  .cbrand:hover .cbrand-arr { transform: translateX(4px); color: var(--gold-l); }
 
   /* ╔══════════════════════════════════════════════════════════╗
      ║  FOOTER                                                  ║
@@ -501,22 +488,27 @@
   /* ╔══════════════════════════════════════════════════════════╗
      ║  RESPONSIVE                                              ║
      ╚══════════════════════════════════════════════════════════╝ */
-  @media (max-width: 1024px) { .brands-grid { grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 1024px) {
+    .svc-grid { grid-template-columns: repeat(2, 1fr); }
+    .div-grid  { grid-template-columns: repeat(2, 1fr); }
+  }
   @media (max-width: 900px) {
     .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
-    .about-grid { grid-template-columns: 1fr; }
-    .cta-grid   { grid-template-columns: 1fr; gap: 3rem; }
+    .why-grid   { grid-template-columns: 1fr; gap: 3rem; }
     .hero-panel { display: none; }
   }
   @media (max-width: 680px) {
-    .brands-grid { grid-template-columns: 1fr; }
-    .stats-row   { grid-template-columns: 1fr; }
-    .stat { border-right: none; border-bottom: 1px solid var(--border); }
-    .stat:last-child { border-bottom: none; }
-    .nav-links, .nav-right .btn { display: none; }
+    .svc-grid  { grid-template-columns: 1fr; }
+    .div-grid  { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: repeat(2,1fr); }
+    .stat { border-right: none; border-bottom: 1px solid var(--border); padding: 1rem; }
+    .stat:nth-child(2n) { border-right: none; }
+    .stat:last-child, .stat:nth-last-child(2):nth-child(odd) { border-bottom: none; }
+    .nav-links, .nav-right { display: none; }
     .nav-toggle { display: flex; }
     .hero-actions { flex-direction: column; align-items: stretch; }
     .footer-inner { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .cta-actions { flex-direction: column; align-items: center; }
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
@@ -536,26 +528,30 @@
     <a href="#inicio" class="nav-logo">
       <div class="nav-mark">PT</div>
       <div>
-        <div class="nav-name">Plata Tech</div>
+        <span class="nav-name">Plata Tech</span>
         <span class="nav-sub">Solutions</span>
       </div>
     </a>
     <ul class="nav-links">
+      <li><a href="#servicios">Servicios</a></li>
       <li><a href="#nosotros">Nosotros</a></li>
-      <li><a href="#marcas">Marcas</a></li>
+      <li><a href="#divisiones">Divisiones</a></li>
       <li><a href="#contacto">Contacto</a></li>
     </ul>
-    <div style="display:flex;align-items:center;gap:.75rem;" class="nav-right">
-      <a href="#contacto" class="btn btn-white" style="padding:.55rem 1.3rem;font-size:.8rem;">Contáctenos</a>
+    <div class="nav-right">
+      <a href="https://wa.me/18494950959" target="_blank" class="btn btn-white" style="padding:.55rem 1.3rem;font-size:.8rem;">
+        WhatsApp
+      </a>
     </div>
-    <button class="nav-toggle" id="navToggle" aria-label="Menú">
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
   </div>
   <div class="nav-mobile" id="navMobile">
-    <a href="#nosotros" onclick="closeNav()">Nosotros</a>
-    <a href="#marcas"   onclick="closeNav()">Marcas</a>
-    <a href="#contacto" onclick="closeNav()">Contacto</a>
+    <a href="#servicios"  onclick="closeNav()">Servicios</a>
+    <a href="#nosotros"   onclick="closeNav()">Nosotros</a>
+    <a href="#divisiones" onclick="closeNav()">Divisiones</a>
+    <a href="#contacto"   onclick="closeNav()">Contacto</a>
   </div>
 </nav>
 
@@ -569,64 +565,65 @@
 
   <div class="container hero-inner">
     <div>
-      <p class="label label-blue hero-label" id="heroLabel">Tecnología con Propósito</p>
+      <p class="label label-blue hero-label" id="heroLabel">Santo Domingo, RD</p>
       <h1 class="h1 hero-title" id="heroTitle">
-        Innovación<br/>que <em>transforma</em><br/>tu mundo
+        Expertos en<br/><em>tecnología</em><br/>para tu hogar<br/>y negocio
       </h1>
       <p class="hero-desc" id="heroDesc">
-        Plata Tech Solutions agrupa tres marcas especializadas: seguridad electrónica,
-        plataforma automotriz y gadgets. Todo bajo un mismo estándar de excelencia.
+        Domótica, electricidad, portones eléctricos, inversores,
+        aire acondicionado y remodelación. Todo bajo el mismo
+        estándar de excelencia.
       </p>
       <div class="hero-actions" id="heroActions">
-        <a href="#marcas" class="btn btn-white js-magnetic">
-          Ver nuestras marcas
+        <a href="#servicios" class="btn btn-white js-magnetic">
+          Ver servicios
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
-        <a href="#contacto" class="btn btn-outline-white js-magnetic">Contáctenos</a>
+        <a href="https://wa.me/18494950959" target="_blank" class="btn btn-outline-white js-magnetic">Contáctenos</a>
       </div>
     </div>
 
     <div class="hero-panel" id="heroPanel">
-      <a href="security.html" class="hpc">
-        <div class="hpc-icon" style="background:rgba(37,99,235,.15);">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <a href="#servicios" class="hpc">
+        <div class="hpc-icon" style="background:rgba(30,80,212,.18);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6da4f8" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
         </div>
         <div>
-          <div class="hpc-name">Plata Tech Security</div>
-          <div class="hpc-sub">Cámaras, alarmas y domótica</div>
+          <div class="hpc-name">Domótica & Automatización</div>
+          <div class="hpc-sub">Control inteligente del hogar</div>
         </div>
-        <svg class="hpc-arr" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <svg class="hpc-arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
-      <a href="https://mekafix.com" target="_blank" rel="noopener" class="hpc">
-        <div class="hpc-icon" style="background:rgba(234,88,12,.12);">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+      <a href="#servicios" class="hpc">
+        <div class="hpc-icon" style="background:rgba(200,146,42,.15);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e6aa3c" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
         </div>
         <div>
-          <div class="hpc-name">MekaFix</div>
-          <div class="hpc-sub">Plataforma automotriz con IA</div>
+          <div class="hpc-name">Electricidad Residencial</div>
+          <div class="hpc-sub">Proyectos completos y certificados</div>
         </div>
-        <svg class="hpc-arr" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        <svg class="hpc-arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
-      <a href="https://instagram.com/ultimogadget" target="_blank" rel="noopener" class="hpc">
-        <div class="hpc-icon" style="background:rgba(147,51,234,.12);">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+      <a href="#servicios" class="hpc">
+        <div class="hpc-icon" style="background:rgba(8,145,178,.15);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
         </div>
         <div>
-          <div class="hpc-name">Ultimo Gadget</div>
-          <div class="hpc-sub">Gadgets, reparación y accesorios</div>
+          <div class="hpc-name">Portones Eléctricos</div>
+          <div class="hpc-sub">Automatización y acceso seguro</div>
         </div>
-        <svg class="hpc-arr" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        <svg class="hpc-arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
       <div class="hero-trust">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--gold-l);flex-shrink:0"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        <span><strong>+500 clientes</strong> confian en nuestras soluciones. Santo Domingo, RD.</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span><strong>500+ proyectos</strong> completados en Santo Domingo</span>
       </div>
     </div>
   </div>
 
   <div class="hero-scroll">
+    <span>Scroll</span>
     <div class="scroll-line"></div>
-    Scroll
   </div>
 </section>
 
@@ -635,41 +632,172 @@
   <div class="container">
     <div class="stats-row">
       <div class="stat">
-        <div class="stat-n" data-count="3" data-suffix="">3</div>
-        <div class="stat-l">Marcas Especializadas</div>
-      </div>
-      <div class="stat">
-        <div class="stat-n">360°</div>
-        <div class="stat-l">Cobertura Tecnológica</div>
-      </div>
-      <div class="stat">
         <div class="stat-n" data-count="500" data-suffix="+">500+</div>
-        <div class="stat-l">Clientes Satisfechos</div>
+        <div class="stat-l">Proyectos Completados</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n" data-count="8" data-suffix="+">8+</div>
+        <div class="stat-l">Anos de Experiencia</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n">6</div>
+        <div class="stat-l">Servicios Especializados</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n">3</div>
+        <div class="stat-l">Divisiones Activas</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ── ABOUT ─────────────────────────────────────────────── -->
-<section id="nosotros" class="about">
-  <div class="container about-grid">
+<!-- ── SERVICES ──────────────────────────────────────────── -->
+<section id="servicios" class="services">
+  <div class="container">
+    <div class="section-header" data-reveal>
+      <p class="label">Nuestros Servicios</p>
+      <h2 class="h2">Todo lo que necesitas<br/>en un solo lugar</h2>
+      <p class="section-sub">Desde la automatización de tu hogar hasta la remodelación completa. Trabajo certificado con garantia.</p>
+    </div>
+
+    <div class="svc-grid">
+
+      <!-- 1. Domótica -->
+      <div class="svc-card svc-card-1 js-tilt">
+        <div class="svc-icon svc-icon-1">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+            <circle cx="17" cy="7" r="1.5"/>
+            <path d="M14.5 4.5a3.5 3.5 0 0 1 5 5"/>
+          </svg>
+        </div>
+        <div class="svc-name">Domótica y Automatización</div>
+        <p class="svc-desc">Control inteligente de tu hogar desde tu celular. Luces, climatización, seguridad y más integrados en un solo sistema.</p>
+        <div class="svc-tags">
+          <span class="svc-tag">Smart Home</span>
+          <span class="svc-tag">Control remoto</span>
+          <span class="svc-tag">Iluminación</span>
+        </div>
+      </div>
+
+      <!-- 2. Portones -->
+      <div class="svc-card svc-card-2 js-tilt">
+        <div class="svc-icon svc-icon-2">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="2" y="7" width="20" height="14" rx="2"/>
+            <path d="M12 7V3"/>
+            <path d="M8 7V4"/>
+            <path d="M16 7V4"/>
+            <path d="M10 14h4"/>
+            <circle cx="12" cy="14" r=".5" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="svc-name">Portones Electricos</div>
+        <p class="svc-desc">Instalacion y automatizacion de portones electricos corredizos y abatibles. Control por mando, app o huella digital.</p>
+        <div class="svc-tags">
+          <span class="svc-tag" style="background:#fffbeb;color:#d97706;border-color:rgba(217,119,6,.15)">Deslizante</span>
+          <span class="svc-tag" style="background:#fffbeb;color:#d97706;border-color:rgba(217,119,6,.15)">Abatible</span>
+          <span class="svc-tag" style="background:#fffbeb;color:#d97706;border-color:rgba(217,119,6,.15)">App</span>
+        </div>
+      </div>
+
+      <!-- 3. Electricidad -->
+      <div class="svc-card svc-card-3 js-tilt">
+        <div class="svc-icon svc-icon-3">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+          </svg>
+        </div>
+        <div class="svc-name">Electricidad Residencial y Comercial</div>
+        <p class="svc-desc">Instalaciones electricas completas para casas, negocios y edificios enteros. Tableros, cableado, tomas, emergencia y mucho mas.</p>
+        <div class="svc-tags">
+          <span class="svc-tag" style="background:#fdf5e6;color:#c8922a;border-color:rgba(200,146,42,.2)">Residencial</span>
+          <span class="svc-tag" style="background:#fdf5e6;color:#c8922a;border-color:rgba(200,146,42,.2)">Comercial</span>
+          <span class="svc-tag" style="background:#fdf5e6;color:#c8922a;border-color:rgba(200,146,42,.2)">Edificios</span>
+        </div>
+      </div>
+
+      <!-- 4. Inversores -->
+      <div class="svc-card svc-card-4 js-tilt">
+        <div class="svc-icon svc-icon-4">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="2" y="7" width="16" height="10" rx="2"/>
+            <path d="M22 11v2"/>
+            <path d="M6 11v2"/>
+            <path d="M10 11v2"/>
+            <path d="M14 11v2"/>
+          </svg>
+        </div>
+        <div class="svc-name">Instalacion de Inversores</div>
+        <p class="svc-desc">Energia sin interrupciones para tu hogar o negocio. Instalamos y configuramos inversores y sistemas de baterias de todas las marcas.</p>
+        <div class="svc-tags">
+          <span class="svc-tag" style="background:#ecfdf5;color:#059669;border-color:rgba(5,150,105,.15)">Solar</span>
+          <span class="svc-tag" style="background:#ecfdf5;color:#059669;border-color:rgba(5,150,105,.15)">Baterias</span>
+          <span class="svc-tag" style="background:#ecfdf5;color:#059669;border-color:rgba(5,150,105,.15)">UPS</span>
+        </div>
+      </div>
+
+      <!-- 5. A/C -->
+      <div class="svc-card svc-card-5 js-tilt">
+        <div class="svc-icon svc-icon-5">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M19.07 4.93L4.93 19.07"/>
+          </svg>
+        </div>
+        <div class="svc-name">Aire Acondicionado</div>
+        <p class="svc-desc">Instalacion, mantenimiento y reparacion de sistemas de aire acondicionado tipo split, cassette, central y de ventana para cualquier espacio.</p>
+        <div class="svc-tags">
+          <span class="svc-tag" style="background:#ecfeff;color:#0891b2;border-color:rgba(8,145,178,.15)">Split</span>
+          <span class="svc-tag" style="background:#ecfeff;color:#0891b2;border-color:rgba(8,145,178,.15)">Central</span>
+          <span class="svc-tag" style="background:#ecfeff;color:#0891b2;border-color:rgba(8,145,178,.15)">Mantenimiento</span>
+        </div>
+      </div>
+
+      <!-- 6. Remodelación -->
+      <div class="svc-card svc-card-6 js-tilt">
+        <div class="svc-icon svc-icon-6">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <line x1="9" y1="22" x2="9" y2="12"/>
+            <line x1="15" y1="22" x2="15" y2="12"/>
+            <line x1="3" y1="9" x2="21" y2="9"/>
+          </svg>
+        </div>
+        <div class="svc-name">Remodelacion de Interiores</div>
+        <p class="svc-desc">Transformamos espacios con placas PVC, sheetrock y drywall. Cielos rasos, divisiones, paredes decorativas y acabados de alta calidad.</p>
+        <div class="svc-tags">
+          <span class="svc-tag" style="background:#f5f3ff;color:#7c3aed;border-color:rgba(124,58,237,.15)">PVC</span>
+          <span class="svc-tag" style="background:#f5f3ff;color:#7c3aed;border-color:rgba(124,58,237,.15)">Sheetrock</span>
+          <span class="svc-tag" style="background:#f5f3ff;color:#7c3aed;border-color:rgba(124,58,237,.15)">Drywall</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── WHY US ─────────────────────────────────────────────── -->
+<section id="nosotros" class="why">
+  <div class="container why-grid">
     <div data-reveal>
-      <p class="label about-label">Quiénes Somos</p>
-      <h2 class="h2 about-title">Impulsamos el Futuro<br/>con Tecnología Real</h2>
-      <p class="about-body">
-        Plata Tech Solutions es un grupo tecnológico comprometido con transformar
-        la manera en que vivimos, trabajamos y nos movemos.
+      <p class="label why-label">Por Que Elegirnos</p>
+      <h2 class="h2 why-title">Calidad y compromiso<br/>en cada proyecto</h2>
+      <p class="why-body">
+        Somos un equipo tecnico certificado con anos de experiencia
+        en instalaciones electricas, automatizacion y remodelacion
+        en Santo Domingo y toda la region.
       </p>
-      <p class="about-body">
-        Desde la seguridad de tu hogar hasta el mantenimiento inteligente
-        de tu vehículo y los gadgets del día a día, tenemos la solución exacta.
+      <p class="why-body">
+        Trabajamos con las mejores marcas del mercado y garantizamos
+        cada instalacion. No terminamos el trabajo hasta que el cliente
+        este 100% satisfecho.
       </p>
       <div class="about-pills">
-        <span class="pill">Seguridad</span>
-        <span class="pill">Automotriz</span>
-        <span class="pill">Tecnología</span>
-        <span class="pill">Inteligencia Artificial</span>
-        <span class="pill">E-Commerce</span>
+        <span class="pill">Certificados</span>
+        <span class="pill">Garantia incluida</span>
+        <span class="pill">Respuesta rapida</span>
+        <span class="pill">Presupuesto gratis</span>
       </div>
     </div>
     <div class="feat-list" data-reveal data-reveal-delay="0.15">
@@ -678,115 +806,107 @@
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         </div>
         <div>
-          <div class="feat-title">Seguridad Profesional</div>
-          <div class="feat-desc">Cámaras Hikvision ColorVu, alarmas y control de acceso con instalación certificada.</div>
+          <div class="feat-title">Trabajo Certificado</div>
+          <div class="feat-desc">Tecnicos con certificacion y experiencia comprobada en cada especialidad.</div>
         </div>
       </div>
       <div class="feat">
         <div class="feat-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         </div>
         <div>
-          <div class="feat-title">Plataforma Inteligente</div>
-          <div class="feat-desc">MekaFix conecta propietarios, mecánicos y repuestos con IA integrada.</div>
+          <div class="feat-title">Rapidez y Puntualidad</div>
+          <div class="feat-desc">Cumplimos los tiempos acordados. Respuesta al mismo dia para emergencias.</div>
         </div>
       </div>
       <div class="feat">
         <div class="feat-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
         </div>
         <div>
-          <div class="feat-title">Gadgets y Reparación</div>
-          <div class="feat-desc">Ultimo Gadget ofrece accesorios, celulares y servicio técnico confiable.</div>
+          <div class="feat-title">Precios Justos</div>
+          <div class="feat-desc">Presupuesto detallado y gratuito. Sin costos ocultos ni sorpresas al finalizar.</div>
+        </div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.72a16 16 0 0 0 6.29 6.29l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <div>
+          <div class="feat-title">Soporte Post-Instalacion</div>
+          <div class="feat-desc">Te acompanamos despues de finalizado. Garantia y soporte tecnico incluido.</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── BRANDS ────────────────────────────────────────────── -->
-<section id="marcas" class="brands">
+<!-- ── DIVISIONS ─────────────────────────────────────────── -->
+<section id="divisiones" class="divisions">
   <div class="container">
-    <div class="brands-header" data-reveal>
-      <p class="label brands-hdr-label">Nuestro Portafolio</p>
-      <h2 class="h2">Tres Marcas, Una Misión</h2>
-      <p class="brands-sub">Cada marca diseñada para resolver un desafío específico, con la calidad y confianza que nos caracterizan.</p>
+    <div class="section-header" data-reveal>
+      <p class="label">Nuestras Divisiones</p>
+      <h2 class="h2">Tres marcas especializadas</h2>
+      <p class="section-sub">Ademas de nuestros servicios generales, operamos divisiones especializadas para seguridad electronica, plataforma automotriz y gadgets.</p>
     </div>
-    <div class="brands-grid">
 
-      <!-- Security -->
-      <div class="bcard js-tilt" style="--acc:#2563eb;" data-reveal data-reveal-delay="0.05">
-        <div class="bcard-stripe" style="background:#2563eb;"></div>
-        <div class="bcard-body">
-          <div class="bcard-head">
-            <div class="bcard-icon" style="background:#eff6ff;color:#2563eb;">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    <div class="div-grid">
+
+      <!-- Plata Tech Security -->
+      <div class="div-card js-tilt">
+        <div class="div-stripe" style="background:linear-gradient(90deg,#1e50d4,#3b6ef6);"></div>
+        <div class="div-body">
+          <div class="div-head">
+            <div class="div-icon" style="background:#eef3ff;color:#1e50d4;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             </div>
-            <span class="bcard-badge">Activo</span>
+            <span class="div-badge">Activo</span>
           </div>
-          <div class="bcard-name">Plata Tech Security</div>
-          <div class="bcard-tagline" style="color:#2563eb;">Protección Inteligente 24/7</div>
-          <p class="bcard-desc">Sistemas de seguridad profesional: cámaras Hikvision ColorVu, alarmas inalámbricas y control de acceso. Instalación certificada en Santo Domingo.</p>
-          <div class="bcard-tags">
-            <span class="btag" style="background:#eff6ff;color:#2563eb;border-color:rgba(37,99,235,.2);">Cámaras CCTV</span>
-            <span class="btag" style="background:#eff6ff;color:#2563eb;border-color:rgba(37,99,235,.2);">Alarmas</span>
-            <span class="btag" style="background:#eff6ff;color:#2563eb;border-color:rgba(37,99,235,.2);">Control de Acceso</span>
-            <span class="btag" style="background:#eff6ff;color:#2563eb;border-color:rgba(37,99,235,.2);">Monitoreo 24/7</span>
-          </div>
-          <a href="security.html" class="bcard-btn" style="background:#2563eb;">
-            Ver Soluciones
+          <div class="div-name">Plata Tech Security</div>
+          <div class="div-tagline" style="color:#1e50d4;">Proteccion Inteligente 24/7</div>
+          <p class="div-desc">Camaras Hikvision ColorVu, alarmas, CCTV y control de acceso. Instalacion certificada para hogares y negocios.</p>
+          <a href="security.html" class="div-btn" style="background:#1e50d4;">
+            Ver cotizaciones
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
         </div>
       </div>
 
       <!-- MekaFix -->
-      <div class="bcard js-tilt" data-reveal data-reveal-delay="0.15">
-        <div class="bcard-stripe" style="background:#ea580c;"></div>
-        <div class="bcard-body">
-          <div class="bcard-head">
-            <div class="bcard-icon" style="background:#fff7ed;color:#ea580c;">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+      <div class="div-card js-tilt">
+        <div class="div-stripe" style="background:linear-gradient(90deg,#ea580c,#f97316);"></div>
+        <div class="div-body">
+          <div class="div-head">
+            <div class="div-icon" style="background:#fff7ed;color:#ea580c;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
             </div>
-            <span class="bcard-badge">Live</span>
+            <span class="div-badge">Beta</span>
           </div>
-          <div class="bcard-name">MekaFix</div>
-          <div class="bcard-tagline" style="color:#ea580c;">Tu Vehículo, Tu Historial, Tu Control</div>
-          <p class="bcard-desc">App y plataforma web todo-en-uno: historial de mantenimiento, marketplace de repuestos, agenda citas con mecánicos y consultas con Inteligencia Artificial.</p>
-          <div class="bcard-tags">
-            <span class="btag" style="background:#fff7ed;color:#ea580c;border-color:rgba(234,88,12,.2);">Historial</span>
-            <span class="btag" style="background:#fff7ed;color:#ea580c;border-color:rgba(234,88,12,.2);">Marketplace</span>
-            <span class="btag" style="background:#fff7ed;color:#ea580c;border-color:rgba(234,88,12,.2);">Citas Online</span>
-            <span class="btag" style="background:#fff7ed;color:#ea580c;border-color:rgba(234,88,12,.2);">IA Automotriz</span>
-          </div>
-          <a href="https://mekafix.com" target="_blank" rel="noopener" class="bcard-btn" style="background:#ea580c;">
-            Ir a MekaFix.com
+          <div class="div-name">MekaFix</div>
+          <div class="div-tagline" style="color:#ea580c;">Tu mecanico en un clic</div>
+          <p class="div-desc">Plataforma digital que conecta propietarios de vehiculos con mecanicos certificados. IA para diagnostico, marketplace y citas online.</p>
+          <a href="https://mekafix.com" target="_blank" rel="noopener" class="div-btn" style="background:#ea580c;">
+            Visitar mekafix.com
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           </a>
         </div>
       </div>
 
       <!-- Ultimo Gadget -->
-      <div class="bcard js-tilt" data-reveal data-reveal-delay="0.25">
-        <div class="bcard-stripe" style="background:#9333ea;"></div>
-        <div class="bcard-body">
-          <div class="bcard-head">
-            <div class="bcard-icon" style="background:#faf5ff;color:#9333ea;">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+      <div class="div-card js-tilt">
+        <div class="div-stripe" style="background:linear-gradient(90deg,#9333ea,#a855f7);"></div>
+        <div class="div-body">
+          <div class="div-head">
+            <div class="div-icon" style="background:#faf5ff;color:#9333ea;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke-linecap="round" stroke-width="2.5"/></svg>
             </div>
-            <span class="bcard-badge">Instagram</span>
+            <span class="div-badge">Activo</span>
           </div>
-          <div class="bcard-name">Ultimo Gadget</div>
-          <div class="bcard-tagline" style="color:#9333ea;">El Mejor Tech al Mejor Precio</div>
-          <p class="bcard-desc">Tu tienda de confianza para gadgets, celulares y reparaciones. Cargadores, audífonos, accesorios y todo lo que tu vida digital necesita.</p>
-          <div class="bcard-tags">
-            <span class="btag" style="background:#faf5ff;color:#9333ea;border-color:rgba(147,51,234,.2);">Reparación</span>
-            <span class="btag" style="background:#faf5ff;color:#9333ea;border-color:rgba(147,51,234,.2);">Accesorios</span>
-            <span class="btag" style="background:#faf5ff;color:#9333ea;border-color:rgba(147,51,234,.2);">Gadgets</span>
-            <span class="btag" style="background:#faf5ff;color:#9333ea;border-color:rgba(147,51,234,.2);">Celulares</span>
-          </div>
-          <a href="https://instagram.com/ultimogadget" target="_blank" rel="noopener" class="bcard-btn" style="background:#9333ea;">
-            Ver en Instagram
+          <div class="div-name">Ultimo Gadget</div>
+          <div class="div-tagline" style="color:#9333ea;">Gadgets y Reparacion</div>
+          <p class="div-desc">Venta de accesorios, celulares y gadgets. Servicio tecnico confiable para reparacion de dispositivos moviles y electronicos.</p>
+          <a href="https://instagram.com/ultimogadget" target="_blank" rel="noopener" class="div-btn" style="background:#9333ea;">
+            @ultimogadget
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
           </a>
         </div>
@@ -796,43 +916,31 @@
   </div>
 </section>
 
-<!-- ── CONTACT/CTA ───────────────────────────────────────── -->
+<!-- ── CTA ───────────────────────────────────────────────── -->
 <section id="contacto" class="cta-sec">
   <div class="cta-orb cta-orb-1"></div>
   <div class="cta-orb cta-orb-2"></div>
-  <div class="container cta-grid">
-    <div data-reveal>
-      <p class="label label-blue cta-label">Contacto</p>
-      <h2 class="h2 cta-title">Listo para dar el<br/>Siguiente Paso?</h2>
-      <p class="cta-desc">Hablemos sobre cómo nuestras soluciones pueden ayudarte. Escríbenos y te respondemos a la brevedad.</p>
-      <a href="mailto:contacto@platatechs.com" class="cta-email">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        contacto@platatechs.com
+  <div class="container cta-inner" data-reveal>
+    <p class="label label-blue cta-label">Contacto</p>
+    <h2 class="cta-title">Solicita tu presupuesto<br/>sin costo</h2>
+    <p class="cta-desc">Cuentanos tu proyecto y te respondemos hoy mismo. Trabajamos en Santo Domingo y zonas aledanas.</p>
+    <div class="cta-actions">
+      <a href="https://wa.me/18494950959" target="_blank" class="btn-whatsapp js-magnetic">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+        Escribir al WhatsApp
       </a>
-      <div class="socials">
-        <a href="https://instagram.com/platatechs" target="_blank" class="soc" title="Instagram">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-        </a>
-        <a href="https://wa.me/18494950959" target="_blank" class="soc" title="WhatsApp">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        </a>
-      </div>
+      <a href="tel:8494950959" class="btn btn-outline-white js-magnetic">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.72a16 16 0 0 0 6.29 6.29l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        849-495-0959
+      </a>
     </div>
-    <div class="cta-brands" data-reveal data-reveal-delay="0.15">
-      <a href="security.html" class="cbrand">
-        <div class="cbrand-dot" style="background:#3b82f6;box-shadow:0 0 8px rgba(59,130,246,.6);"></div>
-        <div><div class="cbrand-name">Plata Tech Security</div><div class="cbrand-sub">Cotizaciones y servicios</div></div>
-        <svg class="cbrand-arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    <p class="cta-contact">O escribe a <a href="mailto:contacto@platatechs.com">contacto@platatechs.com</a></p>
+    <div class="socials">
+      <a href="https://instagram.com/PlataTec" target="_blank" class="soc" title="Instagram @PlataTec">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
       </a>
-      <a href="https://mekafix.com" target="_blank" rel="noopener" class="cbrand">
-        <div class="cbrand-dot" style="background:#ea580c;box-shadow:0 0 8px rgba(234,88,12,.6);"></div>
-        <div><div class="cbrand-name">MekaFix</div><div class="cbrand-sub">mekafix.com</div></div>
-        <svg class="cbrand-arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-      </a>
-      <a href="https://instagram.com/ultimogadget" target="_blank" rel="noopener" class="cbrand">
-        <div class="cbrand-dot" style="background:#9333ea;box-shadow:0 0 8px rgba(147,51,234,.6);"></div>
-        <div><div class="cbrand-name">Ultimo Gadget</div><div class="cbrand-sub">@ultimogadget en Instagram</div></div>
-        <svg class="cbrand-arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      <a href="https://wa.me/18494950959" target="_blank" class="soc" title="WhatsApp">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
       </a>
     </div>
   </div>
@@ -845,11 +953,12 @@
     <div class="footer-logo"><div class="footer-mark">PT</div>Plata Tech Solutions</div>
     <div class="footer-links">
       <a href="#inicio">Inicio</a>
-      <a href="#marcas">Marcas</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#divisiones">Divisiones</a>
       <a href="security.html">Security</a>
       <a href="#contacto">Contacto</a>
     </div>
-    <p class="footer-copy">&copy; 2025 PlataTechs.com</p>
+    <p class="footer-copy">&copy; 2025 PlataTechs.com - Santo Domingo, RD</p>
   </div>
 </footer>
 
@@ -885,7 +994,7 @@ document.getElementById('navToggle').addEventListener('click', () => {
 });
 function closeNav() { document.getElementById('navMobile').classList.remove('open'); }
 
-/* ── Hero: split title chars (TreeWalker — safe for nested tags) ── */
+/* ── Hero: split title chars (TreeWalker) ───────────── */
 (function() {
   const title = document.getElementById('heroTitle');
   const walker = document.createTreeWalker(title, NodeFilter.SHOW_TEXT);
@@ -894,15 +1003,13 @@ function closeNav() { document.getElementById('navMobile').classList.remove('ope
   textNodes.forEach(node => {
     const frag = document.createDocumentFragment();
     [...node.textContent].forEach(c => {
-      if (c === ' ' || c === '\n') {
-        frag.appendChild(document.createTextNode(c === '\n' ? '' : ' '));
-      } else {
-        const span = document.createElement('span');
-        span.className = 'char';
-        span.style.display = 'inline-block';
-        span.textContent = c;
-        frag.appendChild(span);
-      }
+      if (c === '\n') return;
+      if (c === ' ') { frag.appendChild(document.createTextNode(' ')); return; }
+      const span = document.createElement('span');
+      span.className = 'char';
+      span.style.display = 'inline-block';
+      span.textContent = c;
+      frag.appendChild(span);
     });
     node.parentNode.replaceChild(frag, node);
   });
@@ -913,14 +1020,11 @@ function closeNav() { document.getElementById('navMobile').classList.remove('ope
 gsap.timeline({
   defaults: { ease: 'power4.out' },
   onComplete() {
-    // Gold shimmer wave that sweeps across letters continuously
+    // Gold shimmer wave across letters
     const chars = document.querySelectorAll('#heroTitle .char');
-    function goldWave() {
-      gsap.timeline({ repeatDelay: 2.5, repeat: -1 })
-        .to(chars, { color: '#e6aa3c', stagger: .04, duration: .3, ease: 'power2.inOut' })
-        .to(chars, { color: '#ffffff', stagger: .04, duration: .3, ease: 'power2.inOut' });
-    }
-    goldWave();
+    gsap.timeline({ repeat: -1, repeatDelay: 2.5 })
+      .to(chars, { color: '#e6aa3c', stagger: .04, duration: .3, ease: 'power2.inOut' })
+      .to(chars, { color: '#ffffff', stagger: .04, duration: .3, ease: 'power2.inOut' });
   }
 })
   .to('#heroLabel',            { opacity: 1, y: 0, duration: .6 })
@@ -958,10 +1062,16 @@ document.querySelectorAll('.stat-n[data-count]').forEach(el => {
   });
 });
 
-/* ── Brand cards stagger ────────────────────────────── */
-gsap.to('.bcard', {
-  opacity: 1, y: 0, stagger: .13, duration: .85, ease: 'power3.out',
-  scrollTrigger: { trigger: '.brands-grid', start: 'top 82%' }
+/* ── Service cards stagger ──────────────────────────── */
+gsap.to('.svc-card', {
+  opacity: 1, y: 0, stagger: .1, duration: .8, ease: 'power3.out',
+  scrollTrigger: { trigger: '.svc-grid', start: 'top 82%' }
+});
+
+/* ── Division cards stagger ─────────────────────────── */
+gsap.to('.div-card', {
+  opacity: 1, y: 0, stagger: .12, duration: .8, ease: 'power3.out',
+  scrollTrigger: { trigger: '.div-grid', start: 'top 82%' }
 });
 
 /* ── Card tilt on mousemove ─────────────────────────── */
@@ -990,7 +1100,7 @@ document.querySelectorAll('.js-magnetic').forEach(btn => {
   });
 });
 
-/* ── Feat cards hover ───────────────────────────────── */
+/* ── Feat cards ─────────────────────────────────────── */
 gsap.to('.feat', {
   opacity: 1, x: 0, stagger: .1, duration: .7, ease: 'power2.out',
   scrollTrigger: { trigger: '.feat-list', start: 'top 85%' }
