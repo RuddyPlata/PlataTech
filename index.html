@@ -3,10 +3,29 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="Plata Tech Solutions - Domótica, electricidad residencial y comercial, portones eléctricos, inversores, aire acondicionado y remodelación en Santo Domingo."/>
+  <meta name="description" content="Plata Tech Solutions: domótica, electricidad, portones eléctricos, inversores, A/C y remodelación en Santo Domingo. 87 clientes satisfechos. Soporte y garantía post-instalación gratis 3 meses."/>
+  <meta name="keywords" content="domótica Santo Domingo, electricidad residencial Santo Domingo, portones eléctricos RD, inversores solar RD, aire acondicionado instalación, redes WiFi empresas, Plata Tech Solutions"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://platatechs.com/"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://platatechs.com/"/>
+  <meta property="og:title" content="Plata Tech Solutions SRL | Tecnología de Punta en Santo Domingo"/>
+  <meta property="og:description" content="Domótica, electricidad, portones, inversores, A/C y remodelación. 87 clientes contentos. Garantía post-instalación 3 meses gratis."/>
+  <meta property="og:image" content="https://platatechs.com/images/logo-platatech.png"/>
+  <meta property="og:locale" content="es_DO"/>
+  <meta property="og:site_name" content="Plata Tech Solutions SRL"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Plata Tech Solutions SRL | Santo Domingo"/>
+  <meta name="twitter:description" content="Tecnología de punta: domótica, electricidad, inversores y más. Garantía post-instalación 3 meses gratis."/>
+  <meta name="twitter:image" content="https://platatechs.com/images/logo-platatech.png"/>
+  <meta name="geo.region" content="DO-01"/>
+  <meta name="geo.placename" content="Santo Domingo, República Dominicana"/>
   <link rel="icon" type="image/x-icon" href="images/pt.ico"/>
   <link rel="shortcut icon" href="images/pt.ico"/>
-  <title>Plata Tech Solutions SRL | Servicios Tecnológicos</title>
+  <title>Plata Tech Solutions SRL | Domótica, Electricidad & Tecnología | Santo Domingo, RD</title>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"LocalBusiness","name":"Plata Tech Solutions SRL","description":"Domótica, electricidad, portones eléctricos, inversores, A/C y remodelación en Santo Domingo.","url":"https://platatechs.com","telephone":"+18494950959","email":"ruddy.plata@gmail.com","address":{"@type":"PostalAddress","addressLocality":"Santo Domingo","addressCountry":"DO"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"5","reviewCount":"87"}}
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700&family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet"/>
@@ -85,15 +104,14 @@
   /* ── FOUC prevention ──────────────────────────────────── */
   #heroLogo                 { opacity:0; transform:translateY(-20px); }
   #heroLabel                { opacity:0; transform:translateY(16px); }
+  #heroTitle em             { opacity:0; transform:translateY(20px); }
+  #heroTitle .accent        { opacity:0; transform:translateY(20px); }
   #heroDesc                 { opacity:0; transform:translateY(20px); }
   #heroActions .btn         { opacity:0; transform:translateY(14px); }
-  #heroPanel .hpc           { opacity:0; transform:translateX(28px); }
-  #heroPanel .hero-trust    { opacity:0; transform:translateX(18px); }
-  .hero-scroll              { opacity:0; }
   [data-reveal]             { opacity:0; transform:translateY(40px); }
-  .svc-card                 { opacity:0; transform:translateY(50px); }
   .div-card                 { opacity:0; transform:translateY(40px); }
   .feat                     { opacity:0; transform:translateX(-24px); }
+  .gl4-slide                { opacity:0; transform:translateY(24px); }
 
   /* ── Container ─────────────────────────────────────────── */
   .container { max-width: 1140px; margin-inline: auto; padding-inline: 1.5rem; }
@@ -190,97 +208,62 @@
      ║  HERO                                                    ║
      ╚══════════════════════════════════════════════════════════╝ */
   .hero {
-    position: relative; min-height: 100svh;
-    display: flex; align-items: center;
+    position: relative; height: 100svh; min-height: 620px;
+    display: flex; align-items: center; justify-content: center;
     padding-top: var(--nav-h);
     background: var(--navy); overflow: hidden;
   }
-  .hero-orb {
-    position: absolute; border-radius: 50%;
-    filter: blur(80px); opacity: .4; pointer-events: none;
-    animation: orbDrift 18s ease-in-out infinite alternate;
-  }
-  .hero-orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, #1e50d4, transparent); top: -200px; right: -100px; animation-delay: 0s; }
-  .hero-orb-2 { width: 400px; height: 400px; background: radial-gradient(circle, #0f3080, transparent); bottom: -100px; left: -80px; animation-delay: -6s; }
-  .hero-orb-3 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(200,146,42,.5), transparent); top: 40%; left: 30%; animation-delay: -12s; opacity: .15; }
-  @keyframes orbDrift {
-    0%   { transform: translate(0,0) scale(1); }
-    100% { transform: translate(30px,20px) scale(1.1); }
-  }
-  .hero-grid {
-    position: absolute; inset: 0;
-    background-image: radial-gradient(circle, rgba(255,255,255,.07) 1px, transparent 1px);
-    background-size: 36px 36px;
-    mask-image: radial-gradient(ellipse 90% 90% at 50% 50%, black, transparent);
+  @keyframes pulseDot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: .5; transform: scale(1.4); }
   }
   .hero-inner {
     position: relative; z-index: 1;
-    display: grid; grid-template-columns: 1.1fr 1fr;
-    gap: 4rem; align-items: center;
-    padding-block: 4rem 5rem; width: 100%;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 0; text-align: center;
+    padding-block: 1.25rem 2rem; width: 100%;
   }
+  .hero-inner > div { width: 100%; max-width: 780px; margin-inline: auto; }
   .hero-logo-big {
-    grid-column: 1 / -1;
-    width: min(420px, 70vw);
-    margin: 0 auto 1rem;
+    width: auto; max-width: 90vw;
+    margin: 0 auto 1.25rem;
+    display: flex; justify-content: center;
   }
   .hero-logo-big img {
-    width: 100%; height: auto; object-fit: contain;
+    height: clamp(150px, 40svh, 380px);
+    width: auto; max-width: 100%; object-fit: contain;
     filter: drop-shadow(0 0 40px rgba(30,80,212,.5))
             drop-shadow(0 0 80px rgba(30,80,212,.2));
   }
-  .hero-label { margin-bottom: 1.25rem; }
+  .hero-label {
+    margin-bottom: 1.1rem; font-size: .72rem;
+    color: rgba(255,255,255,.55); letter-spacing: .22em;
+  }
   .hero-title {
-    font-size: clamp(2.2rem, 4.5vw, 4.2rem);
-    color: var(--white); margin-bottom: 1.5rem; overflow: hidden;
+    font-size: clamp(2.1rem, 4.6vw, 3.8rem);
+    color: var(--white); margin-bottom: 1.25rem; overflow: hidden;
+    font-weight: 800; letter-spacing: -.03em;
   }
   .hero-title em {
     font-style: normal;
-    color: var(--gold-l);
+    display: inline-block; white-space: nowrap;
+    background: linear-gradient(115deg, #f5c671 0%, #e6aa3c 45%, #c8922a 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero-title .accent {
+    display: block; font-weight: 400; font-size: .38em;
+    letter-spacing: .35em; text-transform: uppercase;
+    color: rgba(255,255,255,.4); margin-top: 1rem;
+    font-family: 'Space Grotesk', sans-serif;
   }
   .hero-desc {
-    font-size: 1.05rem; color: rgba(255,255,255,.62);
-    line-height: 1.75; max-width: 460px; margin-bottom: 2.5rem;
+    font-size: clamp(.95rem, 1.1vw, 1.05rem); color: rgba(255,255,255,.72);
+    line-height: 1.75; max-width: 560px; margin: 0 auto 1.75rem;
+    font-weight: 400;
   }
-  .hero-actions { display: flex; gap: .85rem; flex-wrap: wrap; }
-  .hero-scroll {
-    position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
-    display: flex; flex-direction: column; align-items: center; gap: .35rem;
-    color: rgba(255,255,255,.3); font-size: .62rem; letter-spacing: .15em; text-transform: uppercase;
-  }
-  .scroll-line {
-    width: 1px; height: 44px;
-    background: linear-gradient(to bottom, transparent, var(--gold), transparent);
-    animation: scrollPulse 2.2s ease-in-out infinite;
-  }
-  @keyframes scrollPulse {
-    0%,100% { transform: scaleY(0); transform-origin: top; opacity: 0; }
-    40%      { transform: scaleY(1); transform-origin: top; opacity: 1; }
-    60%      { transform: scaleY(1); transform-origin: bottom; opacity: 1; }
-    99%      { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
-  }
-  /* Right panel */
-  .hero-panel { display: flex; flex-direction: column; gap: .9rem; }
-  .hpc {
-    display: flex; align-items: center; gap: 1rem;
-    padding: 1rem 1.25rem;
-    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
-    border-radius: var(--r); backdrop-filter: blur(8px); transition: all .3s ease;
-  }
-  .hpc:hover { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.22); transform: translateX(6px); }
-  .hpc-icon { width: 44px; height: 44px; border-radius: 11px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-  .hpc-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: .9rem; color: var(--white); }
-  .hpc-sub  { font-size: .72rem; color: rgba(255,255,255,.45); margin-top: 1px; }
-  .hpc-arr  { color: rgba(255,255,255,.3); margin-left: auto; flex-shrink: 0; transition: transform .25s, color .25s; }
-  .hpc:hover .hpc-arr { transform: translateX(5px); color: var(--gold-l); }
-  .hero-trust {
-    display: flex; align-items: center; gap: .75rem;
-    padding: .85rem 1.2rem;
-    background: rgba(200,146,42,.08); border: 1px solid rgba(200,146,42,.2);
-    border-radius: var(--r); font-size: .8rem; color: rgba(255,255,255,.55);
-  }
-  .hero-trust strong { color: var(--gold-l); font-weight: 600; }
-
+  .hero-desc strong { color: rgba(255,255,255,.95); font-weight: 600; }
+  .hero-actions { display: flex; gap: .75rem; flex-wrap: wrap; justify-content: center; }
   /* ╔══════════════════════════════════════════════════════════╗
      ║  STATS                                                   ║
      ╚══════════════════════════════════════════════════════════╝ */
@@ -301,7 +284,7 @@
   /* ╔══════════════════════════════════════════════════════════╗
      ║  SERVICES                                                ║
      ╚══════════════════════════════════════════════════════════╝ */
-  .services { padding: 7rem 0; background: var(--white); }
+  .services { padding: 7rem 0 5rem; background: var(--white); }
   .section-header { text-align: center; margin-bottom: 4rem; }
   .section-header .label { margin-bottom: .8rem; }
   .section-header .h2 { margin-bottom: .9rem; }
@@ -412,7 +395,7 @@
   }
   .feat-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: .88rem; color: var(--ink); margin-bottom: .2rem; }
   .feat-desc  { font-size: .8rem; color: var(--ink-3); }
-
+  
   /* ╔══════════════════════════════════════════════════════════╗
      ║  DIVISIONS                                               ║
      ╚══════════════════════════════════════════════════════════╝ */
@@ -531,9 +514,9 @@
     .div-grid  { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 900px) {
-    .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .hero-inner { padding-block: 1rem 1.75rem; }
+    .hero-logo-big img { height: clamp(130px, 32svh, 260px); }
     .why-grid   { grid-template-columns: 1fr; gap: 3rem; }
-    .hero-panel { display: none; }
   }
   @media (max-width: 680px) {
     .svc-grid  { grid-template-columns: 1fr; }
@@ -550,6 +533,247 @@
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+  }
+
+  /* ── Services carousel (all screens) ─────────────────── */
+  .svc-grid-wrapper {
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory; scrollbar-width: none;
+    display: flex; gap: 1.25rem; padding-bottom: .5rem;
+  }
+  .svc-grid-wrapper::-webkit-scrollbar { display: none; }
+  .svc-grid { display: contents; }
+  .svc-card {
+    flex: 0 0 calc((100% - 2 * 1.25rem) / 3);
+    scroll-snap-align: start;
+    opacity: 1 !important; transform: none !important;
+  }
+  .carousel-hint {
+    display: flex; align-items: center; justify-content: center;
+    gap: .6rem; margin-top: 1.5rem;
+  }
+  .carousel-nav-btn {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--navy); color: var(--white);
+    border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .2s, transform .2s;
+    flex-shrink: 0;
+  }
+  .carousel-nav-btn:hover { background: var(--blue); transform: scale(1.08); }
+  .carousel-nav-btn.disabled { opacity: .3; pointer-events: none; }
+  .carousel-dots { display: flex; gap: .45rem; align-items: center; }
+  .carousel-dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--border); transition: background .2s, width .2s;
+  }
+  .carousel-dot.active { background: var(--blue); width: 14px; border-radius: 3px; }
+  @media (max-width: 1024px) {
+    .svc-card { flex: 0 0 calc((100% - 1.25rem) / 2); }
+  }
+  @media (max-width: 680px) {
+    .svc-grid-wrapper { margin-inline: -1.5rem; padding-inline: 1.5rem; }
+    .svc-card { flex: 0 0 80vw; max-width: 320px; }
+    .svc-card:last-child { margin-right: 1.5rem; }
+  }
+
+  /* ── Guarantee banner ───────────────────────────────── */
+  .guarantee-banner {
+    background: linear-gradient(135deg, #0c5e56 0%, #0a4d46 100%);
+    padding: 2rem 0; position: relative; overflow: hidden;
+  }
+  .guarantee-banner::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background-image: radial-gradient(circle, rgba(255,255,255,.06) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  .guarantee-inner {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 2rem; flex-wrap: wrap;
+  }
+  .guarantee-left { display: flex; align-items: center; gap: 1.2rem; }
+  .guarantee-icon {
+    width: 52px; height: 52px; border-radius: 13px; flex-shrink: 0;
+    background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.22);
+    display: flex; align-items: center; justify-content: center; color: #fff;
+  }
+  .guarantee-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1rem; font-weight: 800; color: #fff; margin-bottom: .2rem;
+  }
+  .guarantee-desc { font-size: .83rem; color: rgba(255,255,255,.76); line-height: 1.5; }
+  .guarantee-badges { display: flex; gap: .45rem; flex-wrap: nowrap; overflow: hidden; }
+  .guarantee-badge {
+    display: flex; align-items: center; gap: .3rem;
+    padding: .28rem .65rem; border-radius: 100px;
+    background: rgba(255,255,255,.13); border: 1px solid rgba(255,255,255,.22);
+    font-size: .72rem; font-weight: 600; color: #fff;
+    white-space: nowrap; flex-shrink: 1; min-width: 0;
+  }
+  @media (max-width: 900px) {
+    .guarantee-inner { flex-direction: column; align-items: flex-start; }
+  }
+
+  /* ── Gallery4 carousel (Servicios) ──────────────────── */
+  .gl4-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 2rem; }
+  .gl4-header-text { flex: 1; }
+  .gl4-nav-btns { display: flex; gap: .55rem; flex-shrink: 0; padding-bottom: .35rem; }
+  .gl4-nav-btn {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: none; border: 1.5px solid var(--border);
+    color: var(--ink-2); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .2s, border-color .2s, color .2s, opacity .2s;
+  }
+  .gl4-nav-btn:hover { background: var(--navy); border-color: var(--navy); color: var(--white); }
+  .gl4-nav-btn.disabled { opacity: .3; pointer-events: none; }
+  .gl4-overflow {
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory; scrollbar-width: none;
+    margin-top: 3.5rem;
+  }
+  .gl4-overflow::-webkit-scrollbar { display: none; }
+  .gl4-track {
+    display: flex; gap: 20px;
+    justify-content: safe center;
+  }
+  /* Floating carousel arrows (services) */
+  .svc-carousel-wrap { position: relative; padding-inline: 3rem; }
+  .svc-float-btn {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    z-index: 20; width: 50px; height: 50px; border-radius: 50%;
+    background: var(--white); border: none;
+    box-shadow: 0 4px 20px rgba(0,0,0,.2);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--navy);
+    transition: background .2s, color .2s, box-shadow .2s, opacity .2s;
+  }
+  .svc-float-btn:hover { background: var(--navy); color: var(--white); box-shadow: 0 6px 28px rgba(0,0,0,.28); }
+  .svc-float-btn.disabled { opacity: 0; pointer-events: none; }
+  .svc-float-prev { left: 1.5rem; }
+  .svc-float-next { right: 1.5rem; }
+  @media (max-width: 640px) { .svc-float-btn { display: none; } }
+  .gl4-slide {
+    flex: 0 0 360px; scroll-snap-align: start;
+    opacity: 1 !important; transform: none !important;
+  }
+  @media (min-width: 1024px) { .gl4-slide { flex: 0 0 440px; } }
+  .gl4-card {
+    position: relative; min-height: 27rem;
+    border-radius: .875rem; overflow: hidden;
+    display: block;
+  }
+  @media (min-width: 768px)  { .gl4-card { aspect-ratio: 5/4; min-height: auto; } }
+  @media (min-width: 1024px) { .gl4-card { aspect-ratio: 16/9; } }
+  .gl4-img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: center;
+    transition: transform .35s ease;
+  }
+  .gl4-card:hover .gl4-img { transform: scale(1.05); }
+  .gl4-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom,
+      transparent 0%,
+      rgba(11,29,62,.38) 45%,
+      rgba(11,29,62,.88) 100%
+    );
+  }
+  .gl4-body {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 1.5rem 2rem 2rem;
+  }
+  .gl4-body-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700; font-size: 1.15rem; color: var(--white);
+    margin-bottom: .5rem; line-height: 1.3;
+  }
+  .gl4-body-desc {
+    color: rgba(255,255,255,.78); font-size: .875rem; line-height: 1.65;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden; margin-bottom: 1.25rem;
+  }
+  .gl4-body-more {
+    display: flex; align-items: center; gap: .35rem;
+    font-size: .8rem; color: rgba(255,255,255,.65);
+  }
+  .gl4-arrow-icon { transition: transform .25s; }
+  .gl4-card:hover .gl4-arrow-icon { transform: translateX(5px); }
+  .gl4-dots-row { display: flex; justify-content: center; margin-top: 2rem; gap: .5rem; }
+  .gl4-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--navy); opacity: .18;
+    border: none; cursor: pointer;
+    transition: opacity .2s, width .2s;
+  }
+  .gl4-dot.active { opacity: 1; width: 20px; border-radius: 4px; }
+  /* Selected service card */
+  .gl4-card.selected { outline: 2.5px solid rgba(30,80,212,.7); outline-offset: -2px; }
+  .gl4-card.selected::after {
+    content: '✓'; position: absolute; top: .75rem; right: .9rem; z-index: 10;
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--blue); color: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    font-size: .8rem; font-weight: 700;
+  }
+  .gl4-header-text .label { margin-bottom: 1rem; }
+  .gl4-header-text .h2   { margin-bottom: 1rem; }
+  @media (max-width: 680px) {
+    .gl4-header { flex-direction: column; align-items: flex-start; }
+    .gl4-nav-btns { align-self: flex-end; }
+  }
+
+  /* ── Circular Testimonials ───────────────────────────── */
+  .testimonials { padding: 7rem 0; background: var(--off-white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); overflow-x: hidden; }
+  .circ-testi {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 5rem; max-width: 56rem; margin: 3.5rem auto 0;
+    align-items: start;
+  }
+  /* Left: stacked photo cards */
+  .circ-img-stack {
+    position: relative; width: 100%; aspect-ratio: 7/6;
+    perspective: 1000px;
+  }
+  .circ-img-card {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: center top;
+    border-radius: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.22);
+    transition: all 0.8s cubic-bezier(.4,2,.3,1);
+    cursor: pointer;
+  }
+  /* Right: content */
+  .circ-content { display: flex; flex-direction: column; padding-top: 1rem; }
+  .circ-name {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700; font-size: 1.75rem; color: #0a0a0a;
+    margin-bottom: .25rem; line-height: 1.2;
+  }
+  .circ-designation { font-size: 1.15rem; color: #454545; margin-bottom: 2rem; line-height: 1.5; }
+  .circ-quote-wrap { min-height: 7rem; }
+  .circ-quote-text { font-size: 1.15rem; color: #171717; line-height: 1.75; }
+  @keyframes wordReveal {
+    from { opacity:0; filter:blur(8px); transform:translateY(4px); }
+    to   { opacity:1; filter:blur(0);   transform:translateY(0); }
+  }
+  .circ-arrows-row { display: flex; gap: 1.5rem; padding-top: 2.5rem; }
+  .circ-btn {
+    width: 2.7rem; height: 2.7rem; border-radius: 50%;
+    background: #141414; color: #f1f1f7; border: none;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: background .3s;
+  }
+  .circ-btn:hover { background: #00A6FB; }
+  @media (max-width: 900px) {
+    .circ-testi { grid-template-columns: 1fr; gap: 2.5rem; }
+    .circ-name { font-size: 1.35rem; }
+    .circ-designation, .circ-quote-text { font-size: .95rem; }
+    .circ-arrows-row { padding-top: 1.5rem; }
   }
   </style>
 </head>
@@ -592,10 +816,7 @@
 <main>
 <!-- ── HERO ─────────────────────────────────────────────── -->
 <section id="inicio" class="hero">
-  <div class="hero-orb hero-orb-1"></div>
-  <div class="hero-orb hero-orb-2"></div>
-  <div class="hero-orb hero-orb-3"></div>
-  <div class="hero-grid"></div>
+  <canvas id="heroCanvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;display:block;"></canvas>
 
   <div class="container hero-inner">
     <div class="hero-logo-big" id="heroLogo">
@@ -603,15 +824,19 @@
     </div>
 
     <div>
-      <p class="label label-blue hero-label" id="heroLabel">Santo Domingo, RD</p>
+      <p class="label label-blue hero-label" id="heroLabel">Santo Domingo, RD &nbsp;·&nbsp; Técnicos Certificados</p>
       <h1 class="h1 hero-title" id="heroTitle">
-        Expertos en<br/><em>tecnología</em><br/>para tu hogar<br/>y negocio
+        Protegemos lo que <em>más te importa</em>.
+        <span class="accent">Tecnología · Confianza · Garantía</span>
       </h1>
       <p class="hero-desc" id="heroDesc">
-        Domótica, electricidad, portones eléctricos, inversores,
-        aire acondicionado y remodelación. Todo bajo el mismo
-        estándar de excelencia.
+        Domótica, electricidad, portones automáticos e inversores instalados por expertos.
+        <strong>Tranquilidad real</strong> y garantía incluida en cada proyecto.
       </p>
+      <div style="display:inline-flex;align-items:center;gap:.5rem;background:rgba(5,150,105,.1);border:1px solid rgba(5,150,105,.25);border-radius:100px;padding:.35rem .85rem;margin-bottom:1.1rem;font-size:.72rem;color:rgba(255,255,255,.82);font-weight:500;" id="heroGuarantee">
+        <span style="width:7px;height:7px;border-radius:50%;background:#10b981;flex-shrink:0;animation:pulseDot 2s ease-in-out infinite;"></span>
+        Soporte y garantía post-instalación <strong style="color:#6ee7b7;">&nbsp;gratis 3 meses</strong>
+      </div>
       <div class="hero-actions" id="heroActions">
         <a href="#servicios" class="btn btn-white js-magnetic">
           Ver servicios
@@ -621,48 +846,8 @@
       </div>
     </div>
 
-    <div class="hero-panel" id="heroPanel">
-      <a href="#servicios" class="hpc">
-        <div class="hpc-icon" style="background:rgba(30,80,212,.18);">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6da4f8" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-        </div>
-        <div>
-          <div class="hpc-name">Domótica & Automatización</div>
-          <div class="hpc-sub">Control inteligente del hogar</div>
-        </div>
-        <svg class="hpc-arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-      <a href="#servicios" class="hpc">
-        <div class="hpc-icon" style="background:rgba(200,146,42,.15);">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e6aa3c" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        </div>
-        <div>
-          <div class="hpc-name">Electricidad Residencial</div>
-          <div class="hpc-sub">Proyectos completos y certificados</div>
-        </div>
-        <svg class="hpc-arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-      <a href="#servicios" class="hpc">
-        <div class="hpc-icon" style="background:rgba(8,145,178,.15);">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
-        </div>
-        <div>
-          <div class="hpc-name">Portones Eléctricos</div>
-          <div class="hpc-sub">Automatización y acceso seguro</div>
-        </div>
-        <svg class="hpc-arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-      <div class="hero-trust">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        <span><strong>500+ proyectos</strong> completados en Santo Domingo</span>
-      </div>
-    </div>
   </div>
 
-  <div class="hero-scroll">
-    <span>Scroll</span>
-    <div class="scroll-line"></div>
-  </div>
 </section>
 
 <!-- ── STATS ─────────────────────────────────────────────── -->
@@ -670,20 +855,51 @@
   <div class="container">
     <div class="stats-row">
       <div class="stat">
-        <div class="stat-n" data-count="500" data-suffix="+">500+</div>
-        <div class="stat-l">Proyectos Completados</div>
+        <div class="stat-n" data-count="87">87</div>
+        <div class="stat-l">Clientes Contentos<br/>con Nuestro Trabajo</div>
       </div>
       <div class="stat">
         <div class="stat-n" data-count="8" data-suffix="+">8+</div>
-        <div class="stat-l">Anos de Experiencia</div>
+        <div class="stat-l">Años de Experiencia</div>
       </div>
       <div class="stat">
-        <div class="stat-n">6</div>
+        <div class="stat-n">10</div>
         <div class="stat-l">Servicios Especializados</div>
       </div>
       <div class="stat">
-        <div class="stat-n">3</div>
-        <div class="stat-l">Divisiones Activas</div>
+        <div class="stat-n" style="color:#059669;">3</div>
+        <div class="stat-l">Meses Garantía<br/>Post-Instalación Gratis</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── GUARANTEE BANNER ──────────────────────────────────── -->
+<div class="guarantee-banner">
+  <div class="container">
+    <div class="guarantee-inner">
+      <div class="guarantee-left">
+        <div class="guarantee-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+        </div>
+        <div>
+          <div class="guarantee-title">Soporte y Garantía Post-Instalación, 3 Meses Gratis</div>
+          <div class="guarantee-desc">Cada instalación incluye 3 meses de soporte técnico y garantía sin costo adicional. Si algo falla, lo resolvemos.</div>
+        </div>
+      </div>
+      <div class="guarantee-badges">
+        <div class="guarantee-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4"/></svg>
+          Sin costo adicional
+        </div>
+        <div class="guarantee-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Respuesta mismo día
+        </div>
+        <div class="guarantee-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3"/></svg>
+          Disponible 7 días
+        </div>
       </div>
     </div>
   </div>
@@ -692,206 +908,164 @@
 <!-- ── SERVICES ──────────────────────────────────────────── -->
 <section id="servicios" class="services">
   <div class="container">
-    <div class="section-header" data-reveal>
-      <p class="label">Nuestros Servicios</p>
-      <h2 class="h2">Todo lo que necesitas<br/>en un solo lugar</h2>
-      <p class="svc-hint">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 15l6 6m-11-4a7 7 0 1 1 0-14 7 7 0 0 1 0 14z"/></svg>
-        Toca un servicio para personalizar tu mensaje de WhatsApp
-      </p>
+    <div class="gl4-header" data-reveal>
+      <div class="gl4-header-text">
+        <p class="label">Nuestros Servicios</p>
+        <h2 class="h2">Todo lo que necesitas<br/>en un solo lugar</h2>
+        <p class="svc-hint" style="margin-top:.25rem;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 15l6 6m-11-4a7 7 0 1 1 0-14 7 7 0 0 1 0 14z"/></svg>
+          Toca un servicio para personalizar tu mensaje de WhatsApp
+        </p>
+      </div>
     </div>
+  </div>
 
-    <div class="svc-grid">
+  <div class="svc-carousel-wrap">
+    <button class="svc-float-btn svc-float-prev disabled" id="svcPrev" aria-label="Anterior">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <div class="gl4-overflow" id="svcWrapper">
+    <div class="gl4-track">
 
       <!-- 1. Electricidad -->
-      <div class="svc-card svc-card-3 js-tilt" data-msg="Hola, me interesa una instalación eléctrica (residencial o comercial). ¿Pueden darme más información y un presupuesto?">
-        <div class="svc-icon svc-icon-3">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-          </svg>
-        </div>
-        <div class="svc-name">Electricidad Residencial y Comercial</div>
-        <p class="svc-desc">Instalaciones electricas completas para casas, negocios y edificios enteros. Tableros, cableado, tomas, emergencia y mucho mas.</p>
-        <div class="svc-tags">
-          <span class="svc-tag" style="background:#fdf5e6;color:#c8922a;border-color:rgba(200,146,42,.2)">Residencial</span>
-          <span class="svc-tag" style="background:#fdf5e6;color:#c8922a;border-color:rgba(200,146,42,.2)">Comercial</span>
-          <span class="svc-tag" style="background:#fdf5e6;color:#c8922a;border-color:rgba(200,146,42,.2)">Edificios</span>
+      <div class="gl4-slide">
+        <div class="gl4-card" data-msg="Hola, me interesa una instalación eléctrica (residencial o comercial). ¿Pueden darme más información y un presupuesto?">
+          <img class="gl4-img" src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=800&q=80&auto=format&fit=crop" alt="Electricidad"/>
+          <div class="gl4-overlay"></div>
+          <div class="gl4-body">
+            <div class="gl4-body-title">Electricidad Residencial y Comercial</div>
+            <div class="gl4-body-desc">Instalaciónes eléctricas completas para casas, negocios y edificios. Tableros, cableado, tomas y emergencias.</div>
+            <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          </div>
         </div>
       </div>
 
       <!-- 2. A/C -->
-      <div class="svc-card svc-card-5 js-tilt" data-msg="Hola, necesito información sobre instalación o mantenimiento de aire acondicionado. ¿Me pueden ayudar con un presupuesto?">
-        <div class="svc-icon svc-icon-5">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M19.07 4.93L4.93 19.07"/>
-          </svg>
-        </div>
-        <div class="svc-name">Aire Acondicionado</div>
-        <p class="svc-desc">Instalacion, mantenimiento y reparacion de sistemas de aire acondicionado tipo split, cassette, central y de ventana para cualquier espacio.</p>
-        <div class="svc-tags">
-          <span class="svc-tag" style="background:#ecfeff;color:#0891b2;border-color:rgba(8,145,178,.15)">Split</span>
-          <span class="svc-tag" style="background:#ecfeff;color:#0891b2;border-color:rgba(8,145,178,.15)">Central</span>
-          <span class="svc-tag" style="background:#ecfeff;color:#0891b2;border-color:rgba(8,145,178,.15)">Mantenimiento</span>
+      <div class="gl4-slide">
+        <div class="gl4-card" data-msg="Hola, necesito información sobre instalación o mantenimiento de aire acondicionado. ¿Me pueden ayudar con un presupuesto?">
+          <img class="gl4-img" src="https://images.unsplash.com/photo-1453749024858-4bca89bd9edc?w=800&q=80&auto=format&fit=crop" alt="Aire Acondicionado"/>
+          <div class="gl4-overlay"></div>
+          <div class="gl4-body">
+            <div class="gl4-body-title">Aire Acondicionado</div>
+            <div class="gl4-body-desc">Instalación, mantenimiento y reparación de sistemas split, cassette y central para cualquier espacio.</div>
+            <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          </div>
         </div>
       </div>
 
       <!-- 3. Inversores -->
-      <div class="svc-card svc-card-4 js-tilt" data-msg="Hola, me interesa instalar un inversor o sistema de baterías en mi hogar o negocio. ¿Cuánto cuesta y qué marcas manejan?">
-        <div class="svc-icon svc-icon-4">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <rect x="2" y="7" width="16" height="10" rx="2"/>
-            <path d="M22 11v2"/>
-            <path d="M6 11v2"/>
-            <path d="M10 11v2"/>
-            <path d="M14 11v2"/>
-          </svg>
-        </div>
-        <div class="svc-name">Instalacion de Inversores</div>
-        <p class="svc-desc">Energia sin interrupciones para tu hogar o negocio. Instalamos y configuramos inversores y sistemas de baterias de todas las marcas.</p>
-        <div class="svc-tags">
-          <span class="svc-tag" style="background:#ecfdf5;color:#059669;border-color:rgba(5,150,105,.15)">Solar</span>
-          <span class="svc-tag" style="background:#ecfdf5;color:#059669;border-color:rgba(5,150,105,.15)">Baterias</span>
-          <span class="svc-tag" style="background:#ecfdf5;color:#059669;border-color:rgba(5,150,105,.15)">UPS</span>
+      <div class="gl4-slide">
+        <div class="gl4-card" data-msg="Hola, me interesa instalar un inversor o sistema de baterías en mi hogar o negocio. ¿Cuánto cuesta y qué marcas manejan?">
+          <img class="gl4-img" src="https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&q=80&auto=format&fit=crop" alt="Inversores Solar"/>
+          <div class="gl4-overlay"></div>
+          <div class="gl4-body">
+            <div class="gl4-body-title">Instalación de Inversores</div>
+            <div class="gl4-body-desc">Energia sin interrupciones. Instalamos inversores y sistemas de baterias de todas las marcas para hogar y negocio.</div>
+            <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          </div>
         </div>
       </div>
 
       <!-- 4. Redes -->
-      <div class="svc-card svc-card-1 js-tilt" data-msg="Hola, necesito instalar o mejorar la red WiFi/LAN de mi hogar o empresa. ¿Pueden ayudarme con un presupuesto?">
-        <div class="svc-icon svc-icon-1">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/>
-            <line x1="12" y1="7" x2="5" y2="17"/><line x1="12" y1="7" x2="19" y2="17"/>
-            <line x1="5" y1="19" x2="19" y2="19"/>
-          </svg>
-        </div>
-        <div class="svc-name">Redes Privadas</div>
-        <p class="svc-desc">Instalacion y administracion de redes LAN/WiFi para hogares y empresas. Configuracion de VPN, routers, switches y puntos de acceso profesionales.</p>
-        <div class="svc-tags">
-          <span class="svc-tag">LAN / WiFi</span>
-          <span class="svc-tag">VPN</span>
-          <span class="svc-tag">Cableado</span>
+      <div class="gl4-slide">
+        <div class="gl4-card" data-msg="Hola, necesito instalar o mejorar la red WiFi/LAN de mi hogar o empresa. ¿Pueden ayudarme con un presupuesto?">
+          <img class="gl4-img" src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80&auto=format&fit=crop" alt="Redes Privadas"/>
+          <div class="gl4-overlay"></div>
+          <div class="gl4-body">
+            <div class="gl4-body-title">Redes Privadas</div>
+            <div class="gl4-body-desc">Redes LAN/WiFi para hogares y empresas. Configuración de VPN, routers, switches y puntos de acceso profesionales.</div>
+            <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          </div>
         </div>
       </div>
 
       <!-- 5. Portones -->
-      <div class="svc-card svc-card-2 js-tilt" data-msg="Hola, me interesa instalar un portón eléctrico. ¿Qué opciones manejan (corredizo, abatible) y cuánto cuesta?">
-        <div class="svc-icon svc-icon-2">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <rect x="2" y="7" width="20" height="14" rx="2"/>
-            <path d="M12 7V3"/>
-            <path d="M8 7V4"/>
-            <path d="M16 7V4"/>
-            <path d="M10 14h4"/>
-            <circle cx="12" cy="14" r=".5" fill="currentColor"/>
-          </svg>
-        </div>
-        <div class="svc-name">Portones Electricos</div>
-        <p class="svc-desc">Instalacion y automatizacion de portones electricos corredizos y abatibles. Control por mando, app o huella digital.</p>
-        <div class="svc-tags">
-          <span class="svc-tag" style="background:#fffbeb;color:#d97706;border-color:rgba(217,119,6,.15)">Deslizante</span>
-          <span class="svc-tag" style="background:#fffbeb;color:#d97706;border-color:rgba(217,119,6,.15)">Abatible</span>
-          <span class="svc-tag" style="background:#fffbeb;color:#d97706;border-color:rgba(217,119,6,.15)">App</span>
+      <div class="gl4-slide">
+        <div class="gl4-card" data-msg="Hola, me interesa instalar un portón eléctrico. ¿Qué opciones manejan (corredizo, abatible) y cuánto cuesta?">
+          <img class="gl4-img" src="https://images.unsplash.com/photo-1645005049035-c35644b627ba?w=800&q=80&auto=format&fit=crop" alt="Portones Electricos"/>
+          <div class="gl4-overlay"></div>
+          <div class="gl4-body">
+            <div class="gl4-body-title">Portones Electricos</div>
+            <div class="gl4-body-desc">Portones corredizos y abatibles con control por mando, app móvil o huella digital. Instalación y automatización.</div>
+            <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          </div>
         </div>
       </div>
 
       <!-- 6. Domótica -->
-      <div class="svc-card svc-card-1 js-tilt" data-msg="Hola, me interesa automatizar mi hogar con domótica (luces, climatización, seguridad). ¿Qué sistemas tienen disponibles?">
-        <div class="svc-icon svc-icon-1">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-            <polyline points="9 22 9 12 15 12 15 22"/>
-            <circle cx="17" cy="7" r="1.5"/>
-            <path d="M14.5 4.5a3.5 3.5 0 0 1 5 5"/>
-          </svg>
-        </div>
-        <div class="svc-name">Domótica y Automatización</div>
-        <p class="svc-desc">Control inteligente de tu hogar desde tu celular. Luces, climatización, seguridad y más integrados en un solo sistema.</p>
-        <div class="svc-tags">
-          <span class="svc-tag">Smart Home</span>
-          <span class="svc-tag">Control remoto</span>
-          <span class="svc-tag">Iluminación</span>
+      <div class="gl4-slide">
+        <div class="gl4-card" data-msg="Hola, me interesa automatizar mi hogar con domótica (luces, climatización, seguridad). ¿Qué sistemas tienen disponibles?">
+          <img class="gl4-img" src="https://images.unsplash.com/photo-1750744688299-c7a459ab3855?w=800&q=80&auto=format&fit=crop" alt="Domótica"/>
+          <div class="gl4-overlay"></div>
+          <div class="gl4-body">
+            <div class="gl4-body-title">Domótica y Automatización</div>
+            <div class="gl4-body-desc">Control inteligente desde tu celular. Luces, climatizacion, seguridad y mas integrados en un solo sistema Smart Home.</div>
+            <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          </div>
         </div>
       </div>
 
       <!-- 7. Remodelación -->
-      <div class="svc-card svc-card-6 js-tilt" data-msg="Hola, necesito información sobre remodelación de interiores (PVC, sheetrock, drywall, cielos rasos). ¿Pueden cotizarme?">
-        <div class="svc-icon svc-icon-6">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-            <line x1="9" y1="22" x2="9" y2="12"/>
-            <line x1="15" y1="22" x2="15" y2="12"/>
-            <line x1="3" y1="9" x2="21" y2="9"/>
-          </svg>
-        </div>
-        <div class="svc-name">Remodelacion de Interiores</div>
-        <p class="svc-desc">Transformamos espacios con placas PVC, sheetrock y drywall. Cielos rasos, divisiones, paredes decorativas y acabados de alta calidad.</p>
-        <div class="svc-tags">
-          <span class="svc-tag" style="background:#f5f3ff;color:#7c3aed;border-color:rgba(124,58,237,.15)">PVC</span>
-          <span class="svc-tag" style="background:#f5f3ff;color:#7c3aed;border-color:rgba(124,58,237,.15)">Sheetrock</span>
-          <span class="svc-tag" style="background:#f5f3ff;color:#7c3aed;border-color:rgba(124,58,237,.15)">Drywall</span>
+      <div class="gl4-slide">
+        <div class="gl4-card" data-msg="Hola, necesito información sobre remodelación de interiores (PVC, sheetrock, drywall, cielos rasos). ¿Pueden cotizarme?">
+          <img class="gl4-img" src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&q=80&auto=format&fit=crop" alt="Remodelación"/>
+          <div class="gl4-overlay"></div>
+          <div class="gl4-body">
+            <div class="gl4-body-title">Remodelación de Interiores</div>
+            <div class="gl4-body-desc">Espacios transformados con PVC, sheetrock y drywall. Cielos rasos, divisiones y acabados de alta calidad.</div>
+            <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          </div>
         </div>
       </div>
 
       <!-- 8. Web y Software -->
-      <div class="svc-card svc-card-2 js-tilt" data-msg="Hola, necesito una página web, tienda en línea o solución de software para mi negocio. ¿Pueden ayudarme?">
-        <div class="svc-icon svc-icon-2">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
-          </svg>
-        </div>
-        <div class="svc-name">Paginas Web y Software</div>
-        <p class="svc-desc">Desarrollo de sitios web profesionales, tiendas en linea y aplicaciones a medida. Soluciones digitales que hacen crecer tu negocio.</p>
-        <div class="svc-tags">
-          <span class="svc-tag" style="background:#fffbeb;color:#d97706;border-color:rgba(217,119,6,.15)">Paginas Web</span>
-          <span class="svc-tag" style="background:#fffbeb;color:#d97706;border-color:rgba(217,119,6,.15)">E-Commerce</span>
-          <span class="svc-tag" style="background:#fffbeb;color:#d97706;border-color:rgba(217,119,6,.15)">Software</span>
+      <div class="gl4-slide">
+        <div class="gl4-card" data-msg="Hola, necesito una página web, tienda en línea o solución de software para mi negocio. ¿Pueden ayudarme?">
+          <img class="gl4-img" src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&q=80&auto=format&fit=crop" alt="Paginas Web y Software"/>
+          <div class="gl4-overlay"></div>
+          <div class="gl4-body">
+            <div class="gl4-body-title">Paginas Web y Software</div>
+            <div class="gl4-body-desc">Sitios web profesionales, tiendas en linea y aplicaciones a medida que hacen crecer tu negocio.</div>
+            <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          </div>
         </div>
       </div>
 
-      <!-- 9. Servidores e Infraestructura -->
-      <div class="svc-card svc-card-4 js-tilt" data-msg="Hola, necesito instalar o configurar servidores para mi empresa. ¿Qué servicios de infraestructura IT ofrecen?">
-        <div class="svc-icon svc-icon-4">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/>
-            <line x1="6" y1="6" x2="6.01" y2="6" stroke-linecap="round" stroke-width="2.5"/>
-            <line x1="6" y1="18" x2="6.01" y2="18" stroke-linecap="round" stroke-width="2.5"/>
-          </svg>
-        </div>
-        <div class="svc-name">Servidores e Infraestructura</div>
-        <p class="svc-desc">Instalacion, configuracion y administracion de servidores fisicos y virtuales. Infraestructura IT completa para negocios y oficinas de cualquier tamano.</p>
-        <div class="svc-tags">
-          <span class="svc-tag" style="background:#ecfdf5;color:#059669;border-color:rgba(5,150,105,.15)">Servidores</span>
-          <span class="svc-tag" style="background:#ecfdf5;color:#059669;border-color:rgba(5,150,105,.15)">Virtualizacion</span>
-          <span class="svc-tag" style="background:#ecfdf5;color:#059669;border-color:rgba(5,150,105,.15)">IT empresarial</span>
+      <!-- 9. Servidores -->
+      <div class="gl4-slide">
+        <div class="gl4-card" data-msg="Hola, necesito instalar o configurar servidores para mi empresa. ¿Qué servicios de infraestructura IT ofrecen?">
+          <img class="gl4-img" src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=800&q=80&auto=format&fit=crop" alt="Servidores"/>
+          <div class="gl4-overlay"></div>
+          <div class="gl4-body">
+            <div class="gl4-body-title">Servidores e Infraestructura IT</div>
+            <div class="gl4-body-desc">Instalación y administración de servidores físicos y virtuales. Infraestructura IT completa para empresas.</div>
+            <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          </div>
         </div>
       </div>
 
-      <!-- 10. Inteligencia Artificial -->
-      <div class="svc-card svc-card-5 js-tilt" style="grid-column: 1 / -1; max-width: 680px; margin-inline: auto; width: 100%;" data-msg="Hola, me interesa implementar Inteligencia Artificial en mi negocio (chatbots, automatización, análisis de datos). ¿Qué soluciones tienen?">
-        <div class="svc-icon svc-icon-5">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 3 3v2a3 3 0 0 1-3 3h-1v1a4 4 0 0 1-8 0v-1H7a3 3 0 0 1-3-3v-2a3 3 0 0 1 3-3h1V6a4 4 0 0 1 4-4z"/>
-            <circle cx="9" cy="10" r="1" fill="currentColor"/>
-            <circle cx="15" cy="10" r="1" fill="currentColor"/>
-            <path d="M9 14s1 1.5 3 1.5 3-1.5 3-1.5"/>
-          </svg>
-        </div>
-        <div class="svc-name">Inteligencia Artificial para tu Negocio</div>
-        <p class="svc-desc">Implementamos soluciones de IA que automatizan procesos, mejoran la atencion al cliente y generan ventajas competitivas reales para tu empresa.</p>
-        <div class="svc-tags">
-          <span class="svc-tag" style="background:#ecfeff;color:#0891b2;border-color:rgba(8,145,178,.15)">Chatbots 24/7</span>
-          <span class="svc-tag" style="background:#ecfeff;color:#0891b2;border-color:rgba(8,145,178,.15)">Automatizacion</span>
-          <span class="svc-tag" style="background:#ecfeff;color:#0891b2;border-color:rgba(8,145,178,.15)">Analisis de datos</span>
-          <span class="svc-tag" style="background:#ecfeff;color:#0891b2;border-color:rgba(8,145,178,.15)">Asistentes virtuales</span>
-          <span class="svc-tag" style="background:#ecfeff;color:#0891b2;border-color:rgba(8,145,178,.15)">Generacion de contenido</span>
-          <span class="svc-tag" style="background:#ecfeff;color:#0891b2;border-color:rgba(8,145,178,.15)">Reconocimiento de imagenes</span>
-          <span class="svc-tag" style="background:#ecfeff;color:#0891b2;border-color:rgba(8,145,178,.15)">CRM inteligente</span>
-          <span class="svc-tag" style="background:#ecfeff;color:#0891b2;border-color:rgba(8,145,178,.15)">Prediccion de ventas</span>
+      <!-- 10. IA -->
+      <div class="gl4-slide">
+        <div class="gl4-card" data-msg="Hola, me interesa implementar Inteligencia Artificial en mi negocio (chatbots, automatización, análisis de datos). ¿Qué soluciones tienen?">
+          <img class="gl4-img" src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80&auto=format&fit=crop" alt="Inteligencia Artificial"/>
+          <div class="gl4-overlay"></div>
+          <div class="gl4-body">
+            <div class="gl4-body-title">Inteligencia Artificial para tu Negocio</div>
+            <div class="gl4-body-desc">Chatbots 24/7, automatización de procesos y análisis de datos para generar ventajas competitivas reales.</div>
+            <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          </div>
         </div>
       </div>
 
-    </div>
-  </div>
+    </div><!-- /gl4-track -->
+    </div><!-- /svcWrapper -->
+    <button class="svc-float-btn svc-float-next" id="svcNext" aria-label="Siguiente">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+  </div><!-- /svc-carousel-wrap -->
+
+  <div class="gl4-dots-row" id="carouselDots"></div>
+
 </section>
 
 <!-- ── WHY US ─────────────────────────────────────────────── -->
@@ -958,6 +1132,54 @@
   </div>
 </section>
 
+<!-- ── TESTIMONIALS (Circular) ───────────────────────────── -->
+<section class="testimonials">
+  <div class="container">
+    <div class="section-header" data-reveal>
+      <p class="label">Testimonios</p>
+      <h2 class="h2">Lo que dicen nuestros<br/>87 clientes contentos</h2>
+      <p class="section-sub">Clientes reales de Santo Domingo que confiaron en nosotros.</p>
+    </div>
+
+    <div class="circ-testi" id="circTesti">
+
+      <!-- Left: stacked photo cards -->
+      <div class="circ-img-stack" id="circStack">
+        <img class="circ-img-card" data-idx="0"
+          src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80&auto=format&fit=crop"
+          alt="Roberto Almonte"/>
+        <img class="circ-img-card" data-idx="1"
+          src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=600&q=80&auto=format&fit=crop"
+          alt="Maria Paulino"/>
+        <img class="circ-img-card" data-idx="2"
+          src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&q=80&auto=format&fit=crop"
+          alt="Jose Martinez"/>
+      </div>
+
+      <!-- Right: content -->
+      <div class="circ-content">
+        <div id="circTextBlock">
+          <div class="circ-name" id="circName"></div>
+          <div class="circ-designation" id="circRole"></div>
+          <div class="circ-quote-wrap">
+            <div class="circ-quote-text" id="circQuote"></div>
+          </div>
+        </div>
+        <div class="circ-arrows-row">
+          <button class="circ-btn" id="circPrev" aria-label="Anterior">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <button class="circ-btn" id="circNext" aria-label="Siguiente">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
 <!-- ── DIVISIONS ─────────────────────────────────────────── -->
 <section id="divisiones" class="divisions">
   <div class="container">
@@ -978,11 +1200,11 @@
             <span class="div-badge">Activo</span>
           </div>
           <div class="div-name">Plata Tech Security</div>
-          <div class="div-tagline" style="color:#1e50d4;">Proteccion Inteligente 24/7</div>
-          <p class="div-desc">Camaras Hikvision ColorVu, alarmas, CCTV y control de acceso. Instalacion certificada para hogares y negocios.</p>
+          <div class="div-tagline" style="color:#1e50d4;">Protección Inteligente 24/7</div>
+          <p class="div-desc">Cámaras Hikvision ColorVu, alarmas, CCTV y control de acceso. Instalación certificada para hogares y negocios.</p>
           <div class="div-btns">
             <a href="security.html" class="div-btn" style="background:#1e50d4;">
-              Ver cotizaciones
+              Ver cotizaciónes
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
             <a href="https://www.instagram.com/platatec/" target="_blank" rel="noopener" class="div-btn-ig">
@@ -1027,7 +1249,7 @@
           </div>
           <div class="div-name">UltimoGadget</div>
           <div class="div-tagline" style="color:#0055ff;">Tech Store & Reparacion</div>
-          <p class="div-desc">Celulares, laptops, auriculares, accesorios y drones. Servicio tecnico profesional para dispositivos moviles y electronicos.</p>
+          <p class="div-desc">Celulares, laptops, auriculares, accesorios y drones. Servicio técnico profesional para dispositivos móviles y electrónicos.</p>
           <div class="div-btns">
             <a href="ultimogadget.html" class="div-btn" style="background:#0055ff;">
               Ver tienda
@@ -1052,7 +1274,11 @@
   <div class="container cta-inner" data-reveal>
     <p class="label label-blue cta-label">Contacto</p>
     <h2 class="cta-title">Solicita tu presupuesto<br/>sin costo</h2>
-    <p class="cta-desc">Cuentanos tu proyecto y te respondemos hoy mismo. Trabajamos en Santo Domingo y zonas aledanas.</p>
+    <p class="cta-desc">Cuéntanos tu proyecto y te respondemos hoy mismo. Trabajamos en Santo Domingo y zonas aledañas.</p>
+    <div style="display:inline-flex;align-items:center;gap:.6rem;background:rgba(5,150,105,.12);border:1px solid rgba(5,150,105,.28);border-radius:100px;padding:.5rem 1.1rem;margin-bottom:2rem;font-size:.8rem;color:rgba(255,255,255,.82);font-weight:500;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+      Toda instalación incluye <strong style="color:#6ee7b7;">&nbsp;3 meses de soporte y garantía gratis</strong>
+    </div>
     <div class="cta-actions">
       <a id="waBtn" href="https://wa.me/18494950959" target="_blank" class="btn-whatsapp js-magnetic">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
@@ -1063,7 +1289,7 @@
         849-495-0959
       </a>
     </div>
-    <p class="cta-contact">O escribe a <a href="mailto:contacto@platatechs.com">contacto@platatechs.com</a></p>
+    <p class="cta-contact">O escribe a <a href="mailto:ruddy.plata@gmail.com">ruddy.plata@gmail.com</a></p>
     <div class="socials">
       <a href="https://instagram.com/PlataTec" target="_blank" class="soc" title="Instagram @PlataTec">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
@@ -1126,7 +1352,17 @@ function closeNav() { document.getElementById('navMobile').classList.remove('ope
 /* ── Hero: split title chars (TreeWalker) ───────────── */
 (function() {
   const title = document.getElementById('heroTitle');
-  const walker = document.createTreeWalker(title, NodeFilter.SHOW_TEXT);
+  const walker = document.createTreeWalker(title, NodeFilter.SHOW_TEXT, {
+    acceptNode(node) {
+      // Skip text inside <em> and .accent so their styling stays intact
+      let p = node.parentElement;
+      while (p && p !== title) {
+        if (p.tagName === 'EM' || p.classList.contains('accent')) return NodeFilter.FILTER_REJECT;
+        p = p.parentElement;
+      }
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
   const textNodes = [];
   while (walker.nextNode()) textNodes.push(walker.currentNode);
   textNodes.forEach(node => {
@@ -1143,13 +1379,14 @@ function closeNav() { document.getElementById('navMobile').classList.remove('ope
     node.parentNode.replaceChild(frag, node);
   });
   gsap.set('#heroTitle .char', { opacity: 0, y: 40, rotateX: -60, transformOrigin: '0% 50% -20px' });
+  gsap.set('#heroTitle em, #heroTitle .accent', { opacity: 0, y: 20 });
 })();
 
 /* ── Hero entrance ──────────────────────────────────── */
 gsap.timeline({
   defaults: { ease: 'power4.out' },
   onComplete() {
-    // Gold shimmer wave across letters
+    // Gold shimmer wave across white letters only (skip gradient <em>)
     const chars = document.querySelectorAll('#heroTitle .char');
     gsap.timeline({ repeat: -1, repeatDelay: 2.5 })
       .to(chars, { color: '#e6aa3c', stagger: .04, duration: .3, ease: 'power2.inOut' })
@@ -1159,11 +1396,10 @@ gsap.timeline({
   .to('#heroLogo',             { opacity: 1, y: 0, duration: .8 })
   .to('#heroLabel',            { opacity: 1, y: 0, duration: .6 }, '-=.4')
   .to('#heroTitle .char',      { opacity: 1, y: 0, rotateX: 0, stagger: .018, duration: .7 }, '-=.3')
+  .to('#heroTitle em',         { opacity: 1, y: 0, duration: .7 }, '-=.45')
+  .to('#heroTitle .accent',    { opacity: 1, y: 0, duration: .6 }, '-=.35')
   .to('#heroDesc',             { opacity: 1, y: 0, duration: .65 }, '-=.3')
-  .to('#heroActions .btn',     { opacity: 1, y: 0, stagger: .1, duration: .5 }, '-=.35')
-  .to('#heroPanel .hpc',       { opacity: 1, x: 0, stagger: .1, duration: .55 }, '-=.65')
-  .to('#heroPanel .hero-trust',{ opacity: 1, x: 0, duration: .45 }, '-=.15')
-  .to('.hero-scroll',          { opacity: 1, duration: .5 }, '-=.2');
+  .to('#heroActions .btn',     { opacity: 1, y: 0, stagger: .1, duration: .5 }, '-=.35');
 
 /* ── Scroll reveals ─────────────────────────────────── */
 document.querySelectorAll('[data-reveal]').forEach(el => {
@@ -1192,16 +1428,18 @@ document.querySelectorAll('.stat-n[data-count]').forEach(el => {
   });
 });
 
-/* ── Service cards stagger ──────────────────────────── */
-gsap.to('.svc-card', {
-  opacity: 1, y: 0, stagger: .1, duration: .8, ease: 'power3.out',
-  scrollTrigger: { trigger: '.svc-grid', start: 'top 82%' }
-});
+/* svc-card: opacity controlled by carousel CSS (opacity:1 !important) */
 
 /* ── Division cards stagger ─────────────────────────── */
 gsap.to('.div-card', {
   opacity: 1, y: 0, stagger: .12, duration: .8, ease: 'power3.out',
   scrollTrigger: { trigger: '.div-grid', start: 'top 82%' }
+});
+
+/* ── Feat cards (Por Qué Elegirnos) ─────────────────── */
+gsap.to('.feat', {
+  opacity: 1, x: 0, stagger: .1, duration: .7, ease: 'power2.out',
+  scrollTrigger: { trigger: '.feat-list', start: 'top 85%' }
 });
 
 /* ── Division cards: toda la card es clickeable ─────── */
@@ -1241,25 +1479,246 @@ document.querySelectorAll('.js-magnetic').forEach(btn => {
   });
 });
 
-/* ── Feat cards ─────────────────────────────────────── */
-gsap.to('.feat', {
-  opacity: 1, x: 0, stagger: .1, duration: .7, ease: 'power2.out',
-  scrollTrigger: { trigger: '.feat-list', start: 'top 85%' }
-});
 
 /* ── Service selection → WhatsApp preload ───────────── */
 const WA_BASE = 'https://wa.me/18494950959?text=';
 const waBtn   = document.getElementById('waBtn');
 const waBtnTx = document.getElementById('waBtnText');
-document.querySelectorAll('.svc-card[data-msg]').forEach(card => {
+document.querySelectorAll('.gl4-card[data-msg]').forEach(card => {
   card.addEventListener('click', () => {
-    document.querySelectorAll('.svc-card.selected').forEach(c => c.classList.remove('selected'));
+    document.querySelectorAll('.gl4-card.selected').forEach(c => c.classList.remove('selected'));
     card.classList.add('selected');
     waBtn.href = WA_BASE + encodeURIComponent(card.dataset.msg);
-    waBtnTx.textContent = 'Preguntar por ' + card.querySelector('.svc-name').textContent;
+    waBtnTx.textContent = 'Preguntar por ' + card.querySelector('.gl4-body-title').textContent;
     document.getElementById('contacto').scrollIntoView({ behavior: 'smooth', block: 'center' });
   });
 });
+
+/* ── Circular Testimonials (3D fan stack) ───────────── */
+(function() {
+  const items = [
+    {
+      quote: 'Instalaron el sistema de domótica completo en mi casa. Llegaron a la hora exacta, explicaron cada detalle y el soporte post-instalación fue excelente. Puntualidad y honestidad de principio a fin.',
+      name:  'Roberto Almonte',
+      role:  'Propietario residencial, Los Cacicazgos',
+    },
+    {
+      quote: 'Instalaron cámaras e inversores en mi negocio. El presupuesto fue exactamente lo que me cotizaron, sin un peso adicional. Los 3 meses de garantía me dieron mucha tranquilidad. Recomendados al 100%.',
+      name:  'Maria Paulino',
+      role:  'Duena de negocio, Piantini',
+    },
+    {
+      quote: 'Instalaron toda la infraestructura de red para la oficina. En tecnología, la confianza lo es todo. Plata Tech la ganó completamente. Profesionalismo que no encontré en ninguna otra empresa.',
+      name:  'Jose Martinez',
+      role:  'Gerente IT, Empresa Corporativa, SD',
+    }
+  ];
+
+  const isMobile = window.innerWidth < 900;
+  const GAP      = isMobile ? 0  : 60;
+  const STICK    = isMobile ? 16 : 48;
+  let current    = 0, autoTimer;
+
+  const imgCards  = document.querySelectorAll('.circ-img-card');
+  const nameEl    = document.getElementById('circName');
+  const roleEl    = document.getElementById('circRole');
+  const quoteEl   = document.getElementById('circQuote');
+  const textBlock = document.getElementById('circTextBlock');
+  const prevBtn   = document.getElementById('circPrev');
+  const nextBtn   = document.getElementById('circNext');
+  const total     = items.length;
+
+  function applyCardTransforms(active) {
+    imgCards.forEach((card, i) => {
+      const isActive = i === active;
+      const isLeft   = (active - 1 + total) % total === i;
+      const isRight  = (active + 1) % total === i;
+      let t, o, z;
+      if (isActive) {
+        t = 'translateX(0) translateY(0) scale(1) rotateY(0deg)';
+        o = '1'; z = '3';
+      } else if (isLeft) {
+        t = `translateX(-${GAP}px) translateY(-${STICK}px) scale(0.85) rotateY(15deg)`;
+        o = '1'; z = '2';
+      } else if (isRight) {
+        t = `translateX(${GAP}px) translateY(-${STICK}px) scale(0.85) rotateY(-15deg)`;
+        o = '1'; z = '2';
+      } else {
+        t = 'translateX(0) scale(0.7)'; o = '0'; z = '1';
+      }
+      card.style.transform = t;
+      card.style.opacity   = o;
+      card.style.zIndex    = z;
+    });
+  }
+
+  function animateWords(text) {
+    quoteEl.innerHTML = '';
+    text.split(' ').forEach((word, i) => {
+      const s = document.createElement('span');
+      s.textContent = word + '\u00a0';
+      s.style.cssText = `display:inline-block;opacity:0;animation:wordReveal .22s ease forwards;animation-delay:${i * 0.025}s`;
+      quoteEl.appendChild(s);
+    });
+  }
+
+  function showSlide(idx, animate) {
+    current = (idx + total) % total;
+    applyCardTransforms(current);
+    const it = items[current];
+    if (animate) {
+      textBlock.style.transition = 'opacity .22s, transform .22s';
+      textBlock.style.opacity = '0';
+      textBlock.style.transform = 'translateY(8px)';
+      setTimeout(() => {
+        nameEl.textContent = it.name;
+        roleEl.textContent = it.role;
+        animateWords(it.quote);
+        textBlock.style.opacity = '1';
+        textBlock.style.transform = 'translateY(0)';
+      }, 230);
+    } else {
+      nameEl.textContent = it.name;
+      roleEl.textContent = it.role;
+      animateWords(it.quote);
+    }
+  }
+
+  function startAuto() { autoTimer = setInterval(() => showSlide(current + 1, true), 5000); }
+
+  prevBtn.addEventListener('click', () => { clearInterval(autoTimer); showSlide(current - 1, true); startAuto(); });
+  nextBtn.addEventListener('click', () => { clearInterval(autoTimer); showSlide(current + 1, true); startAuto(); });
+  imgCards.forEach((c, i) => c.addEventListener('click', () => { clearInterval(autoTimer); showSlide(i, true); startAuto(); }));
+
+  showSlide(0, false);
+  ScrollTrigger.create({
+    trigger: '.circ-testi', start: 'top 85%', once: true,
+    onEnter() { startAuto(); }
+  });
+})();
+
+/* ── Services carousel ──────────────────────────────── */
+(function() {
+  const wrapper = document.getElementById('svcWrapper');
+  const dotsEl  = document.getElementById('carouselDots');
+  const prevBtn = document.getElementById('svcPrev');
+  const nextBtn = document.getElementById('svcNext');
+  if (!wrapper || !dotsEl) return;
+
+  const slides = Array.from(wrapper.querySelectorAll('.gl4-slide'));
+  slides.forEach((_, i) => {
+    const d = document.createElement('button');
+    d.className = 'gl4-dot' + (i === 0 ? ' active' : '');
+    d.setAttribute('aria-label', 'Servicio ' + (i + 1));
+    d.addEventListener('click', () => wrapper.scrollTo({ left: slides[i].offsetLeft, behavior: 'smooth' }));
+    dotsEl.appendChild(d);
+  });
+
+  function slideWidth() {
+    return slides[0] ? slides[0].offsetWidth + 20 : 340;
+  }
+  function updateUI() {
+    const max = wrapper.scrollWidth - wrapper.clientWidth;
+    const idx = Math.round(wrapper.scrollLeft / slideWidth());
+    dotsEl.querySelectorAll('.gl4-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+    if (prevBtn) prevBtn.classList.toggle('disabled', wrapper.scrollLeft <= 4);
+    if (nextBtn) nextBtn.classList.toggle('disabled', wrapper.scrollLeft >= max - 4);
+  }
+  if (prevBtn) prevBtn.addEventListener('click', () => wrapper.scrollBy({ left: -slideWidth(), behavior: 'smooth' }));
+  if (nextBtn) nextBtn.addEventListener('click', () => wrapper.scrollBy({ left:  slideWidth(), behavior: 'smooth' }));
+  wrapper.addEventListener('scroll', updateUI, { passive: true });
+  updateUI();
+})();
+</script>
+
+<!-- ── HERO WebGL Shader ──────────────────────────────── -->
+<script>
+(function(){
+  var canvas = document.getElementById('heroCanvas');
+  if (!canvas) return;
+  var gl = canvas.getContext('webgl2');
+  if (!gl) return;
+
+  var vert = [
+    '#version 300 es',
+    'in vec2 a_pos;',
+    'void main(){ gl_Position = vec4(a_pos,0,1); }'
+  ].join('\n');
+
+  var frag = [
+    '#version 300 es',
+    'precision highp float;',
+    'out vec4 O;',
+    'uniform vec2 resolution;',
+    'uniform float time;',
+    '#define FC gl_FragCoord.xy',
+    '#define T time',
+    '#define R resolution',
+    '#define MN min(R.x,R.y)',
+    'float rnd(vec2 p){p=fract(p*vec2(12.9898,78.233));p+=dot(p,p+34.56);return fract(p.x*p.y);}',
+    'float noise(in vec2 p){vec2 i=floor(p),f=fract(p),u=f*f*(3.-2.*f);float a=rnd(i),b=rnd(i+vec2(1,0)),c=rnd(i+vec2(0,1)),d=rnd(i+1.);return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);}',
+    'float fbm(vec2 p){float t=.0,a=1.;mat2 m=mat2(1.,-.5,.2,1.2);for(int i=0;i<5;i++){t+=a*noise(p);p*=2.*m;a*=.5;}return t;}',
+    'float clouds(vec2 p){float d=1.,t=.0;for(float i=.0;i<3.;i++){float a=d*fbm(i*10.+p.x*.2+.2*(1.+i)*p.y+d+i*i+p);t=mix(t,d,a);d=a;p*=2./(i+1.);}return t;}',
+    'void main(void){',
+    '  vec2 uv=(FC-.5*R)/MN,st=uv*vec2(2,1);',
+    '  vec3 col=vec3(0);',
+    '  float bg=clouds(vec2(st.x+T*.5,-st.y));',
+    '  uv*=1.-.3*(sin(T*.2)*.5+.5);',
+    '  for(float i=1.;i<12.;i++){',
+    '    uv+=.1*cos(i*vec2(.1+.01*i,.8)+i*i+T*.5+.1*uv.x);',
+    '    vec2 p=uv;',
+    '    float d=length(p);',
+    '    col+=.00125/d*vec3(0.18,0.48,1.25)*(sin(i*0.7)+1.8);',
+    '    float b=noise(i+p+bg*1.731);',
+    '    col+=.002*b*vec3(0.25,0.55,1.3)/length(max(p,vec2(b*p.x*.02,p.y)));',
+    '    col=mix(col,vec3(bg*.005,bg*.035,bg*.26),d);',
+    '  }',
+    '  O=vec4(col,1);',
+    '}'
+  ].join('\n');
+
+  function mkShader(type, src){
+    var s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+
+  var prog = gl.createProgram();
+  gl.attachShader(prog, mkShader(gl.VERTEX_SHADER, vert));
+  gl.attachShader(prog, mkShader(gl.FRAGMENT_SHADER, frag));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+
+  var buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  var aPos = gl.getAttribLocation(prog, 'a_pos');
+  gl.enableVertexAttribArray(aPos);
+  gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+  var uRes  = gl.getUniformLocation(prog, 'resolution');
+  var uTime = gl.getUniformLocation(prog, 'time');
+
+  function resize(){
+    var w = canvas.offsetWidth, h = canvas.offsetHeight;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width  = w * dpr;
+    canvas.height = h * dpr;
+    gl.viewport(0, 0, canvas.width, canvas.height);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  var start = performance.now();
+  function frame(){
+    gl.uniform2f(uRes, canvas.width, canvas.height);
+    gl.uniform1f(uTime, (performance.now() - start) / 1000);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
 </script>
 
 </body>
