@@ -70,10 +70,10 @@
      ║  RESET + BASE                                            ║
      ╚══════════════════════════════════════════════════════════╝ */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; scroll-padding-top: var(--nav-h); }
+  html { scroll-behavior: smooth; scroll-padding-top: var(--nav-h); background: var(--navy); }
   body {
     font-family: 'Inter', system-ui, sans-serif;
-    background: var(--white);
+    background: transparent;
     color: var(--ink);
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
@@ -211,7 +211,7 @@
     position: relative; height: 100svh; min-height: 620px;
     display: flex; align-items: center; justify-content: center;
     padding-top: var(--nav-h);
-    background: var(--navy); overflow: hidden;
+    background: transparent; overflow: hidden;
   }
   @keyframes pulseDot {
     0%, 100% { opacity: 1; transform: scale(1); }
@@ -367,7 +367,7 @@
   /* ╔══════════════════════════════════════════════════════════╗
      ║  WHY US                                                  ║
      ╚══════════════════════════════════════════════════════════╝ */
-  .why { padding: 7rem 0; background: var(--blue-tint); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .why { padding: 7rem 0; background: rgba(245,248,255,.72); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
   .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
   .why-label { margin-bottom: 1rem; }
   .why-title { margin-bottom: 1.25rem; }
@@ -450,11 +450,113 @@
   .div-btn-ig:hover { transform: translateX(4px); opacity: .88; }
 
   /* ╔══════════════════════════════════════════════════════════╗
+     ║  SHOP SHOWCASE                                           ║
+     ╚══════════════════════════════════════════════════════════╝ */
+  .shop-show {
+    padding: 6.5rem 0; position: relative; overflow: hidden;
+    background: linear-gradient(180deg, var(--blue-tint) 0%, var(--off-white) 100%);
+    border-top: 1px solid var(--border);
+  }
+  .shop-show::before {
+    content: ''; position: absolute; top: -120px; right: -80px;
+    width: 360px; height: 360px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(30,80,212,.10), transparent 70%);
+    pointer-events: none;
+  }
+  .shop-show-inner {
+    display: grid; grid-template-columns: 1.1fr 1fr;
+    gap: 4rem; align-items: center; position: relative; z-index: 1;
+  }
+  .shop-show-text .label { margin-bottom: 1rem; }
+  .shop-show-title {
+    font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800;
+    font-size: clamp(1.9rem, 3.4vw, 2.6rem); line-height: 1.1;
+    color: var(--ink); margin-bottom: 1.25rem; letter-spacing: -.02em;
+  }
+  .shop-show-title em { color: var(--blue); font-style: normal; }
+  .shop-show-desc {
+    font-size: 1rem; color: var(--ink-2); line-height: 1.75;
+    max-width: 520px; margin-bottom: 2rem;
+  }
+  .shop-show-trust {
+    display: flex; flex-wrap: wrap; gap: .65rem; margin-bottom: 2rem;
+  }
+  .shop-show-trust span {
+    display: inline-flex; align-items: center; gap: .45rem;
+    padding: .45rem .9rem; border-radius: 100px;
+    background: var(--white); border: 1px solid var(--border);
+    font-size: .78rem; font-weight: 600; color: var(--ink-2);
+  }
+  .shop-show-trust svg { color: var(--blue); flex-shrink: 0; }
+  .shop-show-cta {
+    display: inline-flex; align-items: center; gap: .55rem;
+    padding: .9rem 1.8rem; border-radius: 100px;
+    background: var(--blue); color: var(--white);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: .92rem; font-weight: 700;
+    box-shadow: var(--shadow-blue);
+    transition: transform .25s, box-shadow .25s;
+  }
+  .shop-show-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 38px rgba(30,80,212,.32); }
+  .shop-show-sub {
+    display: flex; align-items: center; gap: .9rem; margin-top: 1.5rem;
+    font-size: .78rem; color: var(--ink-3);
+  }
+  .shop-show-sub-logos { display: inline-flex; align-items: center; gap: .7rem; }
+  .shop-show-sub-logos img { height: 20px; width: auto; object-fit: contain; opacity: .7; }
+  .shop-show-sub-logos .sep { width: 1px; height: 14px; background: var(--border); }
+
+  .shop-show-visual {
+    position: relative; display: flex; justify-content: center;
+    padding: 1.5rem;
+  }
+  .shop-show-card {
+    width: 100%; max-width: 420px;
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 20px; padding: 1.75rem;
+    box-shadow: 0 18px 50px rgba(11,29,62,.08);
+    position: relative;
+  }
+  .shop-show-card-head {
+    display: flex; align-items: center; gap: .7rem; margin-bottom: 1.25rem;
+    padding-bottom: 1.25rem; border-bottom: 1px solid var(--border);
+  }
+  .shop-show-card-mark {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--navy), var(--blue));
+    padding: 5px; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 14px rgba(20,71,255,.22);
+  }
+  .shop-show-card-mark img { width: 100%; height: 100%; object-fit: contain; filter: brightness(0) invert(1); }
+  .shop-show-card-brand { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: .95rem; color: var(--ink); }
+  .shop-show-card-sub { font-size: .72rem; color: var(--ink-3); }
+
+  .shop-show-cats { display: grid; grid-template-columns: 1fr 1fr; gap: .55rem; }
+  .shop-show-cats a {
+    display: flex; align-items: center; gap: .6rem;
+    padding: .8rem .9rem; border-radius: 12px;
+    background: var(--off-white); border: 1px solid var(--border);
+    font-size: .82rem; font-weight: 600; color: var(--ink);
+    transition: background .2s, border-color .2s, transform .2s;
+  }
+  .shop-show-cats a:hover { background: var(--blue-pale); border-color: rgba(30,80,212,.25); transform: translateX(2px); }
+  .shop-show-cats svg { color: var(--blue); flex-shrink: 0; }
+
+  @media (max-width: 900px) {
+    .shop-show { padding: 5rem 0; }
+    .shop-show-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+    .shop-show-visual { padding: 0; }
+  }
+
+  /* ╔══════════════════════════════════════════════════════════╗
      ║  CTA                                                     ║
      ╚══════════════════════════════════════════════════════════╝ */
   .cta-sec {
-    background: var(--navy); padding: 7rem 0;
+    background: linear-gradient(180deg, rgba(11,29,62,.55), rgba(11,29,62,.75));
+    padding: 7rem 0;
     position: relative; overflow: hidden;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
   }
   .cta-orb { position: absolute; border-radius: 50%; filter: blur(70px); pointer-events: none; opacity: .3; }
   .cta-orb-1 { width: 400px; height: 400px; background: var(--blue); top: -100px; right: -50px; }
@@ -794,6 +896,7 @@
       <li><a href="#servicios">Servicios</a></li>
       <li><a href="#nosotros">Nosotros</a></li>
       <li><a href="#divisiones">Divisiones</a></li>
+      <li><a href="#tienda">Tienda</a></li>
       <li><a href="#contacto">Contacto</a></li>
     </ul>
     <div class="nav-right">
@@ -809,15 +912,17 @@
     <a href="#servicios"  onclick="closeNav()">Servicios</a>
     <a href="#nosotros"   onclick="closeNav()">Nosotros</a>
     <a href="#divisiones" onclick="closeNav()">Divisiones</a>
+    <a href="#tienda"     onclick="closeNav()">Tienda</a>
     <a href="#contacto"   onclick="closeNav()">Contacto</a>
   </div>
 </nav>
 
 <main>
 <!-- ── HERO ─────────────────────────────────────────────── -->
-<section id="inicio" class="hero">
-  <canvas id="heroCanvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;display:block;"></canvas>
+<!-- Page-wide dynamic background canvas -->
+<canvas id="heroCanvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;display:block;z-index:-1;"></canvas>
 
+<section id="inicio" class="hero">
   <div class="container hero-inner">
     <div class="hero-logo-big" id="heroLogo">
       <img src="images/logo-platatech.png" alt="Plata Tech Solutions"/>
@@ -1075,16 +1180,19 @@
       <p class="label why-label">Por Que Elegirnos</p>
       <h2 class="h2 why-title">Calidad y compromiso<br/>en cada proyecto</h2>
       <p class="why-body">
-        Somos un equipo tecnico certificado con anos de experiencia
-        en instalaciones electricas, automatizacion y remodelacion
-        en Santo Domingo y toda la region.
+        Somos <strong>Plata Tech Solutions S.R.L.</strong>, empresa formalmente
+        establecida en Republica Dominicana, con RNC activo y autorizados por
+        la DGII para emitir facturas con Numero de Comprobante Fiscal (NCF).
       </p>
       <p class="why-body">
-        Trabajamos con las mejores marcas del mercado y garantizamos
-        cada instalacion. No terminamos el trabajo hasta que el cliente
-        este 100% satisfecho.
+        Equipo tecnico certificado con años de experiencia en instalaciones
+        electricas, automatizacion, seguridad y desarrollo web en Santo Domingo
+        y toda la region. Trabajamos con las mejores marcas del mercado y
+        garantizamos cada instalacion hasta que el cliente este 100% satisfecho.
       </p>
       <div class="about-pills">
+        <span class="pill">SRL con RNC</span>
+        <span class="pill">Facturas con NCF</span>
         <span class="pill">Certificados</span>
         <span class="pill">Garantia incluida</span>
         <span class="pill">Respuesta rapida</span>
@@ -1125,7 +1233,16 @@
         </div>
         <div>
           <div class="feat-title">Soporte Post-Instalacion</div>
-          <div class="feat-desc">Te acompanamos despues de finalizado. Garantia y soporte tecnico incluido.</div>
+          <div class="feat-desc">Te acompañamos despues de finalizado. Garantia y soporte tecnico incluido.</div>
+        </div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <div>
+          <div class="feat-title">Empresa Formal, SRL con RNC</div>
+          <div class="feat-desc">Plata Tech Solutions S.R.L. registrada en DGII. Emitimos facturas con Comprobante Fiscal (NCF) para credito fiscal o consumidor final.</div>
         </div>
       </div>
     </div>
@@ -1150,10 +1267,31 @@
           alt="Roberto Almonte"/>
         <img class="circ-img-card" data-idx="1"
           src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=600&q=80&auto=format&fit=crop"
-          alt="Maria Paulino"/>
+          alt="María Paulino"/>
         <img class="circ-img-card" data-idx="2"
           src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&q=80&auto=format&fit=crop"
-          alt="Jose Martinez"/>
+          alt="José Martínez"/>
+        <img class="circ-img-card" data-idx="3"
+          src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600&q=80&auto=format&fit=crop"
+          alt="Carmen Rodríguez"/>
+        <img class="circ-img-card" data-idx="4"
+          src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&q=80&auto=format&fit=crop"
+          alt="Luis Fernández"/>
+        <img class="circ-img-card" data-idx="5"
+          src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600&q=80&auto=format&fit=crop"
+          alt="Ana Jiménez"/>
+        <img class="circ-img-card" data-idx="6"
+          src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=600&q=80&auto=format&fit=crop"
+          alt="Pedro Santana"/>
+        <img class="circ-img-card" data-idx="7"
+          src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=600&q=80&auto=format&fit=crop"
+          alt="Laura Hernández"/>
+        <img class="circ-img-card" data-idx="8"
+          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&q=80&auto=format&fit=crop"
+          alt="Miguel Vásquez"/>
+        <img class="circ-img-card" data-idx="9"
+          src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80&auto=format&fit=crop"
+          alt="Sofía Castillo"/>
       </div>
 
       <!-- Right: content -->
@@ -1267,6 +1405,80 @@
   </div>
 </section>
 
+<!-- ── SHOP SHOWCASE ─────────────────────────────────────── -->
+<section id="tienda" class="shop-show">
+  <div class="container">
+    <div class="shop-show-inner">
+
+      <div class="shop-show-text" data-reveal>
+        <p class="label">Tienda Oficial</p>
+        <h2 class="shop-show-title">Compra con la misma<br/><em>tranquilidad</em> con la que instalamos</h2>
+        <p class="shop-show-desc">Celulares, cámaras, laptops y accesorios oficiales de Plata Tech Security y UltimoGadget — con factura NCF, garantía respaldada y un equipo que responde cuando lo necesitas. No solo te vendemos el equipo: te acompañamos.</p>
+
+        <div class="shop-show-trust">
+          <span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Garantía respaldada
+          </span>
+          <span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Factura con NCF
+          </span>
+          <span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Acompañamiento post-venta
+          </span>
+        </div>
+
+        <a href="shop/index.html" class="shop-show-cta js-magnetic">
+          Ir a la tienda
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+
+        <div class="shop-show-sub">
+          <span>Productos oficiales de</span>
+          <div class="shop-show-sub-logos">
+            <img src="images/logo-platatech.png" alt="Plata Tech Security"/>
+            <span class="sep"></span>
+            <img src="images/logo-ug.png" alt="UltimoGadget"/>
+          </div>
+        </div>
+      </div>
+
+      <div class="shop-show-visual" data-reveal>
+        <div class="shop-show-card">
+          <div class="shop-show-card-head">
+            <div class="shop-show-card-mark"><img src="images/logo-platatech.png" alt="Plata Tech"/></div>
+            <div>
+              <div class="shop-show-card-brand">Plata Tech Store</div>
+              <div class="shop-show-card-sub">Tienda oficial · RNC · NCF</div>
+            </div>
+          </div>
+          <div class="shop-show-cats">
+            <a href="shop/index.html?cat=celulares">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke-width="2.5" stroke-linecap="round"/></svg>
+              Celulares
+            </a>
+            <a href="shop/index.html?cat=camaras">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              Cámaras
+            </a>
+            <a href="shop/index.html?cat=laptops">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              Laptops
+            </a>
+            <a href="shop/index.html?cat=accesorios">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              Accesorios
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <!-- ── CTA ───────────────────────────────────────────────── -->
 <section id="contacto" class="cta-sec">
   <div class="cta-orb cta-orb-1"></div>
@@ -1310,6 +1522,7 @@
       <a href="#inicio">Inicio</a>
       <a href="#servicios">Servicios</a>
       <a href="#divisiones">Divisiones</a>
+      <a href="shop/index.html">Tienda</a>
       <a href="security.html">Security</a>
       <a href="#contacto">Contacto</a>
     </div>
@@ -1498,19 +1711,54 @@ document.querySelectorAll('.gl4-card[data-msg]').forEach(card => {
 (function() {
   const items = [
     {
-      quote: 'Instalaron el sistema de domótica completo en mi casa. Llegaron a la hora exacta, explicaron cada detalle y el soporte post-instalación fue excelente. Puntualidad y honestidad de principio a fin.',
+      quote: 'La verdad llegaron a la hora exacta, cosa que uno no espera en este país. Me instalaron la domótica completa y me explicaron todo con paciencia, sin hacerme sentir bruto. Cualquier duda que tengo después, contestan. Gente seria de verdad.',
       name:  'Roberto Almonte',
       role:  'Propietario residencial, Los Cacicazgos',
     },
     {
-      quote: 'Instalaron cámaras e inversores en mi negocio. El presupuesto fue exactamente lo que me cotizaron, sin un peso adicional. Los 3 meses de garantía me dieron mucha tranquilidad. Recomendados al 100%.',
-      name:  'Maria Paulino',
-      role:  'Duena de negocio, Piantini',
+      quote: 'Me pusieron cámaras e inversores en el negocio y lo mejor es que el precio fue tal cual me lo cotizaron, ni un peso más. Les pedí factura con crédito fiscal y me la emitieron sin ningún rollo, cosa que agradecí porque me sirve para el ITBIS. Los tres meses de garantía los cumplieron a cabalidad.',
+      name:  'María Paulino',
+      role:  'Dueña de negocio, Piantini',
     },
     {
-      quote: 'Instalaron toda la infraestructura de red para la oficina. En tecnología, la confianza lo es todo. Plata Tech la ganó completamente. Profesionalismo que no encontré en ninguna otra empresa.',
-      name:  'Jose Martinez',
+      quote: 'Para contratar un proveedor de red en la oficina pedimos RNC y comprobante fiscal, y ellos lo tenían todo al día. Más allá del papeleo, el trabajo quedó impecable. Ya los tenemos como proveedor fijo para todo lo de tecnología.',
+      name:  'José Martínez',
       role:  'Gerente IT, Empresa Corporativa, SD',
+    },
+    {
+      quote: 'Tenía breakers que saltaban todo el tiempo y enchufes que ni prendían. Rehicieron todo el cableado de la casa en tres días, limpiecito, sin dejar un reguero. Ahora tengo hasta protección contra subidas de voltaje. Súper recomendados.',
+      name:  'Carmen Rodríguez',
+      role:  'Propietaria residencial, Arroyo Hondo',
+    },
+    {
+      quote: 'La página del restaurante me quedó preciosa, rápida y se ve bien hasta en el celular. A las pocas semanas empecé a notar reservas nuevas que llegaban por Google. Fue una inversión que se pagó sola, honestamente.',
+      name:  'Luis Fernández',
+      role:  'Dueño de restaurante, Bella Vista',
+    },
+    {
+      quote: 'Las cámaras Hikvision ColorVu son una maravilla, de noche se ve todo a color como si fuera de día. La alarma me avisa al celular apenas alguien se acerca a la puerta. Desde que la instalaron duermo mucho más tranquila.',
+      name:  'Ana Jiménez',
+      role:  'Propietaria residencial, Naco',
+    },
+    {
+      quote: 'El panel eléctrico del apartamento era una antigüedad y me daba miedo. Vinieron, me dijeron claro qué había que hacer, sin inventos, y lo cambiaron el mismo día. Precio justo, trabajo serio. Uno se da cuenta cuando los técnicos saben lo que hacen.',
+      name:  'Pedro Santana',
+      role:  'Propietario residencial, Gazcue',
+    },
+    {
+      quote: 'Me armaron una tienda online con pasarela de pago y me enseñaron a subir los productos yo misma. Cada vez que me traba algo les escribo y responden rapidísimo. Y como mi negocio es formal, me entregan factura con NCF siempre, eso para mí es clave.',
+      name:  'Laura Hernández',
+      role:  'Emprendedora e-commerce, Evaristo Morales',
+    },
+    {
+      quote: 'Después del susto de un intento de robo en el sector, puse alarma y cuatro cámaras por fuera. La calidad se ve increíble, hasta las placas de los carros se leen clarito. El celular me avisa al instante si hay movimiento. Vale cada peso que pagué.',
+      name:  'Miguel Vásquez',
+      role:  'Propietario residencial, Mirador Norte',
+    },
+    {
+      quote: 'Les pedí que me modernizaran la eléctrica del taller y de paso me hicieran la página web. Me dieron mejor precio por los dos servicios juntos y todo con factura formal de Plata Tech Solutions S.R.L., que para mi contabilidad es lo que necesito. Coordinación impecable.',
+      name:  'Sofía Castillo',
+      role:  'Dueña de taller, Villa Mella',
     }
   ];
 
@@ -1668,9 +1916,11 @@ document.querySelectorAll('.gl4-card[data-msg]').forEach(card => {
     '    uv+=.1*cos(i*vec2(.1+.01*i,.8)+i*i+T*.5+.1*uv.x);',
     '    vec2 p=uv;',
     '    float d=length(p);',
-    '    col+=.00125/d*vec3(0.18,0.48,1.25)*(sin(i*0.7)+1.8);',
+    '    vec3 tint=0.65+0.55*vec3(sin(i*0.7),sin(i*0.7+2.094),sin(i*0.7+4.188));',
+    '    col+=.00125/d*tint*(sin(i*0.7)+1.8);',
     '    float b=noise(i+p+bg*1.731);',
-    '    col+=.002*b*vec3(0.25,0.55,1.3)/length(max(p,vec2(b*p.x*.02,p.y)));',
+    '    vec3 tint2=0.6+0.55*vec3(sin(i*0.9+1.2),sin(i*0.9+3.3),sin(i*0.9+5.4));',
+    '    col+=.002*b*tint2/length(max(p,vec2(b*p.x*.02,p.y)));',
     '    col=mix(col,vec3(bg*.005,bg*.035,bg*.26),d);',
     '  }',
     '  O=vec4(col,1);',

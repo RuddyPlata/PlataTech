@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Orden confirmada - Plata Tech Store</title>
+<link rel="icon" type="image/x-icon" href="../images/favicon-pt.ico"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/shop.css"/>
+<style>
+.order-section { padding: 3rem 0 5rem; }
+.order-hero {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+.order-check {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: #059669; color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 10px 30px rgba(5,150,105,.35);
+  animation: pop .5s cubic-bezier(.16,1,.3,1);
+}
+@keyframes pop {
+  0% { transform: scale(.4); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.order-hero h1 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(2rem, 5vw, 2.75rem); font-weight: 800;
+  letter-spacing: -0.03em; color: var(--ink);
+  margin-bottom: .55rem;
+}
+.order-hero p {
+  font-size: 1.02rem; color: var(--ink-2);
+  max-width: 560px; margin: 0 auto;
+  line-height: 1.55;
+}
+.order-number-box {
+  display: inline-flex; align-items: center; gap: .65rem;
+  margin-top: 1.25rem;
+  padding: .75rem 1.25rem;
+  background: var(--blue-tint);
+  border: 1.5px solid rgba(20,71,255,.2);
+  border-radius: 100px;
+}
+.order-number-label {
+  font-size: .7rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .12em;
+  color: var(--ink-3);
+}
+.order-number {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.05rem; font-weight: 700;
+  color: var(--navy);
+  letter-spacing: .02em;
+}
+.copy-btn {
+  background: transparent; border: none; cursor: pointer;
+  color: var(--blue); padding: .25rem;
+  border-radius: 6px; transition: background .2s;
+}
+.copy-btn:hover { background: rgba(20,71,255,.1); }
+
+.order-grid {
+  display: grid; grid-template-columns: 1.25fr 1fr;
+  gap: 2rem; margin-top: 2rem;
+  align-items: start;
+}
+.order-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 18px; padding: 1.75rem;
+}
+.order-card h2 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.05rem; font-weight: 800;
+  color: var(--ink); letter-spacing: -0.01em;
+  margin-bottom: 1rem;
+}
+
+/* Status pill */
+.order-status {
+  display: inline-flex; align-items: center; gap: .45rem;
+  padding: .35rem .75rem; border-radius: 100px;
+  font-size: .72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .08em;
+  background: #fffbe6; color: #8a6d10;
+  border: 1px solid rgba(212,162,74,.3);
+  margin-bottom: 1rem;
+}
+.order-status .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #d4a24a;
+  animation: pulseDot 2s ease-in-out infinite;
+}
+@keyframes pulseDot {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .5; transform: scale(1.4); }
+}
+
+/* Items list */
+.order-items { display: flex; flex-direction: column; gap: .85rem; }
+.order-item {
+  display: grid; grid-template-columns: 56px 1fr auto;
+  gap: 1rem; align-items: center;
+  padding-bottom: .85rem;
+  border-bottom: 1px solid var(--border);
+}
+.order-item:last-child { border-bottom: none; padding-bottom: 0; }
+.order-item-img {
+  width: 56px; height: 56px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--blue-tint), var(--off-white));
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  padding: 4px; overflow: hidden;
+}
+.order-item-img svg { width: 100%; height: 100%; }
+.order-item-name {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700; font-size: .92rem; color: var(--ink);
+  line-height: 1.3;
+}
+.order-item-meta {
+  font-size: .78rem; color: var(--ink-3); margin-top: .2rem;
+}
+.order-item-price {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700; font-size: .92rem; color: var(--ink);
+}
+
+/* Customer / Totals */
+.info-row {
+  display: grid; grid-template-columns: 110px 1fr;
+  gap: .75rem; padding: .5rem 0;
+  font-size: .88rem;
+}
+.info-row + .info-row { border-top: 1px solid var(--border); }
+.info-label {
+  color: var(--ink-3); font-weight: 600; font-size: .72rem;
+  text-transform: uppercase; letter-spacing: .08em;
+  padding-top: .15rem;
+}
+.info-value { color: var(--ink); font-weight: 500; }
+
+.totals-row {
+  display: flex; justify-content: space-between;
+  padding: .45rem 0; font-size: .9rem; color: var(--ink-2);
+}
+.totals-row.discount {
+  color: #059669; font-weight: 700;
+}
+.totals-row.total {
+  padding-top: .85rem; margin-top: .4rem;
+  border-top: 1.5px solid var(--border);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.15rem; font-weight: 800; color: var(--ink);
+}
+
+/* Next steps / CTAs */
+.next-card {
+  margin-top: 2rem;
+  background: linear-gradient(135deg, var(--navy), var(--blue));
+  color: #fff; padding: 2rem; border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(20,71,255,.25);
+}
+.next-card h2 {
+  color: #fff; margin-bottom: .5rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.25rem; font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.next-card p { color: rgba(255,255,255,.85); font-size: .92rem; line-height: 1.6; }
+.next-actions {
+  display: flex; gap: .65rem; margin-top: 1.25rem;
+  flex-wrap: wrap;
+}
+.btn-wa-white {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .8rem 1.35rem; border-radius: 100px;
+  background: #fff; color: #128c7e;
+  font-size: .88rem; font-weight: 700;
+  transition: transform .2s, box-shadow .2s;
+  box-shadow: 0 8px 24px rgba(0,0,0,.15);
+}
+.btn-wa-white:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px rgba(0,0,0,.2);
+}
+.btn-ghost-white {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .8rem 1.35rem; border-radius: 100px;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.25);
+  color: #fff;
+  font-size: .88rem; font-weight: 600;
+  transition: background .2s;
+}
+.btn-ghost-white:hover { background: rgba(255,255,255,.2); }
+
+/* Not found */
+.not-found {
+  text-align: center; padding: 5rem 2rem;
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 18px;
+}
+.not-found svg { color: var(--ink-3); margin-bottom: 1rem; }
+
+@media (max-width: 900px) {
+  .order-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .info-row { grid-template-columns: 1fr; gap: .1rem; padding: .6rem 0; }
+  .info-label { padding-top: 0; }
+  .next-actions .btn-wa-white, .next-actions .btn-ghost-white { width: 100%; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<nav class="shop-nav">
+  <div class="container shop-nav-inner">
+    <a href="index.html" class="shop-brand">
+      <div class="shop-brand-mark"><img src="../images/logo-platatech.png" alt="Plata Tech"/></div>
+      <div>
+        <div class="shop-brand-name">Plata Tech Store</div>
+        <div class="shop-brand-sub">Tienda oficial</div>
+      </div>
+    </a>
+    <div class="shop-nav-right">
+      <a href="../index.html" class="shop-nav-back">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        platatechs.com
+      </a>
+      <a href="cart.html" class="cart-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        Carrito
+        <span class="cart-count" data-cart-count>0</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<main>
+<section class="order-section">
+  <div class="container">
+    <div id="orderRoot"></div>
+  </div>
+</section>
+</main>
+
+<footer class="shop-foot">
+  <div class="container shop-foot-inner">
+    <div class="shop-foot-brand">
+      <img src="../images/logo-platatech.png" class="shop-foot-logo" alt="Plata Tech Solutions"/>
+      <div>
+        Plata Tech Solutions S.R.L.
+        <small>Tienda oficial · RNC formal · Facturas con NCF</small>
+      </div>
+    </div>
+    <div class="shop-foot-divs">
+      <span class="shop-foot-divs-label">Divisiones</span>
+      <div class="shop-foot-divs-logos">
+        <img src="../images/logo-platatech.png" alt="Plata Tech Security"/>
+        <span class="sep"></span>
+        <img src="../images/logo-ug.png" alt="UltimoGadget"/>
+      </div>
+    </div>
+    <div class="shop-foot-links">
+      <a href="index.html">Tienda</a>
+      <a href="../index.html">Inicio</a>
+      <a href="https://wa.me/18494950959" target="_blank">WhatsApp</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/products.js"></script>
+<script src="assets/cart.js"></script>
+<script>
+const ORDERS_KEY = 'platatech_orders_v1';
+const WA_NUMBER = '18494950959';
+
+function getOrderById(id) {
+  try {
+    const all = JSON.parse(localStorage.getItem(ORDERS_KEY) || '[]');
+    return all.find(o => o.id === id) || null;
+  } catch (e) { return null; }
+}
+
+function fmtDate(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString('es-DO', { day: '2-digit', month: 'long', year: 'numeric' })
+       + ' · ' + d.toLocaleTimeString('es-DO', { hour: '2-digit', minute: '2-digit' });
+}
+
+function modeLabel(mode) {
+  return mode === 'transferencia'
+    ? 'Transferencia bancaria al recibir'
+    : 'Efectivo (RD$) al recibir';
+}
+
+/* Mensaje inicial para que nos envíen la orden (opcional — para que Plata Tech reciba el pedido) */
+function buildSendOrderMessage(order) {
+  const lines = order.items.map(i =>
+    `• ${i.qty}x ${i.name}${i.variant ? ' (' + i.variant + ')' : ''} — ${window.formatPrice(i.subtotal)}`
+  ).join('\n');
+
+  const totalsBlock = [
+    `Subtotal: ${window.formatPrice(order.totals.subtotal)}`,
+    order.totals.discount > 0 ? `Beneficio por pago directo (-10%): -${window.formatPrice(order.totals.discount)}` : null,
+    `ITBIS: ${window.formatPrice(order.totals.itbis)}`,
+    `Total: ${window.formatPrice(order.totals.total)}`
+  ].filter(Boolean).join('\n');
+
+  const cust = order.customer;
+  const modeText = order.codeliveryMode === 'transferencia'
+    ? 'Pago contra entrega - TRANSFERENCIA al recibir'
+    : 'Pago contra entrega - EFECTIVO al recibir';
+
+  return `Hola, acabo de colocar el pedido ${order.id} en Plata Tech Store.\n\n`
+    + `Artículos:\n${lines}\n\n`
+    + `${totalsBlock}\n\n`
+    + `${modeText}\n\n`
+    + `Datos de entrega:\n`
+    + `• Nombre: ${cust.name}\n`
+    + `• Teléfono: ${cust.phone}\n`
+    + `• Dirección: ${cust.address}\n`
+    + `• Sector/ciudad: ${cust.sector}\n`
+    + (cust.notes ? `• Notas: ${cust.notes}\n` : '')
+    + `\nQuedo atento a su contacto para coordinar la entrega.`;
+}
+
+/* Mensaje cortico para consultar después por una orden */
+function buildInquiryMessage(order) {
+  return `Hola, tengo una consulta sobre mi pedido ${order.id} de Plata Tech Store.`;
+}
+
+function render() {
+  const root = document.getElementById('orderRoot');
+  const id = new URLSearchParams(location.search).get('n');
+  const order = id ? getOrderById(id) : null;
+
+  if (!order) {
+    root.innerHTML = `
+      <div class="not-found">
+        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+        <h2 class="h2">Orden no encontrada</h2>
+        <p style="color:var(--ink-2);margin-bottom:1.5rem;">No pudimos localizar esa orden en este dispositivo.</p>
+        <a href="index.html" class="btn btn-primary btn-lg">Volver a la tienda</a>
+      </div>`;
+    return;
+  }
+
+  const sendMsg   = encodeURIComponent(buildSendOrderMessage(order));
+  const askMsg    = encodeURIComponent(buildInquiryMessage(order));
+
+  root.innerHTML = `
+    <div class="order-hero">
+      <div class="order-check">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
+      </div>
+      <h1>Recibimos tu orden</h1>
+      <p>Guardamos todos los detalles. Un representante de <strong>Plata Tech Solutions</strong> te llamará o escribirá por WhatsApp para confirmar disponibilidad, coordinar la entrega y asegurar que cada detalle salga bien. Sin prisa y sin que tengas que dar seguimiento.</p>
+      <div class="order-number-box">
+        <span class="order-number-label">Nº de orden</span>
+        <span class="order-number" id="ordNum">${order.id}</span>
+        <button class="copy-btn" id="copyBtn" aria-label="Copiar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="order-grid">
+      <div class="order-card">
+        <div class="order-status"><span class="dot"></span>Pendiente de contacto</div>
+        <h2>Resumen de la orden</h2>
+        <div class="order-items">
+          ${order.items.map(it => {
+            const p = window.getProductBySlug(it.slug);
+            return `
+              <div class="order-item">
+                <div class="order-item-img">${p ? window.renderProductMock(p, 50) : ''}</div>
+                <div>
+                  <div class="order-item-name">${it.name}</div>
+                  <div class="order-item-meta">${it.variant || ''} · Cantidad ${it.qty}</div>
+                </div>
+                <div class="order-item-price">${window.formatPrice(it.subtotal)}</div>
+              </div>`;
+          }).join('')}
+        </div>
+
+        <div style="margin-top:1.25rem; padding-top:1.25rem; border-top:1px solid var(--border);">
+          <div class="totals-row">
+            <span>Subtotal</span><span>${window.formatPrice(order.totals.subtotal)}</span>
+          </div>
+          ${order.totals.discount > 0 ? `
+          <div class="totals-row discount">
+            <span>Beneficio por pago directo (-10%)</span><span>-${window.formatPrice(order.totals.discount)}</span>
+          </div>` : ''}
+          <div class="totals-row">
+            <span>ITBIS (18%)</span><span>${window.formatPrice(order.totals.itbis)}</span>
+          </div>
+          <div class="totals-row">
+            <span>Envío</span><span>Se coordina por WhatsApp</span>
+          </div>
+          <div class="totals-row total">
+            <span>Total</span><span>${window.formatPrice(order.totals.total)}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="order-card">
+        <h2>Datos de entrega</h2>
+        <div class="info-row">
+          <div class="info-label">Nombre</div>
+          <div class="info-value">${order.customer.name}</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Teléfono</div>
+          <div class="info-value">${order.customer.phone}</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Dirección</div>
+          <div class="info-value">${order.customer.address}</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Sector</div>
+          <div class="info-value">${order.customer.sector}</div>
+        </div>
+        ${order.customer.notes ? `
+        <div class="info-row">
+          <div class="info-label">Notas</div>
+          <div class="info-value">${order.customer.notes}</div>
+        </div>` : ''}
+        <div class="info-row">
+          <div class="info-label">Método</div>
+          <div class="info-value">${modeLabel(order.codeliveryMode)}</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Fecha</div>
+          <div class="info-value">${fmtDate(order.createdAt)}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="next-card">
+      <h2>¿Qué sigue ahora?</h2>
+      <p>Nos comunicamos contigo por WhatsApp al <strong>${order.customer.phone}</strong>. Revisamos disponibilidad, agendamos la entrega a tu conveniencia y coordinamos el pago. Queremos que llegues al final del proceso sin tener que preocuparte por los detalles.</p>
+      <div class="next-actions">
+        <a href="https://wa.me/${WA_NUMBER}?text=${sendMsg}" target="_blank" class="btn-wa-white">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+          Enviar detalles por WhatsApp
+        </a>
+        <a href="https://wa.me/${WA_NUMBER}?text=${askMsg}" target="_blank" class="btn-ghost-white">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          Consultar con nº de orden
+        </a>
+      </div>
+      <p style="margin-top:1.5rem; font-size:.78rem; opacity:.8;">
+        Menciona siempre tu número <strong style="color:#fff;">${order.id}</strong> cuando nos escribas.
+      </p>
+    </div>
+
+    <div style="text-align:center; margin-top:2rem;">
+      <a href="index.html" class="btn btn-ghost">Seguir comprando</a>
+    </div>`;
+
+  /* Copy order number */
+  const copyBtn = document.getElementById('copyBtn');
+  if (copyBtn) copyBtn.addEventListener('click', () => {
+    navigator.clipboard.writeText(order.id).then(() => {
+      window.Cart.toast('Número de orden copiado');
+    }).catch(() => {});
+  });
+}
+
+render();
+</script>
+
+</body>
+</html>

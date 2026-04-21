@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Producto - Plata Tech Store</title>
+<link rel="icon" type="image/x-icon" href="../images/favicon-pt.ico"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/shop.css"/>
+<style>
+/* ── Product detail specific ──────────────────────── */
+.crumbs {
+  padding: 1.25rem 0; background: var(--white);
+  border-bottom: 1px solid var(--border);
+  font-size: .82rem; color: var(--ink-3);
+}
+.crumbs a { color: var(--ink-2); }
+.crumbs a:hover { color: var(--ink); }
+.crumbs span { margin: 0 .5rem; opacity: .5; }
+
+.product-detail { padding: 3rem 0 5rem; }
+.product-detail-grid {
+  display: grid; grid-template-columns: 1.1fr 1fr;
+  gap: 3.5rem; align-items: start;
+}
+.product-showcase {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  aspect-ratio: 1;
+  display: flex; align-items: center; justify-content: center;
+  padding: 3rem;
+  position: sticky; top: 90px;
+}
+.product-info-brand {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: .72rem; font-weight: 600; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--blue);
+  margin-bottom: .75rem;
+}
+.product-info-name {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(1.7rem, 3vw, 2.3rem); font-weight: 800;
+  line-height: 1.15; letter-spacing: -0.02em; color: var(--ink);
+  margin-bottom: .5rem;
+}
+.product-info-variant {
+  font-size: .98rem; color: var(--ink-2);
+  margin-bottom: 1.5rem;
+}
+.product-info-price {
+  display: flex; align-items: baseline; gap: .75rem;
+  padding: 1.5rem 0; border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border); margin-bottom: 1.75rem;
+}
+.product-info-price-now {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 2.2rem; font-weight: 800; color: var(--ink);
+  letter-spacing: -0.02em;
+}
+.product-info-price-old {
+  font-size: 1.1rem; color: var(--ink-3);
+  text-decoration: line-through;
+}
+.product-info-save {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: .72rem; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: .3rem .7rem; border-radius: 100px;
+  background: rgba(37,211,102,.12); color: #0f8f3f;
+}
+
+.product-info-short {
+  font-size: 1rem; line-height: 1.65; color: var(--ink-2);
+  margin-bottom: 1.75rem;
+}
+
+.product-stock {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .45rem .85rem; border-radius: 100px;
+  font-size: .8rem; font-weight: 500;
+  background: rgba(37,211,102,.12); color: #0f8f3f;
+  margin-bottom: 1.75rem;
+}
+.product-stock.low { background: rgba(231,76,60,.1); color: #c0392b; }
+.product-stock::before {
+  content: ''; width: 8px; height: 8px; border-radius: 50%;
+  background: currentColor;
+}
+
+/* Qty + Add to cart row */
+.qty-row {
+  display: flex; gap: .75rem; margin-bottom: 1rem;
+}
+.qty-input {
+  display: inline-flex; align-items: stretch;
+  border: 1px solid var(--border-2); border-radius: 100px;
+  overflow: hidden; background: var(--white);
+}
+.qty-input button {
+  padding: 0 1rem; font-size: 1.1rem; color: var(--ink-2);
+  transition: background .2s;
+}
+.qty-input button:hover { background: var(--blue-tint); color: var(--ink); }
+.qty-input input {
+  width: 3rem; text-align: center; border: none; outline: none;
+  font: inherit; font-weight: 600; color: var(--ink);
+  background: transparent;
+  -moz-appearance: textfield;
+}
+.qty-input input::-webkit-outer-spin-button,
+.qty-input input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+.paypal-wrap {
+  margin-top: 1rem; padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+.paypal-note {
+  display: flex; align-items: center; gap: .5rem;
+  font-size: .78rem; color: var(--ink-3);
+  margin-bottom: .85rem;
+}
+#paypalButtons { min-height: 45px; }
+.paypal-placeholder {
+  padding: 1rem; border-radius: 12px;
+  background: #fffbe6; border: 1px dashed #d4a24a;
+  color: #7a5a10; font-size: .82rem; line-height: 1.5;
+}
+
+/* Specs */
+.specs-block {
+  margin-top: 2.5rem;
+}
+.specs-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.1rem; font-weight: 700; color: var(--ink);
+  margin-bottom: 1rem;
+}
+.specs-list {
+  list-style: none; padding: 0;
+  display: grid; grid-template-columns: 1fr 1fr; gap: .6rem 1.5rem;
+}
+.specs-list li {
+  display: flex; align-items: flex-start; gap: .6rem;
+  font-size: .9rem; color: var(--ink-2); line-height: 1.5;
+  padding: .6rem 0; border-bottom: 1px solid var(--border);
+}
+.specs-list li::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--blue); flex-shrink: 0; margin-top: .55rem;
+}
+
+/* Trust row */
+.trust-row {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1rem; margin-top: 2.5rem;
+  padding-top: 2rem; border-top: 1px solid var(--border);
+}
+.trust-item {
+  display: flex; gap: .7rem; align-items: flex-start;
+  font-size: .82rem; color: var(--ink-2);
+}
+.trust-item svg { color: var(--blue); flex-shrink: 0; margin-top: 2px; }
+.trust-item b { color: var(--ink); display: block; margin-bottom: 2px; font-weight: 600; }
+
+/* Related products */
+.related-section {
+  padding: 4rem 0;
+  background: var(--white);
+  border-top: 1px solid var(--border);
+}
+
+/* Not found */
+.not-found {
+  padding: 5rem 2rem; text-align: center;
+}
+.not-found h2 { margin-bottom: 1rem; }
+.not-found p { color: var(--ink-2); margin-bottom: 2rem; }
+
+@media (max-width: 900px) {
+  .product-detail-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .product-showcase { position: static; aspect-ratio: 4/3; padding: 2rem; }
+  .specs-list { grid-template-columns: 1fr; }
+  .trust-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav class="shop-nav">
+  <div class="container shop-nav-inner">
+    <a href="index.html" class="shop-brand">
+      <div class="shop-brand-mark"><img src="../images/logo-platatech.png" alt="Plata Tech"/></div>
+      <div>
+        <div class="shop-brand-name">Plata Tech Store</div>
+        <div class="shop-brand-sub">Tienda oficial</div>
+      </div>
+    </a>
+    <div class="shop-nav-right">
+      <a href="../index.html" class="shop-nav-back">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        platatechs.com
+      </a>
+      <a href="cart.html" class="cart-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        Carrito
+        <span class="cart-count" data-cart-count>0</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<main id="main">
+  <!-- Rendered by JS -->
+</main>
+
+<footer class="shop-foot">
+  <div class="container shop-foot-inner">
+    <div class="shop-foot-brand">
+      <img src="../images/logo-platatech.png" class="shop-foot-logo" alt="Plata Tech Solutions"/>
+      <div>
+        Plata Tech Solutions S.R.L.
+        <small>Tienda oficial · RNC formal · Facturas con NCF</small>
+      </div>
+    </div>
+    <div class="shop-foot-divs">
+      <span class="shop-foot-divs-label">Divisiones</span>
+      <div class="shop-foot-divs-logos">
+        <img src="../images/logo-platatech.png" alt="Plata Tech Security"/>
+        <span class="sep"></span>
+        <img src="../images/logo-ug.png" alt="UltimoGadget"/>
+      </div>
+    </div>
+    <div class="shop-foot-links">
+      <a href="index.html">Tienda</a>
+      <a href="../index.html">Inicio</a>
+      <a href="cart.html">Carrito</a>
+      <a href="https://wa.me/18494950959" target="_blank">WhatsApp</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/products.js"></script>
+<script src="assets/cart.js"></script>
+
+<!-- PayPal SDK: Replace YOUR_PAYPAL_CLIENT_ID with your real client ID from developer.paypal.com
+     For production, use live client ID. For testing use sandbox. -->
+<script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&currency=USD&components=buttons"></script>
+
+<script>
+const params = new URLSearchParams(location.search);
+const slug = params.get('p');
+const product = slug ? window.getProductBySlug(slug) : null;
+const main = document.getElementById('main');
+
+if (!product) {
+  main.innerHTML = `
+    <div class="not-found">
+      <h2 class="h2">Producto no encontrado</h2>
+      <p>El producto que buscas no existe o fue retirado del catálogo.</p>
+      <a href="index.html" class="btn btn-primary">Ver todos los productos</a>
+    </div>`;
+} else {
+  document.title = `${product.name} - Plata Tech Store`;
+  const catName = window.CATEGORIES.find(c => c.id === product.category).name;
+  const saving = product.oldPrice ? product.oldPrice - product.price : 0;
+  const stockLabel = product.stock > 3
+    ? `En stock (${product.stock} disponibles)`
+    : product.stock > 0
+      ? `Últimas ${product.stock} unidades`
+      : 'Agotado temporalmente';
+
+  main.innerHTML = `
+    <div class="crumbs">
+      <div class="container">
+        <a href="index.html">Tienda</a><span>›</span>
+        <a href="index.html?cat=${product.category}">${catName}</a><span>›</span>
+        ${product.name}
+      </div>
+    </div>
+
+    <section class="product-detail">
+      <div class="container">
+        <div class="product-detail-grid">
+          <div class="product-showcase" id="showcase"></div>
+
+          <div class="product-info">
+            <div class="product-info-brand">${product.brand}</div>
+            <h1 class="product-info-name">${product.name}</h1>
+            <div class="product-info-variant">${product.variant || ''}</div>
+
+            <div class="product-info-price">
+              ${product.oldPrice ? `<span class="product-info-price-old">${window.formatPrice(product.oldPrice)}</span>` : ''}
+              <span class="product-info-price-now">${window.formatPrice(product.price)}</span>
+              ${saving ? `<span class="product-info-save">Ahorras ${window.formatPrice(saving)}</span>` : ''}
+            </div>
+
+            <p class="product-info-short">${product.short}</p>
+
+            <div class="product-stock ${product.stock <= 3 ? 'low' : ''}">${stockLabel}</div>
+
+            <div class="qty-row">
+              <div class="qty-input">
+                <button id="qtyMinus" aria-label="Reducir">−</button>
+                <input type="number" id="qtyVal" value="1" min="1" max="${product.stock}"/>
+                <button id="qtyPlus" aria-label="Aumentar">+</button>
+              </div>
+              <button class="btn btn-dark btn-lg" id="addToCart" style="flex:1">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                Agregar al carrito
+              </button>
+            </div>
+
+            <div class="paypal-wrap">
+              <div class="paypal-note">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Pago seguro con PayPal · tarjeta de crédito o débito
+              </div>
+              <div id="paypalButtons"></div>
+            </div>
+
+            <div class="specs-block">
+              <h3 class="specs-title">Especificaciones</h3>
+              <ul class="specs-list">
+                ${product.specs.map(s => `<li>${s}</li>`).join('')}
+              </ul>
+            </div>
+
+            <div class="trust-row">
+              <div class="trust-item">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <div><b>Producto original</b>Con garantía del fabricante</div>
+              </div>
+              <div class="trust-item">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="1"/><polygon points="16 8 20 8 23 11 23 16 16 16"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                <div><b>Envío en Santo Domingo</b>24-48h, entrega al domicilio</div>
+              </div>
+              <div class="trust-item">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                <div><b>Factura con NCF</b>Crédito fiscal o consumidor final</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="related-section">
+      <div class="container">
+        <h2 class="h2" style="margin-bottom:1.75rem">También te puede interesar</h2>
+        <div class="products-grid" id="relatedGrid"></div>
+      </div>
+    </section>
+  `;
+
+  /* Render showcase mockup */
+  document.getElementById('showcase').innerHTML = window.renderProductMock(product, 360);
+
+  /* Qty controls */
+  const qtyVal   = document.getElementById('qtyVal');
+  const qtyMinus = document.getElementById('qtyMinus');
+  const qtyPlus  = document.getElementById('qtyPlus');
+  qtyMinus.addEventListener('click', () => qtyVal.value = Math.max(1, +qtyVal.value - 1));
+  qtyPlus .addEventListener('click', () => qtyVal.value = Math.min(product.stock, +qtyVal.value + 1));
+
+  /* Add to cart */
+  document.getElementById('addToCart').addEventListener('click', () => {
+    const qty = Math.max(1, +qtyVal.value);
+    window.Cart.add(product.slug, qty);
+    window.Cart.toast(`${product.name} agregado al carrito (${qty})`);
+  });
+
+  /* Related products — same category, excluding current */
+  const related = window.PRODUCTS
+    .filter(p => p.category === product.category && p.slug !== product.slug)
+    .slice(0, 4);
+  const relatedGrid = document.getElementById('relatedGrid');
+  if (related.length) {
+    relatedGrid.innerHTML = related.map(p => `
+      <a href="product.html?p=${p.slug}" class="product-card">
+        <div class="product-vis">
+          ${p.badge ? `<span class="product-badge ${p.badge}">${p.badgeText}</span>` : ''}
+          ${window.renderProductMock(p, 160)}
+        </div>
+        <div class="product-body">
+          <div class="product-brand">${p.brand}</div>
+          <div class="product-name">${p.name}</div>
+          <div class="product-variant">${p.variant || ''}</div>
+          <div class="product-foot">
+            <div class="product-price">
+              ${p.oldPrice ? `<span class="product-price-old">${window.formatPrice(p.oldPrice)}</span>` : ''}
+              ${window.formatPrice(p.price)}
+            </div>
+          </div>
+        </div>
+      </a>
+    `).join('');
+  }
+
+  /* PayPal Buttons — single product quick checkout */
+  /* Approx conversion RD$ → USD at ~60:1 (update with real rate).
+     For production, handle currency server-side via API exchange rate. */
+  const RD_TO_USD = 60;
+  const usdPrice = (product.price / RD_TO_USD).toFixed(2);
+
+  if (typeof paypal !== 'undefined' && window.paypal && window.paypal.Buttons) {
+    try {
+      paypal.Buttons({
+        style: { layout: 'vertical', color: 'gold', shape: 'pill', label: 'paypal', height: 45 },
+        createOrder: (data, actions) => actions.order.create({
+          purchase_units: [{
+            description: `${product.name} - ${product.variant || ''}`,
+            amount: {
+              value: (usdPrice * Math.max(1, +qtyVal.value)).toFixed(2),
+              currency_code: 'USD'
+            },
+            custom_id: product.slug
+          }]
+        }),
+        onApprove: (data, actions) => actions.order.capture().then(details => {
+          alert('Pago exitoso. Gracias, ' + details.payer.name.given_name + '. Recibirás un correo con los detalles.');
+          window.Cart.remove(product.slug);
+          location.href = 'index.html';
+        }),
+        onError: err => alert('Error en el pago: ' + err)
+      }).render('#paypalButtons');
+    } catch (e) {
+      document.getElementById('paypalButtons').innerHTML = `
+        <div class="paypal-placeholder">
+          <b>PayPal no configurado.</b> Reemplaza <code>YOUR_PAYPAL_CLIENT_ID</code> en el tag &lt;script&gt; de PayPal SDK con tu Client ID real de <a href="https://developer.paypal.com" target="_blank">developer.paypal.com</a>.
+        </div>`;
+    }
+  } else {
+    document.getElementById('paypalButtons').innerHTML = `
+      <div class="paypal-placeholder">
+        <b>PayPal no configurado.</b> Para habilitar el checkout, reemplaza <code>YOUR_PAYPAL_CLIENT_ID</code> en el tag &lt;script&gt; de PayPal SDK con tu Client ID real.<br/>
+        Obtenlo gratis en <a href="https://developer.paypal.com" target="_blank">developer.paypal.com</a>.
+      </div>`;
+  }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Carrito - Plata Tech Store</title>
+<link rel="icon" type="image/x-icon" href="../images/favicon-pt.ico"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/shop.css"/>
+<style>
+.cart-section { padding: 3rem 0 5rem; }
+.cart-grid {
+  display: grid; grid-template-columns: 1fr 380px;
+  gap: 2rem; align-items: start;
+}
+.cart-items {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+}
+.cart-item {
+  display: grid; grid-template-columns: 110px 1fr auto;
+  gap: 1.25rem; padding: 1.25rem;
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+}
+.cart-item:last-child { border-bottom: none; }
+.cart-item-img {
+  width: 110px; height: 110px; border-radius: 12px;
+  background: linear-gradient(135deg, var(--blue-tint), var(--off-white));
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border);
+  overflow: hidden; padding: .5rem;
+}
+.cart-item-img svg { width: 90%; height: 90%; }
+.cart-item-body { min-width: 0; }
+.cart-item-brand {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: .65rem; font-weight: 600; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--blue);
+  margin-bottom: .3rem;
+}
+.cart-item-name {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.02rem; font-weight: 700; color: var(--ink);
+  margin-bottom: .2rem; line-height: 1.3;
+}
+.cart-item-variant {
+  font-size: .82rem; color: var(--ink-3);
+  margin-bottom: .7rem;
+}
+.cart-item-row {
+  display: flex; align-items: center; gap: 1rem;
+  flex-wrap: wrap;
+}
+.cart-item-price {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1rem; font-weight: 700; color: var(--ink);
+}
+.cart-item-qty {
+  display: inline-flex; align-items: stretch;
+  border: 1px solid var(--border-2); border-radius: 100px;
+  overflow: hidden; background: var(--white);
+}
+.cart-item-qty button {
+  padding: 0 .85rem; font-size: 1rem; color: var(--ink-2);
+  transition: background .2s;
+}
+.cart-item-qty button:hover { background: var(--blue-tint); color: var(--ink); }
+.cart-item-qty input {
+  width: 2.5rem; text-align: center; border: none; outline: none;
+  font: inherit; font-weight: 600; color: var(--ink); background: transparent;
+  -moz-appearance: textfield;
+}
+.cart-item-qty input::-webkit-outer-spin-button,
+.cart-item-qty input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.cart-item-remove {
+  justify-self: start;
+  font-size: .78rem; color: var(--red);
+  padding: 0; background: none; border: none;
+  text-decoration: underline; cursor: pointer;
+  align-self: flex-start;
+}
+.cart-item-remove:hover { opacity: .7; }
+.cart-item-sub {
+  text-align: right;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.1rem; font-weight: 800; color: var(--ink);
+  min-width: 100px;
+}
+
+/* Summary */
+.cart-summary {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 1.75rem;
+  position: sticky; top: 90px;
+}
+.cart-summary h3 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.15rem; font-weight: 800; color: var(--ink);
+  margin-bottom: 1.25rem; letter-spacing: -0.01em;
+}
+.summary-row {
+  display: flex; justify-content: space-between;
+  padding: .55rem 0; font-size: .9rem; color: var(--ink-2);
+}
+.summary-row b { color: var(--ink); }
+.summary-total {
+  padding-top: 1rem; margin-top: 1rem;
+  border-top: 1px solid var(--border);
+  font-size: 1.2rem; font-weight: 800; color: var(--ink);
+}
+.summary-total b {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.5rem; letter-spacing: -0.02em;
+}
+.summary-note {
+  margin-top: 1rem; padding: .85rem 1rem; border-radius: 10px;
+  background: var(--blue-tint); font-size: .78rem;
+  color: var(--ink-2); line-height: 1.5;
+}
+#paypalButtonsCart {
+  margin-top: 1.25rem; min-height: 50px;
+}
+.paypal-placeholder {
+  padding: 1rem; border-radius: 12px;
+  background: #fffbe6; border: 1px dashed #d4a24a;
+  color: #7a5a10; font-size: .78rem; line-height: 1.5;
+  margin-top: 1rem;
+}
+.summary-actions {
+  display: flex; flex-direction: column; gap: .6rem;
+  margin-top: 1.25rem;
+}
+
+/* Payment method picker */
+.pay-section-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: .78rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .12em;
+  color: var(--ink-3); margin: 1.5rem 0 .75rem;
+}
+.pay-methods {
+  display: flex; flex-direction: column; gap: .55rem;
+}
+.pay-method {
+  display: flex; align-items: center; gap: .85rem;
+  padding: .85rem 1rem; border: 1.5px solid var(--border);
+  border-radius: 12px; cursor: pointer;
+  transition: border-color .2s, background .2s, transform .15s;
+  background: var(--white);
+}
+.pay-method:hover { border-color: var(--blue); transform: translateY(-1px); }
+.pay-method input { display: none; }
+.pay-method.active {
+  border-color: var(--blue);
+  background: var(--blue-tint);
+  box-shadow: 0 0 0 3px rgba(20,71,255,.1);
+}
+.pay-ico {
+  width: 38px; height: 38px; border-radius: 10px;
+  background: var(--off-white); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--ink-2);
+  flex-shrink: 0;
+}
+.pay-method.active .pay-ico {
+  background: var(--white);
+  border-color: var(--blue);
+  color: var(--blue);
+}
+.pay-body { flex: 1; min-width: 0; }
+.pay-name {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700; font-size: .92rem; color: var(--ink);
+  display: flex; align-items: center; gap: .5rem;
+  flex-wrap: wrap;
+}
+.pay-discount {
+  font-size: .65rem; font-weight: 800;
+  padding: .15rem .5rem; border-radius: 100px;
+  background: #059669; color: #fff; letter-spacing: .04em;
+}
+.pay-sub {
+  font-size: .78rem; color: var(--ink-3);
+  margin-top: .15rem;
+}
+.summary-row.discount b { color: #059669; }
+.summary-row.discount {
+  background: rgba(5,150,105,.08);
+  margin: .15rem -.4rem; padding: .5rem .75rem;
+  border-radius: 8px;
+  font-weight: 600;
+}
+.pay-instructions {
+  margin-top: 1rem; padding: .9rem 1rem; border-radius: 10px;
+  background: var(--off-white); border: 1px solid var(--border);
+  font-size: .8rem; color: var(--ink-2); line-height: 1.55;
+}
+.pay-instructions strong { color: var(--ink); }
+
+.pay-submodes {
+  display: grid; grid-template-columns: 1fr 1fr; gap: .55rem;
+}
+.pay-submode {
+  padding: .75rem .85rem; border: 1.5px solid var(--border);
+  border-radius: 10px; cursor: pointer;
+  transition: border-color .2s, background .2s;
+  background: var(--white);
+}
+.pay-submode:hover { border-color: var(--blue); }
+.pay-submode input { display: none; }
+.pay-submode.active {
+  border-color: var(--blue);
+  background: var(--blue-tint);
+}
+.pay-submode-name {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700; font-size: .86rem; color: var(--ink);
+}
+.pay-submode-sub {
+  font-size: .72rem; color: var(--ink-3);
+  margin-top: .2rem; line-height: 1.35;
+}
+@media (max-width: 480px) {
+  .pay-submodes { grid-template-columns: 1fr; }
+}
+
+/* Order form (contra entrega) */
+.order-form { margin-top: 1rem; display: grid; gap: .65rem; }
+.order-form .ff-row { display: grid; grid-template-columns: 1fr 1fr; gap: .55rem; }
+.order-form label {
+  display: block;
+  font-size: .72rem; font-weight: 700;
+  color: var(--ink-2); letter-spacing: .04em;
+  margin-bottom: .3rem;
+  text-transform: uppercase;
+}
+.order-form input,
+.order-form textarea {
+  width: 100%; padding: .75rem .9rem;
+  border: 1.5px solid var(--border); border-radius: 10px;
+  font: inherit; font-size: .88rem; color: var(--ink);
+  background: var(--white);
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+.order-form input:focus,
+.order-form textarea:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(20,71,255,.1);
+}
+.order-form input.err,
+.order-form textarea.err { border-color: var(--red); }
+.order-form textarea { min-height: 70px; resize: vertical; }
+.order-form .ff-error {
+  color: var(--red); font-size: .72rem; margin-top: .25rem;
+  display: none;
+}
+.order-form .ff-error.show { display: block; }
+@media (max-width: 480px) {
+  .order-form .ff-row { grid-template-columns: 1fr; }
+}
+
+/* Empty */
+.cart-empty {
+  padding: 5rem 2rem; text-align: center;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+}
+.cart-empty svg {
+  color: var(--ink-3); margin-bottom: 1.25rem;
+}
+.cart-empty h2 { margin-bottom: .75rem; }
+.cart-empty p {
+  color: var(--ink-2); margin-bottom: 1.75rem;
+}
+
+@media (max-width: 900px) {
+  .cart-grid { grid-template-columns: 1fr; }
+  .cart-summary { position: static; }
+  .cart-item { grid-template-columns: 80px 1fr; }
+  .cart-item-img { width: 80px; height: 80px; }
+  .cart-item-sub { grid-column: 1 / -1; text-align: right; }
+}
+</style>
+</head>
+<body>
+
+<nav class="shop-nav">
+  <div class="container shop-nav-inner">
+    <a href="index.html" class="shop-brand">
+      <div class="shop-brand-mark"><img src="../images/logo-platatech.png" alt="Plata Tech"/></div>
+      <div>
+        <div class="shop-brand-name">Plata Tech Store</div>
+        <div class="shop-brand-sub">Tienda oficial</div>
+      </div>
+    </a>
+    <div class="shop-nav-right">
+      <a href="../index.html" class="shop-nav-back">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        platatechs.com
+      </a>
+      <a href="cart.html" class="cart-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        Carrito
+        <span class="cart-count" data-cart-count>0</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<main>
+<section class="cart-section">
+  <div class="container">
+    <h1 class="h1" style="margin-bottom:2rem">Tu carrito</h1>
+    <div id="cartRoot"></div>
+  </div>
+</section>
+</main>
+
+<footer class="shop-foot">
+  <div class="container shop-foot-inner">
+    <div class="shop-foot-brand">
+      <img src="../images/logo-platatech.png" class="shop-foot-logo" alt="Plata Tech Solutions"/>
+      <div>
+        Plata Tech Solutions S.R.L.
+        <small>Tienda oficial · RNC formal · Facturas con NCF</small>
+      </div>
+    </div>
+    <div class="shop-foot-divs">
+      <span class="shop-foot-divs-label">Divisiones</span>
+      <div class="shop-foot-divs-logos">
+        <img src="../images/logo-platatech.png" alt="Plata Tech Security"/>
+        <span class="sep"></span>
+        <img src="../images/logo-ug.png" alt="UltimoGadget"/>
+      </div>
+    </div>
+    <div class="shop-foot-links">
+      <a href="index.html">Tienda</a>
+      <a href="../index.html">Inicio</a>
+      <a href="https://wa.me/18494950959" target="_blank">WhatsApp</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/products.js"></script>
+<script src="assets/cart.js"></script>
+
+<!-- PayPal SDK -->
+<script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&currency=USD&components=buttons"></script>
+
+<script>
+const root = document.getElementById('cartRoot');
+const RD_TO_USD = 60;           // Tasa aproximada RD$ -> USD para PayPal
+const DISCOUNT_PCT = 0.10;      // 10% descuento en transferencia / efectivo
+
+/* Métodos de pago principales */
+const PAYMENT_METHODS = [
+  {
+    id: 'online',
+    name: 'Pago en línea',
+    sub: 'PayPal o tarjeta de crédito/débito',
+    discount: false,
+    icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>'
+  },
+  {
+    id: 'contra-entrega',
+    name: 'Pago contra entrega',
+    sub: 'Efectivo o transferencia al recibir',
+    discount: true,
+    icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M8 21H3v-5M21 3l-7 7M3 21l7-7"/></svg>'
+  }
+];
+
+/* Sub-opción para contra entrega */
+const CODELIVERY_MODES = [
+  { id: 'efectivo',      name: 'Efectivo',      sub: 'Pago en RD$ al momento de la entrega' },
+  { id: 'transferencia', name: 'Transferencia', sub: 'Popular · BHD · Banreservas al recibir' }
+];
+
+let paymentMethod  = 'online';       // 'online' | 'contra-entrega'
+let codeliveryMode = 'efectivo';     // 'efectivo' | 'transferencia' (solo aplica si contra-entrega)
+
+/* Estado del formulario (persistido entre re-renders) */
+let formState = { name: '', phone: '', address: '', sector: '', notes: '' };
+function captureFormState() {
+  const form = document.getElementById('orderForm');
+  if (!form) return;
+  Object.keys(formState).forEach(f => {
+    const el = form.querySelector(`[name="${f}"]`);
+    if (el) formState[f] = el.value;
+  });
+}
+function restoreFormState() {
+  const form = document.getElementById('orderForm');
+  if (!form) return;
+  Object.keys(formState).forEach(f => {
+    const el = form.querySelector(`[name="${f}"]`);
+    if (el) el.value = formState[f] || '';
+  });
+}
+
+/* Calcular totales aplicando el descuento si corresponde */
+function computeTotals() {
+  const items = window.Cart.get();
+  let subtotal = 0;
+  items.forEach(i => {
+    const p = window.getProductBySlug(i.slug);
+    if (p) subtotal += p.price * i.qty;
+  });
+  const methodMeta = PAYMENT_METHODS.find(m => m.id === paymentMethod);
+  const discountEligible = methodMeta && methodMeta.discount;
+  const discount = discountEligible ? Math.round(subtotal * DISCOUNT_PCT) : 0;
+  const subtotalNet = subtotal - discount;
+  const itbis = Math.round(subtotalNet * 0.18);
+  const total = subtotalNet + itbis;
+  const itemCount = items.reduce((s, i) => s + i.qty, 0);
+  return { subtotal, discount, subtotalNet, itbis, total, itemCount, discountEligible };
+}
+
+function render() {
+  captureFormState();
+  const items = window.Cart.get();
+
+  if (items.length === 0) {
+    root.innerHTML = `
+      <div class="cart-empty">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <h2 class="h2">Tu carrito está vacío</h2>
+        <p>Explora la tienda y agrega los productos que te interesan.</p>
+        <a href="index.html" class="btn btn-primary btn-lg">Ir a la tienda</a>
+      </div>`;
+    return;
+  }
+
+  const totals = computeTotals();
+
+  root.innerHTML = `
+    <div class="cart-grid">
+      <div class="cart-items" id="cartItems">
+        ${items.map(it => {
+          const p = window.getProductBySlug(it.slug);
+          if (!p) return '';
+          return `
+            <div class="cart-item" data-slug="${p.slug}">
+              <div class="cart-item-img">${window.renderProductMock(p, 90)}</div>
+              <div class="cart-item-body">
+                <div class="cart-item-brand">${p.brand}</div>
+                <div class="cart-item-name">${p.name}</div>
+                <div class="cart-item-variant">${p.variant || ''}</div>
+                <div class="cart-item-row">
+                  <div class="cart-item-price">${window.formatPrice(p.price)}</div>
+                  <div class="cart-item-qty">
+                    <button data-qty="-" aria-label="Reducir">−</button>
+                    <input type="number" value="${it.qty}" min="1" max="${p.stock}" data-qty-input/>
+                    <button data-qty="+" aria-label="Aumentar">+</button>
+                  </div>
+                  <button class="cart-item-remove" data-remove>Eliminar</button>
+                </div>
+              </div>
+              <div class="cart-item-sub">${window.formatPrice(p.price * it.qty)}</div>
+            </div>`;
+        }).join('')}
+      </div>
+
+      <aside class="cart-summary">
+        <h3>Resumen</h3>
+        <div class="summary-row">
+          <span>Subtotal (${totals.itemCount} ${totals.itemCount === 1 ? 'artículo' : 'artículos'})</span>
+          <b>${window.formatPrice(totals.subtotal)}</b>
+        </div>
+        ${totals.discount > 0 ? `
+          <div class="summary-row discount">
+            <span>Beneficio por pago directo (-10%)</span>
+            <b>-${window.formatPrice(totals.discount)}</b>
+          </div>` : ''}
+        <div class="summary-row">
+          <span>ITBIS (18%)</span>
+          <b>${window.formatPrice(totals.itbis)}</b>
+        </div>
+        <div class="summary-row">
+          <span>Envío</span>
+          <b>Se coordina</b>
+        </div>
+        <div class="summary-row summary-total">
+          <span>Total</span>
+          <b>${window.formatPrice(totals.total)}</b>
+        </div>
+
+        <div class="pay-section-title">Método de pago</div>
+        <div class="pay-methods">
+          ${PAYMENT_METHODS.map(m => `
+            <label class="pay-method ${m.id === paymentMethod ? 'active' : ''}" data-pay="${m.id}">
+              <input type="radio" name="pay" value="${m.id}" ${m.id === paymentMethod ? 'checked' : ''}/>
+              <div class="pay-ico">${m.icon}</div>
+              <div class="pay-body">
+                <div class="pay-name">
+                  ${m.name}
+                  ${m.discount ? '<span class="pay-discount">-10%</span>' : ''}
+                </div>
+                <div class="pay-sub">${m.sub}</div>
+              </div>
+            </label>`).join('')}
+        </div>
+
+        ${paymentMethod === 'contra-entrega' ? `
+          <div class="pay-section-title" style="margin-top:1.1rem">¿Cómo vas a pagar al recibir?</div>
+          <div class="pay-submodes">
+            ${CODELIVERY_MODES.map(m => `
+              <label class="pay-submode ${m.id === codeliveryMode ? 'active' : ''}" data-submode="${m.id}">
+                <input type="radio" name="submode" value="${m.id}" ${m.id === codeliveryMode ? 'checked' : ''}/>
+                <div>
+                  <div class="pay-submode-name">${m.name}</div>
+                  <div class="pay-submode-sub">${m.sub}</div>
+                </div>
+              </label>`).join('')}
+          </div>
+
+          <div class="pay-section-title" style="margin-top:1.1rem">Tus datos de entrega</div>
+          <form class="order-form" id="orderForm" novalidate>
+            <div>
+              <label for="of-name">Nombre completo</label>
+              <input type="text" id="of-name" name="name" placeholder="Ej: Juan Pérez" autocomplete="name" required/>
+              <div class="ff-error" data-err="name">Requerido</div>
+            </div>
+            <div>
+              <label for="of-phone">Teléfono / WhatsApp</label>
+              <input type="tel" id="of-phone" name="phone" placeholder="Ej: 809-555-0000" autocomplete="tel" required/>
+              <div class="ff-error" data-err="phone">Número de teléfono válido</div>
+            </div>
+            <div>
+              <label for="of-address">Dirección de entrega</label>
+              <input type="text" id="of-address" name="address" placeholder="Calle, número, apto/edificio" autocomplete="street-address" required/>
+              <div class="ff-error" data-err="address">Requerido</div>
+            </div>
+            <div>
+              <label for="of-sector">Sector y ciudad</label>
+              <input type="text" id="of-sector" name="sector" placeholder="Ej: Piantini, Santo Domingo" required/>
+              <div class="ff-error" data-err="sector">Requerido</div>
+            </div>
+            <div>
+              <label for="of-notes">Referencia o notas (opcional)</label>
+              <textarea id="of-notes" name="notes" placeholder="Punto de referencia, horario preferido, etc."></textarea>
+            </div>
+          </form>` : ''}
+
+        <div id="payAction"></div>
+
+        <div class="summary-note">
+          El envío dentro de Santo Domingo se coordina al confirmar el pedido (24-48h típicamente). Para entregas fuera del GSD, contactamos por WhatsApp. Facturamos con NCF a solicitud.
+        </div>
+
+        <div class="summary-actions">
+          <button class="btn btn-ghost" id="clearCart">Vaciar carrito</button>
+        </div>
+      </aside>
+    </div>`;
+
+  wireItemControls();
+  wirePaymentMethods();
+  renderAction(totals);
+  restoreFormState();
+}
+
+function wireItemControls() {
+  document.querySelectorAll('.cart-item').forEach(row => {
+    const slug = row.dataset.slug;
+    const input = row.querySelector('[data-qty-input]');
+    row.querySelector('[data-qty="-"]').addEventListener('click', () => {
+      window.Cart.setQty(slug, Math.max(1, +input.value - 1));
+      render();
+    });
+    row.querySelector('[data-qty="+"]').addEventListener('click', () => {
+      const p = window.getProductBySlug(slug);
+      window.Cart.setQty(slug, Math.min(p.stock, +input.value + 1));
+      render();
+    });
+    input.addEventListener('change', () => {
+      const p = window.getProductBySlug(slug);
+      const v = Math.max(1, Math.min(p.stock, +input.value || 1));
+      window.Cart.setQty(slug, v);
+      render();
+    });
+    row.querySelector('[data-remove]').addEventListener('click', () => {
+      window.Cart.remove(slug);
+      render();
+    });
+  });
+
+  const clearBtn = document.getElementById('clearCart');
+  if (clearBtn) clearBtn.addEventListener('click', () => {
+    if (confirm('¿Vaciar el carrito?')) { window.Cart.clear(); render(); }
+  });
+}
+
+function wirePaymentMethods() {
+  document.querySelectorAll('.pay-method').forEach(el => {
+    el.addEventListener('click', () => {
+      paymentMethod = el.dataset.pay;
+      render();
+    });
+  });
+  document.querySelectorAll('.pay-submode').forEach(el => {
+    el.addEventListener('click', () => {
+      codeliveryMode = el.dataset.submode;
+      render();
+    });
+  });
+}
+
+function renderAction(totals) {
+  const box = document.getElementById('payAction');
+  if (!box) return;
+
+  /* Pago online → PayPal */
+  if (paymentMethod === 'online') {
+    box.innerHTML = `<div id="paypalButtonsCart"></div>`;
+    renderPayPal(totals);
+    return;
+  }
+
+  /* Contra entrega → instrucciones + botón de colocar pedido */
+  const instr = codeliveryMode === 'transferencia'
+    ? `<strong>Contra entrega con transferencia:</strong> llevamos tu pedido dentro del GSD, revisas el equipo con calma y pagas por transferencia al recibir. Al confirmar tu orden te contactamos por WhatsApp con los datos bancarios y el horario de entrega. Aplicamos un 10% de beneficio por pago directo.`
+    : `<strong>Contra entrega con efectivo:</strong> llevamos tu pedido dentro del GSD, revisas el equipo con calma y pagas en efectivo (RD$) al recibir. Al confirmar tu orden te contactamos por WhatsApp con el horario de entrega. Aplicamos un 10% de beneficio por pago directo.`;
+
+  box.innerHTML = `
+    <div class="pay-instructions">${instr}</div>
+    <button type="button" id="placeOrderBtn"
+       class="btn btn-primary btn-lg btn-block" style="margin-top:1rem;">
+      Colocar pedido
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+    <p style="margin-top:.75rem; font-size:.72rem; color:var(--ink-3); line-height:1.5; text-align:center;">
+      Al colocar tu pedido recibirás un número de orden y te contactaremos por WhatsApp para coordinar la entrega.
+    </p>`;
+
+  const btn = document.getElementById('placeOrderBtn');
+  if (btn) btn.addEventListener('click', () => placeOrder(totals));
+}
+
+/* ── Place order (contra entrega) ─────────────────────── */
+const ORDERS_KEY = 'platatech_orders_v1';
+
+function generateOrderNumber() {
+  const d = new Date();
+  const yy = String(d.getFullYear()).slice(-2);
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  const rnd = Math.floor(1000 + Math.random() * 9000);
+  return `PT-${yy}${mm}${dd}-${rnd}`;
+}
+
+function saveOrder(order) {
+  try {
+    const all = JSON.parse(localStorage.getItem(ORDERS_KEY) || '[]');
+    all.unshift(order);
+    localStorage.setItem(ORDERS_KEY, JSON.stringify(all.slice(0, 50))); // cap at 50
+  } catch (e) { /* quota exceeded etc., ignore */ }
+}
+
+function validateOrderForm() {
+  const form = document.getElementById('orderForm');
+  if (!form) return null;
+  const fields = ['name','phone','address','sector'];
+  let ok = true;
+  const data = {};
+  fields.forEach(f => {
+    const el = form.querySelector(`[name="${f}"]`);
+    const errEl = form.querySelector(`[data-err="${f}"]`);
+    const v = (el.value || '').trim();
+    data[f] = v;
+    let valid = v.length >= 2;
+    if (f === 'phone') valid = /[0-9]{7,}/.test(v.replace(/\D/g,''));
+    if (!valid) { el.classList.add('err'); errEl.classList.add('show'); ok = false; }
+    else       { el.classList.remove('err'); errEl.classList.remove('show'); }
+  });
+  data.notes = (form.querySelector('[name="notes"]').value || '').trim();
+  return ok ? data : null;
+}
+
+function placeOrder(totals) {
+  const customer = validateOrderForm();
+  if (!customer) {
+    document.getElementById('orderForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  const items = window.Cart.get().map(i => {
+    const p = window.getProductBySlug(i.slug);
+    return p ? {
+      slug: p.slug, name: p.name, variant: p.variant || '',
+      qty: i.qty, price: p.price, subtotal: p.price * i.qty
+    } : null;
+  }).filter(Boolean);
+
+  const order = {
+    id: generateOrderNumber(),
+    createdAt: new Date().toISOString(),
+    status: 'pendiente',
+    paymentMethod: 'contra-entrega',
+    codeliveryMode: codeliveryMode,
+    customer: customer,
+    items: items,
+    totals: {
+      subtotal: totals.subtotal,
+      discount: totals.discount,
+      subtotalNet: totals.subtotalNet,
+      itbis: totals.itbis,
+      total: totals.total,
+      itemCount: totals.itemCount
+    }
+  };
+
+  saveOrder(order);
+  window.Cart.clear();
+
+  /* Redirigir a la página de confirmación de orden */
+  location.href = `orden.html?n=${encodeURIComponent(order.id)}`;
+}
+
+function renderPayPal(totals) {
+  const container = document.getElementById('paypalButtonsCart');
+  if (!container) return;
+  container.innerHTML = '';
+
+  if (typeof paypal !== 'undefined' && window.paypal && window.paypal.Buttons) {
+    try {
+      paypal.Buttons({
+        style: { layout: 'vertical', color: 'gold', shape: 'pill', label: 'checkout', height: 48 },
+        createOrder: (data, actions) => {
+          const items = window.Cart.get().map(it => {
+            const p = window.getProductBySlug(it.slug);
+            return {
+              name: (p.name + ' ' + (p.variant || '')).substring(0, 127),
+              quantity: String(it.qty),
+              unit_amount: { value: (p.price / RD_TO_USD).toFixed(2), currency_code: 'USD' },
+              sku: p.slug
+            };
+          });
+
+          const subTotUsd = items.reduce((s, i) => s + (+i.unit_amount.value * +i.quantity), 0);
+          const taxUsd = +(subTotUsd * 0.18).toFixed(2);
+
+          return actions.order.create({
+            purchase_units: [{
+              description: 'Pedido Plata Tech Store',
+              items,
+              amount: {
+                value: (subTotUsd + taxUsd).toFixed(2),
+                currency_code: 'USD',
+                breakdown: {
+                  item_total: { value: subTotUsd.toFixed(2), currency_code: 'USD' },
+                  tax_total:  { value: taxUsd.toFixed(2),    currency_code: 'USD' }
+                }
+              }
+            }]
+          });
+        },
+        onApprove: (data, actions) => actions.order.capture().then(details => {
+          alert(`Pago exitoso. Gracias, ${details.payer.name.given_name}. Coordinaremos tu entrega por correo o WhatsApp.`);
+          window.Cart.clear();
+          location.href = 'index.html';
+        }),
+        onError: err => {
+          console.error(err);
+          alert('Hubo un problema con el pago. Intenta de nuevo o coordina por WhatsApp.');
+        }
+      }).render('#paypalButtonsCart');
+    } catch (e) {
+      container.innerHTML = `<div class="paypal-placeholder"><b>PayPal no configurado.</b> Reemplaza <code>YOUR_PAYPAL_CLIENT_ID</code> en el script de PayPal. Obtenlo gratis en <a href="https://developer.paypal.com" target="_blank">developer.paypal.com</a>.</div>`;
+    }
+  } else {
+    container.innerHTML = `<div class="paypal-placeholder"><b>PayPal no configurado.</b> Reemplaza <code>YOUR_PAYPAL_CLIENT_ID</code> en el script de PayPal. Obtenlo gratis en <a href="https://developer.paypal.com" target="_blank">developer.paypal.com</a>.</div>`;
+  }
+}
+
+render();
+window.addEventListener('cart:change', render);
+</script>
+
+</body>
+</html>

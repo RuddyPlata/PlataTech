@@ -48,9 +48,10 @@
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; scroll-padding-top: var(--nav-h); }
+  html { background: var(--dark); }
   body {
     font-family: 'Inter', system-ui, sans-serif;
-    background: var(--dark);
+    background: transparent;
     color: var(--text);
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
@@ -90,6 +91,7 @@
   #heroStats .hstat { opacity: 0; transform: translateY(30px); }
   [data-reveal] { opacity: 0; transform: translateY(40px); }
   .cat-card { opacity: 0; transform: translateY(50px); }
+  .phone-card { opacity: 0; transform: translateY(50px); }
   .wcard { opacity: 0; transform: translateY(40px); }
 
   /* ── Container ─────────────────────────────────────── */
@@ -215,7 +217,7 @@
     position: relative; min-height: 100svh;
     display: flex; align-items: center;
     padding-top: var(--nav-h); overflow: hidden;
-    background: var(--dark);
+    background: transparent;
   }
   .hero-orb {
     position: absolute; border-radius: 50%;
@@ -298,7 +300,9 @@
      ║  CATEGORIES BAR                                      ║
      ╚══════════════════════════════════════════════════════╝ */
   .sbar {
-    background: var(--dark-2);
+    background: rgba(19,24,37,.72);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border-top: 1px solid var(--border-b);
     border-bottom: 1px solid var(--border-b);
     padding: 2rem 0;
@@ -325,7 +329,7 @@
   /* ╔══════════════════════════════════════════════════════╗
      ║  CATEGORIES SECTION                                  ║
      ╚══════════════════════════════════════════════════════╝ */
-  .categories { padding: 7rem 0; background: var(--dark); }
+  .categories { padding: 7rem 0; background: rgba(13,17,23,.55); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-top: 1px solid var(--border-b); border-bottom: 1px solid var(--border-b); }
   .cat-grid {
     display: grid; grid-template-columns: repeat(3,1fr);
     gap: 1.5rem;
@@ -433,11 +437,201 @@
   }
 
   /* ╔══════════════════════════════════════════════════════╗
+     ║  PHONES CATEGORY VIEW (Shop preview)                 ║
+     ╚══════════════════════════════════════════════════════╝ */
+  .phones { padding: 7rem 0; background: rgba(19,24,37,.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-top: 1px solid var(--border-b); border-bottom: 1px solid var(--border-b); }
+  .phone-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+  .phone-card {
+    border-radius: 18px; overflow: hidden;
+    background: rgba(13,17,23,.95);
+    border: 1px solid transparent;
+    display: flex; flex-direction: column;
+    position: relative; z-index: 0;
+    text-decoration: none; color: inherit;
+    transition: transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s;
+    will-change: transform; cursor: pointer;
+  }
+  .phone-card::before {
+    content: ''; position: absolute; inset: -1.5px;
+    border-radius: 19.5px;
+    background: var(--chrome); background-size: 300% 300%;
+    animation: chromeShimmer 10s ease infinite;
+    z-index: -1; opacity: .3; transition: opacity .4s;
+  }
+  .phone-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-lg); }
+  .phone-card:hover::before { opacity: .85; animation-duration: 3s; }
+
+  .phone-vis {
+    padding: 2rem 1.5rem 1.5rem;
+    aspect-ratio: 16/11;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    border-bottom: 1px solid var(--border-b);
+    overflow: hidden;
+  }
+  .phone-vis-apple   { background: radial-gradient(circle at 30% 30%, rgba(100,100,120,.2), rgba(6,8,15,.95)); }
+  .phone-vis-pink    { background: radial-gradient(circle at 30% 30%, rgba(255,192,203,.15), rgba(6,8,15,.95)); }
+  .phone-vis-samsung { background: radial-gradient(circle at 30% 30%, rgba(107,78,159,.25), rgba(6,8,15,.95)); }
+  .phone-vis-black   { background: radial-gradient(circle at 30% 30%, rgba(50,50,60,.3), rgba(6,8,15,.95)); }
+  .phone-vis-pixel   { background: radial-gradient(circle at 30% 30%, rgba(58,107,217,.25), rgba(6,8,15,.95)); }
+  .phone-vis-moto    { background: radial-gradient(circle at 30% 30%, rgba(74,138,111,.25), rgba(6,8,15,.95)); }
+
+  .phone-mock {
+    height: 170px; width: auto;
+    filter: drop-shadow(0 20px 30px rgba(0,0,0,.45));
+    transition: transform .5s cubic-bezier(.16,1,.3,1);
+  }
+  .phone-card:hover .phone-mock { transform: translateY(-4px) rotate(-2deg); }
+
+  .phone-badge {
+    position: absolute; top: 1rem; right: 1rem;
+    padding: .28rem .7rem; border-radius: 100px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: .62rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    z-index: 1;
+  }
+  .phone-badge.hot  { background: var(--blue);  color: var(--white); }
+  .phone-badge.new  { background: var(--green); color: #fff; }
+  .phone-badge.sale { background: linear-gradient(135deg, #f59e0b, #d97706); color: #1a0f00; }
+
+  .phone-body { padding: 1.5rem 1.5rem 1.75rem; flex: 1; display: flex; flex-direction: column; }
+  .phone-brand {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: .68rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--blue-3); margin-bottom: .4rem;
+  }
+  .phone-model {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.2rem; font-weight: 700;
+    color: var(--white); line-height: 1.2; margin-bottom: .55rem;
+    letter-spacing: -0.01em;
+  }
+  .phone-specs {
+    font-size: .82rem; color: var(--text-dim);
+    line-height: 1.5; margin-bottom: 1.25rem; flex: 1;
+  }
+  .phone-foot {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem; padding-top: 1rem;
+    border-top: 1px solid var(--border-b);
+  }
+  .phone-price {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.15rem; font-weight: 800;
+    color: var(--gold-l); letter-spacing: -0.015em;
+  }
+  .phone-old {
+    font-size: .78rem; font-weight: 500;
+    color: var(--text-dim); text-decoration: line-through;
+    margin-right: .4rem;
+  }
+  .phone-cta {
+    display: inline-flex; align-items: center; gap: .4rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: .78rem; font-weight: 600;
+    color: var(--blue-3);
+    padding: .5rem .85rem; border-radius: 100px;
+    border: 1px solid var(--blue-border);
+    background: var(--blue-pale);
+    transition: background .25s, color .25s, transform .25s;
+  }
+  .phone-card:hover .phone-cta {
+    background: var(--blue); color: var(--white);
+    transform: translateX(2px);
+  }
+
+  .phone-shop-cta {
+    margin-top: 3rem;
+    display: flex; flex-direction: column; align-items: center; gap: 1rem;
+  }
+  .phone-shop-note {
+    display: flex; align-items: center; gap: .5rem;
+    font-size: .82rem; color: var(--text-mid);
+  }
+  .phone-shop-note svg { color: var(--gold-l); opacity: .8; }
+
+  /* Shop promo band inside productos */
+  .shop-promo {
+    margin-top: 3.5rem;
+    background: linear-gradient(135deg, #0b1d3e, #162d5e);
+    border: 1px solid var(--border-b2);
+    border-radius: 20px; padding: 2.2rem 2.4rem;
+    display: grid; grid-template-columns: 1fr auto; gap: 1.5rem; align-items: center;
+    color: var(--white); position: relative; overflow: hidden;
+    box-shadow: 0 18px 50px rgba(0,0,0,.35);
+  }
+  .shop-promo::before {
+    content: ''; position: absolute; top: -60px; right: -40px;
+    width: 220px; height: 220px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(30,80,212,.35), transparent 70%);
+    pointer-events: none;
+  }
+  .shop-promo-text { position: relative; z-index: 1; }
+  .shop-promo-label {
+    display: inline-block; font-family: 'Space Grotesk', sans-serif;
+    font-size: .68rem; font-weight: 600; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--gold-l); margin-bottom: .6rem;
+  }
+  .shop-promo-title {
+    font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800;
+    font-size: 1.35rem; line-height: 1.25; margin-bottom: .4rem;
+  }
+  .shop-promo-desc { font-size: .88rem; color: rgba(255,255,255,.7); line-height: 1.6; max-width: 520px; }
+  .shop-promo-btn {
+    display: inline-flex; align-items: center; gap: .5rem;
+    padding: .9rem 1.6rem; border-radius: 100px;
+    background: var(--blue); color: var(--white);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: .88rem; font-weight: 700;
+    box-shadow: 0 10px 30px rgba(30,80,212,.4);
+    white-space: nowrap; position: relative; z-index: 1;
+    transition: transform .25s, box-shadow .25s;
+  }
+  .shop-promo-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 40px rgba(30,80,212,.55); }
+
+  .shop-help-row {
+    margin-top: 1.25rem;
+    display: flex; align-items: center; justify-content: center;
+    gap: 1rem; flex-wrap: wrap;
+    padding: 1.2rem 1.5rem; border-radius: 14px;
+    background: rgba(255,255,255,.04); border: 1px dashed var(--border-b2);
+  }
+  .shop-help-text {
+    font-size: .88rem; color: var(--text-mid);
+    font-weight: 500;
+  }
+  .shop-help-text strong { color: var(--white); font-weight: 700; }
+  .shop-help-btn {
+    display: inline-flex; align-items: center; gap: .45rem;
+    padding: .55rem 1.1rem; border-radius: 100px;
+    background: var(--green); color: #fff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: .8rem; font-weight: 700;
+    box-shadow: 0 6px 20px rgba(37,211,102,.3);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .shop-help-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 26px rgba(37,211,102,.45); }
+
+  @media (max-width: 720px) {
+    .shop-promo { grid-template-columns: 1fr; padding: 1.8rem; text-align: center; }
+    .shop-promo-desc { margin-inline: auto; }
+    .shop-help-row { flex-direction: column; text-align: center; }
+  }
+  @media (max-width: 768px) {
+    .phone-grid { grid-template-columns: 1fr; }
+  }
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .phone-grid { grid-template-columns: repeat(2,1fr); }
+  }
+
+  /* ╔══════════════════════════════════════════════════════╗
      ║  REPAIR SECTION                                      ║
      ╚══════════════════════════════════════════════════════╝ */
   .repair {
     padding: 7rem 0;
-    background: var(--dark-2);
+    background: rgba(23,32,51,.55);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border-top: 1px solid var(--border-b);
     border-bottom: 1px solid var(--border-b);
   }
@@ -506,7 +700,7 @@
   /* ╔══════════════════════════════════════════════════════╗
      ║  WHY US                                              ║
      ╚══════════════════════════════════════════════════════╝ */
-  .why { padding: 7rem 0; background: var(--dark); }
+  .why { padding: 7rem 0; background: rgba(13,17,23,.6); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-top: 1px solid var(--border-b); border-bottom: 1px solid var(--border-b); }
   .why-grid {
     display: grid; grid-template-columns: repeat(4,1fr);
     gap: 1rem; margin-top: 4rem;
@@ -543,7 +737,9 @@
      ╚══════════════════════════════════════════════════════╝ */
   .cta-sec {
     padding: 7rem 0;
-    background: var(--dark-2);
+    background: rgba(19,24,37,.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     position: relative; overflow: hidden;
     border-top: 1px solid var(--border-b);
   }
@@ -572,7 +768,9 @@
      ║  FOOTER                                              ║
      ╚══════════════════════════════════════════════════════╝ */
   .footer {
-    background: var(--dark);
+    background: rgba(6,8,15,.82);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border-top: 1px solid var(--border-b);
     padding: 2.5rem 0;
   }
@@ -644,12 +842,10 @@
 
 <main>
 <!-- ── HERO ────────────────────────────────────────── -->
-<section id="inicio" class="hero">
-  <div class="hero-orb hero-orb-1"></div>
-  <div class="hero-orb hero-orb-2"></div>
-  <div class="hero-orb hero-orb-3"></div>
-  <div class="hero-grid"></div>
+<!-- Page-wide dynamic background canvas -->
+<canvas id="heroCanvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;display:block;z-index:-1;"></canvas>
 
+<section id="inicio" class="hero">
   <div class="container hero-inner">
     <div class="hero-logo-big" id="heroLogo">
       <img src="images/logo-ug.png" alt="UltimoGadget"/>
@@ -732,162 +928,178 @@
     <div class="sec-head" data-reveal>
       <p class="label">Nuestros Productos</p>
       <h2 class="h2">Todo lo que necesitas<br/>en un solo lugar</h2>
-      <p class="sec-sub">Equipos originales, precios competitivos y entrega en Santo Domingo. Pregunta disponibilidad por WhatsApp.</p>
-      <p class="cat-hint">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-        Toca una categoría para personalizar tu mensaje de WhatsApp
-      </p>
+      <p class="sec-sub">Equipos originales con factura y garantía. Toca cualquier producto para ver detalles y comprar en la tienda oficial.</p>
     </div>
 
-    <div class="cat-grid">
+    <div class="phone-grid">
 
-      <!-- Smartphones -->
-      <div class="cat-card featured js-tilt" data-msg="Hola, me interesan los smartphones de UltimoGadget. ¿Qué modelos tienen disponibles y cuáles son los precios?"  >
-        <div class="cat-vis">
-          <span class="cat-badge hot">Mas Vendido</span>
-          <div class="cat-icon-wrap">
-            <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke-width="2.5" stroke-linecap="round"/></svg>
+      <a href="shop/product.html?p=iphone-15-pro-max" class="phone-card js-tilt">
+        <div class="phone-vis phone-vis-apple">
+          <span class="phone-badge hot">Mas vendido</span>
+          <svg class="phone-mock" viewBox="0 0 120 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="8" y="4" width="104" height="212" rx="20" fill="#1a1a1f" stroke="#2a2a30" stroke-width="1.5"/>
+            <rect x="14" y="10" width="92" height="200" rx="14" fill="url(#gApple)"/>
+            <rect x="48" y="14" width="24" height="6" rx="3" fill="#0a0a0c"/>
+            <defs><linearGradient id="gApple" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4a4a52"/><stop offset="1" stop-color="#1a1a1f"/></linearGradient></defs>
+          </svg>
+        </div>
+        <div class="phone-body">
+          <div class="phone-brand">Apple</div>
+          <div class="phone-model">iPhone 15 Pro Max</div>
+          <p class="phone-specs">256GB &middot; Titanio Natural &middot; Chip A17 Pro &middot; Camara 48MP</p>
+          <div class="phone-foot">
+            <div class="phone-price">RD$89,500</div>
+            <span class="phone-cta">
+              Ver en tienda
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
           </div>
         </div>
-        <div class="cat-body">
-          <div class="cat-type">Categoria principal</div>
-          <div class="cat-name">Smartphones</div>
-          <p class="cat-desc">iPhones, Samsung Galaxy, Motorola y mas. Nuevos y reacondicionados con garantia. Los ultimos modelos disponibles.</p>
-          <div class="cat-tags">
-            <span class="ctag">iPhone</span>
-            <span class="ctag">Samsung Galaxy</span>
-            <span class="ctag">Motorola</span>
-            <span class="ctag">Nuevos y usados</span>
-          </div>
-          <a href="https://wa.me/18494950959?text=Hola%2C%20me%20interesan%20los%20smartphones%20de%20UltimoGadget" target="_blank" class="cat-cta wa">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
-            Ver disponibilidad
-          </a>
+      </a>
+
+      <a href="shop/product.html?p=samsung-galaxy-s24-ultra" class="phone-card js-tilt">
+        <div class="phone-vis phone-vis-samsung">
+          <span class="phone-badge new">Nuevo</span>
+          <svg class="phone-mock" viewBox="0 0 120 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="8" y="4" width="104" height="212" rx="20" fill="#1a1a1f" stroke="#2a2a30" stroke-width="1.5"/>
+            <rect x="14" y="10" width="92" height="200" rx="14" fill="url(#gSamsung)"/>
+            <circle cx="60" cy="18" r="2.5" fill="#0a0a0c"/>
+            <defs><linearGradient id="gSamsung" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6b4e9f"/><stop offset="1" stop-color="#2a1f4a"/></linearGradient></defs>
+          </svg>
         </div>
+        <div class="phone-body">
+          <div class="phone-brand">Samsung</div>
+          <div class="phone-model">Galaxy S24 Ultra</div>
+          <p class="phone-specs">512GB &middot; Titanium Violet &middot; S Pen &middot; Galaxy AI &middot; 200MP</p>
+          <div class="phone-foot">
+            <div class="phone-price">RD$79,900</div>
+            <span class="phone-cta">
+              Ver en tienda
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
+          </div>
+        </div>
+      </a>
+
+      <a href="shop/product.html?p=macbook-air-m3-13" class="phone-card js-tilt">
+        <div class="phone-vis phone-vis-mbair">
+          <span class="phone-badge hot">Popular</span>
+          <svg class="phone-mock" viewBox="0 0 180 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="14" y="12" width="152" height="102" rx="8" fill="#1a1a1f" stroke="#2a2a30" stroke-width="1.5"/>
+            <rect x="20" y="18" width="140" height="90" rx="4" fill="url(#gMba)"/>
+            <rect x="6" y="114" width="168" height="8" rx="3" fill="#2a2a30"/>
+            <rect x="78" y="116" width="24" height="3" rx="1.5" fill="#0a0a0c"/>
+            <defs><linearGradient id="gMba" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2a2d3a"/><stop offset="1" stop-color="#0f1218"/></linearGradient></defs>
+          </svg>
+        </div>
+        <div class="phone-body">
+          <div class="phone-brand">Apple</div>
+          <div class="phone-model">MacBook Air M3 13"</div>
+          <p class="phone-specs">256GB &middot; Medianoche &middot; Chip M3 &middot; 18h bateria</p>
+          <div class="phone-foot">
+            <div class="phone-price">RD$85,500</div>
+            <span class="phone-cta">
+              Ver en tienda
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
+          </div>
+        </div>
+      </a>
+
+      <a href="shop/product.html?p=airpods-pro-2" class="phone-card js-tilt">
+        <div class="phone-vis phone-vis-airpods">
+          <span class="phone-badge hot">Mas vendido</span>
+          <svg class="phone-mock" viewBox="0 0 160 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="38" y="30" width="84" height="64" rx="18" fill="url(#gAp)" stroke="#c5c5cc" stroke-width="1"/>
+            <rect x="74" y="94" width="12" height="16" rx="2" fill="#e5e5ea"/>
+            <circle cx="56" cy="62" r="6" fill="#0a0a0c" opacity=".3"/>
+            <circle cx="104" cy="62" r="6" fill="#0a0a0c" opacity=".3"/>
+            <defs><linearGradient id="gAp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5f5f7"/><stop offset="1" stop-color="#c5c5cc"/></linearGradient></defs>
+          </svg>
+        </div>
+        <div class="phone-body">
+          <div class="phone-brand">Apple</div>
+          <div class="phone-model">AirPods Pro (2da gen)</div>
+          <p class="phone-specs">USB-C &middot; Cancelacion activa &middot; Audio espacial &middot; Chip H2</p>
+          <div class="phone-foot">
+            <div class="phone-price">RD$14,500</div>
+            <span class="phone-cta">
+              Ver en tienda
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
+          </div>
+        </div>
+      </a>
+
+      <a href="shop/product.html?p=sony-wh-1000xm5" class="phone-card js-tilt">
+        <div class="phone-vis phone-vis-sony">
+          <svg class="phone-mock" viewBox="0 0 160 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M30 80 Q30 40 80 40 Q130 40 130 80" stroke="#1a1a1f" stroke-width="10" fill="none" stroke-linecap="round"/>
+            <rect x="18" y="72" width="28" height="44" rx="10" fill="url(#gSony)"/>
+            <rect x="114" y="72" width="28" height="44" rx="10" fill="url(#gSony)"/>
+            <defs><linearGradient id="gSony" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a2a2a"/><stop offset="1" stop-color="#0a0a0a"/></linearGradient></defs>
+          </svg>
+        </div>
+        <div class="phone-body">
+          <div class="phone-brand">Sony</div>
+          <div class="phone-model">WH-1000XM5</div>
+          <p class="phone-specs">Over-ear &middot; Cancelacion lider &middot; 30h bateria &middot; LDAC</p>
+          <div class="phone-foot">
+            <div class="phone-price">RD$24,500</div>
+            <span class="phone-cta">
+              Ver en tienda
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
+          </div>
+        </div>
+      </a>
+
+      <a href="shop/product.html?p=motorola-edge-50" class="phone-card js-tilt">
+        <div class="phone-vis phone-vis-moto">
+          <span class="phone-badge sale">Oferta</span>
+          <svg class="phone-mock" viewBox="0 0 120 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="8" y="4" width="104" height="212" rx="20" fill="#1a1a1f" stroke="#2a2a30" stroke-width="1.5"/>
+            <rect x="14" y="10" width="92" height="200" rx="14" fill="url(#gMoto)"/>
+            <circle cx="60" cy="18" r="2.5" fill="#0a0a0c"/>
+            <defs><linearGradient id="gMoto" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4a8a6f"/><stop offset="1" stop-color="#1a3a28"/></linearGradient></defs>
+          </svg>
+        </div>
+        <div class="phone-body">
+          <div class="phone-brand">Motorola</div>
+          <div class="phone-model">Edge 50 Fusion</div>
+          <p class="phone-specs">256GB &middot; Forest Blue &middot; 144Hz pOLED &middot; Camara 50MP</p>
+          <div class="phone-foot">
+            <div class="phone-price"><span class="phone-old">RD$38,900</span> RD$32,900</div>
+            <span class="phone-cta">
+              Ver en tienda
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Shop promo band -->
+    <div class="shop-promo" data-reveal>
+      <div class="shop-promo-text">
+        <span class="shop-promo-label">Tienda oficial</span>
+        <div class="shop-promo-title">Compra en línea con factura y garantía</div>
+        <p class="shop-promo-desc">Revisa disponibilidad en tiempo real, ve los precios y coordina la entrega. Todos nuestros equipos con NCF y respaldo post-venta.</p>
       </div>
+      <a href="shop/index.html" class="shop-promo-btn js-magnetic">
+        Ver tienda oficial
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
 
-      <!-- Laptops -->
-      <div class="cat-card js-tilt" data-msg="Hola, me interesan las laptops de UltimoGadget. ¿Qué modelos tienen disponibles (Windows / MacBook) y cuáles son los precios?">
-        <div class="cat-vis">
-          <div class="cat-icon-wrap">
-            <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-          </div>
-        </div>
-        <div class="cat-body">
-          <div class="cat-type">Computadoras</div>
-          <div class="cat-name">Laptops</div>
-          <p class="cat-desc">Laptops Windows y MacBook para trabajo, estudio y gaming. Modelos nuevos y reacondicionados con garantia incluida.</p>
-          <div class="cat-tags">
-            <span class="ctag">MacBook</span>
-            <span class="ctag">Windows</span>
-            <span class="ctag">Gaming</span>
-            <span class="ctag">Trabajo</span>
-          </div>
-          <a href="https://wa.me/18494950959?text=Hola%2C%20me%20interesan%20las%20laptops%20de%20UltimoGadget" target="_blank" class="cat-cta wa">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
-            Ver disponibilidad
-          </a>
-        </div>
-      </div>
-
-      <!-- Auriculares -->
-      <div class="cat-card js-tilt" data-msg="Hola, me interesan los auriculares de UltimoGadget. ¿Qué modelos tienen disponibles (AirPods, Sony, JBL) y cuáles son los precios?">
-        <div class="cat-vis">
-          <span class="cat-badge new">Nuevos</span>
-          <div class="cat-icon-wrap">
-            <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
-          </div>
-        </div>
-        <div class="cat-body">
-          <div class="cat-type">Audio</div>
-          <div class="cat-name">Auriculares</div>
-          <p class="cat-desc">AirPods, Sony, JBL y mas marcas. True wireless, con cancelacion de ruido y sonido premium para cada presupuesto.</p>
-          <div class="cat-tags">
-            <span class="ctag">AirPods</span>
-            <span class="ctag">Sony</span>
-            <span class="ctag">JBL</span>
-            <span class="ctag">True Wireless</span>
-          </div>
-          <a href="https://wa.me/18494950959?text=Hola%2C%20me%20interesan%20los%20auriculares%20de%20UltimoGadget" target="_blank" class="cat-cta wa">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
-            Ver disponibilidad
-          </a>
-        </div>
-      </div>
-
-      <!-- Cargadores -->
-      <div class="cat-card js-tilt" data-msg="Hola, me interesan los cargadores y accesorios de energía de UltimoGadget. ¿Qué opciones tienen disponibles y cuáles son los precios?">
-        <div class="cat-vis">
-          <div class="cat-icon-wrap">
-            <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 18H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3.19M15 6h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-3.19"/><line x1="23" y1="13" x2="23" y2="11"/><polyline points="11 6 7 12 13 12 9 18"/></svg>
-          </div>
-        </div>
-        <div class="cat-body">
-          <div class="cat-type">Energia</div>
-          <div class="cat-name">Cargadores</div>
-          <p class="cat-desc">Cargadores rapidos, cables USB-C y Lightning, power banks y accesorios de energia compatibles con todas las marcas.</p>
-          <div class="cat-tags">
-            <span class="ctag">Carga rapida</span>
-            <span class="ctag">USB-C</span>
-            <span class="ctag">Lightning</span>
-            <span class="ctag">Power Bank</span>
-          </div>
-          <a href="https://wa.me/18494950959?text=Hola%2C%20me%20interesan%20los%20cargadores%20de%20UltimoGadget" target="_blank" class="cat-cta wa">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
-            Ver disponibilidad
-          </a>
-        </div>
-      </div>
-
-      <!-- Accesorios -->
-      <div class="cat-card js-tilt" data-msg="Hola, me interesan los accesorios de teléfono de UltimoGadget (fundas, protectores, soportes, etc.). ¿Qué tienen disponible?">
-        <div class="cat-vis">
-          <div class="cat-icon-wrap">
-            <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          </div>
-        </div>
-        <div class="cat-body">
-          <div class="cat-type">Accesorios</div>
-          <div class="cat-name">Accesorios de Telefono</div>
-          <p class="cat-desc">Fundas, protectores de pantalla, soportes, popSockets, cables y todo lo que necesitas para proteger y personalizar tu equipo.</p>
-          <div class="cat-tags">
-            <span class="ctag">Fundas</span>
-            <span class="ctag">Protectores</span>
-            <span class="ctag">Soportes</span>
-            <span class="ctag">PopSocket</span>
-          </div>
-          <a href="https://wa.me/18494950959?text=Hola%2C%20me%20interesan%20los%20accesorios%20de%20UltimoGadget" target="_blank" class="cat-cta wa">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
-            Ver disponibilidad
-          </a>
-        </div>
-      </div>
-
-      <!-- Drones -->
-      <div class="cat-card js-tilt" data-msg="Hola, me interesan los drones de juguete de UltimoGadget. ¿Qué modelos tienen disponibles y cuáles son los precios?">
-        <div class="cat-vis">
-          <span class="cat-badge new">Diversion</span>
-          <div class="cat-icon-wrap">
-            <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0"/><path d="M4.5 4.5 7 7M19.5 4.5 17 7M4.5 19.5 7 17M19.5 19.5 17 17"/><circle cx="4" cy="4" r="1.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="4" cy="20" r="1.5"/><circle cx="20" cy="20" r="1.5"/></svg>
-          </div>
-        </div>
-        <div class="cat-body">
-          <div class="cat-type">Entretenimiento</div>
-          <div class="cat-name">Drones de Juguete</div>
-          <p class="cat-desc">Drones compactos y faciles de volar, perfectos para ninos y principiantes. Con camara, control remoto y bateria recargable.</p>
-          <div class="cat-tags">
-            <span class="ctag">Con camara</span>
-            <span class="ctag">Control remoto</span>
-            <span class="ctag">Para ninos</span>
-            <span class="ctag">Recargable</span>
-          </div>
-          <a href="https://wa.me/18494950959?text=Hola%2C%20me%20interesan%20los%20drones%20de%20UltimoGadget" target="_blank" class="cat-cta wa">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
-            Ver disponibilidad
-          </a>
-        </div>
-      </div>
-
+    <!-- No lo ves aquí? WhatsApp -->
+    <div class="shop-help-row" data-reveal>
+      <div class="shop-help-text">¿No lo ves aquí? <strong>Escríbenos y te lo buscamos.</strong></div>
+      <a href="https://wa.me/18494950959?text=Hola%2C%20busco%20un%20equipo%20que%20no%20vi%20listado%20en%20la%20p%C3%A1gina%20de%20UltimoGadget." target="_blank" class="shop-help-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+        Consultar por WhatsApp
+      </a>
     </div>
   </div>
 </section>
@@ -1089,6 +1301,12 @@ gsap.to('.cat-card', {
   scrollTrigger: { trigger: '.cat-grid', start: 'top 82%' }
 });
 
+/* ── Phone cards stagger ────────────────────────── */
+gsap.to('.phone-card', {
+  opacity: 1, y: 0, stagger: .1, duration: .75, ease: 'power3.out',
+  scrollTrigger: { trigger: '.phone-grid', start: 'top 82%' }
+});
+
 /* ── Why cards stagger ──────────────────────────── */
 gsap.to('.wcard', {
   opacity: 1, y: 0, stagger: .1, duration: .75, ease: 'power3.out',
@@ -1135,6 +1353,246 @@ document.querySelectorAll('.cat-card[data-msg]').forEach(card => {
     document.getElementById('contacto').scrollIntoView({ behavior: 'smooth', block: 'center' });
   });
 });
+</script>
+
+<!-- ── HERO Canvas: Rick & Morty flying saucers ────────── -->
+<script>
+(function(){
+  var canvas = document.getElementById('heroCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  var W = 0, H = 0, DPR = Math.min(window.devicePixelRatio || 1, 2);
+  var stars = [];
+  var ufos  = [];
+  var zooms = [];
+
+  function rand(a, b){ return a + Math.random() * (b - a); }
+
+  function resize(){
+    W = canvas.offsetWidth;
+    H = canvas.offsetHeight;
+    canvas.width  = W * DPR;
+    canvas.height = H * DPR;
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    initStars();
+  }
+
+  function initStars(){
+    stars.length = 0;
+    var n = Math.round((W * H) / 9000);
+    for (var i = 0; i < n; i++){
+      stars.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: Math.random() < .85 ? rand(.3, .8) : rand(1, 1.6),
+        a: rand(.25, .85),
+        tw: rand(0.4, 1.6),
+        ph: Math.random() * Math.PI * 2
+      });
+    }
+  }
+
+  function newUFO(initial){
+    var size = rand(26, 64);
+    var depth = (size - 26) / 38;
+    var dir = Math.random() < .5 ? 1 : -1;
+    var speed = rand(6, 22) * (0.5 + depth * 0.7) * dir;
+    return {
+      x: initial ? rand(0, W) : (dir > 0 ? -size*2 : W + size*2),
+      y: rand(H*0.08, H*0.82),
+      vx: speed,
+      vy: rand(-3, 3),
+      size: size,
+      depth: depth,
+      bob: rand(0.5, 1.2),
+      bobSpd: rand(0.6, 1.6),
+      phase: Math.random() * Math.PI * 2,
+      hue: [180, 170, 160, 45, 300][Math.floor(Math.random()*5)],
+      t0: performance.now() / 1000
+    };
+  }
+
+  function newZoom(){
+    var y = rand(H*0.12, H*0.85);
+    var dir = Math.random() < .5 ? 1 : -1;
+    var slope = rand(-0.15, 0.15);
+    return {
+      x: dir > 0 ? -60 : W + 60,
+      y: y,
+      vx: dir * rand(340, 560),
+      vy: dir * slope * rand(340, 560),
+      life: 0,
+      ttl: rand(1.8, 2.8),
+      size: rand(12, 20),
+      hue: Math.random() < .5 ? 180 : 45
+    };
+  }
+
+  function initShips(){
+    ufos.length = 0;
+    var count = Math.max(4, Math.round(W / 280));
+    for (var i = 0; i < count; i++) ufos.push(newUFO(true));
+  }
+
+  function drawUFO(u, t){
+    var bob = Math.sin((t - u.t0) * u.bobSpd + u.phase) * u.bob;
+    var x = u.x, y = u.y + bob;
+    var s = u.size;
+    var alpha = 0.35 + u.depth * 0.55;
+    ctx.save();
+    ctx.translate(x, y);
+
+    var glow = ctx.createRadialGradient(0, s*0.35, 0, 0, s*0.35, s*1.1);
+    glow.addColorStop(0, 'hsla(' + u.hue + ',90%,60%,' + (0.35 * alpha) + ')');
+    glow.addColorStop(1, 'hsla(' + u.hue + ',90%,60%,0)');
+    ctx.fillStyle = glow;
+    ctx.beginPath();
+    ctx.ellipse(0, s*0.35, s*1.05, s*0.45, 0, 0, Math.PI*2);
+    ctx.fill();
+
+    ctx.fillStyle = 'rgba(18,32,62,' + (0.85 * alpha) + ')';
+    ctx.beginPath();
+    ctx.ellipse(0, 0, s*0.85, s*0.22, 0, 0, Math.PI*2);
+    ctx.fill();
+
+    ctx.strokeStyle = 'hsla(' + u.hue + ',90%,65%,' + (0.85 * alpha) + ')';
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, s*0.85, s*0.22, 0, 0, Math.PI*2);
+    ctx.stroke();
+
+    var lights = 3;
+    for (var i = 0; i < lights; i++){
+      var lx = (i - (lights-1)/2) * s*0.42;
+      var ly = s*0.18;
+      var blink = 0.55 + 0.45 * Math.sin(t*2.4 + i*1.3 + u.phase);
+      ctx.fillStyle = 'hsla(' + u.hue + ',95%,65%,' + (blink * alpha) + ')';
+      ctx.beginPath();
+      ctx.arc(lx, ly, s*0.065, 0, Math.PI*2);
+      ctx.fill();
+    }
+
+    ctx.fillStyle = 'rgba(120,200,255,' + (0.18 * alpha) + ')';
+    ctx.beginPath();
+    ctx.ellipse(0, -s*0.05, s*0.4, s*0.3, 0, Math.PI, 0);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(180,230,255,' + (0.6 * alpha) + ')';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.ellipse(0, -s*0.05, s*0.4, s*0.3, 0, Math.PI, 0);
+    ctx.stroke();
+
+    ctx.fillStyle = 'rgba(255,255,255,' + (0.5 * alpha) + ')';
+    ctx.beginPath();
+    ctx.ellipse(-s*0.15, -s*0.18, s*0.06, s*0.09, -0.3, 0, Math.PI*2);
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+  function drawZoom(z){
+    var tail = 140;
+    ctx.save();
+    var angle = Math.atan2(z.vy, z.vx);
+    ctx.translate(z.x, z.y);
+    ctx.rotate(angle);
+    var grad = ctx.createLinearGradient(-tail, 0, 0, 0);
+    grad.addColorStop(0, 'hsla(' + z.hue + ',95%,65%,0)');
+    grad.addColorStop(1, 'hsla(' + z.hue + ',95%,65%,0.85)');
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(-tail, 0);
+    ctx.lineTo(-z.size, 0);
+    ctx.stroke();
+    ctx.fillStyle = 'hsla(' + z.hue + ',95%,75%,0.95)';
+    ctx.beginPath();
+    ctx.ellipse(0, 0, z.size*0.65, z.size*0.22, 0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,0.9)';
+    ctx.beginPath();
+    ctx.arc(0, 0, z.size*0.18, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawBackground(){
+    var g = ctx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, '#060f24');
+    g.addColorStop(0.55, '#0b1d3e');
+    g.addColorStop(1, '#0a1633');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+
+    var nb1 = ctx.createRadialGradient(W*0.2, H*0.3, 0, W*0.2, H*0.3, Math.max(W,H)*0.35);
+    nb1.addColorStop(0, 'rgba(60,120,220,0.18)');
+    nb1.addColorStop(1, 'rgba(60,120,220,0)');
+    ctx.fillStyle = nb1;
+    ctx.fillRect(0, 0, W, H);
+
+    var nb2 = ctx.createRadialGradient(W*0.85, H*0.75, 0, W*0.85, H*0.75, Math.max(W,H)*0.4);
+    nb2.addColorStop(0, 'rgba(120,60,220,0.12)');
+    nb2.addColorStop(1, 'rgba(120,60,220,0)');
+    ctx.fillStyle = nb2;
+    ctx.fillRect(0, 0, W, H);
+  }
+
+  function drawStars(t){
+    for (var i = 0; i < stars.length; i++){
+      var s = stars[i];
+      var tw = 0.5 + 0.5 * Math.sin(t * s.tw + s.ph);
+      ctx.fillStyle = 'rgba(255,255,255,' + (s.a * tw).toFixed(3) + ')';
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+      ctx.fill();
+    }
+  }
+
+  var last = performance.now();
+  var zoomCooldown = 2;
+
+  function frame(now){
+    var dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    var t = now / 1000;
+
+    drawBackground();
+    drawStars(t);
+
+    for (var i = 0; i < ufos.length; i++){
+      var u = ufos[i];
+      u.x += u.vx * dt;
+      u.y += u.vy * dt * 0.3;
+      if (u.vx > 0 && u.x > W + u.size*2) { ufos[i] = newUFO(false); }
+      else if (u.vx < 0 && u.x < -u.size*2) { ufos[i] = newUFO(false); }
+      drawUFO(u, t);
+    }
+
+    zoomCooldown -= dt;
+    if (zoomCooldown <= 0 && zooms.length < 2){
+      zooms.push(newZoom());
+      zoomCooldown = rand(1.8, 4.5);
+    }
+    for (var j = zooms.length - 1; j >= 0; j--){
+      var z = zooms[j];
+      z.x += z.vx * dt;
+      z.y += z.vy * dt;
+      z.life += dt;
+      drawZoom(z);
+      if (z.life > z.ttl || z.x < -200 || z.x > W + 200) zooms.splice(j, 1);
+    }
+
+    requestAnimationFrame(frame);
+  }
+
+  resize();
+  initShips();
+  window.addEventListener('resize', function(){ resize(); initShips(); });
+  requestAnimationFrame(frame);
+})();
 </script>
 
 </body>

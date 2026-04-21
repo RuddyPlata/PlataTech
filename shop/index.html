@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Plata Tech Store - Tienda Oficial</title>
+<meta name="description" content="Tienda oficial de Plata Tech Solutions S.R.L. - Celulares, laptops, cámaras de seguridad, accesorios y más. Envío en Santo Domingo."/>
+<link rel="icon" type="image/x-icon" href="../images/favicon-pt.ico"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/shop.css"/>
+</head>
+<body>
+
+<!-- ══ NAVIGATION ═══════════════════════════════════════ -->
+<nav class="shop-nav">
+  <div class="container shop-nav-inner">
+    <a href="index.html" class="shop-brand">
+      <div class="shop-brand-mark"><img src="../images/logo-platatech.png" alt="Plata Tech"/></div>
+      <div>
+        <div class="shop-brand-name">Plata Tech Store</div>
+        <div class="shop-brand-sub">Tienda oficial</div>
+      </div>
+    </a>
+    <div class="shop-nav-right">
+      <a href="../index.html" class="shop-nav-back">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        platatechs.com
+      </a>
+      <a href="cart.html" class="cart-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        Carrito
+        <span class="cart-count" data-cart-count>0</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+<!-- ══ HERO ════════════════════════════════════════════ -->
+<section class="shop-hero">
+  <div class="container shop-hero-inner">
+    <p class="label">Tienda Oficial</p>
+    <h1 class="h1">Tecnología bien instalada,<br/><em>tranquilidad real</em></h1>
+    <p class="shop-hero-desc">No solo vendemos equipos: los instalamos, los dejamos funcionando y respondemos después. Productos originales, garantía respaldada, factura con NCF y un equipo que te contesta cuando nos necesitas.</p>
+    <div class="shop-hero-divs">
+      <span class="shop-hero-divs-label">Productos oficiales de</span>
+      <div class="shop-hero-divs-logos">
+        <img src="../images/logo-platatech.png" alt="Plata Tech Security"/>
+        <span class="sep"></span>
+        <img src="../images/logo-ug.png" alt="UltimoGadget"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FILTERS ═════════════════════════════════════════ -->
+<div class="filter-bar">
+  <div class="container filter-inner">
+    <div class="filter-cats" id="filterCats"></div>
+    <div class="filter-search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input type="search" id="searchInput" placeholder="Buscar producto, marca, modelo..."/>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PRODUCTS ════════════════════════════════════════ -->
+<section class="products-section">
+  <div class="container">
+    <div class="products-head">
+      <div>
+        <h2 class="h2" id="resultsTitle">Todos los productos</h2>
+      </div>
+      <div class="products-count" id="resultsCount"></div>
+    </div>
+    <div class="products-grid" id="productsGrid"></div>
+  </div>
+</section>
+
+</main>
+
+<!-- ══ FOOTER ══════════════════════════════════════════ -->
+<footer class="shop-foot">
+  <div class="container shop-foot-inner">
+    <div class="shop-foot-brand">
+      <img src="../images/logo-platatech.png" class="shop-foot-logo" alt="Plata Tech Solutions"/>
+      <div>
+        Plata Tech Solutions S.R.L.
+        <small>Tienda oficial · RNC formal · Facturas con NCF</small>
+      </div>
+    </div>
+    <div class="shop-foot-divs">
+      <span class="shop-foot-divs-label">Divisiones</span>
+      <div class="shop-foot-divs-logos">
+        <img src="../images/logo-platatech.png" alt="Plata Tech Security"/>
+        <span class="sep"></span>
+        <img src="../images/logo-ug.png" alt="UltimoGadget"/>
+      </div>
+    </div>
+    <div class="shop-foot-links">
+      <a href="../index.html">Inicio</a>
+      <a href="../security.html">Seguridad</a>
+      <a href="../ultimogadget.html">UltimoGadget</a>
+      <a href="cart.html">Carrito</a>
+      <a href="https://wa.me/18494950959" target="_blank">WhatsApp</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/products.js"></script>
+<script src="assets/cart.js"></script>
+<script>
+/* ── State ──────────────────────────────────────────── */
+let activeCategory = 'todos';
+let searchQuery = '';
+
+/* ── Render categories ─────────────────────────────── */
+function renderCategories() {
+  const root = document.getElementById('filterCats');
+  root.innerHTML = window.CATEGORIES.map(cat => {
+    const count = cat.id === 'todos'
+      ? window.PRODUCTS.length
+      : window.PRODUCTS.filter(p => p.category === cat.id).length;
+    return `<button class="filter-cat ${cat.id === activeCategory ? 'active' : ''}" data-cat="${cat.id}">
+      ${cat.name} <span style="opacity:.55">(${count})</span>
+    </button>`;
+  }).join('');
+  root.querySelectorAll('.filter-cat').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeCategory = btn.dataset.cat;
+      renderCategories();
+      renderProducts();
+    });
+  });
+}
+
+/* ── Render products ────────────────────────────────── */
+function renderProducts() {
+  const grid = document.getElementById('productsGrid');
+  const q = searchQuery.trim().toLowerCase();
+
+  let list = window.PRODUCTS;
+  if (activeCategory !== 'todos') list = list.filter(p => p.category === activeCategory);
+  if (q) list = list.filter(p =>
+    p.name.toLowerCase().includes(q) ||
+    p.brand.toLowerCase().includes(q) ||
+    (p.variant || '').toLowerCase().includes(q) ||
+    (p.short || '').toLowerCase().includes(q)
+  );
+
+  document.getElementById('resultsCount').textContent =
+    `${list.length} producto${list.length === 1 ? '' : 's'}`;
+
+  const catName = window.CATEGORIES.find(c => c.id === activeCategory).name;
+  document.getElementById('resultsTitle').textContent =
+    activeCategory === 'todos' ? 'Todos los productos' : catName;
+
+  if (list.length === 0) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <p>No encontramos productos con esa búsqueda.</p>
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map(p => `
+    <a href="product.html?p=${p.slug}" class="product-card">
+      <div class="product-vis">
+        ${p.badge ? `<span class="product-badge ${p.badge}">${p.badgeText}</span>` : ''}
+        ${window.renderProductMock(p, 180)}
+      </div>
+      <div class="product-body">
+        <div class="product-brand">${p.brand}</div>
+        <div class="product-name">${p.name}</div>
+        <div class="product-variant">${p.variant || ''}</div>
+        <div class="product-foot">
+          <div class="product-price">
+            ${p.oldPrice ? `<span class="product-price-old">${window.formatPrice(p.oldPrice)}</span>` : ''}
+            ${window.formatPrice(p.price)}
+          </div>
+          <button class="product-add" aria-label="Agregar al carrito" data-add="${p.slug}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+        </div>
+      </div>
+    </a>
+  `).join('');
+
+  /* Wire add buttons (stopPropagation so the card link doesn't fire) */
+  grid.querySelectorAll('[data-add]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault(); e.stopPropagation();
+      const slug = btn.dataset.add;
+      const p = window.getProductBySlug(slug);
+      window.Cart.add(slug, 1);
+      window.Cart.toast(`${p.name} agregado al carrito`);
+    });
+  });
+}
+
+/* ── Search ─────────────────────────────────────────── */
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchQuery = e.target.value;
+  renderProducts();
+});
+
+/* ── Init ───────────────────────────────────────────── */
+/* Apply URL category filter if present (?cat=celulares) */
+const urlParams = new URLSearchParams(window.location.search);
+const urlCat = urlParams.get('cat');
+if (urlCat && window.CATEGORIES.some(c => c.id === urlCat)) activeCategory = urlCat;
+
+renderCategories();
+renderProducts();
+</script>
+
+</body>
+</html>

@@ -297,6 +297,31 @@
     color: var(--gold-l); margin-bottom: .3rem;
   }
   .hstat-label { font-size: .76rem; color: var(--text-dim); }
+  /* Feature variant (non-stat) */
+  .hstat-feat { padding: 1.35rem 1.25rem; }
+  .hstat-ico {
+    color: var(--gold-l); margin-bottom: .7rem;
+    display: block; opacity: .95;
+  }
+  .hstat-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1rem; font-weight: 700; line-height: 1.15;
+    color: var(--text); margin-bottom: .3rem; letter-spacing: -0.005em;
+  }
+  .hstat-desc {
+    font-size: .74rem; color: var(--text-dim);
+    line-height: 1.45;
+  }
+  .hstat-badge {
+    position: absolute; top: .7rem; right: .7rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: .56rem; font-weight: 600; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--gold-l);
+    padding: .22rem .5rem; border-radius: 99px;
+    background: rgba(245,186,59,.1);
+    border: 1px solid var(--gold-border);
+    z-index: 1;
+  }
 
   /* scroll indicator */
   .hero-scroll {
@@ -650,10 +675,7 @@
 <main>
 <!-- ── HERO ─────────────────────────────────────────────── -->
 <section id="inicio" class="hero">
-  <div class="hero-orb hero-orb-1"></div>
-  <div class="hero-orb hero-orb-2"></div>
-  <div class="hero-orb hero-orb-3"></div>
-  <div class="hero-grid"></div>
+  <canvas id="heroCanvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;display:block;"></canvas>
 
   <div class="container hero-inner">
     <div class="hero-logo-big" id="heroLogo">
@@ -683,21 +705,27 @@
     </div>
 
     <div class="hero-stats" id="heroStats">
-      <div class="hstat">
-        <div class="hstat-num" data-count="500" data-suffix="+">500+</div>
-        <div class="hstat-label">Instalaciones completadas</div>
+      <div class="hstat hstat-feat">
+        <svg class="hstat-ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+        <div class="hstat-title">Cámaras Hikvision</div>
+        <div class="hstat-desc">ColorVu, visión nocturna a color 24/7</div>
       </div>
-      <div class="hstat">
-        <div class="hstat-num">24/7</div>
-        <div class="hstat-label">Monitoreo continuo</div>
+      <div class="hstat hstat-feat">
+        <svg class="hstat-ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <div class="hstat-title">Sensores Inteligentes</div>
+        <div class="hstat-desc">Movimiento, humo, CO2, puertas y ventanas</div>
       </div>
-      <div class="hstat">
-        <div class="hstat-num">100%</div>
-        <div class="hstat-label">Garantia en equipos</div>
+      <div class="hstat hstat-feat">
+        <span class="hstat-badge">Opcional</span>
+        <svg class="hstat-ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49M7.76 7.76a6 6 0 0 0 0 8.49M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+        <div class="hstat-title">Monitoreo 24/7</div>
+        <div class="hstat-desc">Central de alarmas con respuesta inmediata</div>
       </div>
-      <div class="hstat">
-        <div class="hstat-num" data-count="8" data-suffix="+">8+</div>
-        <div class="hstat-label">Anos de experiencia</div>
+      <div class="hstat hstat-feat">
+        <span class="hstat-badge">Opcional</span>
+        <svg class="hstat-ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 5-3.5 9-9 9s-9-4-9-9 3.5-9 9-9c2.5 0 4.8.8 6.6 2.3"/></svg>
+        <div class="hstat-title">Garantía Extendida</div>
+        <div class="hstat-desc">Cobertura ampliada sobre equipos e instalación</div>
       </div>
     </div>
   </div>
@@ -967,7 +995,7 @@
       <div class="wcard">
         <div class="wcard-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
         <div class="wcard-title">Instalacion Certificada</div>
-        <div class="wcard-desc">Tecnicos capacitados con anos de experiencia en instalaciones residenciales y comerciales.</div>
+        <div class="wcard-desc">Tecnicos capacitados con años de experiencia en instalaciones residenciales y comerciales.</div>
       </div>
       <div class="wcard">
         <div class="wcard-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
@@ -1168,9 +1196,99 @@ document.querySelectorAll('.pcard[data-type="camera"] .price-row').forEach(row =
 
     // Also update the main CTA button
     waBtn.href = url;
-    waBtnTx.textContent = `Cotizar ${count} cámaras — ${kit.split('(')[0].trim()}`;
+    waBtnTx.textContent = `Cotizar ${count} cámaras - ${kit.split('(')[0].trim()}`;
   });
 });
+</script>
+
+<!-- ── HERO WebGL Shader ──────────────────────────────── -->
+<script>
+(function(){
+  var canvas = document.getElementById('heroCanvas');
+  if (!canvas) return;
+  var gl = canvas.getContext('webgl2');
+  if (!gl) return;
+
+  var vert = [
+    '#version 300 es',
+    'in vec2 a_pos;',
+    'void main(){ gl_Position = vec4(a_pos,0,1); }'
+  ].join('\n');
+
+  var frag = [
+    '#version 300 es',
+    'precision highp float;',
+    'out vec4 O;',
+    'uniform vec2 resolution;',
+    'uniform float time;',
+    '#define FC gl_FragCoord.xy',
+    '#define T time',
+    '#define R resolution',
+    '#define MN min(R.x,R.y)',
+    'float rnd(vec2 p){p=fract(p*vec2(12.9898,78.233));p+=dot(p,p+34.56);return fract(p.x*p.y);}',
+    'float noise(in vec2 p){vec2 i=floor(p),f=fract(p),u=f*f*(3.-2.*f);float a=rnd(i),b=rnd(i+vec2(1,0)),c=rnd(i+vec2(0,1)),d=rnd(i+1.);return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);}',
+    'float fbm(vec2 p){float t=.0,a=1.;mat2 m=mat2(1.,-.5,.2,1.2);for(int i=0;i<5;i++){t+=a*noise(p);p*=2.*m;a*=.5;}return t;}',
+    'float clouds(vec2 p){float d=1.,t=.0;for(float i=.0;i<3.;i++){float a=d*fbm(i*10.+p.x*.2+.2*(1.+i)*p.y+d+i*i+p);t=mix(t,d,a);d=a;p*=2./(i+1.);}return t;}',
+    'void main(void){',
+    '  vec2 uv=(FC-.5*R)/MN,st=uv*vec2(2,1);',
+    '  vec3 col=vec3(0);',
+    '  float bg=clouds(vec2(st.x+T*.5,-st.y));',
+    '  uv*=1.-.3*(sin(T*.2)*.5+.5);',
+    '  for(float i=1.;i<12.;i++){',
+    '    uv+=.1*cos(i*vec2(.1+.01*i,.8)+i*i+T*.5+.1*uv.x);',
+    '    vec2 p=uv;',
+    '    float d=length(p);',
+    '    col+=.00125/d*vec3(0.18,0.48,1.25)*(sin(i*0.7)+1.8);',
+    '    float b=noise(i+p+bg*1.731);',
+    '    col+=.002*b*vec3(0.25,0.55,1.3)/length(max(p,vec2(b*p.x*.02,p.y)));',
+    '    col=mix(col,vec3(bg*.005,bg*.035,bg*.26),d);',
+    '  }',
+    '  O=vec4(col,1);',
+    '}'
+  ].join('\n');
+
+  function mkShader(type, src){
+    var s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+
+  var prog = gl.createProgram();
+  gl.attachShader(prog, mkShader(gl.VERTEX_SHADER, vert));
+  gl.attachShader(prog, mkShader(gl.FRAGMENT_SHADER, frag));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+
+  var buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  var aPos = gl.getAttribLocation(prog, 'a_pos');
+  gl.enableVertexAttribArray(aPos);
+  gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+  var uRes  = gl.getUniformLocation(prog, 'resolution');
+  var uTime = gl.getUniformLocation(prog, 'time');
+
+  function resize(){
+    var w = canvas.offsetWidth, h = canvas.offsetHeight;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width  = w * dpr;
+    canvas.height = h * dpr;
+    gl.viewport(0, 0, canvas.width, canvas.height);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  var start = performance.now();
+  function frame(){
+    gl.uniform2f(uRes, canvas.width, canvas.height);
+    gl.uniform1f(uTime, (performance.now() - start) / 1000);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
 </script>
 
 </body>
