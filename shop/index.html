@@ -81,6 +81,17 @@
 <div class="filter-bar">
   <div class="container filter-inner">
     <div class="filter-cats" id="filterCats"></div>
+    <div class="filter-price">
+      <span class="filter-price-label">Precio</span>
+      <div class="filter-price-slider">
+        <div class="filter-price-track"></div>
+        <div class="filter-price-fill" id="priceFill"></div>
+        <input type="range" id="priceMin" class="filter-price-input" min="0" max="100" value="0" aria-label="Precio mínimo"/>
+        <input type="range" id="priceMax" class="filter-price-input" min="0" max="100" value="100" aria-label="Precio máximo"/>
+      </div>
+      <span class="filter-price-value" id="priceText">RD$0 — RD$0</span>
+      <button type="button" class="filter-price-reset" id="priceReset" hidden>Limpiar</button>
+    </div>
     <div class="filter-search">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
       <input type="search" id="searchInput" placeholder="Buscar producto, marca, modelo..."/>
@@ -94,8 +105,20 @@
     <div class="products-head">
       <div>
         <h2 class="h2" id="resultsTitle">Todos los productos</h2>
+        <div class="products-count" id="resultsCount"></div>
       </div>
-      <div class="products-count" id="resultsCount"></div>
+      <div class="view-controls">
+        <button type="button" class="view-flat-btn" id="viewFlatBtn" hidden>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+          Mostrar todo en lista
+        </button>
+        <select class="sort-select" id="sortSelect" aria-label="Ordenar por">
+          <option value="default">Orden recomendado</option>
+          <option value="price-asc">Precio: menor a mayor</option>
+          <option value="price-desc">Precio: mayor a menor</option>
+          <option value="name-asc">Nombre A–Z</option>
+        </select>
+      </div>
     </div>
     <div class="products-grid" id="productsGrid"></div>
   </div>
@@ -139,8 +162,55 @@
 /* ── State ──────────────────────────────────────────── */
 let activeCategory = 'todos';
 let searchQuery = '';
+let sortBy = 'default';
+let viewMode = 'auto'; // 'auto' = home grouped por categoría, 'flat' = lista plana
 
-/* ── Render categories ─────────────────────────────── */
+/* ── Price range ────────────────────────────────────── */
+const PRICE_LO = 0;
+const PRICE_HI = Math.ceil(Math.max.apply(null, window.PRODUCTS.map(p => p.price || 0)) / 1000) * 1000 || 100000;
+const PRICE_GAP = 500;
+let priceMin = PRICE_LO;
+let priceMax = PRICE_HI;
+
+const slMin   = document.getElementById('priceMin');
+const slMax   = document.getElementById('priceMax');
+const fillEl  = document.getElementById('priceFill');
+const textEl  = document.getElementById('priceText');
+const resetBt = document.getElementById('priceReset');
+
+[slMin, slMax].forEach(s => { s.min = PRICE_LO; s.max = PRICE_HI; s.step = 500; });
+slMin.value = PRICE_LO; slMax.value = PRICE_HI;
+
+function refreshPriceUI() {
+  const span = PRICE_HI - PRICE_LO || 1;
+  const lp = ((priceMin - PRICE_LO) / span) * 100;
+  const hp = ((priceMax - PRICE_LO) / span) * 100;
+  fillEl.style.left  = lp + '%';
+  fillEl.style.right = (100 - hp) + '%';
+  textEl.textContent = 'RD$' + priceMin.toLocaleString('en-US') + ' — RD$' + priceMax.toLocaleString('en-US');
+  const isDefault = (priceMin === PRICE_LO && priceMax === PRICE_HI);
+  resetBt.hidden = isDefault;
+}
+slMin.addEventListener('input', () => {
+  let lo = +slMin.value, hi = +slMax.value;
+  if (lo > hi - PRICE_GAP) { lo = hi - PRICE_GAP; slMin.value = lo; }
+  priceMin = lo;
+  refreshPriceUI(); renderProducts();
+});
+slMax.addEventListener('input', () => {
+  let lo = +slMin.value, hi = +slMax.value;
+  if (hi < lo + PRICE_GAP) { hi = lo + PRICE_GAP; slMax.value = hi; }
+  priceMax = hi;
+  refreshPriceUI(); renderProducts();
+});
+resetBt.addEventListener('click', () => {
+  priceMin = PRICE_LO; priceMax = PRICE_HI;
+  slMin.value = PRICE_LO; slMax.value = PRICE_HI;
+  refreshPriceUI(); renderProducts();
+});
+refreshPriceUI();
+
+/* ── Categories filter ──────────────────────────────── */
 function renderCategories() {
   const root = document.getElementById('filterCats');
   root.innerHTML = window.CATEGORIES.map(cat => {
@@ -154,45 +224,35 @@ function renderCategories() {
   root.querySelectorAll('.filter-cat').forEach(btn => {
     btn.addEventListener('click', () => {
       activeCategory = btn.dataset.cat;
+      viewMode = 'auto';
       renderCategories();
       renderProducts();
     });
   });
 }
 
-/* ── Render products ────────────────────────────────── */
-function renderProducts() {
-  const grid = document.getElementById('productsGrid');
-  const q = searchQuery.trim().toLowerCase();
+/* ── Helpers ────────────────────────────────────────── */
+function isHomeView() {
+  return viewMode === 'auto'
+      && activeCategory === 'todos'
+      && !searchQuery.trim()
+      && sortBy === 'default'
+      && priceMin === PRICE_LO
+      && priceMax === PRICE_HI;
+}
 
-  let list = window.PRODUCTS;
-  if (activeCategory !== 'todos') list = list.filter(p => p.category === activeCategory);
-  if (q) list = list.filter(p =>
-    p.name.toLowerCase().includes(q) ||
-    p.brand.toLowerCase().includes(q) ||
-    (p.variant || '').toLowerCase().includes(q) ||
-    (p.short || '').toLowerCase().includes(q)
-  );
+function applySort(list) {
+  if (sortBy === 'price-asc')  return list.slice().sort((a,b) => (a.price||0) - (b.price||0));
+  if (sortBy === 'price-desc') return list.slice().sort((a,b) => (b.price||0) - (a.price||0));
+  if (sortBy === 'name-asc')   return list.slice().sort((a,b) => a.name.localeCompare(b.name, 'es'));
+  return list;
+}
 
-  document.getElementById('resultsCount').textContent =
-    `${list.length} producto${list.length === 1 ? '' : 's'}`;
-
-  const catName = window.CATEGORIES.find(c => c.id === activeCategory).name;
-  document.getElementById('resultsTitle').textContent =
-    activeCategory === 'todos' ? 'Todos los productos' : catName;
-
-  if (list.length === 0) {
-    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
-      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-      <p>No encontramos productos con esa búsqueda.</p>
-    </div>`;
-    return;
-  }
-
-  grid.innerHTML = list.map(p => `
+function productCardHtml(p) {
+  return `
     <a href="product.html?p=${p.slug}" class="product-card">
       <div class="product-vis">
-        ${p.badge ? `<span class="product-badge ${p.badge}">${p.badgeText}</span>` : ''}
+        ${p.badge ? `<span class="product-badge ${p.badge}">${p.badgeText || ''}</span>` : ''}
         ${window.renderProductMock(p, 180)}
       </div>
       <div class="product-body">
@@ -209,29 +269,115 @@ function renderProducts() {
           </button>
         </div>
       </div>
-    </a>
-  `).join('');
+    </a>`;
+}
 
-  /* Wire add buttons (stopPropagation so the card link doesn't fire) */
-  grid.querySelectorAll('[data-add]').forEach(btn => {
+function wireAdds(root) {
+  root.querySelectorAll('[data-add]').forEach(btn => {
     btn.addEventListener('click', e => {
       e.preventDefault(); e.stopPropagation();
       const slug = btn.dataset.add;
       const p = window.getProductBySlug(slug);
+      if (!p) return;
       window.Cart.add(slug, 1);
       window.Cart.toast(`${p.name} agregado al carrito`);
     });
   });
 }
 
-/* ── Search ─────────────────────────────────────────── */
+/* ── Render ─────────────────────────────────────────── */
+function renderProducts() {
+  const grid = document.getElementById('productsGrid');
+  const flatBtn = document.getElementById('viewFlatBtn');
+  const titleEl = document.getElementById('resultsTitle');
+  const countEl = document.getElementById('resultsCount');
+  const home = isHomeView();
+
+  flatBtn.hidden = !(viewMode === 'auto' && activeCategory === 'todos');
+
+  if (home) {
+    titleEl.textContent = 'Explora por categoría';
+    countEl.textContent = `${window.PRODUCTS.length} productos disponibles · agrupados por tipo`;
+    grid.className = 'products-rows';
+    const cats = window.CATEGORIES.filter(c => c.id !== 'todos');
+    grid.innerHTML = cats.map(cat => {
+      const list = window.PRODUCTS.filter(p => p.category === cat.id);
+      if (!list.length) return '';
+      const visible = list.slice(0, 4);
+      return `
+        <section class="cat-row" id="cat-${cat.id}">
+          <div class="cat-row-head">
+            <h3 class="cat-row-title">${cat.name}<span class="cat-row-title-count">${list.length} producto${list.length===1?'':'s'}</span></h3>
+            <button class="cat-row-more" type="button" data-cat="${cat.id}">
+              Ver todos
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+          <div class="cat-row-grid">
+            ${visible.map(productCardHtml).join('')}
+          </div>
+        </section>`;
+    }).filter(Boolean).join('');
+    grid.querySelectorAll('.cat-row-more').forEach(btn => {
+      btn.addEventListener('click', () => {
+        activeCategory = btn.dataset.cat;
+        viewMode = 'auto';
+        renderCategories();
+        renderProducts();
+        const head = document.querySelector('.products-head');
+        if (head) window.scrollTo({ top: head.getBoundingClientRect().top + window.scrollY - 130, behavior: 'smooth' });
+      });
+    });
+    wireAdds(grid);
+    return;
+  }
+
+  /* Flat view */
+  grid.className = 'products-grid';
+  const q = searchQuery.trim().toLowerCase();
+  let list = window.PRODUCTS;
+  if (activeCategory !== 'todos') list = list.filter(p => p.category === activeCategory);
+  if (q) list = list.filter(p =>
+    p.name.toLowerCase().includes(q) ||
+    p.brand.toLowerCase().includes(q) ||
+    (p.variant || '').toLowerCase().includes(q) ||
+    (p.short || '').toLowerCase().includes(q)
+  );
+  list = list.filter(p => (p.price||0) >= priceMin && (p.price||0) <= priceMax);
+  list = applySort(list);
+
+  const catName = window.CATEGORIES.find(c => c.id === activeCategory).name;
+  titleEl.textContent = activeCategory === 'todos' ? 'Todos los productos' : catName;
+  countEl.textContent = `${list.length} producto${list.length === 1 ? '' : 's'}`;
+
+  if (list.length === 0) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <p>No encontramos productos con esos filtros.</p>
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map(productCardHtml).join('');
+  wireAdds(grid);
+}
+
+/* ── Search / sort / view toggle ────────────────────── */
 document.getElementById('searchInput').addEventListener('input', e => {
   searchQuery = e.target.value;
   renderProducts();
 });
+document.getElementById('sortSelect').addEventListener('change', e => {
+  sortBy = e.target.value;
+  viewMode = (sortBy === 'default') ? 'auto' : 'flat';
+  renderProducts();
+});
+document.getElementById('viewFlatBtn').addEventListener('click', () => {
+  viewMode = 'flat';
+  renderProducts();
+});
 
 /* ── Init ───────────────────────────────────────────── */
-/* Apply URL category filter if present (?cat=celulares) */
 const urlParams = new URLSearchParams(window.location.search);
 const urlCat = urlParams.get('cat');
 if (urlCat && window.CATEGORIES.some(c => c.id === urlCat)) activeCategory = urlCat;

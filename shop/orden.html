@@ -99,6 +99,13 @@
   0%,100% { opacity: 1; transform: scale(1); }
   50% { opacity: .5; transform: scale(1.4); }
 }
+.order-status:has(.dot.paid) {
+  background: #ecfdf5; color: #065f46;
+  border-color: rgba(5,150,105,.3);
+}
+.order-status .dot.paid {
+  background: #059669;
+}
 
 /* Items list */
 .order-items { display: flex; flex-direction: column; gap: .85rem; }
@@ -296,16 +303,16 @@ function fmtDate(iso) {
        + ' · ' + d.toLocaleTimeString('es-DO', { hour: '2-digit', minute: '2-digit' });
 }
 
-function modeLabel(mode) {
-  return mode === 'transferencia'
+function modeLabel(order) {
+  if (order.paymentMethod === 'online') return 'PayPal / Tarjeta (pagado)';
+  return order.codeliveryMode === 'transferencia'
     ? 'Transferencia bancaria al recibir'
     : 'Efectivo (RD$) al recibir';
 }
 
-function deliveryLabel(mode) {
-  return mode === 'transferencia'
-    ? 'El mismo día · máx 24 horas'
-    : '1 a 3 días laborables';
+function deliveryLabel(order) {
+  if (order.paymentMethod === 'online') return '1 a 3 días laborables';
+  return 'El mismo día · máx 24 horas';
 }
 
 /* Mensaje inicial para que nos envíen la orden (opcional — para que Plata Tech reciba el pedido) */
@@ -316,18 +323,19 @@ function buildSendOrderMessage(order) {
 
   const totalsBlock = [
     `Subtotal: ${window.formatPrice(order.totals.subtotal)}`,
-    order.totals.discount > 0 ? `Beneficio por pago directo (-10%): -${window.formatPrice(order.totals.discount)}` : null,
-    `ITBIS: ${window.formatPrice(order.totals.itbis)}`,
+    order.totals.itbis === 0 ? `ITBIS: Exonerado (pago directo)` : `ITBIS: ${window.formatPrice(order.totals.itbis)}`,
     `Total: ${window.formatPrice(order.totals.total)}`
-  ].filter(Boolean).join('\n');
+  ].join('\n');
 
   const cust = order.customer;
-  const modeText = order.codeliveryMode === 'transferencia'
-    ? 'Pago contra entrega - TRANSFERENCIA al recibir'
-    : 'Pago contra entrega - EFECTIVO al recibir';
-  const slaText = order.codeliveryMode === 'transferencia'
-    ? 'Entrega: el mismo día (máximo 24 horas)'
-    : 'Entrega: 1 a 3 días laborables';
+  const modeText = order.paymentMethod === 'online'
+    ? 'Pagado por PayPal / tarjeta'
+    : (order.codeliveryMode === 'transferencia'
+      ? 'Pago contra entrega - TRANSFERENCIA al recibir'
+      : 'Pago contra entrega - EFECTIVO al recibir');
+  const slaText = order.paymentMethod === 'online'
+    ? 'Entrega: 1 a 3 días laborables'
+    : 'Entrega: el mismo día (máximo 24 horas)';
 
   return `Hola, acabo de colocar el pedido ${order.id} en Plata Tech Store.\n\n`
     + `Artículos:\n${lines}\n\n`
@@ -366,13 +374,18 @@ function render() {
   const sendMsg   = encodeURIComponent(buildSendOrderMessage(order));
   const askMsg    = encodeURIComponent(buildInquiryMessage(order));
 
+  const isPaid = order.status === 'pagado' || new URLSearchParams(location.search).get('paid') === '1';
+
   root.innerHTML = `
     <div class="order-hero">
       <div class="order-check">
         <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
       </div>
-      <h1>Recibimos tu orden</h1>
-      <p>Guardamos todos los detalles. Un representante de <strong>Plata Tech Solutions</strong> te llamará o escribirá por WhatsApp para confirmar disponibilidad, coordinar la entrega y asegurar que cada detalle salga bien. Sin prisa y sin que tengas que dar seguimiento.</p>
+      <h1>${isPaid ? 'Pago recibido' : 'Recibimos tu orden'}</h1>
+      <p>${isPaid
+        ? 'Tu pago fue procesado exitosamente por PayPal. Un representante de <strong>Plata Tech Solutions</strong> te contactará por WhatsApp para coordinar la entrega en <strong>1 a 3 días laborables</strong>.'
+        : 'Guardamos todos los detalles. Un representante de <strong>Plata Tech Solutions</strong> te llamará o escribirá por WhatsApp para confirmar disponibilidad, coordinar la entrega y asegurar que cada detalle salga bien.'
+      }</p>
       <div class="order-number-box">
         <span class="order-number-label">Nº de orden</span>
         <span class="order-number" id="ordNum">${order.id}</span>
@@ -384,7 +397,7 @@ function render() {
 
     <div class="order-grid">
       <div class="order-card">
-        <div class="order-status"><span class="dot"></span>Pendiente de contacto</div>
+        <div class="order-status"><span class="dot${isPaid ? ' paid' : ''}"></span>${isPaid ? 'Pagado' : 'Pendiente de contacto'}</div>
         <h2>Resumen de la orden</h2>
         <div class="order-items">
           ${order.items.map(it => {
@@ -405,15 +418,11 @@ function render() {
           <div class="totals-row">
             <span>Subtotal</span><span>${window.formatPrice(order.totals.subtotal)}</span>
           </div>
-          ${order.totals.discount > 0 ? `
-          <div class="totals-row discount">
-            <span>Beneficio por pago directo (-10%)</span><span>-${window.formatPrice(order.totals.discount)}</span>
-          </div>` : ''}
-          <div class="totals-row">
-            <span>ITBIS (18%)</span><span>${window.formatPrice(order.totals.itbis)}</span>
+          <div class="totals-row${order.totals.itbis === 0 ? ' discount' : ''}">
+            <span>ITBIS (18%)</span><span>${order.totals.itbis === 0 ? 'Exonerado' : window.formatPrice(order.totals.itbis)}</span>
           </div>
-          <div class="totals-row${order.codeliveryMode === 'transferencia' ? ' discount' : ''}">
-            <span>Entrega</span><span>${deliveryLabel(order.codeliveryMode)}</span>
+          <div class="totals-row${order.paymentMethod !== 'online' ? ' discount' : ''}">
+            <span>Entrega</span><span>${deliveryLabel(order)}</span>
           </div>
           <div class="totals-row total">
             <span>Total</span><span>${window.formatPrice(order.totals.total)}</span>
@@ -446,12 +455,21 @@ function render() {
         </div>` : ''}
         <div class="info-row">
           <div class="info-label">Método</div>
-          <div class="info-value">${modeLabel(order.codeliveryMode)}</div>
+          <div class="info-value">${modeLabel(order)}</div>
         </div>
         <div class="info-row">
           <div class="info-label">Fecha</div>
           <div class="info-value">${fmtDate(order.createdAt)}</div>
         </div>
+        ${order.paypalOrderId ? `
+        <div class="info-row">
+          <div class="info-label">PayPal ID</div>
+          <div class="info-value" style="font-family:monospace;font-size:.82rem">${order.paypalOrderId}</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Cobrado</div>
+          <div class="info-value">US$${order.paypalAmountUsd} (tasa ${Number(order.exchangeRate).toFixed(2)} DOP/USD)</div>
+        </div>` : ''}
       </div>
     </div>
 

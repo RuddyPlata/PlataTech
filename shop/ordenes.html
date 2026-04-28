@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Consultar orden - Plata Tech Store</title>
+<link rel="icon" type="image/x-icon" href="../images/favicon-pt.ico"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/shop.css"/>
+<style>
+.ord-section { padding: 3rem 0 5rem; }
+
+/* ── Lookup (cliente) ────────────────────────────── */
+.lookup-box {
+  max-width: 520px; margin: 0 auto;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 2.5rem 2rem;
+  text-align: center;
+}
+.lookup-box h2 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.35rem; font-weight: 800;
+  margin-bottom: .5rem;
+}
+.lookup-box p { color: var(--ink-2); font-size: .9rem; margin-bottom: 1.5rem; line-height: 1.55; }
+.lookup-form {
+  display: flex; gap: .5rem;
+}
+.lookup-form input {
+  flex: 1; padding: .8rem 1.1rem;
+  border: 1.5px solid var(--border); border-radius: 12px;
+  font: inherit; font-size: .95rem; color: var(--ink);
+  background: var(--off-white); outline: none;
+  transition: border-color .2s;
+  text-transform: uppercase;
+}
+.lookup-form input:focus { border-color: var(--blue); background: var(--white); }
+.lookup-form input::placeholder { text-transform: none; }
+.lookup-form button {
+  padding: .8rem 1.5rem; border-radius: 12px;
+  background: var(--ink); color: var(--white);
+  font: inherit; font-size: .9rem; font-weight: 700;
+  cursor: pointer; border: 0;
+  transition: background .2s, transform .15s;
+  white-space: nowrap;
+}
+.lookup-form button:hover { background: var(--blue); transform: translateY(-1px); }
+.lookup-error {
+  margin-top: 1rem; padding: .75rem 1rem; border-radius: 10px;
+  background: #fef2f2; color: #b91c1c; font-size: .85rem;
+  border: 1px solid #fecaca;
+  display: none;
+}
+.lookup-error.show { display: block; }
+.admin-link {
+  margin-top: 1.5rem; display: inline-block;
+  font-size: .78rem; color: var(--ink-3);
+  cursor: pointer; border: 0; background: 0;
+  text-decoration: underline;
+  transition: color .2s;
+}
+.admin-link:hover { color: var(--ink); }
+
+/* ── Order result card ───────────────────────────── */
+.ord-result {
+  max-width: 620px; margin: 0 auto;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+}
+.ord-result-head {
+  padding: 1.5rem 1.75rem;
+  background: linear-gradient(135deg, var(--navy), var(--blue));
+  color: var(--white);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 1rem;
+}
+.ord-result-id {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem; font-weight: 700;
+  letter-spacing: .04em;
+}
+.ord-result-date { font-size: .82rem; opacity: .8; }
+.ord-result-body { padding: 1.5rem 1.75rem; }
+.ord-result-status {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .3rem .75rem; border-radius: 100px;
+  font-size: .72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .06em;
+  margin-bottom: 1rem;
+}
+.status-pendiente  { background: #fffbe6; color: #8a6d10; border: 1px solid rgba(212,162,74,.3); }
+.status-contactado { background: #e0f2fe; color: #0369a1; border: 1px solid rgba(3,105,161,.2); }
+.status-encamino   { background: #fef3c7; color: #92400e; border: 1px solid rgba(217,119,6,.2); }
+.status-entregado  { background: #ecfdf5; color: #065f46; border: 1px solid rgba(5,150,105,.2); }
+.status-pagado     { background: #ecfdf5; color: #065f46; border: 1px solid rgba(5,150,105,.2); }
+.status-cancelado  { background: #fef2f2; color: #991b1b; border: 1px solid rgba(185,28,28,.2); }
+.ord-items { margin-bottom: 1.25rem; }
+.ord-item {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: .5rem 0; border-bottom: 1px solid var(--border);
+  gap: .75rem;
+}
+.ord-item:last-child { border-bottom: 0; }
+.ord-item-name { font-size: .9rem; font-weight: 600; color: var(--ink); flex: 1; min-width: 0; }
+.ord-item-meta { font-size: .78rem; color: var(--ink-3); }
+.ord-item-price { font-size: .9rem; font-weight: 700; color: var(--ink); white-space: nowrap; }
+.ord-totals { padding-top: 1rem; border-top: 1px solid var(--border); }
+.ord-totals-row {
+  display: flex; justify-content: space-between;
+  padding: .35rem 0; font-size: .88rem; color: var(--ink-2);
+}
+.ord-totals-row b { color: var(--ink); }
+.ord-totals-row.total { font-size: 1.15rem; font-weight: 800; color: var(--ink); padding-top: .75rem; margin-top: .5rem; border-top: 1px solid var(--border); }
+.ord-totals-row.total b { font-size: 1.25rem; }
+.ord-totals-row.exon b { color: #059669; }
+.ord-customer { margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
+.ord-customer h3 { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: var(--ink-3); margin-bottom: .75rem; }
+.ord-customer-row { display: flex; gap: .5rem; font-size: .88rem; padding: .25rem 0; }
+.ord-customer-label { color: var(--ink-3); min-width: 80px; }
+.ord-customer-val { color: var(--ink); font-weight: 500; }
+.ord-back {
+  display: inline-flex; align-items: center; gap: .4rem;
+  margin-top: 1.25rem; font-size: .88rem; font-weight: 600;
+  color: var(--blue); cursor: pointer; background: 0; border: 0;
+}
+.ord-back:hover { text-decoration: underline; }
+
+/* ── Admin panel ─────────────────────────────────── */
+.admin-gate {
+  max-width: 380px; margin: 0 auto;
+  text-align: center;
+}
+.admin-gate h2 { margin-bottom: .5rem; }
+.admin-gate p { color: var(--ink-2); font-size: .88rem; margin-bottom: 1.25rem; }
+.admin-gate input {
+  width: 100%; padding: .8rem 1.1rem;
+  border: 1.5px solid var(--border); border-radius: 12px;
+  font: inherit; font-size: .95rem; color: var(--ink);
+  text-align: center; outline: none;
+  transition: border-color .2s;
+}
+.admin-gate input:focus { border-color: var(--blue); }
+.admin-gate .err { border-color: #ef4444; animation: shake .4s; }
+@keyframes shake { 20%,60% { transform: translateX(-4px); } 40%,80% { transform: translateX(4px); } }
+
+.admin-panel { margin-top: 1rem; }
+.admin-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+.admin-bar h2 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.35rem; font-weight: 800;
+}
+.admin-stats {
+  display: flex; gap: .6rem; flex-wrap: wrap;
+}
+.admin-stat {
+  padding: .35rem .75rem; border-radius: 100px;
+  font-size: .72rem; font-weight: 700;
+  background: var(--off-white); border: 1px solid var(--border);
+  color: var(--ink-2);
+}
+.admin-stat b { color: var(--ink); }
+.admin-filters {
+  display: flex; gap: .45rem; margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+.admin-filter {
+  padding: .45rem .9rem; border-radius: 100px;
+  font-size: .78rem; font-weight: 600;
+  background: var(--off-white); border: 1px solid var(--border);
+  color: var(--ink-2); cursor: pointer;
+  transition: background .2s, color .2s, border-color .2s;
+}
+.admin-filter:hover { color: var(--ink); border-color: var(--blue); }
+.admin-filter.active { background: var(--ink); color: var(--white); border-color: var(--ink); }
+
+.admin-table {
+  width: 100%; border-collapse: separate; border-spacing: 0;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.admin-table th {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: .68rem; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-3);
+  padding: .85rem 1rem;
+  background: var(--off-white);
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.admin-table td {
+  padding: .75rem 1rem;
+  font-size: .85rem; color: var(--ink);
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.admin-table tr:last-child td { border-bottom: 0; }
+.admin-table tr:hover td { background: rgba(20,71,255,.02); }
+.admin-order-id {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700; font-size: .82rem;
+  color: var(--blue); cursor: pointer;
+}
+.admin-order-id:hover { text-decoration: underline; }
+.admin-items-summary { font-size: .78rem; color: var(--ink-2); max-width: 200px; }
+.admin-status-select {
+  font: inherit; font-size: .78rem; font-weight: 600;
+  padding: .35rem .6rem; border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: var(--white); color: var(--ink);
+  cursor: pointer; outline: none;
+  transition: border-color .2s;
+}
+.admin-status-select:focus { border-color: var(--blue); }
+.admin-total { font-weight: 700; white-space: nowrap; }
+.admin-date { font-size: .78rem; color: var(--ink-3); white-space: nowrap; }
+.admin-empty {
+  text-align: center; padding: 3rem 1rem;
+  color: var(--ink-3); font-size: .92rem;
+}
+.admin-export {
+  margin-top: 1rem; display: flex; gap: .5rem; flex-wrap: wrap;
+}
+.admin-export button {
+  padding: .5rem 1rem; border-radius: 100px;
+  font: inherit; font-size: .78rem; font-weight: 600;
+  cursor: pointer; border: 1px solid var(--border);
+  background: var(--off-white); color: var(--ink);
+  transition: background .2s;
+}
+.admin-export button:hover { background: var(--blue-tint); border-color: var(--blue); }
+
+@media (max-width: 768px) {
+  .lookup-form { flex-direction: column; }
+  .admin-table { display: block; overflow-x: auto; }
+  .ord-result-head { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<nav class="shop-nav">
+  <div class="container shop-nav-inner">
+    <a href="index.html" class="shop-brand">
+      <div class="shop-brand-mark"><img src="../images/logo-platatech.png" alt="Plata Tech"/></div>
+      <div>
+        <div class="shop-brand-name">Plata Tech Store</div>
+        <div class="shop-brand-sub">Tienda oficial</div>
+      </div>
+    </a>
+    <div class="shop-nav-right">
+      <a href="index.html" class="shop-nav-back">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Tienda
+      </a>
+      <a href="cart.html" class="cart-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        Carrito
+        <span class="cart-count" data-cart-count>0</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<main>
+<section class="ord-section">
+  <div class="container">
+    <div id="app"></div>
+  </div>
+</section>
+</main>
+
+<footer class="shop-foot">
+  <div class="container shop-foot-inner">
+    <div class="shop-foot-brand">
+      <img src="../images/logo-platatech.png" class="shop-foot-logo" alt="Plata Tech Solutions"/>
+      <div>
+        Plata Tech Solutions S.R.L.
+        <small>Tienda oficial</small>
+      </div>
+    </div>
+    <div class="shop-foot-links">
+      <a href="index.html">Tienda</a>
+      <a href="../index.html">Inicio</a>
+      <a href="https://wa.me/18494950959" target="_blank">WhatsApp</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/products.js"></script>
+<script src="assets/products-static.js"></script>
+<script src="assets/products-overrides.js"></script>
+<script src="assets/cart.js"></script>
+<script>
+const ORDERS_KEY = 'platatech_orders_v1';
+const ADMIN_PIN  = 'platatech2024';
+const STATUSES   = [
+  { id: 'pendiente',  label: 'Pendiente' },
+  { id: 'pagado',     label: 'Pagado' },
+  { id: 'contactado', label: 'Contactado' },
+  { id: 'encamino',   label: 'En camino' },
+  { id: 'entregado',  label: 'Entregado' },
+  { id: 'cancelado',  label: 'Cancelado' }
+];
+
+const app = document.getElementById('app');
+let view = 'lookup'; // 'lookup' | 'result' | 'admin-gate' | 'admin'
+let adminFilter = 'todos';
+let foundOrder = null;
+
+function getOrders() {
+  try { return JSON.parse(localStorage.getItem(ORDERS_KEY) || '[]'); }
+  catch (e) { return []; }
+}
+function saveOrders(orders) {
+  localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
+}
+function updateOrderStatus(orderId, newStatus) {
+  const orders = getOrders();
+  const o = orders.find(x => x.id === orderId);
+  if (o) { o.status = newStatus; saveOrders(orders); }
+}
+function fmtPrice(n) { return 'RD$' + Number(n).toLocaleString('en-US'); }
+function fmtDate(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString('es-DO', { day: '2-digit', month: 'short', year: 'numeric' })
+       + ' ' + d.toLocaleTimeString('es-DO', { hour: '2-digit', minute: '2-digit' });
+}
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+function statusClass(s) { return 'status-' + (s || 'pendiente').replace(/\s/g, ''); }
+
+/* ── Check URL params ──────────────────────────────── */
+const urlP = new URLSearchParams(location.search);
+const urlN = urlP.get('n');
+const urlAdmin = urlP.get('admin');
+if (urlN) {
+  foundOrder = getOrders().find(o => o.id === urlN);
+  view = foundOrder ? 'result' : 'lookup';
+}
+if (urlAdmin === '1') view = 'admin-gate';
+
+/* ── Render ────────────────────────────────────────── */
+function render() {
+  if (view === 'lookup')     return renderLookup();
+  if (view === 'result')     return renderResult();
+  if (view === 'admin-gate') return renderAdminGate();
+  if (view === 'admin')      return renderAdmin();
+}
+
+function renderLookup() {
+  app.innerHTML = `
+    <div class="lookup-box">
+      <h2>Consulta tu orden</h2>
+      <p>Ingresa tu numero de orden para ver el estado y los detalles de tu pedido.</p>
+      <div class="lookup-form">
+        <input type="text" id="lookupInput" placeholder="Ej: PT-260428-1234" autocomplete="off" spellcheck="false"/>
+        <button type="button" id="lookupBtn">Buscar</button>
+      </div>
+      <div class="lookup-error" id="lookupErr">No encontramos una orden con ese numero en este dispositivo.</div>
+      <button class="admin-link" id="adminLink">Acceso administrador</button>
+    </div>`;
+
+  const input = document.getElementById('lookupInput');
+  const btn   = document.getElementById('lookupBtn');
+  const err   = document.getElementById('lookupErr');
+
+  if (urlN && !foundOrder) err.classList.add('show');
+
+  function doLookup() {
+    const q = input.value.trim().toUpperCase();
+    if (!q) { input.focus(); return; }
+    const orders = getOrders();
+    const match = orders.find(o => o.id.toUpperCase() === q);
+    if (match) {
+      foundOrder = match;
+      view = 'result';
+      history.replaceState(null, '', '?n=' + encodeURIComponent(match.id));
+      render();
+    } else {
+      err.classList.add('show');
+      input.classList.add('err');
+      input.focus();
+    }
+  }
+  btn.addEventListener('click', doLookup);
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') doLookup(); });
+  input.addEventListener('input', () => { err.classList.remove('show'); input.classList.remove('err'); });
+  document.getElementById('adminLink').addEventListener('click', () => { view = 'admin-gate'; render(); });
+  input.focus();
+}
+
+function renderResult() {
+  const o = foundOrder;
+  if (!o) { view = 'lookup'; render(); return; }
+  const st = STATUSES.find(s => s.id === o.status) || STATUSES[0];
+
+  app.innerHTML = `
+    <div class="ord-result">
+      <div class="ord-result-head">
+        <div>
+          <div class="ord-result-id">${esc(o.id)}</div>
+          <div class="ord-result-date">${fmtDate(o.createdAt)}</div>
+        </div>
+        <div class="ord-result-status ${statusClass(o.status)}">${esc(st.label)}</div>
+      </div>
+      <div class="ord-result-body">
+        <div class="ord-items">
+          ${o.items.map(i => `
+            <div class="ord-item">
+              <div>
+                <div class="ord-item-name">${esc(i.name)}</div>
+                <div class="ord-item-meta">${esc(i.variant || '')} ${i.qty > 1 ? '&times; ' + i.qty : ''}</div>
+              </div>
+              <div class="ord-item-price">${fmtPrice(i.subtotal)}</div>
+            </div>`).join('')}
+        </div>
+        <div class="ord-totals">
+          <div class="ord-totals-row">
+            <span>Subtotal</span><b>${fmtPrice(o.totals.subtotal)}</b>
+          </div>
+          <div class="ord-totals-row${o.totals.itbis === 0 ? ' exon' : ''}">
+            <span>ITBIS</span><b>${o.totals.itbis === 0 ? 'Exonerado' : fmtPrice(o.totals.itbis)}</b>
+          </div>
+          <div class="ord-totals-row total">
+            <span>Total</span><b>${fmtPrice(o.totals.total)}</b>
+          </div>
+        </div>
+        ${o.customer && o.customer.name ? `
+        <div class="ord-customer">
+          <h3>Datos de entrega</h3>
+          <div class="ord-customer-row"><span class="ord-customer-label">Nombre</span><span class="ord-customer-val">${esc(o.customer.name)}</span></div>
+          <div class="ord-customer-row"><span class="ord-customer-label">Telefono</span><span class="ord-customer-val">${esc(o.customer.phone)}</span></div>
+          <div class="ord-customer-row"><span class="ord-customer-label">Direccion</span><span class="ord-customer-val">${esc(o.customer.address)}</span></div>
+          ${o.customer.sector ? `<div class="ord-customer-row"><span class="ord-customer-label">Sector</span><span class="ord-customer-val">${esc(o.customer.sector)}</span></div>` : ''}
+        </div>` : ''}
+        ${o.paypalOrderId ? `
+        <div class="ord-customer" style="margin-top:.75rem; padding-top:.75rem;">
+          <h3>Pago PayPal</h3>
+          <div class="ord-customer-row"><span class="ord-customer-label">PayPal ID</span><span class="ord-customer-val" style="font-family:monospace;font-size:.82rem">${esc(o.paypalOrderId)}</span></div>
+          <div class="ord-customer-row"><span class="ord-customer-label">Cobrado</span><span class="ord-customer-val">US$${o.paypalAmountUsd}</span></div>
+        </div>` : ''}
+        <button class="ord-back" id="backBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Buscar otra orden
+        </button>
+      </div>
+    </div>`;
+
+  document.getElementById('backBtn').addEventListener('click', () => {
+    foundOrder = null; view = 'lookup';
+    history.replaceState(null, '', 'ordenes.html');
+    render();
+  });
+}
+
+function renderAdminGate() {
+  app.innerHTML = `
+    <div class="admin-gate">
+      <h2 class="h2">Acceso administrador</h2>
+      <p>Ingresa la clave de administrador para ver y gestionar todas las ordenes.</p>
+      <input type="password" id="pinInput" placeholder="Clave" autocomplete="off"/>
+      <br/><br/>
+      <button class="ord-back" id="backToLookup">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Volver a consulta
+      </button>
+    </div>`;
+
+  const pin = document.getElementById('pinInput');
+  pin.focus();
+  pin.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      if (pin.value === ADMIN_PIN) {
+        view = 'admin';
+        history.replaceState(null, '', '?admin=1');
+        render();
+      } else {
+        pin.classList.add('err');
+        pin.value = '';
+        setTimeout(() => pin.classList.remove('err'), 500);
+      }
+    }
+  });
+  document.getElementById('backToLookup').addEventListener('click', () => {
+    view = 'lookup';
+    history.replaceState(null, '', 'ordenes.html');
+    render();
+  });
+}
+
+function renderAdmin() {
+  const orders = getOrders();
+  const filtered = adminFilter === 'todos' ? orders : orders.filter(o => o.status === adminFilter);
+
+  const counts = {};
+  orders.forEach(o => { counts[o.status] = (counts[o.status] || 0) + 1; });
+  const totalRevenue = orders.filter(o => o.status !== 'cancelado').reduce((s, o) => s + (o.totals.total || 0), 0);
+
+  app.innerHTML = `
+    <div class="admin-panel">
+      <div class="admin-bar">
+        <h2>${orders.length} orden${orders.length === 1 ? '' : 'es'}</h2>
+        <div class="admin-stats">
+          <div class="admin-stat"><b>${orders.filter(o=>o.status==='pendiente'||o.status==='pagado').length}</b> activas</div>
+          <div class="admin-stat"><b>${orders.filter(o=>o.status==='entregado').length}</b> entregadas</div>
+          <div class="admin-stat">Facturado <b>${fmtPrice(totalRevenue)}</b></div>
+        </div>
+      </div>
+
+      <div class="admin-filters" id="adminFilters">
+        <button class="admin-filter ${adminFilter==='todos'?'active':''}" data-f="todos">Todas (${orders.length})</button>
+        ${STATUSES.map(s => {
+          const c = counts[s.id] || 0;
+          return c || s.id === 'pendiente' ? `<button class="admin-filter ${adminFilter===s.id?'active':''}" data-f="${s.id}">${s.label} (${c})</button>` : '';
+        }).join('')}
+      </div>
+
+      ${filtered.length === 0 ? `<div class="admin-empty">No hay ordenes con ese filtro.</div>` : `
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Orden</th>
+            <th>Cliente</th>
+            <th>Articulos</th>
+            <th>Total</th>
+            <th>Metodo</th>
+            <th>Estado</th>
+            <th>Fecha</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${filtered.map(o => {
+            const itemsSummary = o.items.map(i => i.qty + 'x ' + i.name).join(', ');
+            const method = o.paymentMethod === 'online' ? 'PayPal' : (o.codeliveryMode === 'transferencia' ? 'Transfer.' : 'Efectivo');
+            return `
+              <tr>
+                <td><span class="admin-order-id" data-view="${esc(o.id)}">${esc(o.id)}</span></td>
+                <td>${esc(o.customer ? o.customer.name : '—')}<br/><span style="font-size:.72rem;color:var(--ink-3)">${esc(o.customer ? o.customer.phone : '')}</span></td>
+                <td><div class="admin-items-summary" title="${esc(itemsSummary)}">${o.items.length} item${o.items.length===1?'':'s'}</div></td>
+                <td class="admin-total">${fmtPrice(o.totals.total)}</td>
+                <td style="font-size:.78rem">${method}</td>
+                <td>
+                  <select class="admin-status-select" data-oid="${esc(o.id)}">
+                    ${STATUSES.map(s => `<option value="${s.id}" ${o.status===s.id?'selected':''}>${s.label}</option>`).join('')}
+                  </select>
+                </td>
+                <td class="admin-date">${fmtDate(o.createdAt)}</td>
+              </tr>`;
+          }).join('')}
+        </tbody>
+      </table>`}
+
+      <div class="admin-export">
+        <button id="exportCsv">Exportar CSV</button>
+        <button id="backToLookup2">Volver a consulta</button>
+      </div>
+    </div>`;
+
+  /* Wire filters */
+  document.getElementById('adminFilters').querySelectorAll('.admin-filter').forEach(btn => {
+    btn.addEventListener('click', () => { adminFilter = btn.dataset.f; render(); });
+  });
+
+  /* Wire status selects */
+  document.querySelectorAll('.admin-status-select').forEach(sel => {
+    sel.addEventListener('change', () => {
+      updateOrderStatus(sel.dataset.oid, sel.value);
+      render();
+    });
+  });
+
+  /* Wire view order */
+  document.querySelectorAll('.admin-order-id').forEach(el => {
+    el.addEventListener('click', () => {
+      foundOrder = getOrders().find(o => o.id === el.dataset.view);
+      if (foundOrder) { view = 'result'; render(); }
+    });
+  });
+
+  /* Wire CSV export */
+  document.getElementById('exportCsv').addEventListener('click', () => {
+    const rows = [['Orden','Fecha','Cliente','Telefono','Direccion','Sector','Metodo','Estado','Articulos','Total']];
+    orders.forEach(o => {
+      rows.push([
+        o.id,
+        o.createdAt,
+        o.customer ? o.customer.name : '',
+        o.customer ? o.customer.phone : '',
+        o.customer ? o.customer.address : '',
+        o.customer ? o.customer.sector : '',
+        o.paymentMethod === 'online' ? 'PayPal' : o.codeliveryMode,
+        o.status,
+        o.items.map(i => i.qty + 'x ' + i.name).join(' | '),
+        o.totals.total
+      ]);
+    });
+    const csv = rows.map(r => r.map(c => '"' + String(c||'').replace(/"/g,'""') + '"').join(',')).join('\n');
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'ordenes-platatech-' + new Date().toISOString().slice(0,10) + '.csv';
+    a.click();
+  });
+
+  document.getElementById('backToLookup2').addEventListener('click', () => {
+    view = 'lookup';
+    history.replaceState(null, '', 'ordenes.html');
+    render();
+  });
+}
+
+render();
+</script>
+
+</body>
+</html>

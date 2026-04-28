@@ -355,41 +355,63 @@
 <script src="assets/products-overrides.js"></script>
 <script src="assets/cart.js"></script>
 
-<!-- PayPal SDK -->
-<script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&currency=USD&components=buttons"></script>
+<!-- PayPal SDK — reemplaza YOUR_PAYPAL_CLIENT_ID con tu Client ID real -->
+<script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&currency=USD&components=buttons&disable-funding=credit,card"></script>
 
 <script>
 const root = document.getElementById('cartRoot');
-const RD_TO_USD = 60;           // Tasa aproximada RD$ -> USD para PayPal
-const DISCOUNT_PCT = 0.10;      // 10% descuento en transferencia / efectivo
+/* Contra-entrega: exonerado de ITBIS. Online: 18% ITBIS incluido. */
+const RATE_FALLBACK = 60;       // Tasa fallback RD$/USD
+
+/* ── Tasa de cambio dinámica USD→DOP ───────────────── */
+let usdToDop = RATE_FALLBACK;
+let rateSource = 'fallback';
+
+(async function fetchRate() {
+  try {
+    const res = await fetch('https://open.er-api.com/v6/latest/USD');
+    if (!res.ok) throw new Error(res.status);
+    const data = await res.json();
+    if (data.result === 'success' && data.rates && data.rates.DOP) {
+      usdToDop = data.rates.DOP;
+      rateSource = 'open.er-api';
+      render(); // re-render con tasa actualizada
+    }
+  } catch (e) {
+    console.warn('No se pudo obtener tasa USD/DOP, usando fallback', RATE_FALLBACK, e);
+  }
+})();
+
+function rdToUsd(rdp) { return +(rdp / usdToDop).toFixed(2); }
+function fmtUsd(n) { return 'US$' + n.toFixed(2); }
 
 /* Métodos de pago principales */
 const PAYMENT_METHODS = [
   {
     id: 'online',
     name: 'Pago en línea',
-    sub: 'PayPal o tarjeta · Entrega 1 a 3 días',
-    discount: false,
+    sub: 'PayPal o tarjeta en USD · Entrega 1 a 3 días',
+    badge: null,
     icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>'
   },
   {
     id: 'contra-entrega',
     name: 'Pago contra entrega',
-    sub: 'Efectivo o transferencia al recibir',
-    discount: true,
+    sub: 'Efectivo o transferencia · Entrega el mismo día · Sin ITBIS',
+    badge: 'SIN ITBIS',
     icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M8 21H3v-5M21 3l-7 7M3 21l7-7"/></svg>'
   }
 ];
 
 /* Sub-opción para contra entrega */
 const CODELIVERY_MODES = [
-  { id: 'efectivo',      name: 'Efectivo',      sub: 'Pago en RD$ al recibir · Entrega 1 a 3 días' },
+  { id: 'efectivo',      name: 'Efectivo',      sub: 'Pago en RD$ al recibir · Entrega el mismo día (máx 24h)' },
   { id: 'transferencia', name: 'Transferencia', sub: 'Popular · BHD · Banreservas · Entrega el mismo día (máx 24h)' }
 ];
 
 /* SLA de entrega segun forma de pago */
 function deliverySLA() {
-  if (paymentMethod === 'contra-entrega' && codeliveryMode === 'transferencia') {
+  if (paymentMethod === 'contra-entrega') {
     return { text: 'El mismo día · máx 24h', fast: true };
   }
   return { text: '1 a 3 días laborables', fast: false };
@@ -417,7 +439,7 @@ function restoreFormState() {
   });
 }
 
-/* Calcular totales aplicando el descuento si corresponde */
+/* Calcular totales — contra-entrega exonerado de ITBIS, online incluye 18% */
 function computeTotals() {
   const items = window.Cart.get();
   let subtotal = 0;
@@ -425,14 +447,11 @@ function computeTotals() {
     const p = window.getProductBySlug(i.slug);
     if (p) subtotal += p.price * i.qty;
   });
-  const methodMeta = PAYMENT_METHODS.find(m => m.id === paymentMethod);
-  const discountEligible = methodMeta && methodMeta.discount;
-  const discount = discountEligible ? Math.round(subtotal * DISCOUNT_PCT) : 0;
-  const subtotalNet = subtotal - discount;
-  const itbis = Math.round(subtotalNet * 0.18);
-  const total = subtotalNet + itbis;
+  const noItbis = (paymentMethod === 'contra-entrega');
+  const itbis = noItbis ? 0 : Math.round(subtotal * 0.18);
+  const total = subtotal + itbis;
   const itemCount = items.reduce((s, i) => s + i.qty, 0);
-  return { subtotal, discount, subtotalNet, itbis, total, itemCount, discountEligible };
+  return { subtotal, discount: 0, subtotalNet: subtotal, itbis, total, itemCount, noItbis };
 }
 
 function render() {
@@ -486,14 +505,9 @@ function render() {
           <span>Subtotal (${totals.itemCount} ${totals.itemCount === 1 ? 'artículo' : 'artículos'})</span>
           <b>${window.formatPrice(totals.subtotal)}</b>
         </div>
-        ${totals.discount > 0 ? `
-          <div class="summary-row discount">
-            <span>Beneficio por pago directo (-10%)</span>
-            <b>-${window.formatPrice(totals.discount)}</b>
-          </div>` : ''}
-        <div class="summary-row">
+        <div class="summary-row${totals.noItbis ? ' discount' : ''}">
           <span>ITBIS (18%)</span>
-          <b>${window.formatPrice(totals.itbis)}</b>
+          <b>${totals.noItbis ? 'Exonerado' : window.formatPrice(totals.itbis)}</b>
         </div>
         <div class="summary-row${deliverySLA().fast ? ' discount' : ''}">
           <span>Entrega</span>
@@ -503,6 +517,11 @@ function render() {
           <span>Total</span>
           <b>${window.formatPrice(totals.total)}</b>
         </div>
+        ${paymentMethod === 'online' ? `
+        <div class="summary-row" style="padding-top:0">
+          <span style="font-size:.75rem;color:var(--ink-3)">Equivalente PayPal <small>(${usdToDop.toFixed(2)} DOP/USD)</small></span>
+          <b style="color:var(--blue);font-size:1rem">${fmtUsd(rdToUsd(totals.total))}</b>
+        </div>` : ''}
 
         <div class="pay-section-title">Método de pago</div>
         <div class="pay-methods">
@@ -513,7 +532,7 @@ function render() {
               <div class="pay-body">
                 <div class="pay-name">
                   ${m.name}
-                  ${m.discount ? '<span class="pay-discount">-10%</span>' : ''}
+                  ${m.badge ? '<span class="pay-discount">' + m.badge + '</span>' : ''}
                 </div>
                 <div class="pay-sub">${m.sub}</div>
               </div>
@@ -564,7 +583,7 @@ function render() {
         <div id="payAction"></div>
 
         <div class="summary-note">
-          <strong>Tiempos de entrega:</strong> con tarjeta o PayPal entregamos en <strong>1 a 3 días laborables</strong>. Si pagas por transferencia te entregamos <strong>el mismo día (máximo 24 horas)</strong> dentro del GSD. Para entregas fuera del GSD coordinamos por WhatsApp. Facturamos con NCF a solicitud.
+          <strong>Pago contra entrega</strong> (efectivo o transferencia) → entregamos <strong>el mismo día (máx 24h)</strong> dentro del GSD y <strong>no incluye ITBIS</strong>. <strong>Pago online</strong> (PayPal/tarjeta en USD) → <strong>1 a 3 días laborables</strong>, incluye ITBIS. Entregas fuera del GSD coordinamos por WhatsApp. Facturamos con NCF a solicitud.
         </div>
 
         <div class="summary-actions">
@@ -638,8 +657,8 @@ function renderAction(totals) {
 
   /* Contra entrega → instrucciones + botón de colocar pedido */
   const instr = codeliveryMode === 'transferencia'
-    ? `<strong>Contra entrega con transferencia · entrega el mismo día (máx 24h):</strong> llevamos tu pedido dentro del GSD, revisas el equipo con calma y pagas por transferencia al recibir. Al confirmar tu orden te contactamos por WhatsApp con los datos bancarios y coordinamos la entrega para el mismo día (máximo 24 horas). Aplicamos un 10% de beneficio por pago directo.`
-    : `<strong>Contra entrega con efectivo · entrega 1 a 3 días:</strong> llevamos tu pedido dentro del GSD, revisas el equipo con calma y pagas en efectivo (RD$) al recibir. Al confirmar tu orden te contactamos por WhatsApp con el horario de entrega (1 a 3 días laborables). Aplicamos un 10% de beneficio por pago directo.`;
+    ? `<strong>Contra entrega con transferencia · entrega el mismo día (máx 24h):</strong> llevamos tu pedido dentro del GSD, revisas el equipo con calma y pagas por transferencia al recibir. Al confirmar tu orden te contactamos por WhatsApp con los datos bancarios. <strong>Exonerado de ITBIS</strong> por pago directo.`
+    : `<strong>Contra entrega con efectivo · entrega el mismo día (máx 24h):</strong> llevamos tu pedido dentro del GSD, revisas el equipo con calma y pagas en efectivo (RD$) al recibir. Al confirmar tu orden te contactamos por WhatsApp. <strong>Exonerado de ITBIS</strong> por pago directo.`;
 
   box.innerHTML = `
     <div class="pay-instructions">${instr}</div>
@@ -741,54 +760,107 @@ function renderPayPal(totals) {
   if (!container) return;
   container.innerHTML = '';
 
-  if (typeof paypal !== 'undefined' && window.paypal && window.paypal.Buttons) {
-    try {
-      paypal.Buttons({
-        style: { layout: 'vertical', color: 'gold', shape: 'pill', label: 'checkout', height: 48 },
-        createOrder: (data, actions) => {
-          const items = window.Cart.get().map(it => {
-            const p = window.getProductBySlug(it.slug);
-            return {
-              name: (p.name + ' ' + (p.variant || '')).substring(0, 127),
-              quantity: String(it.qty),
-              unit_amount: { value: (p.price / RD_TO_USD).toFixed(2), currency_code: 'USD' },
-              sku: p.slug
-            };
-          });
+  if (typeof paypal === 'undefined' || !window.paypal || !window.paypal.Buttons) {
+    container.innerHTML = `<div class="paypal-placeholder">
+      <b>PayPal no configurado.</b> Reemplaza <code>YOUR_PAYPAL_CLIENT_ID</code> en el script de PayPal.
+      Obtenlo gratis en <a href="https://developer.paypal.com" target="_blank">developer.paypal.com</a>.
+    </div>`;
+    return;
+  }
 
-          const subTotUsd = items.reduce((s, i) => s + (+i.unit_amount.value * +i.quantity), 0);
-          const taxUsd = +(subTotUsd * 0.18).toFixed(2);
+  try {
+    paypal.Buttons({
+      style: { layout: 'vertical', color: 'gold', shape: 'pill', label: 'checkout', height: 48 },
 
-          return actions.order.create({
-            purchase_units: [{
-              description: 'Pedido Plata Tech Store',
-              items,
-              amount: {
-                value: (subTotUsd + taxUsd).toFixed(2),
-                currency_code: 'USD',
-                breakdown: {
-                  item_total: { value: subTotUsd.toFixed(2), currency_code: 'USD' },
-                  tax_total:  { value: taxUsd.toFixed(2),    currency_code: 'USD' }
-                }
+      createOrder: function(data, actions) {
+        const cartItems = window.Cart.get();
+        const items = cartItems.map(function(it) {
+          const p = window.getProductBySlug(it.slug);
+          if (!p) return null;
+          return {
+            name: (p.name + ' ' + (p.variant || '')).substring(0, 127),
+            quantity: String(it.qty),
+            unit_amount: { value: rdToUsd(p.price).toFixed(2), currency_code: 'USD' },
+            sku: p.slug
+          };
+        }).filter(Boolean);
+
+        const subTotUsd = items.reduce(function(s, i) { return s + (+i.unit_amount.value * +i.quantity); }, 0);
+        const taxUsd = +(subTotUsd * 0.18).toFixed(2);
+
+        return actions.order.create({
+          purchase_units: [{
+            description: 'Pedido Plata Tech Store',
+            soft_descriptor: 'PlataTech',
+            items: items,
+            amount: {
+              value: (subTotUsd + taxUsd).toFixed(2),
+              currency_code: 'USD',
+              breakdown: {
+                item_total: { value: subTotUsd.toFixed(2), currency_code: 'USD' },
+                tax_total:  { value: taxUsd.toFixed(2),    currency_code: 'USD' }
               }
-            }]
-          });
-        },
-        onApprove: (data, actions) => actions.order.capture().then(details => {
-          alert(`Pago exitoso. Gracias, ${details.payer.name.given_name}. Coordinaremos tu entrega por correo o WhatsApp.`);
+            }
+          }]
+        });
+      },
+
+      onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+          /* Crear orden local igual que contra-entrega */
+          var cartItems = window.Cart.get().map(function(i) {
+            var p = window.getProductBySlug(i.slug);
+            return p ? {
+              slug: p.slug, name: p.name, variant: p.variant || '',
+              qty: i.qty, price: p.price, subtotal: p.price * i.qty
+            } : null;
+          }).filter(Boolean);
+
+          var order = {
+            id: generateOrderNumber(),
+            createdAt: new Date().toISOString(),
+            status: 'pagado',
+            paymentMethod: 'online',
+            paypalOrderId: details.id,
+            paypalPayer: (details.payer && details.payer.email_address) || '',
+            paypalAmountUsd: details.purchase_units[0].amount.value,
+            exchangeRate: usdToDop,
+            rateSource: rateSource,
+            codeliveryMode: null,
+            customer: {
+              name: details.payer ? (details.payer.name.given_name + ' ' + details.payer.name.surname) : '',
+              phone: '',
+              address: '',
+              sector: '',
+              notes: ''
+            },
+            items: cartItems,
+            totals: {
+              subtotal: totals.subtotal,
+              discount: 0,
+              subtotalNet: totals.subtotal,
+              itbis: totals.itbis,
+              total: totals.total,
+              itemCount: totals.itemCount
+            }
+          };
+
+          saveOrder(order);
           window.Cart.clear();
-          location.href = 'index.html';
-        }),
-        onError: err => {
-          console.error(err);
-          alert('Hubo un problema con el pago. Intenta de nuevo o coordina por WhatsApp.');
-        }
-      }).render('#paypalButtonsCart');
-    } catch (e) {
-      container.innerHTML = `<div class="paypal-placeholder"><b>PayPal no configurado.</b> Reemplaza <code>YOUR_PAYPAL_CLIENT_ID</code> en el script de PayPal. Obtenlo gratis en <a href="https://developer.paypal.com" target="_blank">developer.paypal.com</a>.</div>`;
-    }
-  } else {
-    container.innerHTML = `<div class="paypal-placeholder"><b>PayPal no configurado.</b> Reemplaza <code>YOUR_PAYPAL_CLIENT_ID</code> en el script de PayPal. Obtenlo gratis en <a href="https://developer.paypal.com" target="_blank">developer.paypal.com</a>.</div>`;
+          location.href = 'orden.html?n=' + encodeURIComponent(order.id) + '&paid=1';
+        });
+      },
+
+      onError: function(err) {
+        console.error('PayPal error:', err);
+        alert('Hubo un problema con el pago. Intenta de nuevo o coordina por WhatsApp al 849-495-0959.');
+      }
+    }).render('#paypalButtonsCart');
+  } catch (e) {
+    console.error('PayPal render error:', e);
+    container.innerHTML = `<div class="paypal-placeholder">
+      <b>Error al cargar PayPal.</b> Verifica tu conexión o <a href="https://wa.me/18494950959" target="_blank">coordina por WhatsApp</a>.
+    </div>`;
   }
 }
 

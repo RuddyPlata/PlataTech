@@ -74,19 +74,44 @@ window.Cart = {
     });
   },
 
-  /* Show a floating toast when item added */
+  /* Show a floating toast anchored to cart button, with checkout CTA */
   toast(msg) {
     let t = document.getElementById('cartToast');
     if (!t) {
       t = document.createElement('div');
       t.id = 'cartToast';
       t.className = 'cart-toast';
+      t.innerHTML = ''
+        + '<div class="cart-toast-icon">'
+        +   '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>'
+        + '</div>'
+        + '<div class="cart-toast-body">'
+        +   '<div class="cart-toast-msg" id="cartToastMsg"></div>'
+        +   '<div class="cart-toast-actions">'
+        +     '<a href="cart.html" class="cart-toast-btn primary">Ir a checkout'
+        +       '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>'
+        +     '</a>'
+        +     '<button type="button" class="cart-toast-btn ghost" id="cartToastClose">Seguir comprando</button>'
+        +   '</div>'
+        + '</div>';
       document.body.appendChild(t);
+      t.querySelector('#cartToastClose').addEventListener('click', () => {
+        t.classList.remove('show');
+        clearTimeout(t._hide);
+      });
     }
-    t.textContent = msg;
+    t.querySelector('#cartToastMsg').textContent = msg;
+    /* Anchor horizontally to cart-btn so the arrow lines up */
+    const cartBtn = document.querySelector('.cart-btn');
+    if (cartBtn) {
+      const r = cartBtn.getBoundingClientRect();
+      const rightOffset = Math.max(12, window.innerWidth - r.right + (r.width / 2) - 28);
+      t.style.right = rightOffset + 'px';
+      t.style.top = (r.bottom + 12) + 'px';
+    }
     t.classList.add('show');
     clearTimeout(t._hide);
-    t._hide = setTimeout(() => t.classList.remove('show'), 2200);
+    t._hide = setTimeout(() => t.classList.remove('show'), 4500);
   }
 };
 

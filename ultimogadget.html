@@ -482,6 +482,13 @@
     transition: transform .5s cubic-bezier(.16,1,.3,1);
   }
   .phone-card:hover .phone-mock { transform: translateY(-4px) rotate(-2deg); }
+  .phone-mock-img {
+    max-height: 170px; max-width: 80%; width: auto; height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 20px 30px rgba(0,0,0,.5));
+    transition: transform .5s cubic-bezier(.16,1,.3,1);
+  }
+  .phone-card:hover .phone-mock-img { transform: translateY(-4px) scale(1.04); }
 
   .phone-badge {
     position: absolute; top: 1rem; right: 1rem;
@@ -619,9 +626,43 @@
   }
   @media (max-width: 768px) {
     .phone-grid { grid-template-columns: 1fr; }
+    .phone-tiers { grid-template-columns: 1fr; }
   }
   @media (min-width: 769px) and (max-width: 1024px) {
     .phone-grid { grid-template-columns: repeat(2,1fr); }
+  }
+
+  /* ── Phone tiers (3 columnas: alta gama / media / esencial) ── */
+  .phone-tiers {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.75rem;
+  }
+  .phone-tier { display: flex; flex-direction: column; gap: 1.25rem; }
+  .phone-tier-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: .75rem;
+    padding: .65rem 1.1rem;
+    border-radius: 12px;
+    background: rgba(13,17,23,.55);
+    border: 1px solid var(--border-b);
+  }
+  .phone-tier-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: .72rem; font-weight: 700;
+    letter-spacing: .14em; text-transform: uppercase;
+    color: var(--gold-l);
+  }
+  .phone-tier-sub {
+    font-size: .72rem; font-weight: 500;
+    color: var(--text-dim);
+  }
+  .phone-tier-empty {
+    padding: 1.5rem 1.1rem;
+    text-align: center;
+    font-size: .82rem; color: var(--text-dim);
+    border: 1px dashed var(--border-b);
+    border-radius: 14px;
   }
 
   /* ╔══════════════════════════════════════════════════════╗
@@ -931,154 +972,7 @@
       <p class="sec-sub">Equipos originales con factura y garantía. Toca cualquier producto para ver detalles y comprar en la tienda oficial.</p>
     </div>
 
-    <div class="phone-grid">
-
-      <a href="shop/product.html?p=iphone-15-pro-max" class="phone-card js-tilt">
-        <div class="phone-vis phone-vis-apple">
-          <span class="phone-badge hot">Mas vendido</span>
-          <svg class="phone-mock" viewBox="0 0 120 220" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="8" y="4" width="104" height="212" rx="20" fill="#1a1a1f" stroke="#2a2a30" stroke-width="1.5"/>
-            <rect x="14" y="10" width="92" height="200" rx="14" fill="url(#gApple)"/>
-            <rect x="48" y="14" width="24" height="6" rx="3" fill="#0a0a0c"/>
-            <defs><linearGradient id="gApple" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4a4a52"/><stop offset="1" stop-color="#1a1a1f"/></linearGradient></defs>
-          </svg>
-        </div>
-        <div class="phone-body">
-          <div class="phone-brand">Apple</div>
-          <div class="phone-model">iPhone 15 Pro Max</div>
-          <p class="phone-specs">256GB &middot; Titanio Natural &middot; Chip A17 Pro &middot; Camara 48MP</p>
-          <div class="phone-foot">
-            <div class="phone-price">RD$89,500</div>
-            <span class="phone-cta">
-              Ver en tienda
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </span>
-          </div>
-        </div>
-      </a>
-
-      <a href="shop/product.html?p=samsung-galaxy-s24-ultra" class="phone-card js-tilt">
-        <div class="phone-vis phone-vis-samsung">
-          <span class="phone-badge new">Nuevo</span>
-          <svg class="phone-mock" viewBox="0 0 120 220" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="8" y="4" width="104" height="212" rx="20" fill="#1a1a1f" stroke="#2a2a30" stroke-width="1.5"/>
-            <rect x="14" y="10" width="92" height="200" rx="14" fill="url(#gSamsung)"/>
-            <circle cx="60" cy="18" r="2.5" fill="#0a0a0c"/>
-            <defs><linearGradient id="gSamsung" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6b4e9f"/><stop offset="1" stop-color="#2a1f4a"/></linearGradient></defs>
-          </svg>
-        </div>
-        <div class="phone-body">
-          <div class="phone-brand">Samsung</div>
-          <div class="phone-model">Galaxy S24 Ultra</div>
-          <p class="phone-specs">512GB &middot; Titanium Violet &middot; S Pen &middot; Galaxy AI &middot; 200MP</p>
-          <div class="phone-foot">
-            <div class="phone-price">RD$79,900</div>
-            <span class="phone-cta">
-              Ver en tienda
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </span>
-          </div>
-        </div>
-      </a>
-
-      <a href="shop/product.html?p=macbook-air-m3-13" class="phone-card js-tilt">
-        <div class="phone-vis phone-vis-mbair">
-          <span class="phone-badge hot">Popular</span>
-          <svg class="phone-mock" viewBox="0 0 180 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="14" y="12" width="152" height="102" rx="8" fill="#1a1a1f" stroke="#2a2a30" stroke-width="1.5"/>
-            <rect x="20" y="18" width="140" height="90" rx="4" fill="url(#gMba)"/>
-            <rect x="6" y="114" width="168" height="8" rx="3" fill="#2a2a30"/>
-            <rect x="78" y="116" width="24" height="3" rx="1.5" fill="#0a0a0c"/>
-            <defs><linearGradient id="gMba" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2a2d3a"/><stop offset="1" stop-color="#0f1218"/></linearGradient></defs>
-          </svg>
-        </div>
-        <div class="phone-body">
-          <div class="phone-brand">Apple</div>
-          <div class="phone-model">MacBook Air M3 13"</div>
-          <p class="phone-specs">256GB &middot; Medianoche &middot; Chip M3 &middot; 18h bateria</p>
-          <div class="phone-foot">
-            <div class="phone-price">RD$85,500</div>
-            <span class="phone-cta">
-              Ver en tienda
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </span>
-          </div>
-        </div>
-      </a>
-
-      <a href="shop/product.html?p=airpods-pro-2" class="phone-card js-tilt">
-        <div class="phone-vis phone-vis-airpods">
-          <span class="phone-badge hot">Mas vendido</span>
-          <svg class="phone-mock" viewBox="0 0 160 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="38" y="30" width="84" height="64" rx="18" fill="url(#gAp)" stroke="#c5c5cc" stroke-width="1"/>
-            <rect x="74" y="94" width="12" height="16" rx="2" fill="#e5e5ea"/>
-            <circle cx="56" cy="62" r="6" fill="#0a0a0c" opacity=".3"/>
-            <circle cx="104" cy="62" r="6" fill="#0a0a0c" opacity=".3"/>
-            <defs><linearGradient id="gAp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5f5f7"/><stop offset="1" stop-color="#c5c5cc"/></linearGradient></defs>
-          </svg>
-        </div>
-        <div class="phone-body">
-          <div class="phone-brand">Apple</div>
-          <div class="phone-model">AirPods Pro (2da gen)</div>
-          <p class="phone-specs">USB-C &middot; Cancelacion activa &middot; Audio espacial &middot; Chip H2</p>
-          <div class="phone-foot">
-            <div class="phone-price">RD$14,500</div>
-            <span class="phone-cta">
-              Ver en tienda
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </span>
-          </div>
-        </div>
-      </a>
-
-      <a href="shop/product.html?p=sony-wh-1000xm5" class="phone-card js-tilt">
-        <div class="phone-vis phone-vis-sony">
-          <svg class="phone-mock" viewBox="0 0 160 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M30 80 Q30 40 80 40 Q130 40 130 80" stroke="#1a1a1f" stroke-width="10" fill="none" stroke-linecap="round"/>
-            <rect x="18" y="72" width="28" height="44" rx="10" fill="url(#gSony)"/>
-            <rect x="114" y="72" width="28" height="44" rx="10" fill="url(#gSony)"/>
-            <defs><linearGradient id="gSony" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a2a2a"/><stop offset="1" stop-color="#0a0a0a"/></linearGradient></defs>
-          </svg>
-        </div>
-        <div class="phone-body">
-          <div class="phone-brand">Sony</div>
-          <div class="phone-model">WH-1000XM5</div>
-          <p class="phone-specs">Over-ear &middot; Cancelacion lider &middot; 30h bateria &middot; LDAC</p>
-          <div class="phone-foot">
-            <div class="phone-price">RD$24,500</div>
-            <span class="phone-cta">
-              Ver en tienda
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </span>
-          </div>
-        </div>
-      </a>
-
-      <a href="shop/product.html?p=motorola-edge-50" class="phone-card js-tilt">
-        <div class="phone-vis phone-vis-moto">
-          <span class="phone-badge sale">Oferta</span>
-          <svg class="phone-mock" viewBox="0 0 120 220" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="8" y="4" width="104" height="212" rx="20" fill="#1a1a1f" stroke="#2a2a30" stroke-width="1.5"/>
-            <rect x="14" y="10" width="92" height="200" rx="14" fill="url(#gMoto)"/>
-            <circle cx="60" cy="18" r="2.5" fill="#0a0a0c"/>
-            <defs><linearGradient id="gMoto" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4a8a6f"/><stop offset="1" stop-color="#1a3a28"/></linearGradient></defs>
-          </svg>
-        </div>
-        <div class="phone-body">
-          <div class="phone-brand">Motorola</div>
-          <div class="phone-model">Edge 50 Fusion</div>
-          <p class="phone-specs">256GB &middot; Forest Blue &middot; 144Hz pOLED &middot; Camara 50MP</p>
-          <div class="phone-foot">
-            <div class="phone-price"><span class="phone-old">RD$38,900</span> RD$32,900</div>
-            <span class="phone-cta">
-              Ver en tienda
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </span>
-          </div>
-        </div>
-      </a>
-
-    </div>
+    <div class="phone-tiers" id="phoneTiers"></div>
 
     <!-- Shop promo band -->
     <div class="shop-promo" data-reveal>
@@ -1247,12 +1141,83 @@
   </div>
 </footer>
 
+<!-- Catalog (auto-sync from Google Sheets) -->
+<script src="shop/assets/products.js"></script>
+<script src="shop/assets/products-static.js"></script>
+<script src="shop/assets/products-overrides.js"></script>
+
 <!-- GSAP -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
 <script>
 gsap.registerPlugin(ScrollTrigger);
+
+/* ── Render phone tiers dynamically from catalog ── */
+(function renderPhoneTiers() {
+  var root = document.getElementById('phoneTiers');
+  if (!root || !window.PRODUCTS) return;
+  var fmt = function (n) { return 'RD$' + Number(n).toLocaleString('en-US'); };
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+    return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+  }); };
+
+  var phones = window.PRODUCTS.filter(function (p) {
+    return p && p.category === 'celulares' && p.image && p.price;
+  });
+  var byPriceDesc = function (a, b) { return (b.price || 0) - (a.price || 0); };
+
+  var alta = phones.filter(function (p) { return p.price >= 20000; }).sort(byPriceDesc).slice(0, 3);
+  var media = phones.filter(function (p) { return p.price >= 12000 && p.price < 20000; }).sort(byPriceDesc).slice(0, 3);
+  var esencial = phones.filter(function (p) { return p.price < 12000; }).sort(byPriceDesc).slice(0, 3);
+
+  var card = function (p, badgeText) {
+    var imgSrc = /^(https?:|\/\/)/.test(p.image) ? p.image : 'shop/' + p.image;
+    var grad = (p.gradient && p.gradient.length === 2) ? p.gradient : ['#2a2d3a', '#0f1218'];
+    var badgeClass = p.oldPrice ? 'sale' : 'hot';
+    var label = p.oldPrice ? 'Oferta' : (badgeText || '');
+    var badge = label ? '<span class="phone-badge ' + badgeClass + '">' + esc(label) + '</span>' : '';
+    var oldPrice = p.oldPrice ? '<span class="phone-old">' + fmt(p.oldPrice) + '</span> ' : '';
+    var visStyle = 'background: radial-gradient(circle at 30% 30%, ' + grad[0] + '55, rgba(6,8,15,.95));';
+    return ''
+      + '<a href="shop/product.html?p=' + encodeURIComponent(p.slug) + '" class="phone-card js-tilt">'
+      +   '<div class="phone-vis" style="' + visStyle + '">'
+      +     badge
+      +     '<img class="phone-mock-img" src="' + esc(imgSrc) + '" alt="' + esc(p.name) + '" loading="lazy"/>'
+      +   '</div>'
+      +   '<div class="phone-body">'
+      +     '<div class="phone-brand">' + esc(p.brand || '') + '</div>'
+      +     '<div class="phone-model">' + esc(p.name) + '</div>'
+      +     '<p class="phone-specs">' + esc(p.short || (p.specs || []).join(' · ')) + '</p>'
+      +     '<div class="phone-foot">'
+      +       '<div class="phone-price">' + oldPrice + fmt(p.price) + '</div>'
+      +       '<span class="phone-cta">Ver en tienda'
+      +         '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>'
+      +       '</span>'
+      +     '</div>'
+      +   '</div>'
+      + '</a>';
+  };
+
+  var tier = function (label, sub, items, badgeText) {
+    var body = items.length
+      ? items.map(function (p) { return card(p, badgeText); }).join('')
+      : '<div class="phone-tier-empty">Pronto agregamos modelos en este rango. Escríbenos por WhatsApp.</div>';
+    return ''
+      + '<div class="phone-tier">'
+      +   '<div class="phone-tier-head">'
+      +     '<span class="phone-tier-label">' + esc(label) + '</span>'
+      +     '<span class="phone-tier-sub">' + esc(sub) + '</span>'
+      +   '</div>'
+      +   body
+      + '</div>';
+  };
+
+  root.innerHTML =
+      tier('Alta gama', 'Lo mejor del mercado', alta, 'Premium')
+    + tier('Gama media', 'Menos de RD$20,000', media, 'Recomendado')
+    + tier('Esencial', 'Menos de RD$12,000', esencial, 'Mejor precio');
+})();
 
 /* ── Custom cursor ──────────────────────────────── */
 const cur = document.getElementById('cur');
@@ -1303,8 +1268,8 @@ gsap.to('.cat-card', {
 
 /* ── Phone cards stagger ────────────────────────── */
 gsap.to('.phone-card', {
-  opacity: 1, y: 0, stagger: .1, duration: .75, ease: 'power3.out',
-  scrollTrigger: { trigger: '.phone-grid', start: 'top 82%' }
+  opacity: 1, y: 0, stagger: .08, duration: .75, ease: 'power3.out',
+  scrollTrigger: { trigger: '.phone-tiers', start: 'top 82%' }
 });
 
 /* ── Why cards stagger ──────────────────────────── */
