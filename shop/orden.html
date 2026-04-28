@@ -276,6 +276,8 @@
 </footer>
 
 <script src="assets/products.js"></script>
+<script src="assets/products-static.js"></script>
+<script src="assets/products-overrides.js"></script>
 <script src="assets/cart.js"></script>
 <script>
 const ORDERS_KEY = 'platatech_orders_v1';
@@ -300,6 +302,12 @@ function modeLabel(mode) {
     : 'Efectivo (RD$) al recibir';
 }
 
+function deliveryLabel(mode) {
+  return mode === 'transferencia'
+    ? 'El mismo día · máx 24 horas'
+    : '1 a 3 días laborables';
+}
+
 /* Mensaje inicial para que nos envíen la orden (opcional — para que Plata Tech reciba el pedido) */
 function buildSendOrderMessage(order) {
   const lines = order.items.map(i =>
@@ -317,11 +325,14 @@ function buildSendOrderMessage(order) {
   const modeText = order.codeliveryMode === 'transferencia'
     ? 'Pago contra entrega - TRANSFERENCIA al recibir'
     : 'Pago contra entrega - EFECTIVO al recibir';
+  const slaText = order.codeliveryMode === 'transferencia'
+    ? 'Entrega: el mismo día (máximo 24 horas)'
+    : 'Entrega: 1 a 3 días laborables';
 
   return `Hola, acabo de colocar el pedido ${order.id} en Plata Tech Store.\n\n`
     + `Artículos:\n${lines}\n\n`
     + `${totalsBlock}\n\n`
-    + `${modeText}\n\n`
+    + `${modeText}\n${slaText}\n\n`
     + `Datos de entrega:\n`
     + `• Nombre: ${cust.name}\n`
     + `• Teléfono: ${cust.phone}\n`
@@ -401,8 +412,8 @@ function render() {
           <div class="totals-row">
             <span>ITBIS (18%)</span><span>${window.formatPrice(order.totals.itbis)}</span>
           </div>
-          <div class="totals-row">
-            <span>Envío</span><span>Se coordina por WhatsApp</span>
+          <div class="totals-row${order.codeliveryMode === 'transferencia' ? ' discount' : ''}">
+            <span>Entrega</span><span>${deliveryLabel(order.codeliveryMode)}</span>
           </div>
           <div class="totals-row total">
             <span>Total</span><span>${window.formatPrice(order.totals.total)}</span>

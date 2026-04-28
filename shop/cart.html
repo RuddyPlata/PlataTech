@@ -351,6 +351,8 @@
 </footer>
 
 <script src="assets/products.js"></script>
+<script src="assets/products-static.js"></script>
+<script src="assets/products-overrides.js"></script>
 <script src="assets/cart.js"></script>
 
 <!-- PayPal SDK -->
@@ -366,7 +368,7 @@ const PAYMENT_METHODS = [
   {
     id: 'online',
     name: 'Pago en línea',
-    sub: 'PayPal o tarjeta de crédito/débito',
+    sub: 'PayPal o tarjeta · Entrega 1 a 3 días',
     discount: false,
     icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>'
   },
@@ -381,9 +383,17 @@ const PAYMENT_METHODS = [
 
 /* Sub-opción para contra entrega */
 const CODELIVERY_MODES = [
-  { id: 'efectivo',      name: 'Efectivo',      sub: 'Pago en RD$ al momento de la entrega' },
-  { id: 'transferencia', name: 'Transferencia', sub: 'Popular · BHD · Banreservas al recibir' }
+  { id: 'efectivo',      name: 'Efectivo',      sub: 'Pago en RD$ al recibir · Entrega 1 a 3 días' },
+  { id: 'transferencia', name: 'Transferencia', sub: 'Popular · BHD · Banreservas · Entrega el mismo día (máx 24h)' }
 ];
+
+/* SLA de entrega segun forma de pago */
+function deliverySLA() {
+  if (paymentMethod === 'contra-entrega' && codeliveryMode === 'transferencia') {
+    return { text: 'El mismo día · máx 24h', fast: true };
+  }
+  return { text: '1 a 3 días laborables', fast: false };
+}
 
 let paymentMethod  = 'online';       // 'online' | 'contra-entrega'
 let codeliveryMode = 'efectivo';     // 'efectivo' | 'transferencia' (solo aplica si contra-entrega)
@@ -485,9 +495,9 @@ function render() {
           <span>ITBIS (18%)</span>
           <b>${window.formatPrice(totals.itbis)}</b>
         </div>
-        <div class="summary-row">
-          <span>Envío</span>
-          <b>Se coordina</b>
+        <div class="summary-row${deliverySLA().fast ? ' discount' : ''}">
+          <span>Entrega</span>
+          <b>${deliverySLA().text}</b>
         </div>
         <div class="summary-row summary-total">
           <span>Total</span>
@@ -554,7 +564,7 @@ function render() {
         <div id="payAction"></div>
 
         <div class="summary-note">
-          El envío dentro de Santo Domingo se coordina al confirmar el pedido (24-48h típicamente). Para entregas fuera del GSD, contactamos por WhatsApp. Facturamos con NCF a solicitud.
+          <strong>Tiempos de entrega:</strong> con tarjeta o PayPal entregamos en <strong>1 a 3 días laborables</strong>. Si pagas por transferencia te entregamos <strong>el mismo día (máximo 24 horas)</strong> dentro del GSD. Para entregas fuera del GSD coordinamos por WhatsApp. Facturamos con NCF a solicitud.
         </div>
 
         <div class="summary-actions">
@@ -628,8 +638,8 @@ function renderAction(totals) {
 
   /* Contra entrega → instrucciones + botón de colocar pedido */
   const instr = codeliveryMode === 'transferencia'
-    ? `<strong>Contra entrega con transferencia:</strong> llevamos tu pedido dentro del GSD, revisas el equipo con calma y pagas por transferencia al recibir. Al confirmar tu orden te contactamos por WhatsApp con los datos bancarios y el horario de entrega. Aplicamos un 10% de beneficio por pago directo.`
-    : `<strong>Contra entrega con efectivo:</strong> llevamos tu pedido dentro del GSD, revisas el equipo con calma y pagas en efectivo (RD$) al recibir. Al confirmar tu orden te contactamos por WhatsApp con el horario de entrega. Aplicamos un 10% de beneficio por pago directo.`;
+    ? `<strong>Contra entrega con transferencia · entrega el mismo día (máx 24h):</strong> llevamos tu pedido dentro del GSD, revisas el equipo con calma y pagas por transferencia al recibir. Al confirmar tu orden te contactamos por WhatsApp con los datos bancarios y coordinamos la entrega para el mismo día (máximo 24 horas). Aplicamos un 10% de beneficio por pago directo.`
+    : `<strong>Contra entrega con efectivo · entrega 1 a 3 días:</strong> llevamos tu pedido dentro del GSD, revisas el equipo con calma y pagas en efectivo (RD$) al recibir. Al confirmar tu orden te contactamos por WhatsApp con el horario de entrega (1 a 3 días laborables). Aplicamos un 10% de beneficio por pago directo.`;
 
   box.innerHTML = `
     <div class="pay-instructions">${instr}</div>
