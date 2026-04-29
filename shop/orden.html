@@ -324,8 +324,8 @@ async function getOrderById(id) {
   // 2. Fallback to Supabase (cross-device)
   if (window.SB) {
     try {
-      const { data, error } = await window.SB.from('orders').select('*').eq('id', id).maybeSingle();
-      if (!error && data) return rowToOrder(data);
+      const { data, error } = await window.SB.rpc('get_order_by_id', { p_id: id });
+      if (!error && data?.[0]) return rowToOrder(data[0]);
     } catch (e) { console.warn('Supabase lookup failed', e); }
   }
   return null;

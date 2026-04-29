@@ -200,9 +200,9 @@ function rowToOrder(r) {
 
 /* ── Supabase queries ──────────────────────────────── */
 async function sbLookup(id) {
-  const { data, error } = await window.SB.from('orders').select('*').eq('id', id).maybeSingle();
+  const { data, error } = await window.SB.rpc('get_order_by_id', { p_id: id });
   if (error) { console.error(error); return null; }
-  return rowToOrder(data);
+  return data?.[0] ? rowToOrder(data[0]) : null;
 }
 
 async function sbGetAll() {
