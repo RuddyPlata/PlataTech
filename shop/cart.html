@@ -838,29 +838,64 @@ async function placeOrder(totals) {
   location.href = `orden.html?n=${encodeURIComponent(order.id)}`;
 }
 
-const PP_FAIL_KEY = 'pp_fail_count';
-const PP_FAIL_MAX = 2;
+const PP_BLOCK_LS = 'pp_blocked_v1';  // localStorage — persists across tabs/restarts
+let ppIsBlocked = localStorage.getItem(PP_BLOCK_LS) === '1';
 
-function ppFails() { return parseInt(sessionStorage.getItem(PP_FAIL_KEY) || '0'); }
-function ppAddFail() {
-  const n = ppFails() + 1;
-  sessionStorage.setItem(PP_FAIL_KEY, n);
-  return n;
-}
 function ppBlockedHtml() {
-  return `<div style="background:#fef2f2;border:1.5px solid #fecaca;border-radius:12px;padding:1.1rem 1.25rem;text-align:center;font-size:.88rem;color:#991b1b;line-height:1.55">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto .5rem;display:block"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
-    <b>Pago bloqueado temporalmente.</b><br/>
-    Detectamos multiples intentos fallidos en esta sesion.<br/>
-    Coordina tu pedido por <a href="https://wa.me/18494950959" target="_blank" style="color:#991b1b;font-weight:700">WhatsApp</a> o intenta con contra-entrega.
+  return `<div style="background:#fef2f2;border:1.5px solid #fecaca;border-radius:12px;padding:1.25rem;text-align:center;font-size:.88rem;color:#991b1b;line-height:1.6">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto .55rem;display:block"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+    <b>Pagos bloqueados desde este dispositivo.</b><br/>
+    Se detectaron multiples intentos fallidos.<br/>
+    Coordina tu pedido por <a href="https://wa.me/18494950959" target="_blank" style="color:#991b1b;font-weight:700">WhatsApp</a> o usa contra-entrega.
   </div>`;
 }
 
-function renderPayPal(totals) {
+// Check block status against server (real IP check via Edge Function)
+async function ppCheckBlock() {
+  if (ppIsBlocked) return true;
+  try {
+    const { data } = await window.SB.functions.invoke('payment-guard', {
+      body: { action: 'check' }
+    });
+    if (data?.blocked) {
+      ppIsBlocked = true;
+      localStorage.setItem(PP_BLOCK_LS, '1');
+    }
+    return !!data?.blocked;
+  } catch (e) {
+    return false; // fail open — don't block on network error
+  }
+}
+
+// Record a PayPal failure server-side (by real IP) + locally
+async function ppRecordFail() {
+  localStorage.setItem(PP_BLOCK_LS + '_fails',
+    String((parseInt(localStorage.getItem(PP_BLOCK_LS + '_fails') || '0')) + 1));
+  try {
+    const { data } = await window.SB.functions.invoke('payment-guard', {
+      body: { action: 'fail', ua: navigator.userAgent.substring(0, 250) }
+    });
+    if (data?.blocked) {
+      ppIsBlocked = true;
+      localStorage.setItem(PP_BLOCK_LS, '1');
+    }
+    return data || { fails: 1, blocked: false };
+  } catch (e) {
+    const localFails = parseInt(localStorage.getItem(PP_BLOCK_LS + '_fails') || '1');
+    if (localFails >= 2) {
+      ppIsBlocked = true;
+      localStorage.setItem(PP_BLOCK_LS, '1');
+    }
+    return { fails: localFails, blocked: ppIsBlocked };
+  }
+}
+
+async function renderPayPal(totals) {
   const container = document.getElementById('paypalButtonsCart');
   if (!container) return;
 
-  if (ppFails() >= PP_FAIL_MAX) {
+  const blocked = await ppCheckBlock();
+  if (blocked) {
     container.innerHTML = ppBlockedHtml();
     return;
   }
@@ -970,20 +1005,13 @@ function renderPayPal(totals) {
         });
       },
 
-      onError: function(err) {
+      onError: async function(err) {
         console.error('PayPal error:', err);
-        const fails = ppAddFail();
-        if (fails >= PP_FAIL_MAX) {
+        const result = await ppRecordFail();
+        if (result.blocked || ppIsBlocked) {
           container.innerHTML = ppBlockedHtml();
-          if (window.SB) {
-            window.SB.from('payment_blocks').insert({
-              reason: 'consecutive_declines',
-              attempts: fails,
-              ua: navigator.userAgent.substring(0, 200)
-            }).then(() => {});
-          }
         } else {
-          alert(`Hubo un problema con el pago (intento ${fails} de ${PP_FAIL_MAX}). Verifica tu tarjeta e intenta de nuevo.`);
+          alert(`Hubo un problema con el pago (intento ${result.fails} de 2). Verifica tu tarjeta e intenta de nuevo o usa contra-entrega.`);
         }
       }
     }).render('#paypalButtonsCart');
