@@ -198,7 +198,8 @@ def apply_margin(cost: int, category: str) -> int:
     Categoria seguridad -> +25%
     """
     if category == 'seguridad':
-        return int(round(cost * 1.25))
+        rate = 1.25 if cost < 10000 else 1.15
+        return int(round(cost * rate))
     if cost < 2500:
         return cost + 1000
     if cost < 15000:
