@@ -843,10 +843,20 @@ function renderPayPal(totals) {
   container.innerHTML = '';
 
   if (typeof paypal === 'undefined' || !window.paypal || !window.paypal.Buttons) {
-    container.innerHTML = `<div class="paypal-placeholder">
-      <b>PayPal no configurado.</b> Reemplaza <code>YOUR_PAYPAL_CLIENT_ID</code> en el script de PayPal.
-      Obtenlo gratis en <a href="https://developer.paypal.com" target="_blank">developer.paypal.com</a>.
-    </div>`;
+    // SDK still loading — retry up to 5 times every 800ms
+    let tries = 0;
+    const wait = setInterval(() => {
+      tries++;
+      if (window.paypal && window.paypal.Buttons) {
+        clearInterval(wait);
+        renderPayPal(totals);
+      } else if (tries >= 5) {
+        clearInterval(wait);
+        container.innerHTML = `<div class="paypal-placeholder">
+          <b>No se pudo cargar PayPal.</b> Verifica tu conexión o <a href="https://wa.me/18494950959" target="_blank">coordina por WhatsApp</a>.
+        </div>`;
+      }
+    }, 800);
     return;
   }
 
