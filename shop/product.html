@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.paypal.com https://maps.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://*.supabase.co https://open.er-api.com https://maps.googleapis.com https://maps.gstatic.com; object-src 'none'; base-uri 'self';"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>Producto - Plata Tech Store</title>
 <meta name="description" content="Tecnología original con garantía y soporte. Plata Tech Solutions S.R.L. - Tienda oficial en Santo Domingo, RD."/>
@@ -334,8 +335,8 @@ if (!product) {
     <div class="crumbs">
       <div class="container">
         <a href="index.html">Tienda</a><span>›</span>
-        <a href="index.html?cat=${product.category}">${catName}</a><span>›</span>
-        ${product.name}
+        <a href="index.html?cat=${escapeHtml(product.category)}">${escapeHtml(catName)}</a><span>›</span>
+        ${escapeHtml(product.name)}
       </div>
     </div>
 
@@ -345,16 +346,16 @@ if (!product) {
           <div class="product-showcase" id="showcase"></div>
 
           <div class="product-info">
-            <div class="product-info-brand">${product.brand}</div>
-            <h1 class="product-info-name">${product.name}</h1>
-            <div class="product-info-variant">${product.variant || ''}</div>
+            <div class="product-info-brand">${escapeHtml(product.brand)}</div>
+            <h1 class="product-info-name">${escapeHtml(product.name)}</h1>
+            <div class="product-info-variant">${escapeHtml(product.variant || '')}</div>
 
             <div class="product-info-price">
               ${product.oldPrice ? `<span class="product-info-price-old">${window.formatPrice(product.oldPrice)}</span>` : ''}
               <span class="product-info-price-now">${window.formatPrice(product.price)}</span>
             </div>
 
-            <p class="product-info-short">${product.short}</p>
+            <p class="product-info-short">${escapeHtml(product.short)}</p>
 
             <div class="product-stock ${product.stock <= 3 ? 'low' : ''}">${stockLabel}</div>
 
@@ -381,7 +382,7 @@ if (!product) {
             <div class="specs-block">
               <h3 class="specs-title">Especificaciones</h3>
               <ul class="specs-list">
-                ${product.specs.map(s => `<li>${s}</li>`).join('')}
+                ${product.specs.map(s => `<li>${escapeHtml(s)}</li>`).join('')}
               </ul>
             </div>
 
@@ -461,10 +462,19 @@ if (!product) {
   }
 
   /* PayPal Buttons — single product quick checkout */
-  /* Approx conversion RD$ → USD at ~60:1 (update with real rate).
-     For production, handle currency server-side via API exchange rate. */
   const RD_TO_USD = 60;
   const usdPrice = (product.price / RD_TO_USD).toFixed(2);
+
+  function generateOrderNumber() {
+    const d = new Date();
+    const yy = String(d.getFullYear()).slice(-2);
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    const arr = new Uint32Array(1);
+    crypto.getRandomValues(arr);
+    const hex = (arr[0] & 0xFFFFFF).toString(16).toUpperCase().padStart(6, '0');
+    return `PT-${yy}${mm}${dd}-${hex}`;
+  }
 
   if (typeof paypal !== 'undefined' && window.paypal && window.paypal.Buttons) {
     try {
@@ -480,12 +490,41 @@ if (!product) {
             custom_id: product.slug
           }]
         }),
-        onApprove: (data, actions) => actions.order.capture().then(details => {
-          alert('Pago exitoso. Gracias, ' + details.payer.name.given_name + '. Recibirás un correo con los detalles.');
+        onApprove: async (data, actions) => {
+          const details = await actions.order.capture();
+          const qty = Math.max(1, +qtyVal.value);
+          const orderId = generateOrderNumber();
+          const captured = details.purchase_units?.[0]?.amount?.value || (usdPrice * qty).toFixed(2);
+
+          const order = {
+            id: orderId,
+            status: 'pagado',
+            payment_method: 'paypal',
+            paypal_order_id: details.id,
+            paypal_payer: details.payer?.email_address || '',
+            paypal_amount_usd: parseFloat(captured),
+            exchange_rate: RD_TO_USD,
+            customer: {
+              name: `${details.payer?.name?.given_name || ''} ${details.payer?.name?.surname || ''}`.trim(),
+              email: details.payer?.email_address || '',
+              phone: '', address: '', sector: '',
+              notes: 'Orden rápida desde página de producto'
+            },
+            items: [{ slug: product.slug, name: product.name, variant: product.variant || '', qty, price: product.price, subtotal: product.price * qty }],
+            totals: { subtotal: product.price * qty, discount: 0, subtotalNet: product.price * qty, itbis: 0, total: product.price * qty, itemCount: qty }
+          };
+
+          if (window.SB) {
+            await window.SB.from('orders').insert(order).catch(e => console.error('order save error', e));
+          }
+
           window.Cart.remove(product.slug);
-          location.href = 'index.html';
-        }),
-        onError: err => alert('Error en el pago: ' + err)
+          location.href = `orden.html?n=${encodeURIComponent(orderId)}`;
+        },
+        onError: err => {
+          console.error('PayPal error:', err);
+          alert('Hubo un error al procesar el pago. Por favor intenta de nuevo o contáctanos por WhatsApp.');
+        }
       }).render('#paypalButtons');
     } catch (e) {
       document.getElementById('paypalButtons').innerHTML = `

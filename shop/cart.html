@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.paypal.com https://maps.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://*.supabase.co https://open.er-api.com https://maps.googleapis.com https://maps.gstatic.com; object-src 'none'; base-uri 'self';"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>Carrito - Plata Tech Store</title>
 <link rel="icon" type="image/x-icon" href="../images/pt.ico"/>
@@ -392,6 +393,9 @@
 <script src="assets/sb.js"></script>
 <script src="assets/custom-products.js"></script>
 
+<!-- Clickjacking protection (frame-busting) -->
+<script>if (self !== top) { top.location = self.location; }</script>
+
 <!-- PayPal SDK -->
 <script src="https://www.paypal.com/sdk/js?client-id=Aawkw19CboHF0mf8LQKMpu8qsdxx_Lue-ioCF-2KhBmZGhDOSgCXCSU7xDG6D_j09tELCWeVZ8w7y1ME&currency=USD&components=buttons"></script>
 
@@ -741,8 +745,10 @@ function generateOrderNumber() {
   const yy = String(d.getFullYear()).slice(-2);
   const mm = String(d.getMonth() + 1).padStart(2, '0');
   const dd = String(d.getDate()).padStart(2, '0');
-  const rnd = Math.floor(1000 + Math.random() * 9000);
-  return `PT-${yy}${mm}${dd}-${rnd}`;
+  const arr = new Uint32Array(1);
+  crypto.getRandomValues(arr);
+  const hex = (arr[0] & 0xFFFFFF).toString(16).toUpperCase().padStart(6, '0');
+  return `PT-${yy}${mm}${dd}-${hex}`;
 }
 
 async function saveOrder(order) {
@@ -838,55 +844,43 @@ async function placeOrder(totals) {
   location.href = `orden.html?n=${encodeURIComponent(order.id)}`;
 }
 
-const PP_BLOCK_LS = 'pp_blocked_v1';  // localStorage — persists across tabs/restarts
-let ppIsBlocked = localStorage.getItem(PP_BLOCK_LS) === '1';
+let ppIsBlocked = false; // always re-verified server-side on each load
 
 function ppBlockedHtml() {
   return `<div style="background:#fef2f2;border:1.5px solid #fecaca;border-radius:12px;padding:1.25rem;text-align:center;font-size:.88rem;color:#991b1b;line-height:1.6">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto .55rem;display:block"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
     <b>Pagos bloqueados desde este dispositivo.</b><br/>
-    Se detectaron multiples intentos fallidos.<br/>
+    Se detectaron múltiples intentos fallidos.<br/>
     Coordina tu pedido por <a href="https://wa.me/18494950959" target="_blank" style="color:#991b1b;font-weight:700">WhatsApp</a> o usa contra-entrega.
   </div>`;
 }
 
-// Check block status against server (real IP check via Edge Function)
+// Check block status — always asks server (real IP); fail CLOSED on network error
 async function ppCheckBlock() {
   if (ppIsBlocked) return true;
   try {
     const { data } = await window.SB.functions.invoke('payment-guard', {
       body: { action: 'check' }
     });
-    if (data?.blocked) {
-      ppIsBlocked = true;
-      localStorage.setItem(PP_BLOCK_LS, '1');
-    }
+    if (data?.blocked) ppIsBlocked = true;
     return !!data?.blocked;
   } catch (e) {
-    return false; // fail open — don't block on network error
+    ppIsBlocked = true; // fail closed — if guard unreachable, block PayPal
+    return true;
   }
 }
 
-// Record a PayPal failure server-side (by real IP) + locally
+// Record a PayPal failure server-side (by real IP)
 async function ppRecordFail() {
-  localStorage.setItem(PP_BLOCK_LS + '_fails',
-    String((parseInt(localStorage.getItem(PP_BLOCK_LS + '_fails') || '0')) + 1));
   try {
     const { data } = await window.SB.functions.invoke('payment-guard', {
       body: { action: 'fail', ua: navigator.userAgent.substring(0, 250) }
     });
-    if (data?.blocked) {
-      ppIsBlocked = true;
-      localStorage.setItem(PP_BLOCK_LS, '1');
-    }
+    if (data?.blocked) ppIsBlocked = true;
     return data || { fails: 1, blocked: false };
   } catch (e) {
-    const localFails = parseInt(localStorage.getItem(PP_BLOCK_LS + '_fails') || '1');
-    if (localFails >= 2) {
-      ppIsBlocked = true;
-      localStorage.setItem(PP_BLOCK_LS, '1');
-    }
-    return { fails: localFails, blocked: ppIsBlocked };
+    ppIsBlocked = true; // fail closed on network error
+    return { fails: 1, blocked: true };
   }
 }
 

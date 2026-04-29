@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.paypal.com https://maps.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://*.supabase.co https://open.er-api.com https://maps.googleapis.com https://maps.gstatic.com; object-src 'none'; base-uri 'self';"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>Orden confirmada - Plata Tech Store</title>
 <link rel="icon" type="image/x-icon" href="../images/pt.ico"/>
@@ -415,7 +416,7 @@ async function render() {
   const sendMsg   = encodeURIComponent(buildSendOrderMessage(order));
   const askMsg    = encodeURIComponent(buildInquiryMessage(order));
 
-  const isPaid = order.status === 'pagado' || new URLSearchParams(location.search).get('paid') === '1';
+  const isPaid = order.status === 'pagado';
 
   root.innerHTML = `
     <div class="order-hero">
@@ -429,7 +430,7 @@ async function render() {
       }</p>
       <div class="order-number-box">
         <span class="order-number-label">Nº de orden</span>
-        <span class="order-number" id="ordNum">${order.id}</span>
+        <span class="order-number" id="ordNum">${escapeHtml(order.id)}</span>
         <button class="copy-btn" id="copyBtn" aria-label="Copiar">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
         </button>
@@ -475,24 +476,24 @@ async function render() {
         <h2>Datos de entrega</h2>
         <div class="info-row">
           <div class="info-label">Nombre</div>
-          <div class="info-value">${order.customer.name}</div>
+          <div class="info-value">${escapeHtml(order.customer.name)}</div>
         </div>
         <div class="info-row">
           <div class="info-label">Teléfono</div>
-          <div class="info-value">${order.customer.phone}</div>
+          <div class="info-value">${escapeHtml(order.customer.phone)}</div>
         </div>
         <div class="info-row">
           <div class="info-label">Dirección</div>
-          <div class="info-value">${order.customer.address}</div>
+          <div class="info-value">${escapeHtml(order.customer.address)}</div>
         </div>
         <div class="info-row">
           <div class="info-label">Sector</div>
-          <div class="info-value">${order.customer.sector}</div>
+          <div class="info-value">${escapeHtml(order.customer.sector)}</div>
         </div>
         ${order.customer.notes ? `
         <div class="info-row">
           <div class="info-label">Notas</div>
-          <div class="info-value">${order.customer.notes}</div>
+          <div class="info-value">${escapeHtml(order.customer.notes)}</div>
         </div>` : ''}
         <div class="info-row">
           <div class="info-label">Método</div>
@@ -505,7 +506,7 @@ async function render() {
         ${order.paypalOrderId ? `
         <div class="info-row">
           <div class="info-label">PayPal ID</div>
-          <div class="info-value" style="font-family:monospace;font-size:.82rem">${order.paypalOrderId}</div>
+          <div class="info-value" style="font-family:monospace;font-size:.82rem">${escapeHtml(order.paypalOrderId)}</div>
         </div>
         <div class="info-row">
           <div class="info-label">Cobrado</div>
@@ -528,7 +529,7 @@ async function render() {
         </a>
       </div>
       <p style="margin-top:1.5rem; font-size:.78rem; opacity:.8;">
-        Menciona siempre tu número <strong style="color:#fff;">${order.id}</strong> cuando nos escribas.
+        Menciona siempre tu número <strong style="color:#fff;">${escapeHtml(order.id)}</strong> cuando nos escribas.
       </p>
     </div>
 
