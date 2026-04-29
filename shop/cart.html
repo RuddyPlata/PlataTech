@@ -974,9 +974,9 @@ window.addEventListener('cart:change', render);
 })();
 </script>
 
+<script src="assets/config.js"></script>
 <script>
-// Google Maps picker — initialized lazily when user clicks the button
-const GMAPS_KEY = 'AIzaSyAByeccvBa2u-VdhmGhyTIrTsRSJdekBTs';
+// Google Maps picker — key loaded from assets/config.js (gitignored)
 let mapsLoaded = false;
 let mapInstance = null;
 let markerInstance = null;
@@ -986,7 +986,7 @@ function loadMapsScript() {
     if (window.google && window.google.maps) { resolve(); return; }
     window._mapsReady = resolve;
     const s = document.createElement('script');
-    s.src = `https://maps.googleapis.com/maps/api/js?key=${GMAPS_KEY}&callback=_mapsReady&loading=async`;
+    s.src = `https://maps.googleapis.com/maps/api/js?key=${window.GMAPS_KEY}&callback=_mapsReady&loading=async`;
     s.async = true; s.defer = true;
     document.head.appendChild(s);
   });
