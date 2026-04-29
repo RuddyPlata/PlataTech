@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Admin — Plata Tech Store</title>
+<link rel="icon" type="image/x-icon" href="../images/favicon-pt.ico"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#f0f2f7;font-family:'Inter',sans-serif;color:#0d1117;min-height:100vh}
+:root{
+  --ink:#0d1117;--ink-2:#4b5563;--ink-3:#9ca3af;
+  --blue:#1447ff;--blue-t:rgba(20,71,255,.08);
+  --border:#e5e7eb;--white:#ffffff;--off:#f9fafb;
+  --navy:#0f172a;
+}
+
+/* ── Gate ──────────────────────────────────────────── */
+.gate-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);padding:1.5rem}
+.gate-card{background:var(--white);border-radius:20px;padding:2.5rem 2rem;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,.28)}
+.gate-brand{display:flex;align-items:center;gap:.75rem;margin-bottom:2rem}
+.gate-brand img{width:38px;height:38px}
+.gate-brand-name{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:1.05rem;line-height:1.1}
+.gate-brand-sub{font-size:.68rem;color:var(--ink-3);font-weight:500;text-transform:uppercase;letter-spacing:.08em}
+.gate-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.55rem;font-weight:800;margin-bottom:.3rem}
+.gate-sub{color:var(--ink-2);font-size:.88rem;margin-bottom:1.75rem}
+.gate-field{display:flex;flex-direction:column;gap:.32rem;margin-bottom:1rem}
+.gate-field label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-2)}
+.gate-field input{padding:.8rem 1rem;border:1.5px solid var(--border);border-radius:10px;font:inherit;font-size:.9rem;color:var(--ink);outline:none;transition:border-color .2s}
+.gate-field input:focus{border-color:var(--blue)}
+.gate-field input.err{border-color:#ef4444;animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-4px)}40%,80%{transform:translateX(4px)}}
+.gate-btn{width:100%;padding:.9rem;border-radius:12px;background:var(--ink);color:var(--white);font:inherit;font-size:.95rem;font-weight:700;border:0;cursor:pointer;transition:background .2s;margin-top:.5rem}
+.gate-btn:hover{background:var(--blue)}
+.gate-btn:disabled{opacity:.55;cursor:not-allowed}
+.gate-err{color:#b91c1c;font-size:.82rem;margin-top:.75rem;text-align:center}
+
+/* ── Layout ─────────────────────────────────────────── */
+.adm-layout{display:flex;min-height:100vh}
+.adm-sidebar{width:224px;background:var(--navy);flex-shrink:0;display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;transition:transform .25s}
+.adm-main{margin-left:224px;flex:1;min-height:100vh;display:flex;flex-direction:column}
+
+/* Sidebar */
+.adm-sidebar-top{padding:1.4rem 1.25rem 1rem;border-bottom:1px solid rgba(255,255,255,.07)}
+.adm-brand{display:flex;align-items:center;gap:.65rem}
+.adm-brand img{width:30px;height:30px;filter:brightness(10);opacity:.9}
+.adm-brand-name{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:.92rem;color:var(--white);line-height:1.15}
+.adm-brand-sub{font-size:.64rem;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:.1em}
+.adm-nav{flex:1;padding:.85rem 0;overflow-y:auto}
+.adm-nav-label{padding:.4rem 1.25rem .2rem;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.22);margin-top:.5rem}
+.adm-nav-item{display:flex;align-items:center;gap:.65rem;padding:.62rem 1rem;margin:.08rem .5rem;border-radius:10px;font-size:.84rem;font-weight:500;color:rgba(255,255,255,.5);cursor:pointer;transition:background .15s,color .15s;border:0;background:0;width:calc(100% - 1rem);text-align:left}
+.adm-nav-item svg{opacity:.65;flex-shrink:0}
+.adm-nav-item:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.85)}
+.adm-nav-item.active{background:rgba(20,71,255,.28);color:var(--white)}
+.adm-nav-item.active svg{opacity:1}
+.adm-nav-badge{margin-left:auto;background:rgba(255,255,255,.12);color:rgba(255,255,255,.55);font-size:.64rem;font-weight:700;padding:.14rem .45rem;border-radius:100px}
+.adm-nav-item.active .adm-nav-badge{background:rgba(255,255,255,.22);color:var(--white)}
+.adm-sidebar-bottom{padding:1rem .5rem;border-top:1px solid rgba(255,255,255,.07)}
+.adm-store-link{display:flex;align-items:center;gap:.65rem;padding:.6rem .75rem;border-radius:10px;font-size:.8rem;font-weight:500;color:rgba(255,255,255,.38);text-decoration:none;transition:background .15s,color .15s;margin-bottom:.2rem}
+.adm-store-link:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.75)}
+.adm-logout-btn{display:flex;align-items:center;gap:.65rem;padding:.6rem .75rem;border-radius:10px;font-size:.8rem;font-weight:500;color:rgba(255,255,255,.38);cursor:pointer;border:0;background:0;width:100%;text-align:left;transition:background .15s,color .15s}
+.adm-logout-btn:hover{background:rgba(239,68,68,.15);color:#f87171}
+
+/* Mobile topbar */
+.mob-topbar{display:none;background:var(--navy);padding:.85rem 1.25rem;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.mob-brand{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:1rem;color:var(--white)}
+.mob-ham{background:0;border:0;color:var(--white);cursor:pointer;padding:.25rem}
+.adm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99}
+
+/* Topbar */
+.adm-topbar{background:var(--white);border-bottom:1px solid var(--border);padding:.9rem 1.75rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-shrink:0;position:sticky;top:0;z-index:10}
+.adm-topbar h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.2rem;font-weight:800}
+.adm-topbar-right{display:flex;align-items:center;gap:.6rem}
+.icon-btn{padding:.42rem .8rem;border-radius:100px;font:inherit;font-size:.76rem;font-weight:600;color:var(--ink-2);background:var(--off);border:1px solid var(--border);cursor:pointer;transition:background .2s;display:flex;align-items:center;gap:.4rem}
+.icon-btn:hover{background:var(--border)}
+
+/* Content */
+.adm-content{flex:1;padding:1.6rem}
+
+/* Spinner */
+.spin-wrap{display:flex;justify-content:center;align-items:center;padding:5rem}
+.spin-wrap::after{content:'';width:34px;height:34px;border-radius:50%;border:3px solid var(--border);border-top-color:var(--blue);animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* Stat cards */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:1rem;margin-bottom:1.75rem}
+.stat-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:1.2rem}
+.stat-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:.8rem}
+.stat-val{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.6rem;font-weight:800;line-height:1;margin-bottom:.2rem}
+.stat-label{font-size:.73rem;color:var(--ink-3);font-weight:500}
+.stat-sub{font-size:.7rem;color:var(--ink-3);margin-top:.35rem}
+
+/* Table wrapper */
+.tbl-wrap{background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.tbl-head{padding:.9rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:.75rem;flex-wrap:wrap}
+.tbl-head h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:.9rem;font-weight:700}
+.tbl-head-right{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.tbl-pills{padding:.55rem 1.25rem;border-bottom:1px solid var(--border);display:flex;gap:.3rem;flex-wrap:wrap}
+.pill{padding:.32rem .7rem;border-radius:100px;font-size:.73rem;font-weight:600;background:var(--off);border:1px solid var(--border);color:var(--ink-2);cursor:pointer;transition:background .15s,color .15s,border-color .15s}
+.pill:hover{color:var(--ink);border-color:var(--ink-3)}
+.pill.active{background:var(--ink);color:var(--white);border-color:var(--ink)}
+.srch{position:relative}
+.srch input{padding:.46rem .85rem .46rem 2rem;border:1.5px solid var(--border);border-radius:10px;font:inherit;font-size:.8rem;color:var(--ink);background:var(--off);outline:none;transition:border-color .2s;width:210px}
+.srch input:focus{border-color:var(--blue);background:var(--white)}
+.srch svg{position:absolute;left:.6rem;top:50%;transform:translateY(-50%);color:var(--ink-3);pointer-events:none}
+
+table.t{width:100%;border-collapse:separate;border-spacing:0}
+table.t th{font-family:'Space Grotesk',sans-serif;font-size:.63rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);padding:.75rem 1rem;background:var(--off);border-bottom:1px solid var(--border);text-align:left;white-space:nowrap}
+table.t td{padding:.65rem 1rem;font-size:.82rem;color:var(--ink);border-bottom:1px solid var(--border);vertical-align:middle}
+table.t tr:last-child td{border-bottom:0}
+table.t tr:hover td{background:rgba(20,71,255,.018)}
+.t-empty{text-align:center;padding:3.5rem 1rem;color:var(--ink-3);font-size:.9rem}
+
+/* Status */
+.s-pill{display:inline-block;padding:.2rem .58rem;border-radius:100px;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+.s-pendiente{background:#fffbe6;color:#8a6d10;border:1px solid rgba(212,162,74,.3)}
+.s-pagado{background:#ecfdf5;color:#065f46;border:1px solid rgba(5,150,105,.2)}
+.s-contactado{background:#e0f2fe;color:#0369a1;border:1px solid rgba(3,105,161,.2)}
+.s-encamino{background:#fef3c7;color:#92400e;border:1px solid rgba(217,119,6,.2)}
+.s-entregado{background:#ecfdf5;color:#065f46;border:1px solid rgba(5,150,105,.2)}
+.s-cancelado{background:#fef2f2;color:#991b1b;border:1px solid rgba(185,28,28,.2)}
+
+.oid{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.79rem;color:var(--blue);cursor:pointer;white-space:nowrap}
+.oid:hover{text-decoration:underline}
+.status-sel{font:inherit;font-size:.76rem;font-weight:600;padding:.28rem .5rem;border-radius:8px;border:1.5px solid var(--border);background:var(--white);color:var(--ink);cursor:pointer;outline:none;transition:border-color .2s}
+.status-sel:focus{border-color:var(--blue)}
+
+/* Products */
+.prod-thumb{width:42px;height:42px;border-radius:8px;object-fit:cover;border:1px solid var(--border);flex-shrink:0}
+.prod-thumb-ph{width:42px;height:42px;border-radius:8px;border:1px solid var(--border);background:var(--off);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--ink-3)}
+.pub-yes{display:inline-block;padding:.18rem .52rem;border-radius:100px;font-size:.68rem;font-weight:700;background:#ecfdf5;color:#065f46;border:1px solid rgba(5,150,105,.2)}
+.pub-no{display:inline-block;padding:.18rem .52rem;border-radius:100px;font-size:.68rem;font-weight:700;background:#fef2f2;color:#991b1b;border:1px solid rgba(185,28,28,.2)}
+.act-btn{padding:.28rem .6rem;border-radius:8px;font:inherit;font-size:.73rem;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--off);color:var(--ink);transition:background .15s,color .15s}
+.act-btn:hover{background:var(--blue-t);border-color:var(--blue);color:var(--blue)}
+.act-btn.del:hover{background:#fef2f2;border-color:#fecaca;color:#b91c1c}
+.act-btn.primary{background:var(--ink);color:var(--white);border-color:var(--ink)}
+.act-btn.primary:hover{background:var(--blue);border-color:var(--blue);color:var(--white)}
+
+/* Drawer form */
+.drawer{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1.25rem}
+.drawer h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:1rem;font-weight:800;margin-bottom:1.1rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem 1.1rem}
+.form-field{display:flex;flex-direction:column;gap:.3rem}
+.form-field.full{grid-column:1/-1}
+.form-field label{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-3)}
+.form-field input,.form-field select,.form-field textarea{padding:.62rem .88rem;border:1.5px solid var(--border);border-radius:10px;font:inherit;font-size:.87rem;color:var(--ink);background:var(--off);outline:none;transition:border-color .2s}
+.form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:var(--blue);background:var(--white)}
+.form-field textarea{resize:vertical;min-height:74px}
+.slug-hint{font-size:.7rem;color:var(--ink-3);font-family:monospace;margin-top:.2rem}
+.form-check{display:flex;align-items:center;gap:.45rem;font-size:.87rem;font-weight:500;cursor:pointer}
+.form-check input[type=checkbox]{width:15px;height:15px;accent-color:var(--blue);cursor:pointer}
+.form-actions{display:flex;gap:.6rem;margin-top:1rem;align-items:center;flex-wrap:wrap}
+.save-btn{padding:.62rem 1.35rem;border-radius:10px;font:inherit;font-size:.87rem;font-weight:700;background:var(--ink);color:var(--white);border:0;cursor:pointer;transition:background .2s}
+.save-btn:hover{background:var(--blue)}
+.save-btn:disabled{opacity:.55;cursor:not-allowed}
+.cancel-btn{padding:.62rem 1.1rem;border-radius:10px;font:inherit;font-size:.87rem;font-weight:600;background:var(--off);color:var(--ink-2);border:1px solid var(--border);cursor:pointer}
+.cancel-btn:hover{background:var(--border)}
+
+/* Image upload */
+.img-drop{border:2px dashed var(--border);border-radius:12px;padding:1.1rem;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;background:var(--off)}
+.img-drop:hover,.img-drop.drag{border-color:var(--blue);background:var(--blue-t)}
+.img-drop input[type=file]{display:none}
+.img-drop-lbl{font-size:.8rem;color:var(--ink-3);line-height:1.5}
+.img-drop-lbl strong{color:var(--blue)}
+.img-preview{width:100%;max-height:150px;object-fit:cover;border-radius:8px;border:1px solid var(--border);display:none;margin-top:.65rem}
+.img-prog{font-size:.76rem;margin-top:.45rem;display:none}
+
+/* Feedback */
+.fb-grid{display:flex;flex-direction:column;gap:.65rem}
+.fb-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:1rem 1.25rem;display:flex;gap:1rem;align-items:flex-start}
+.fb-comment{font-size:.84rem;color:var(--ink);line-height:1.55;margin-top:.5rem}
+.fb-meta{margin-left:auto;text-align:right;flex-shrink:0}
+.fb-meta-id{font-family:'Space Grotesk',sans-serif;font-size:.7rem;font-weight:700;color:var(--blue)}
+.fb-meta-date{font-size:.68rem;color:var(--ink-3);margin-top:.2rem}
+.fb-rec{display:inline-flex;align-items:center;gap:.3rem;padding:.18rem .5rem;border-radius:100px;font-size:.67rem;font-weight:700}
+.fb-rec.yes{background:#ecfdf5;color:#065f46;border:1px solid rgba(5,150,105,.2)}
+.fb-rec.no{background:#fef2f2;color:#991b1b;border:1px solid rgba(185,28,28,.2)}
+.star-row{display:flex;align-items:center;gap:.2rem}
+
+/* Responsive */
+@media(max-width:768px){
+  .adm-sidebar{transform:translateX(-100%)}
+  .adm-sidebar.open{transform:translateX(0)}
+  .adm-overlay.show{display:block}
+  .adm-main{margin-left:0}
+  .mob-topbar{display:flex}
+  .adm-topbar{display:none}
+  .adm-content{padding:1.1rem}
+  .stat-grid{grid-template-columns:1fr 1fr}
+  .form-grid{grid-template-columns:1fr}
+  .form-field.full{grid-column:1}
+  table.t{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .fb-card{flex-direction:column}
+  .fb-meta{margin-left:0;text-align:left}
+  .srch input{width:160px}
+}
+@media(max-width:480px){
+  .stat-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ── Auth gate ─────────────────────────────────────── -->
+<div id="gateRoot">
+  <div class="gate-wrap">
+    <div class="gate-card">
+      <div class="gate-brand">
+        <img src="../images/logo-platatech.png" alt="Plata Tech"/>
+        <div>
+          <div class="gate-brand-name">Plata Tech</div>
+          <div class="gate-brand-sub">Admin Panel</div>
+        </div>
+      </div>
+      <h1 class="gate-title">Bienvenido</h1>
+      <p class="gate-sub">Ingresa con tu cuenta de administrador para continuar.</p>
+      <div class="gate-field">
+        <label>Correo electronico</label>
+        <input type="email" id="gEmail" placeholder="admin@ejemplo.com" autocomplete="email"/>
+      </div>
+      <div class="gate-field">
+        <label>Contrasena</label>
+        <input type="password" id="gPass" placeholder="••••••••" autocomplete="current-password"/>
+      </div>
+      <button class="gate-btn" id="gBtn">Entrar al dashboard</button>
+      <div class="gate-err" id="gErr"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Admin layout ──────────────────────────────────── -->
+<div id="adminRoot" style="display:none">
+  <div class="adm-overlay" id="overlay"></div>
+  <div class="mob-topbar">
+    <span class="mob-brand">Plata Tech Admin</span>
+    <button class="mob-ham" id="hamBtn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="adm-layout">
+    <aside class="adm-sidebar" id="sidebar">
+      <div class="adm-sidebar-top">
+        <div class="adm-brand">
+          <img src="../images/logo-platatech.png" alt=""/>
+          <div>
+            <div class="adm-brand-name">Plata Tech</div>
+            <div class="adm-brand-sub">Admin</div>
+          </div>
+        </div>
+      </div>
+      <nav class="adm-nav">
+        <div class="adm-nav-label">General</div>
+        <button class="adm-nav-item" data-s="resumen">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          Resumen
+        </button>
+        <button class="adm-nav-item" data-s="pedidos">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
+          Pedidos
+          <span class="adm-nav-badge" id="navBadgePedidos">0</span>
+        </button>
+        <div class="adm-nav-label" style="margin-top:.75rem">Catalogo</div>
+        <button class="adm-nav-item" data-s="productos">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          Productos
+        </button>
+        <div class="adm-nav-label" style="margin-top:.75rem">Clientes</div>
+        <button class="adm-nav-item" data-s="opiniones">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Opiniones
+          <span class="adm-nav-badge" id="navBadgeOp">0</span>
+        </button>
+      </nav>
+      <div class="adm-sidebar-bottom">
+        <a href="index.html" class="adm-store-link">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Ver tienda
+        </a>
+        <button class="adm-logout-btn" id="logoutBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Cerrar sesion
+        </button>
+      </div>
+    </aside>
+
+    <div class="adm-main">
+      <div class="adm-topbar">
+        <h1 id="topTitle">Resumen</h1>
+        <div class="adm-topbar-right">
+          <button class="icon-btn" id="refreshBtn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+            Actualizar
+          </button>
+        </div>
+      </div>
+      <div class="adm-content" id="content">
+        <div class="spin-wrap"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="assets/sb.js"></script>
+<script>
+/* ── State ──────────────────────────────────────────── */
+let section     = 'resumen';
+let ordFilter   = 'todos';
+let ordSearch   = '';
+let allOrders   = [];
+let allFeedback = [];
+let allProds    = [];
+let editingProd = null;
+
+const STATUSES = [
+  {id:'pendiente',label:'Pendiente'},
+  {id:'pagado',label:'Pagado'},
+  {id:'contactado',label:'Contactado'},
+  {id:'encamino',label:'En camino'},
+  {id:'entregado',label:'Entregado'},
+  {id:'cancelado',label:'Cancelado'}
+];
+const CATS = ['celulares','accesorios','tablets','laptops','audio','smartwatch','gaming','seguridad','conectividad','varios'];
+
+const gateRoot  = document.getElementById('gateRoot');
+const adminRoot = document.getElementById('adminRoot');
+const content   = document.getElementById('content');
+
+/* ── Helpers ─────────────────────────────────────────── */
+function fmtPrice(n){ return 'RD$'+Number(n||0).toLocaleString('en-US'); }
+function fmtDate(iso){
+  if(!iso) return '—';
+  const d=new Date(iso);
+  return d.toLocaleDateString('es-DO',{day:'2-digit',month:'short',year:'numeric'})+' '+
+         d.toLocaleTimeString('es-DO',{hour:'2-digit',minute:'2-digit'});
+}
+function fmtDateShort(iso){
+  if(!iso) return '—';
+  const d=new Date(iso);
+  return d.toLocaleDateString('es-DO',{day:'2-digit',month:'short',year:'numeric'});
+}
+function esc(s){ const d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
+function sLabel(s){ return (STATUSES.find(x=>x.id===s)||STATUSES[0]).label; }
+function slugify(t){
+  return (t||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').substring(0,80);
+}
+function stars(val){
+  const n=Math.max(0,Math.min(5,Math.round(val||0))); let o='';
+  for(let i=1;i<=5;i++) o+=i<=n
+    ?`<svg width="12" height="12" viewBox="0 0 24 24" fill="var(--blue)" stroke="var(--blue)" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`
+    :`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--border)" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+  return o;
+}
+
+/* ── Supabase ────────────────────────────────────────── */
+function rowToOrder(r){
+  return {
+    id:r.id, createdAt:r.created_at, status:r.status,
+    paymentMethod:r.payment_method, paypalOrderId:r.paypal_order_id,
+    paypalAmountUsd:r.paypal_amount_usd, codeliveryMode:r.codelivery_mode,
+    customer:r.customer||{}, items:r.items||[], totals:r.totals||{},
+    lat:r.lat, lng:r.lng
+  };
+}
+
+async function loadAll(){
+  const [oRes,fRes,pRes] = await Promise.all([
+    window.SB.from('orders').select('*').order('created_at',{ascending:false}),
+    window.SB.from('feedback').select('*').order('created_at',{ascending:false}).limit(100),
+    window.SB.from('custom_products').select('*').order('created_at',{ascending:false})
+  ]);
+  allOrders   = (oRes.data||[]).map(rowToOrder);
+  allFeedback = fRes.data||[];
+  allProds    = pRes.data||[];
+
+  const active = allOrders.filter(o=>['pendiente','pagado','contactado','encamino'].includes(o.status)).length;
+  document.getElementById('navBadgePedidos').textContent = active||allOrders.length;
+  document.getElementById('navBadgeOp').textContent = allFeedback.length;
+}
+
+async function updateStatus(id,status){
+  await window.SB.from('orders').update({status}).eq('id',id);
+}
+
+async function uploadImage(file){
+  const ext=file.name.split('.').pop().toLowerCase();
+  const path=`products/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+  const {error}=await window.SB.storage.from('product-images').upload(path,file,{upsert:false});
+  if(error){ console.error('upload:',error); return null; }
+  const {data:{publicUrl}}=window.SB.storage.from('product-images').getPublicUrl(path);
+  return publicUrl;
+}
+
+async function saveProd(payload){
+  if(payload.id){
+    const {error}=await window.SB.from('custom_products').update(payload).eq('id',payload.id);
+    return !error;
+  } else {
+    const {id:_,...ins}=payload;
+    const {error}=await window.SB.from('custom_products').insert(ins);
+    return !error;
+  }
+}
+
+async function delProd(id){
+  if(!confirm('Eliminar este producto? No se puede deshacer.')) return false;
+  const {error}=await window.SB.from('custom_products').delete().eq('id',id);
+  return !error;
+}
+
+/* ── Init ────────────────────────────────────────────── */
+(async function init(){
+  const {data:{session}}=await window.SB.auth.getSession();
+  if(!session){
+    gateRoot.style.display='';
+    setupGate();
+  } else {
+    gateRoot.style.display='none';
+    await showAdmin();
+  }
+})();
+
+function setupGate(){
+  const emailEl=document.getElementById('gEmail');
+  const passEl=document.getElementById('gPass');
+  const btn=document.getElementById('gBtn');
+  const errEl=document.getElementById('gErr');
+
+  async function doLogin(){
+    const email=emailEl.value.trim(), pass=passEl.value;
+    if(!email||!pass) return;
+    btn.disabled=true; btn.textContent='Entrando...';
+    const {error}=await window.SB.auth.signInWithPassword({email,password:pass});
+    if(error){
+      errEl.textContent='Correo o contrasena incorrectos.';
+      passEl.value=''; passEl.classList.add('err');
+      setTimeout(()=>passEl.classList.remove('err'),500);
+      btn.disabled=false; btn.textContent='Entrar al dashboard';
+    } else {
+      gateRoot.style.display='none';
+      await showAdmin();
+    }
+  }
+  btn.addEventListener('click',doLogin);
+  passEl.addEventListener('keydown',e=>{ if(e.key==='Enter') doLogin(); });
+  emailEl.addEventListener('keydown',e=>{ if(e.key==='Enter') passEl.focus(); });
+  emailEl.focus();
+}
+
+async function showAdmin(){
+  adminRoot.style.display='';
+  await loadAll();
+  setupShell();
+  go('resumen');
+}
+
+function setupShell(){
+  // Sidebar nav
+  document.querySelectorAll('.adm-nav-item[data-s]').forEach(b=>{
+    b.addEventListener('click',()=>{ closeMenu(); go(b.dataset.s); });
+  });
+  document.getElementById('logoutBtn').addEventListener('click',async()=>{
+    await window.SB.auth.signOut(); location.reload();
+  });
+  document.getElementById('refreshBtn').addEventListener('click',async()=>{
+    await loadAll(); renderSection();
+  });
+  // Mobile
+  const ham=document.getElementById('hamBtn');
+  const ov=document.getElementById('overlay');
+  const sb=document.getElementById('sidebar');
+  ham.addEventListener('click',()=>{ sb.classList.add('open'); ov.classList.add('show'); });
+  ov.addEventListener('click',closeMenu);
+  function closeMenu(){ sb.classList.remove('open'); ov.classList.remove('show'); }
+  window.closeMenu=closeMenu;
+}
+
+function go(s){
+  section=s;
+  document.querySelectorAll('.adm-nav-item').forEach(b=>b.classList.remove('active'));
+  const btn=document.querySelector(`.adm-nav-item[data-s="${s}"]`);
+  if(btn) btn.classList.add('active');
+  const titles={resumen:'Resumen',pedidos:'Pedidos',productos:'Productos',opiniones:'Opiniones'};
+  const t=document.getElementById('topTitle');
+  if(t) t.textContent=titles[s]||s;
+  renderSection();
+}
+window.go=go;
+
+function renderSection(){
+  if(section==='resumen')    renderResumen();
+  else if(section==='pedidos')    renderPedidos();
+  else if(section==='productos')  renderProductos();
+  else if(section==='opiniones')  renderOpiniones();
+}
+
+/* ── RESUMEN ─────────────────────────────────────────── */
+function renderResumen(){
+  const active    = allOrders.filter(o=>['pendiente','contactado','encamino'].includes(o.status)).length;
+  const entregados= allOrders.filter(o=>o.status==='entregado').length;
+  const revenue   = allOrders.filter(o=>o.status!=='cancelado').reduce((s,o)=>s+(o.totals.total||0),0);
+  const fbCount   = allFeedback.length;
+  const fbAvg     = fbCount ? allFeedback.reduce((s,r)=>s+(r.experience||0),0)/fbCount : 0;
+  const recent    = allOrders.slice(0,10);
+
+  content.innerHTML=`
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#eff6ff"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#1447ff" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg></div>
+        <div class="stat-val">${allOrders.length}</div>
+        <div class="stat-label">Ordenes totales</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#fef3c7"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+        <div class="stat-val">${active}</div>
+        <div class="stat-label">En proceso</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#ecfdf5"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div class="stat-val">${entregados}</div>
+        <div class="stat-label">Entregadas</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#eff6ff"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#1447ff" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <div class="stat-val" style="font-size:1.3rem">${fmtPrice(revenue)}</div>
+        <div class="stat-label">Ingresos totales</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#fefce8"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#ca8a04" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <div class="stat-val">${fbCount ? fbAvg.toFixed(1) : '—'}</div>
+        <div class="stat-label">Rating promedio</div>
+        <div class="stat-sub">${fbCount} opinion${fbCount===1?'':'es'}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#fdf4ff"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
+        <div class="stat-val">${allProds.filter(p=>p.published).length}</div>
+        <div class="stat-label">Productos publicados</div>
+        <div class="stat-sub">${allProds.length} total</div>
+      </div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-head">
+        <h3>Ordenes recientes</h3>
+        <button class="act-btn" onclick="go('pedidos')">Ver todas</button>
+      </div>
+      ${recent.length===0?'<div class="t-empty">No hay ordenes aun.</div>':`
+      <table class="t">
+        <thead><tr><th>Orden</th><th>Cliente</th><th>Total</th><th>Metodo</th><th>Estado</th><th>Fecha</th></tr></thead>
+        <tbody>
+          ${recent.map(o=>`<tr>
+            <td><span class="oid" onclick="go('pedidos')">${esc(o.id)}</span></td>
+            <td>${esc(o.customer.name||'—')}</td>
+            <td style="font-weight:700">${fmtPrice(o.totals.total)}</td>
+            <td style="font-size:.76rem">${o.paymentMethod==='online'?'PayPal':o.codeliveryMode==='transferencia'?'Transfer.':'Efectivo'}</td>
+            <td><span class="s-pill s-${o.status}">${sLabel(o.status)}</span></td>
+            <td style="font-size:.72rem;color:var(--ink-3);white-space:nowrap">${fmtDateShort(o.createdAt)}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>`}
+    </div>`;
+}
+
+/* ── PEDIDOS ─────────────────────────────────────────── */
+function renderPedidos(){
+  const counts={};
+  allOrders.forEach(o=>{ counts[o.status]=(counts[o.status]||0)+1; });
+
+  const filtered=allOrders.filter(o=>{
+    const matchStatus=ordFilter==='todos'||o.status===ordFilter;
+    const q=ordSearch.trim().toLowerCase();
+    return matchStatus&&(!q
+      ||o.id.toLowerCase().includes(q)
+      ||(o.customer.name||'').toLowerCase().includes(q)
+      ||(o.customer.phone||'').includes(q));
+  });
+
+  content.innerHTML=`
+    <div class="tbl-wrap">
+      <div class="tbl-head">
+        <h3>${allOrders.length} orden${allOrders.length===1?'':'es'}</h3>
+        <div class="tbl-head-right">
+          <div class="srch">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input type="search" id="ordSrch" placeholder="Buscar..." value="${esc(ordSearch)}"/>
+          </div>
+          <button class="act-btn" id="csvBtn">CSV</button>
+        </div>
+      </div>
+      <div class="tbl-pills">
+        <button class="pill ${ordFilter==='todos'?'active':''}" data-f="todos">Todas (${allOrders.length})</button>
+        ${STATUSES.map(s=>`<button class="pill ${ordFilter===s.id?'active':''}" data-f="${s.id}">${s.label} (${counts[s.id]||0})</button>`).join('')}
+      </div>
+      ${filtered.length===0?'<div class="t-empty">Sin resultados.</div>':`
+      <table class="t">
+        <thead><tr><th>Orden</th><th>Cliente</th><th>Items</th><th>Total</th><th>Metodo</th><th>Estado</th><th>Fecha</th><th></th></tr></thead>
+        <tbody>
+          ${filtered.map(o=>{
+            const method=o.paymentMethod==='online'?'PayPal':o.codeliveryMode==='transferencia'?'Transfer.':'Efectivo';
+            return `<tr>
+              <td><span class="oid" data-oid="${esc(o.id)}">${esc(o.id)}</span></td>
+              <td>
+                <div style="font-weight:600">${esc(o.customer.name||'—')}</div>
+                ${o.customer.phone?`<div style="font-size:.7rem;color:var(--ink-3)">${esc(o.customer.phone)}</div>`:''}
+              </td>
+              <td style="font-size:.76rem;color:var(--ink-2)">${o.items.length} art.</td>
+              <td style="font-weight:700;white-space:nowrap">${fmtPrice(o.totals.total)}</td>
+              <td style="font-size:.76rem">${method}</td>
+              <td>
+                <select class="status-sel" data-oid="${esc(o.id)}">
+                  ${STATUSES.map(s=>`<option value="${s.id}" ${o.status===s.id?'selected':''}>${s.label}</option>`).join('')}
+                </select>
+              </td>
+              <td style="font-size:.72rem;color:var(--ink-3);white-space:nowrap">${fmtDate(o.createdAt)}</td>
+              <td>${o.lat&&o.lng?`<a href="https://www.google.com/maps/dir/?api=1&destination=${o.lat},${o.lng}" target="_blank" style="display:inline-flex;align-items:center;gap:.3rem;font-size:.7rem;font-weight:700;color:var(--blue);text-decoration:none;padding:.25rem .52rem;border:1px solid rgba(20,71,255,.25);border-radius:7px;white-space:nowrap"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Navegar</a>`:''}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>`}
+    </div>`;
+
+  const srch=document.getElementById('ordSrch');
+  if(srch){ srch.addEventListener('input',e=>{ ordSearch=e.target.value; renderPedidos(); }); srch.focus(); }
+
+  document.querySelectorAll('.pill[data-f]').forEach(b=>{
+    b.addEventListener('click',()=>{ ordFilter=b.dataset.f; renderPedidos(); });
+  });
+
+  document.querySelectorAll('.status-sel').forEach(sel=>{
+    sel.addEventListener('change',async()=>{
+      await updateStatus(sel.dataset.oid,sel.value);
+      const o=allOrders.find(x=>x.id===sel.dataset.oid);
+      if(o) o.status=sel.value;
+      renderPedidos();
+    });
+  });
+
+  document.querySelectorAll('.oid[data-oid]').forEach(el=>{
+    el.addEventListener('click',()=>{
+      window.open('ordenes.html?n='+encodeURIComponent(el.dataset.oid),'_blank');
+    });
+  });
+
+  document.getElementById('csvBtn')?.addEventListener('click',()=>{
+    const rows=[['Orden','Fecha','Cliente','Telefono','Direccion','Sector','Metodo','Estado','Items','Total RD$']];
+    allOrders.forEach(o=>{
+      rows.push([o.id,o.createdAt,o.customer.name||'',o.customer.phone||'',o.customer.address||'',o.customer.sector||'',
+        o.paymentMethod==='online'?'PayPal':o.codeliveryMode,o.status,
+        o.items.map(i=>i.qty+'x '+i.name).join(' | '),o.totals.total||0]);
+    });
+    const csv=rows.map(r=>r.map(c=>'"'+String(c||'').replace(/"/g,'""')+'"').join(',')).join('\n');
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}));
+    a.download='ordenes-'+new Date().toISOString().slice(0,10)+'.csv';
+    a.click();
+  });
+}
+
+/* ── PRODUCTOS ───────────────────────────────────────── */
+function renderProductos(){
+  const pub=allProds.filter(p=>p.published).length;
+  content.innerHTML=`
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1.1rem;flex-wrap:wrap">
+      <div>
+        <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.05rem;font-weight:800">${allProds.length} producto${allProds.length===1?'':'s'}</div>
+        <div style="font-size:.75rem;color:var(--ink-3);margin-top:.1rem">${pub} publicado${pub===1?'':'s'}</div>
+      </div>
+      <button class="act-btn primary" id="addProdBtn">+ Agregar producto</button>
+    </div>
+    <div id="drawerWrap" style="display:none"></div>
+    <div class="tbl-wrap">
+      ${allProds.length===0?`<div class="t-empty">No hay productos personalizados aun.<br/><button class="act-btn primary" style="margin-top:1rem" id="addProdBtn2">Agregar el primero</button></div>`:`
+      <table class="t">
+        <thead><tr><th>Producto</th><th>Categoria</th><th>Precio</th><th>Stock</th><th>Estado</th><th>Acciones</th></tr></thead>
+        <tbody>
+          ${allProds.map(p=>`<tr>
+            <td>
+              <div style="display:flex;align-items:center;gap:.7rem">
+                ${p.image_url
+                  ?`<img src="${esc(p.image_url)}" class="prod-thumb" alt=""/>`
+                  :`<div class="prod-thumb-ph"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>`}
+                <div>
+                  <div style="font-weight:600;font-size:.84rem">${esc(p.name)}</div>
+                  ${p.brand?`<div style="font-size:.7rem;color:var(--ink-3)">${esc(p.brand)}</div>`:''}
+                  ${p.variant?`<div style="font-size:.7rem;color:var(--ink-3)">${esc(p.variant)}</div>`:''}
+                </div>
+              </div>
+            </td>
+            <td style="font-size:.78rem">${esc(p.category||'—')}</td>
+            <td style="font-weight:700;white-space:nowrap">
+              ${fmtPrice(p.price)}
+              ${p.old_price?`<br/><span style="font-size:.7rem;color:var(--ink-3);text-decoration:line-through">${fmtPrice(p.old_price)}</span>`:''}
+            </td>
+            <td style="font-size:.82rem">${p.stock??'—'}</td>
+            <td><span class="${p.published?'pub-yes':'pub-no'}">${p.published?'Publicado':'Oculto'}</span></td>
+            <td style="white-space:nowrap">
+              <button class="act-btn" data-edit="${esc(p.id)}" style="margin-right:.3rem">Editar</button>
+              <button class="act-btn del" data-del="${esc(p.id)}">Eliminar</button>
+            </td>
+          </tr>`).join('')}
+        </tbody>
+      </table>`}
+    </div>`;
+
+  document.getElementById('addProdBtn')?.addEventListener('click',()=>openDrawer(null));
+  document.getElementById('addProdBtn2')?.addEventListener('click',()=>openDrawer(null));
+  document.querySelectorAll('[data-edit]').forEach(b=>{
+    b.addEventListener('click',()=>{
+      const p=allProds.find(x=>x.id===b.dataset.edit);
+      if(p) openDrawer(p);
+    });
+  });
+  document.querySelectorAll('[data-del]').forEach(b=>{
+    b.addEventListener('click',async()=>{
+      const ok=await delProd(b.dataset.del);
+      if(ok){ allProds=allProds.filter(x=>x.id!==b.dataset.del); renderProductos(); }
+    });
+  });
+}
+
+function openDrawer(prod){
+  editingProd=prod||null;
+  const wrap=document.getElementById('drawerWrap');
+  wrap.style.display='block';
+  wrap.innerHTML=`
+    <div class="drawer">
+      <h3>${prod?'Editar producto':'Nuevo producto'}</h3>
+      <div class="form-grid">
+        <div class="form-field">
+          <label>Nombre *</label>
+          <input type="text" id="pName" value="${esc(prod?.name||'')}" placeholder="Ej: iPhone 15 Pro" autocomplete="off"/>
+          <div class="slug-hint" id="pSlug">${prod?'slug: '+prod.slug:''}</div>
+        </div>
+        <div class="form-field">
+          <label>Marca</label>
+          <input type="text" id="pBrand" value="${esc(prod?.brand||'')}" placeholder="Ej: Apple" autocomplete="off"/>
+        </div>
+        <div class="form-field">
+          <label>Categoria</label>
+          <select id="pCat">
+            <option value="">— Seleccionar —</option>
+            ${CATS.map(c=>`<option value="${c}" ${prod?.category===c?'selected':''}>${c}</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Variante</label>
+          <input type="text" id="pVariant" value="${esc(prod?.variant||'')}" placeholder="Ej: 256GB Negro" autocomplete="off"/>
+        </div>
+        <div class="form-field">
+          <label>Precio (RD$) *</label>
+          <input type="number" id="pPrice" value="${prod?.price??''}" placeholder="0" min="0"/>
+        </div>
+        <div class="form-field">
+          <label>Precio anterior (RD$)</label>
+          <input type="number" id="pOld" value="${prod?.old_price??''}" placeholder="0" min="0"/>
+        </div>
+        <div class="form-field">
+          <label>Stock</label>
+          <input type="number" id="pStock" value="${prod?.stock??10}" placeholder="10" min="0"/>
+        </div>
+        <div class="form-field">
+          <label>Etiqueta (badge)</label>
+          <input type="text" id="pBadge" value="${esc(prod?.badge||'')}" placeholder="Ej: Nuevo, Oferta" autocomplete="off"/>
+        </div>
+        <div class="form-field full">
+          <label>Imagen del producto</label>
+          <div class="img-drop" id="imgDrop">
+            <input type="file" id="pImgFile" accept="image/*"/>
+            <div class="img-drop-lbl">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin:0 auto .4rem;display:block;color:var(--ink-3)"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <strong>Haz clic o arrastra</strong> para subir imagen
+            </div>
+            ${prod?.image_url?`<img src="${esc(prod.image_url)}" class="img-preview" style="display:block" id="imgPrev"/>`:'<img class="img-preview" id="imgPrev"/>'}
+            <div class="img-prog" id="imgProg"></div>
+          </div>
+          <input type="url" id="pImgUrl" value="${esc(prod?.image_url||'')}" placeholder="o pega una URL directamente..." style="margin-top:.5rem" autocomplete="off"/>
+        </div>
+        <div class="form-field full">
+          <label>Descripcion</label>
+          <textarea id="pDesc" placeholder="Descripcion breve del producto">${esc(prod?.description||'')}</textarea>
+        </div>
+        <div class="form-field full">
+          <label class="form-check">
+            <input type="checkbox" id="pPub" ${(prod==null||prod.published!==false)?'checked':''}/>
+            Publicado (visible en la tienda)
+          </label>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="save-btn" id="pSaveBtn">Guardar</button>
+        <button class="cancel-btn" id="pCancelBtn">Cancelar</button>
+      </div>
+    </div>`;
+
+  // Slug preview
+  const nameEl=document.getElementById('pName');
+  const slugEl=document.getElementById('pSlug');
+  nameEl.addEventListener('input',()=>{
+    slugEl.textContent=nameEl.value?'slug: '+slugify(nameEl.value):'';
+  });
+  if(!prod) nameEl.focus();
+
+  // Image handling
+  const drop=document.getElementById('imgDrop');
+  const fileInp=document.getElementById('pImgFile');
+  const urlInp=document.getElementById('pImgUrl');
+  const prev=document.getElementById('imgPrev');
+  const prog=document.getElementById('imgProg');
+
+  drop.addEventListener('click',e=>{ if(e.target!==fileInp) fileInp.click(); });
+  drop.addEventListener('dragover',e=>{ e.preventDefault(); drop.classList.add('drag'); });
+  drop.addEventListener('dragleave',()=>drop.classList.remove('drag'));
+  drop.addEventListener('drop',e=>{
+    e.preventDefault(); drop.classList.remove('drag');
+    const f=e.dataTransfer.files[0];
+    if(f&&f.type.startsWith('image/')) doUpload(f);
+  });
+  fileInp.addEventListener('change',()=>{ if(fileInp.files[0]) doUpload(fileInp.files[0]); });
+  urlInp.addEventListener('input',()=>{
+    if(urlInp.value){ prev.src=urlInp.value; prev.style.display='block'; }
+    else prev.style.display='none';
+  });
+
+  async function doUpload(file){
+    prog.style.display='block'; prog.style.color='var(--blue)'; prog.textContent='Subiendo imagen...';
+    const url=await uploadImage(file);
+    if(url){
+      urlInp.value=url; prev.src=url; prev.style.display='block';
+      prog.textContent='Imagen subida correctamente.'; prog.style.color='#059669';
+      setTimeout(()=>{ prog.style.display='none'; },2500);
+    } else {
+      prog.textContent='Error al subir. Verifica que el bucket product-images existe en Supabase Storage.';
+      prog.style.color='#b91c1c';
+    }
+  }
+
+  // Cancel
+  document.getElementById('pCancelBtn').addEventListener('click',()=>{
+    editingProd=null; wrap.style.display='none'; wrap.innerHTML='';
+  });
+
+  // Save
+  document.getElementById('pSaveBtn').addEventListener('click',async()=>{
+    const name=document.getElementById('pName').value.trim();
+    const price=document.getElementById('pPrice').value;
+    if(!name){ document.getElementById('pName').focus(); return; }
+    if(!price){ document.getElementById('pPrice').focus(); return; }
+
+    const btn=document.getElementById('pSaveBtn');
+    btn.disabled=true; btn.textContent='Guardando...';
+
+    const payload={
+      slug:       editingProd?editingProd.slug:slugify(name),
+      name,
+      brand:      document.getElementById('pBrand').value.trim()||null,
+      category:   document.getElementById('pCat').value||null,
+      variant:    document.getElementById('pVariant').value.trim()||null,
+      price:      parseInt(price,10),
+      old_price:  document.getElementById('pOld').value?parseInt(document.getElementById('pOld').value,10):null,
+      stock:      document.getElementById('pStock').value!==''?parseInt(document.getElementById('pStock').value,10):10,
+      badge:      document.getElementById('pBadge').value.trim()||null,
+      image_url:  document.getElementById('pImgUrl').value.trim()||null,
+      description:document.getElementById('pDesc').value.trim()||null,
+      published:  document.getElementById('pPub').checked
+    };
+    if(editingProd) payload.id=editingProd.id;
+
+    const ok=await saveProd(payload);
+    if(ok){
+      await loadAll();
+      wrap.style.display='none'; wrap.innerHTML=''; editingProd=null;
+      renderProductos();
+    } else {
+      btn.disabled=false; btn.textContent='Guardar';
+      alert('Error al guardar. Revisa la consola.');
+    }
+  });
+
+  wrap.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ── OPINIONES ───────────────────────────────────────── */
+function renderOpiniones(){
+  const n=allFeedback.length;
+  const avgExp=n?allFeedback.reduce((s,r)=>s+(r.experience||0),0)/n:null;
+  const avgRep=n?allFeedback.reduce((s,r)=>s+(r.rep_rating||0),0)/n:null;
+  const pctRec=n?Math.round(allFeedback.filter(r=>r.recommend===true).length/n*100):null;
+
+  content.innerHTML=`
+    ${n>0?`<div class="stat-grid" style="margin-bottom:1.25rem">
+      <div class="stat-card">
+        <div class="stat-val">${avgExp.toFixed(1)}<span style="font-size:.9rem;color:var(--ink-3)">/5</span></div>
+        <div class="stat-label">Experiencia general</div>
+        <div style="margin-top:.35rem;display:flex;gap:.15rem">${stars(avgExp)}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">${avgRep.toFixed(1)}<span style="font-size:.9rem;color:var(--ink-3)">/5</span></div>
+        <div class="stat-label">Atencion del asesor</div>
+        <div style="margin-top:.35rem;display:flex;gap:.15rem">${stars(avgRep)}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">${pctRec}%</div>
+        <div class="stat-label">Recomiendan</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">${n}</div>
+        <div class="stat-label">Total opiniones</div>
+      </div>
+    </div>`:''}
+    ${n===0
+      ?'<div class="tbl-wrap"><div class="t-empty">No hay opiniones registradas todavia.</div></div>'
+      :`<div class="fb-grid">
+        ${allFeedback.map(r=>{
+          const d=r.created_at?new Date(r.created_at):null;
+          const dateStr=d?d.toLocaleDateString('es-DO',{day:'2-digit',month:'short',year:'numeric'}):'—';
+          const rec=r.recommend===true?`<span class="fb-rec yes">Si recomienda</span>`
+                   :r.recommend===false?`<span class="fb-rec no">No recomienda</span>`:'';
+          return `<div class="fb-card">
+            <div style="flex:1">
+              <div style="display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap">
+                <div>
+                  <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-3);margin-bottom:.2rem">Experiencia</div>
+                  <div class="star-row">${stars(r.experience)}<span style="font-size:.72rem;color:var(--ink-2);margin-left:.3rem">${r.experience||'—'}/5</span></div>
+                </div>
+                <div>
+                  <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-3);margin-bottom:.2rem">Asesor</div>
+                  <div class="star-row">${stars(r.rep_rating)}<span style="font-size:.72rem;color:var(--ink-2);margin-left:.3rem">${r.rep_rating||'—'}/5</span></div>
+                </div>
+                <div style="display:flex;align-items:flex-end">${rec}</div>
+              </div>
+              ${r.comment?`<div class="fb-comment">${esc(r.comment)}</div>`:''}
+            </div>
+            <div class="fb-meta">
+              ${r.order_id?`<div class="fb-meta-id">${esc(r.order_id)}</div>`:''}
+              <div class="fb-meta-date">${dateStr}</div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>`}`;
+}
+</script>
+</body>
+</html>
