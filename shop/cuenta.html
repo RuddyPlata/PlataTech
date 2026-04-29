@@ -765,23 +765,42 @@ function friendlyAuthError(msg) {
 
 /* ── Fetch orders ────────────────────────────────────── */
 async function fetchOrders(userEmail) {
+  const needle = userEmail.toLowerCase().trim();
+
+  function matchesEmail(o) {
+    const custEmail = (o.customer && o.customer.email) ? o.customer.email.toLowerCase().trim() : '';
+    return custEmail === needle;
+  }
+
+  // 1. Supabase
+  let sbOrders = [];
   try {
     const { data, error } = await window.SB
       .from('orders')
       .select('*')
       .order('created_at', { ascending: false });
+    if (!error && data) {
+      sbOrders = data
+        .filter(matchesEmail)
+        .map(r => ({
+          id: r.id, createdAt: r.created_at, status: r.status,
+          paymentMethod: r.payment_method, codeliveryMode: r.codelivery_mode,
+          paypalOrderId: r.paypal_order_id, paypalAmountUsd: r.paypal_amount_usd,
+          customer: r.customer, items: r.items, totals: r.totals
+        }));
+    }
+  } catch (e) { console.warn('Supabase fetchOrders error:', e); }
 
-    if (error) return [];
-    if (!data) return [];
+  // 2. localStorage fallback — merge orders not already in sbOrders
+  try {
+    const local = JSON.parse(localStorage.getItem('platatech_orders_v1') || '[]');
+    const sbIds = new Set(sbOrders.map(o => o.id));
+    const localMatches = local.filter(o => matchesEmail(o) && !sbIds.has(o.id));
+    sbOrders = [...sbOrders, ...localMatches]
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  } catch (e) {}
 
-    return data.filter(o => {
-      const custEmail = (o.customer && o.customer.email) ? o.customer.email.toLowerCase().trim() : '';
-      return custEmail === userEmail.toLowerCase().trim();
-    });
-  } catch (e) {
-    console.warn('Error fetching orders:', e);
-    return [];
-  }
+  return sbOrders;
 }
 
 /* ── Load dashboard ──────────────────────────────────── */
