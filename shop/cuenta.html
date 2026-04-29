@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Mi cuenta - Plata Tech Store</title>
+<link rel="icon" type="image/x-icon" href="../images/favicon-pt.ico"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/shop.css"/>
+<style>
+/* ── Page layout ─────────────────────────────────────── */
+.cuenta-section { padding: 3rem 0 5rem; }
+.cuenta-inner { max-width: 900px; margin-inline: auto; }
+
+/* ── Auth gate ───────────────────────────────────────── */
+.auth-wrap {
+  max-width: 440px; margin: 0 auto;
+}
+.auth-header {
+  text-align: center; margin-bottom: 2rem;
+}
+.auth-header h1 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(1.75rem, 4vw, 2.25rem); font-weight: 800;
+  letter-spacing: -0.03em; color: var(--ink);
+  margin-bottom: .45rem;
+}
+.auth-header p {
+  font-size: .95rem; color: var(--ink-2); line-height: 1.5;
+}
+.auth-tabs {
+  display: flex; border-radius: 12px;
+  background: var(--border); padding: 4px;
+  margin-bottom: 1.75rem; gap: 4px;
+}
+.auth-tab {
+  flex: 1; padding: .65rem 1rem;
+  border-radius: 9px; border: none;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: .88rem; font-weight: 600;
+  color: var(--ink-2); background: transparent;
+  cursor: pointer; transition: background .2s, color .2s, box-shadow .2s;
+}
+.auth-tab.active {
+  background: var(--white);
+  color: var(--ink);
+  box-shadow: 0 2px 8px rgba(10,17,40,.1);
+}
+.auth-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 20px; padding: 2rem;
+  box-shadow: var(--shadow-md);
+}
+.auth-panel { display: none; }
+.auth-panel.visible { display: block; }
+
+/* ── Form elements ───────────────────────────────────── */
+.field { margin-bottom: 1.1rem; }
+.field label {
+  display: block; margin-bottom: .45rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: .7rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .1em;
+  color: var(--ink-3);
+}
+.field input {
+  width: 100%; padding: .8rem 1rem;
+  border: 1.5px solid var(--border-2); border-radius: 10px;
+  font-family: 'Inter', sans-serif; font-size: .95rem;
+  color: var(--ink); background: var(--off-white);
+  transition: border-color .2s, box-shadow .2s;
+  outline: none;
+}
+.field input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(30,80,212,.1);
+  background: var(--white);
+}
+.field input::placeholder { color: var(--ink-3); }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+.form-error {
+  margin-bottom: 1rem; padding: .7rem 1rem;
+  background: rgba(231,76,60,.07); border: 1px solid rgba(231,76,60,.25);
+  border-radius: 10px; font-size: .85rem;
+  color: #c0392b; display: none;
+}
+.form-error.visible { display: block; }
+.form-success {
+  margin-bottom: 1rem; padding: .7rem 1rem;
+  background: rgba(5,150,105,.07); border: 1px solid rgba(5,150,105,.25);
+  border-radius: 10px; font-size: .85rem;
+  color: #065f46; display: none;
+}
+.form-success.visible { display: block; }
+
+.auth-footer {
+  text-align: center; margin-top: 1.25rem;
+}
+.auth-footer a {
+  font-size: .88rem; color: var(--ink-3);
+  text-decoration: underline; cursor: pointer;
+}
+.auth-footer a:hover { color: var(--ink-2); }
+
+/* ── Dashboard ───────────────────────────────────────── */
+.dash-header {
+  margin-bottom: 2rem;
+}
+.dash-header h1 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(1.75rem, 4vw, 2.25rem); font-weight: 800;
+  letter-spacing: -0.03em; color: var(--ink);
+  margin-bottom: .3rem;
+}
+.dash-header p { font-size: .95rem; color: var(--ink-2); }
+.dash-grid {
+  display: grid; grid-template-columns: 1.4fr 1fr;
+  gap: 1.75rem; align-items: start;
+}
+
+/* ── Orders panel ────────────────────────────────────── */
+.panel {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 20px; padding: 1.75rem;
+}
+.panel-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1rem; font-weight: 800;
+  color: var(--ink); letter-spacing: -0.01em;
+  margin-bottom: 1.25rem;
+}
+
+.spinner-wrap {
+  display: flex; align-items: center; justify-content: center;
+  padding: 3rem 0; color: var(--ink-3);
+  flex-direction: column; gap: .75rem;
+}
+.spinner {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 2.5px solid var(--border-2);
+  border-top-color: var(--blue);
+  animation: spin .75s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.order-list { display: flex; flex-direction: column; gap: .85rem; }
+.order-row {
+  display: grid; grid-template-columns: 1fr auto;
+  gap: .75rem; align-items: center;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--border); border-radius: 14px;
+  background: var(--off-white);
+  transition: border-color .2s, box-shadow .2s;
+}
+.order-row:hover {
+  border-color: var(--border-2);
+  box-shadow: var(--shadow-sm);
+}
+.order-row-id {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: .78rem; font-weight: 600; color: var(--ink-3);
+  letter-spacing: .04em; margin-bottom: .25rem;
+}
+.order-row-date {
+  font-size: .8rem; color: var(--ink-3); margin-top: .15rem;
+}
+.order-row-total {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: .98rem; font-weight: 700; color: var(--ink);
+  margin-top: .2rem;
+}
+.order-row-right { display: flex; flex-direction: column; align-items: flex-end; gap: .5rem; }
+
+/* Status badges */
+.status-badge {
+  display: inline-flex; align-items: center; gap: .35rem;
+  padding: .28rem .65rem; border-radius: 100px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: .65rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .08em;
+}
+.status-badge .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  flex-shrink: 0;
+}
+/* pendiente */
+.badge-pendiente   { background: #fffbe6; color: #8a6d10; border: 1px solid rgba(212,162,74,.3); }
+.badge-pendiente .dot { background: #d4a24a; }
+/* confirmado / preparando */
+.badge-confirmado  { background: var(--blue-tint); color: var(--blue); border: 1px solid rgba(30,80,212,.2); }
+.badge-confirmado .dot { background: var(--blue); }
+.badge-preparando  { background: var(--blue-tint); color: var(--blue); border: 1px solid rgba(30,80,212,.2); }
+.badge-preparando .dot { background: var(--blue); }
+/* en camino */
+.badge-en-camino   { background: #fff4ec; color: #c05a00; border: 1px solid rgba(192,90,0,.25); }
+.badge-en-camino .dot { background: #f97316; }
+/* entregado */
+.badge-entregado   { background: #ecfdf5; color: #065f46; border: 1px solid rgba(5,150,105,.25); }
+.badge-entregado .dot { background: #059669; }
+/* cancelado */
+.badge-cancelado   { background: #fef2f2; color: #991b1b; border: 1px solid rgba(231,76,60,.2); }
+.badge-cancelado .dot { background: var(--red); }
+/* default / pagado */
+.badge-default     { background: var(--blue-tint); color: var(--blue); border: 1px solid rgba(30,80,212,.2); }
+.badge-default .dot { background: var(--blue); }
+
+.order-link {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: .8rem; font-weight: 600; color: var(--blue);
+  white-space: nowrap;
+}
+.order-link:hover { text-decoration: underline; }
+
+.empty-state {
+  text-align: center; padding: 2.5rem 1rem; color: var(--ink-3);
+}
+.empty-state svg { margin: 0 auto .75rem; opacity: .45; }
+.empty-state p { font-size: .9rem; }
+
+/* ── Profile panel ───────────────────────────────────── */
+.profile-info { display: flex; flex-direction: column; gap: 0; }
+.profile-field {
+  padding: .6rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.profile-field:last-of-type { border-bottom: none; }
+.profile-field-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: .65rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .1em;
+  color: var(--ink-3); margin-bottom: .15rem;
+}
+.profile-field-value {
+  font-size: .9rem; font-weight: 500; color: var(--ink);
+  word-break: break-word;
+}
+.profile-field-value.empty { color: var(--ink-3); font-style: italic; }
+
+.profile-actions { margin-top: 1.25rem; display: flex; flex-direction: column; gap: .6rem; }
+.btn-edit-profile {
+  display: flex; align-items: center; justify-content: center; gap: .45rem;
+  padding: .7rem 1.25rem; border-radius: 100px;
+  background: var(--blue-tint); color: var(--blue);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: .85rem; font-weight: 600;
+  border: 1.5px solid rgba(30,80,212,.2);
+  cursor: pointer; transition: background .2s, border-color .2s;
+}
+.btn-edit-profile:hover { background: rgba(30,80,212,.12); border-color: rgba(30,80,212,.35); }
+.btn-signout {
+  display: flex; align-items: center; justify-content: center; gap: .45rem;
+  padding: .7rem 1.25rem; border-radius: 100px;
+  background: transparent; color: var(--ink-3);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: .85rem; font-weight: 600;
+  border: 1.5px solid var(--border-2);
+  cursor: pointer; transition: color .2s, border-color .2s, background .2s;
+}
+.btn-signout:hover {
+  color: var(--red); border-color: rgba(231,76,60,.35);
+  background: rgba(231,76,60,.04);
+}
+
+/* ── Edit form (inline) ──────────────────────────────── */
+.edit-form { display: none; }
+.edit-form.visible { display: block; }
+.edit-form .field { margin-bottom: .85rem; }
+.edit-form-actions { display: flex; gap: .6rem; margin-top: 1.1rem; }
+.btn-save {
+  flex: 1; padding: .72rem 1.25rem; border-radius: 100px;
+  background: var(--blue); color: var(--white);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: .85rem; font-weight: 600;
+  border: none; cursor: pointer;
+  transition: background .2s, transform .2s;
+}
+.btn-save:hover { background: var(--blue-2); transform: translateY(-1px); }
+.btn-cancel-edit {
+  flex: 1; padding: .72rem 1.25rem; border-radius: 100px;
+  background: transparent; color: var(--ink-2);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: .85rem; font-weight: 600;
+  border: 1.5px solid var(--border-2);
+  cursor: pointer; transition: background .2s, color .2s;
+}
+.btn-cancel-edit:hover { background: var(--blue-tint); color: var(--ink); }
+
+/* ── Nav user name ───────────────────────────────────── */
+.nav-cuenta {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .55rem 1rem; border-radius: 100px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: .85rem; font-weight: 600;
+  color: var(--ink-2);
+  border: 1.5px solid var(--border-2);
+  background: var(--white);
+  transition: border-color .2s, color .2s, background .2s;
+}
+.nav-cuenta:hover {
+  border-color: var(--blue); color: var(--blue);
+  background: var(--blue-tint);
+}
+.nav-cuenta svg { flex-shrink: 0; }
+
+/* ── Responsive ──────────────────────────────────────── */
+@media (max-width: 768px) {
+  .dash-grid { grid-template-columns: 1fr; }
+  .field-row { grid-template-columns: 1fr; }
+  .edit-form-actions { flex-direction: column; }
+}
+@media (max-width: 480px) {
+  .auth-card { padding: 1.5rem 1.25rem; }
+  .panel { padding: 1.35rem; }
+  .order-row { grid-template-columns: 1fr; gap: .5rem; }
+  .order-row-right { flex-direction: row; align-items: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── Nav ───────────────────────────────────────────── -->
+<nav class="shop-nav">
+  <div class="container shop-nav-inner">
+    <a href="index.html" class="shop-brand">
+      <div class="shop-brand-mark"><img src="../images/logo-platatech.png" alt="Plata Tech"/></div>
+      <div>
+        <div class="shop-brand-name">Plata Tech Store</div>
+        <div class="shop-brand-sub">Tienda oficial</div>
+      </div>
+    </a>
+    <div class="shop-nav-right">
+      <a href="../index.html" class="shop-nav-back">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        platatechs.com
+      </a>
+      <a href="cuenta.html" class="nav-cuenta" id="navCuentaLink">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        <span id="navCuentaLabel">Mi cuenta</span>
+      </a>
+      <a href="cart.html" class="cart-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        Carrito
+        <span class="cart-count" data-cart-count>0</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Main ──────────────────────────────────────────── -->
+<main>
+<section class="cuenta-section">
+  <div class="container">
+    <div class="cuenta-inner" id="cuentaRoot">
+      <!-- filled by JS -->
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ── Footer ────────────────────────────────────────── -->
+<footer class="shop-foot">
+  <div class="container shop-foot-inner">
+    <div class="shop-foot-brand">
+      <img src="../images/logo-platatech.png" class="shop-foot-logo" alt="Plata Tech Solutions"/>
+      <div>
+        Plata Tech Solutions S.R.L.
+        <small>Tienda oficial · RNC formal · Facturas con NCF</small>
+      </div>
+    </div>
+    <div class="shop-foot-divs">
+      <span class="shop-foot-divs-label">Divisiones</span>
+      <div class="shop-foot-divs-logos">
+        <img src="../images/logo-platatech.png" alt="Plata Tech Security"/>
+        <span class="sep"></span>
+        <img src="../images/logo-ug.png" alt="UltimoGadget"/>
+      </div>
+    </div>
+    <div class="shop-foot-links">
+      <a href="index.html">Tienda</a>
+      <a href="../index.html">Inicio</a>
+      <a href="https://wa.me/18494950959" target="_blank">WhatsApp</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="assets/sb.js"></script>
+<script>
+/* ── Helpers ─────────────────────────────────────────── */
+function fmtPrice(n) {
+  return 'RD$' + Number(n).toLocaleString('es-DO', { minimumFractionDigits: 2 });
+}
+function fmtDate(iso) {
+  return new Date(iso).toLocaleDateString('es-DO', { day: '2-digit', month: 'long', year: 'numeric' });
+}
+function esc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ── Status badge ────────────────────────────────────── */
+function statusKey(s) {
+  if (!s) return 'default';
+  const normalized = s.toLowerCase().trim().replace(/\s+/g,'-');
+  const map = {
+    'pendiente': 'pendiente',
+    'confirmado': 'confirmado',
+    'preparando': 'preparando',
+    'en-camino': 'en-camino',
+    'entregado': 'entregado',
+    'cancelado': 'cancelado'
+  };
+  return map[normalized] || 'default';
+}
+function statusLabel(s) {
+  if (!s) return 'Pendiente';
+  const labels = {
+    'pendiente': 'Pendiente',
+    'confirmado': 'Confirmado',
+    'preparando': 'Preparando',
+    'en camino': 'En camino',
+    'entregado': 'Entregado',
+    'cancelado': 'Cancelado',
+    'pagado': 'Pagado'
+  };
+  return labels[s.toLowerCase().trim()] || s;
+}
+function renderBadge(status) {
+  const key = statusKey(status);
+  return `<span class="status-badge badge-${key}"><span class="dot"></span>${esc(statusLabel(status))}</span>`;
+}
+
+/* ── Auth gate HTML ──────────────────────────────────── */
+function renderAuthGate() {
+  return `
+    <div class="auth-wrap">
+      <div class="auth-header">
+        <h1>Bienvenido</h1>
+        <p>Inicia sesión para ver tus órdenes y guardar tus datos de entrega.</p>
+      </div>
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Iniciar sesión</button>
+        <button class="auth-tab" id="tabRegister" onclick="switchTab('register')">Crear cuenta</button>
+      </div>
+      <div class="auth-card">
+
+        <!-- Login panel -->
+        <div class="auth-panel visible" id="panelLogin">
+          <div class="form-error" id="loginError"></div>
+          <div class="field">
+            <label for="loginEmail">Correo electrónico</label>
+            <input type="email" id="loginEmail" placeholder="tu@correo.com" autocomplete="email"/>
+          </div>
+          <div class="field">
+            <label for="loginPassword">Contraseña</label>
+            <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password"/>
+          </div>
+          <button class="btn btn-primary btn-block btn-lg" id="loginBtn" onclick="doLogin()">Entrar</button>
+        </div>
+
+        <!-- Register panel -->
+        <div class="auth-panel" id="panelRegister">
+          <div class="form-error" id="registerError"></div>
+          <div class="form-success" id="registerSuccess"></div>
+          <div class="field">
+            <label for="regName">Nombre completo</label>
+            <input type="text" id="regName" placeholder="Tu nombre" autocomplete="name"/>
+          </div>
+          <div class="field">
+            <label for="regEmail">Correo electrónico</label>
+            <input type="email" id="regEmail" placeholder="tu@correo.com" autocomplete="email"/>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="regPassword">Contraseña</label>
+              <input type="password" id="regPassword" placeholder="Mínimo 6 caracteres" autocomplete="new-password"/>
+            </div>
+            <div class="field">
+              <label for="regPasswordConfirm">Confirmar</label>
+              <input type="password" id="regPasswordConfirm" placeholder="Repetir contraseña" autocomplete="new-password"/>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-block btn-lg" id="registerBtn" onclick="doRegister()">Crear cuenta</button>
+        </div>
+
+      </div>
+      <div class="auth-footer">
+        <a onclick="history.back()">Continuar como invitado</a>
+      </div>
+    </div>`;
+}
+
+/* ── Dashboard HTML ──────────────────────────────────── */
+function renderDashboard(user, orders) {
+  const meta = user.user_metadata || {};
+  const firstName = (meta.name || user.email || '').split(' ')[0];
+
+  const ordersHTML = renderOrderList(orders, user.email);
+  const profileHTML = renderProfilePanel(user, meta);
+
+  return `
+    <div class="dash-header">
+      <h1>Hola, ${esc(firstName)}</h1>
+      <p>${esc(user.email)}</p>
+    </div>
+    <div class="dash-grid">
+      <div class="panel">
+        <div class="panel-title">Mis órdenes</div>
+        <div id="orderListWrap">${ordersHTML}</div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Mis datos</div>
+        ${profileHTML}
+      </div>
+    </div>`;
+}
+
+function renderOrderList(orders, email) {
+  if (!orders || orders.length === 0) {
+    return `<div class="empty-state">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="2" y="3" width="20" height="18" rx="3"/>
+        <path d="M8 9h8M8 13h5"/>
+      </svg>
+      <p>No tienes órdenes aún.<br>Cuando hagas un pedido, aparecerá aquí.</p>
+    </div>`;
+  }
+
+  const rows = orders.map(o => {
+    const total = o.totals && o.totals.total != null ? fmtPrice(o.totals.total) : '—';
+    const date = o.created_at ? fmtDate(o.created_at) : '—';
+    const orderId = esc(o.id || '');
+    return `
+      <div class="order-row">
+        <div>
+          <div class="order-row-id"># ${orderId}</div>
+          <div class="order-row-total">${total}</div>
+          <div class="order-row-date">${date}</div>
+        </div>
+        <div class="order-row-right">
+          ${renderBadge(o.status)}
+          <a href="orden.html?n=${encodeURIComponent(o.id)}" class="order-link">Ver orden →</a>
+        </div>
+      </div>`;
+  }).join('');
+
+  return `<div class="order-list">${rows}</div>`;
+}
+
+function renderProfilePanel(user, meta) {
+  function val(v) {
+    return v ? `<div class="profile-field-value">${esc(v)}</div>`
+             : `<div class="profile-field-value empty">No guardado</div>`;
+  }
+
+  return `
+    <div id="profileView">
+      <div class="profile-info">
+        <div class="profile-field">
+          <div class="profile-field-label">Nombre</div>
+          ${val(meta.name)}
+        </div>
+        <div class="profile-field">
+          <div class="profile-field-label">Correo</div>
+          <div class="profile-field-value">${esc(user.email)}</div>
+        </div>
+        <div class="profile-field">
+          <div class="profile-field-label">Teléfono</div>
+          ${val(meta.phone)}
+        </div>
+        <div class="profile-field">
+          <div class="profile-field-label">Dirección</div>
+          ${val(meta.address)}
+        </div>
+        <div class="profile-field">
+          <div class="profile-field-label">Sector / Ciudad</div>
+          ${val(meta.sector)}
+        </div>
+      </div>
+      <div class="profile-actions">
+        <button class="btn-edit-profile" onclick="showEditForm()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Editar datos
+        </button>
+        <button class="btn-signout" onclick="doSignOut()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Cerrar sesión
+        </button>
+      </div>
+    </div>
+
+    <div class="edit-form" id="editForm">
+      <div class="form-error" id="editError"></div>
+      <div class="form-success" id="editSuccess"></div>
+      <div class="field">
+        <label for="editName">Nombre</label>
+        <input type="text" id="editName" value="${esc(meta.name || '')}" placeholder="Tu nombre completo"/>
+      </div>
+      <div class="field">
+        <label for="editPhone">Teléfono</label>
+        <input type="tel" id="editPhone" value="${esc(meta.phone || '')}" placeholder="809-000-0000"/>
+      </div>
+      <div class="field">
+        <label for="editAddress">Dirección</label>
+        <input type="text" id="editAddress" value="${esc(meta.address || '')}" placeholder="Calle, número, edificio"/>
+      </div>
+      <div class="field">
+        <label for="editSector">Sector / Ciudad</label>
+        <input type="text" id="editSector" value="${esc(meta.sector || '')}" placeholder="Sector, municipio"/>
+      </div>
+      <div class="edit-form-actions">
+        <button class="btn-save" onclick="doSaveProfile()">Guardar</button>
+        <button class="btn-cancel-edit" onclick="hideEditForm()">Cancelar</button>
+      </div>
+    </div>`;
+}
+
+/* ── Tab switching ───────────────────────────────────── */
+function switchTab(tab) {
+  const isLogin = tab === 'login';
+  document.getElementById('tabLogin').classList.toggle('active', isLogin);
+  document.getElementById('tabRegister').classList.toggle('active', !isLogin);
+  document.getElementById('panelLogin').classList.toggle('visible', isLogin);
+  document.getElementById('panelRegister').classList.toggle('visible', !isLogin);
+}
+
+/* ── Show / hide error ───────────────────────────────── */
+function setError(id, msg) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = msg || '';
+  el.classList.toggle('visible', !!msg);
+}
+function setSuccess(id, msg) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = msg || '';
+  el.classList.toggle('visible', !!msg);
+}
+
+/* ── Auth actions ────────────────────────────────────── */
+async function doLogin() {
+  const email = (document.getElementById('loginEmail').value || '').trim();
+  const password = document.getElementById('loginPassword').value || '';
+  setError('loginError', '');
+
+  if (!email || !password) {
+    setError('loginError', 'Por favor ingresa tu correo y contraseña.');
+    return;
+  }
+
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true;
+  btn.textContent = 'Entrando…';
+
+  const { error } = await window.SB.auth.signInWithPassword({ email, password });
+  btn.disabled = false;
+  btn.textContent = 'Entrar';
+
+  if (error) {
+    const msg = friendlyAuthError(error.message);
+    setError('loginError', msg);
+  }
+  // onAuthStateChange will handle the redirect to dashboard
+}
+
+async function doRegister() {
+  const name  = (document.getElementById('regName').value || '').trim();
+  const email = (document.getElementById('regEmail').value || '').trim();
+  const pw    = document.getElementById('regPassword').value || '';
+  const pw2   = document.getElementById('regPasswordConfirm').value || '';
+  setError('registerError', '');
+  setSuccess('registerSuccess', '');
+
+  if (!name) { setError('registerError', 'Por favor ingresa tu nombre.'); return; }
+  if (!email) { setError('registerError', 'Por favor ingresa tu correo.'); return; }
+  if (pw.length < 6) { setError('registerError', 'La contraseña debe tener al menos 6 caracteres.'); return; }
+  if (pw !== pw2) { setError('registerError', 'Las contraseñas no coinciden.'); return; }
+
+  const btn = document.getElementById('registerBtn');
+  btn.disabled = true;
+  btn.textContent = 'Creando cuenta…';
+
+  const { error } = await window.SB.auth.signUp({
+    email,
+    password: pw,
+    options: { data: { name } }
+  });
+
+  btn.disabled = false;
+  btn.textContent = 'Crear cuenta';
+
+  if (error) {
+    setError('registerError', friendlyAuthError(error.message));
+  } else {
+    setSuccess('registerSuccess', 'Cuenta creada. Revisa tu correo para confirmar tu dirección (puede estar en spam).');
+  }
+}
+
+async function doSignOut() {
+  await window.SB.auth.signOut();
+  // onAuthStateChange will re-render
+}
+
+/* ── Profile edit ────────────────────────────────────── */
+function showEditForm() {
+  const view = document.getElementById('profileView');
+  const form = document.getElementById('editForm');
+  if (view) view.style.display = 'none';
+  if (form) { form.classList.add('visible'); }
+}
+function hideEditForm() {
+  const view = document.getElementById('profileView');
+  const form = document.getElementById('editForm');
+  if (view) view.style.display = '';
+  if (form) { form.classList.remove('visible'); setError('editError',''); setSuccess('editSuccess',''); }
+}
+async function doSaveProfile() {
+  const name    = (document.getElementById('editName').value    || '').trim();
+  const phone   = (document.getElementById('editPhone').value   || '').trim();
+  const address = (document.getElementById('editAddress').value || '').trim();
+  const sector  = (document.getElementById('editSector').value  || '').trim();
+
+  setError('editError', '');
+  setSuccess('editSuccess', '');
+
+  const btn = document.querySelector('#editForm .btn-save');
+  if (btn) { btn.disabled = true; btn.textContent = 'Guardando…'; }
+
+  const { error } = await window.SB.auth.updateUser({ data: { name, phone, address, sector } });
+
+  if (btn) { btn.disabled = false; btn.textContent = 'Guardar'; }
+
+  if (error) {
+    setError('editError', 'No se pudo guardar. Intenta de nuevo.');
+  } else {
+    setSuccess('editSuccess', 'Datos guardados correctamente.');
+    // Refresh dashboard with updated user
+    const { data: { session } } = await window.SB.auth.getSession();
+    if (session) {
+      await loadDashboard(session.user);
+      // After re-render, keep edit form open briefly so success is visible
+    }
+  }
+}
+
+/* ── Friendly error messages ─────────────────────────── */
+function friendlyAuthError(msg) {
+  if (!msg) return 'Ocurrió un error inesperado.';
+  const m = msg.toLowerCase();
+  if (m.includes('invalid login') || m.includes('invalid credentials') || m.includes('email not confirmed'))
+    return 'Correo o contraseña incorrectos.';
+  if (m.includes('email already') || m.includes('already registered') || m.includes('user already'))
+    return 'Ya existe una cuenta con ese correo.';
+  if (m.includes('password') && m.includes('short'))
+    return 'La contraseña es muy corta (mínimo 6 caracteres).';
+  if (m.includes('rate limit') || m.includes('too many'))
+    return 'Demasiados intentos. Espera un momento e intenta de nuevo.';
+  if (m.includes('network') || m.includes('fetch'))
+    return 'Error de conexión. Verifica tu internet.';
+  return msg;
+}
+
+/* ── Fetch orders ────────────────────────────────────── */
+async function fetchOrders(userEmail) {
+  try {
+    const { data, error } = await window.SB
+      .from('orders')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) return [];
+    if (!data) return [];
+
+    return data.filter(o => {
+      const custEmail = (o.customer && o.customer.email) ? o.customer.email.toLowerCase().trim() : '';
+      return custEmail === userEmail.toLowerCase().trim();
+    });
+  } catch (e) {
+    console.warn('Error fetching orders:', e);
+    return [];
+  }
+}
+
+/* ── Load dashboard ──────────────────────────────────── */
+async function loadDashboard(user) {
+  const root = document.getElementById('cuentaRoot');
+
+  // Render shell immediately, then load orders
+  const meta = user.user_metadata || {};
+  const firstName = (meta.name || user.email || '').split(' ')[0];
+
+  root.innerHTML = `
+    <div class="dash-header">
+      <h1>Hola, ${esc(firstName)}</h1>
+      <p>${esc(user.email)}</p>
+    </div>
+    <div class="dash-grid">
+      <div class="panel">
+        <div class="panel-title">Mis órdenes</div>
+        <div id="orderListWrap">
+          <div class="spinner-wrap">
+            <div class="spinner"></div>
+            <span style="font-size:.85rem;color:var(--ink-3)">Cargando órdenes…</span>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Mis datos</div>
+        ${renderProfilePanel(user, meta)}
+      </div>
+    </div>`;
+
+  // Update nav
+  updateNav(meta.name || user.email);
+
+  // Fetch orders async
+  const orders = await fetchOrders(user.email);
+  const wrap = document.getElementById('orderListWrap');
+  if (wrap) wrap.innerHTML = renderOrderList(orders, user.email);
+}
+
+/* ── Load auth gate ──────────────────────────────────── */
+function loadAuthGate() {
+  const root = document.getElementById('cuentaRoot');
+  root.innerHTML = renderAuthGate();
+  updateNav(null);
+}
+
+/* ── Nav update ──────────────────────────────────────── */
+function updateNav(nameOrEmail) {
+  const label = document.getElementById('navCuentaLabel');
+  if (!label) return;
+  if (nameOrEmail) {
+    label.textContent = nameOrEmail.split(' ')[0];
+  } else {
+    label.textContent = 'Mi cuenta';
+  }
+}
+
+/* ── Boot ────────────────────────────────────────────── */
+(async function boot() {
+  // Show loading state briefly
+  const root = document.getElementById('cuentaRoot');
+  root.innerHTML = `<div class="spinner-wrap" style="min-height:40vh;">
+    <div class="spinner"></div>
+  </div>`;
+
+  const { data: { session } } = await window.SB.auth.getSession();
+
+  if (session) {
+    await loadDashboard(session.user);
+  } else {
+    loadAuthGate();
+  }
+
+  // React to auth state changes in real-time
+  window.SB.auth.onAuthStateChange(async (event, session) => {
+    if (session) {
+      await loadDashboard(session.user);
+    } else {
+      loadAuthGate();
+    }
+  });
+})();
+
+/* ── Global: auto-fill checkout ──────────────────────── */
+window.getAccountProfile = async function() {
+  const { data: { session } } = await window.SB.auth.getSession();
+  if (!session) return null;
+  const meta = session.user.user_metadata || {};
+  return {
+    name:    meta.name    || '',
+    email:   session.user.email || '',
+    phone:   meta.phone   || '',
+    address: meta.address || '',
+    sector:  meta.sector  || ''
+  };
+};
+</script>
+
+</body>
+</html>

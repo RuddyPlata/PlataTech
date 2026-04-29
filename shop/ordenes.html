@@ -161,6 +161,26 @@
 .spin::after { content:''; width:36px; height:36px; border-radius:50%; border:3px solid var(--border); border-top-color:var(--blue); animation:sp .7s linear infinite; }
 @keyframes sp { to { transform:rotate(360deg); } }
 
+/* ── Feedback list ─────────────────────────────────── */
+.fb-list { display:flex; flex-direction:column; gap:.6rem; }
+.fb-card {
+  background:var(--white); border:1px solid var(--border); border-radius:14px;
+  padding:1rem 1.25rem; display:grid; grid-template-columns:1fr auto;
+  gap:.5rem .75rem; align-items:start;
+}
+.fb-card-left { display:flex; flex-direction:column; gap:.35rem; }
+.fb-stars { display:flex; align-items:center; gap:.25rem; }
+.fb-stars svg { flex-shrink:0; }
+.fb-ratings { display:flex; gap:1rem; flex-wrap:wrap; }
+.fb-rating-label { font-size:.68rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--ink-3); margin-bottom:.2rem; }
+.fb-comment { font-size:.88rem; color:var(--ink); line-height:1.55; margin-top:.15rem; }
+.fb-comment:empty { display:none; }
+.fb-meta { font-size:.72rem; color:var(--ink-3); text-align:right; line-height:1.6; }
+.fb-recommend { display:inline-flex; align-items:center; gap:.3rem; padding:.22rem .55rem; border-radius:100px; font-size:.7rem; font-weight:700; }
+.fb-recommend.yes { background:#ecfdf5; color:#065f46; border:1px solid rgba(5,150,105,.2); }
+.fb-recommend.no  { background:#fef2f2; color:#991b1b; border:1px solid rgba(185,28,28,.2); }
+.fb-empty { text-align:center; padding:3rem 1rem; color:var(--ink-3); font-size:.92rem; }
+
 @media (max-width:768px) {
   .lookup-form { flex-direction:column; }
   .admin-table { display:block; overflow-x:auto; }
@@ -469,12 +489,34 @@ function renderAdminGate() {
   emailEl.focus();
 }
 
+/* ── Feedback helpers ──────────────────────────────── */
+function renderStars(val, total = 5) {
+  const filled = Math.max(0, Math.min(total, Math.round(val || 0)));
+  let out = '';
+  for (let i = 1; i <= total; i++) {
+    if (i <= filled) {
+      out += `<svg width="13" height="13" viewBox="0 0 24 24" fill="var(--blue)" stroke="var(--blue)" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+    } else {
+      out += `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--border)" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+    }
+  }
+  return out;
+}
+
+async function fetchFeedback() {
+  const { data, error } = await window.SB.from('feedback').select('*').order('created_at', { ascending: false }).limit(50);
+  if (error) { console.error('feedback error:', error); return []; }
+  return data || [];
+}
+
 /* ── ADMIN PANEL ───────────────────────────────────── */
 async function renderAdmin() {
   app.innerHTML = '<div class="spin"></div>';
 
-  const orders = await sbGetAll();
+  const [orders, feedbackRows] = await Promise.all([sbGetAll(), fetchFeedback()]);
+
   const filtered = orders.filter(o => {
+    if (adminFilter === 'opiniones') return false; // feedback tab, skip order filter
     const matchStatus = adminFilter === 'todos' || o.status === adminFilter;
     const q = adminSearch.trim().toLowerCase();
     const matchSearch = !q
@@ -489,6 +531,59 @@ async function renderAdmin() {
   const active = orders.filter(o=>o.status==='pendiente'||o.status==='pagado'||o.status==='contactado'||o.status==='encamino').length;
   const totalRev = orders.filter(o=>o.status!=='cancelado').reduce((s,o)=>s+(o.totals.total||0),0);
 
+  /* Feedback stats */
+  const fbCount = feedbackRows.length;
+  const fbAvgExp = fbCount ? (feedbackRows.reduce((s,r)=>s+(r.experience||0),0)/fbCount) : null;
+  const fbAvgRep = fbCount ? (feedbackRows.reduce((s,r)=>s+(r.rep_rating||0),0)/fbCount) : null;
+  const fbPctRec = fbCount ? Math.round(feedbackRows.filter(r=>r.recommend===true).length/fbCount*100) : null;
+
+  const fbStatHtml = fbCount > 0
+    ? `<div class="admin-stat">&#11088; <b>${fbAvgExp.toFixed(1)}</b> experiencia</div>
+       <div class="admin-stat">&#11088; <b>${fbAvgRep.toFixed(1)}</b> asesor</div>
+       <div class="admin-stat">&#128077; <b>${fbPctRec}%</b> recomiendan</div>
+       <div class="admin-stat"><b>${fbCount}</b> opinion${fbCount===1?'':'es'}</div>`
+    : `<div class="admin-stat" style="color:var(--ink-3)">Sin opiniones aun</div>`;
+
+  /* Feedback content */
+  let fbContentHtml = '';
+  if (adminFilter === 'opiniones') {
+    if (feedbackRows.length === 0) {
+      fbContentHtml = '<div class="fb-empty">Todavia no hay opiniones registradas.</div>';
+    } else {
+      fbContentHtml = `<div class="fb-list">
+        ${feedbackRows.map(r => {
+          const recBadge = r.recommend === true
+            ? `<span class="fb-recommend yes">&#128077; Si recomienda</span>`
+            : r.recommend === false
+              ? `<span class="fb-recommend no">&#128078; No recomienda</span>`
+              : '';
+          const d = r.created_at ? new Date(r.created_at) : null;
+          const dateStr = d ? d.toLocaleDateString('es-DO',{day:'2-digit',month:'short',year:'numeric'}) : '—';
+          return `<div class="fb-card">
+            <div class="fb-card-left">
+              <div class="fb-ratings">
+                <div>
+                  <div class="fb-rating-label">Experiencia</div>
+                  <div class="fb-stars">${renderStars(r.experience)}<span style="font-size:.75rem;color:var(--ink-2);margin-left:.3rem">${r.experience||'—'}/5</span></div>
+                </div>
+                <div>
+                  <div class="fb-rating-label">Asesor</div>
+                  <div class="fb-stars">${renderStars(r.rep_rating)}<span style="font-size:.75rem;color:var(--ink-2);margin-left:.3rem">${r.rep_rating||'—'}/5</span></div>
+                </div>
+                <div style="display:flex;align-items:flex-end;padding-bottom:.05rem">${recBadge}</div>
+              </div>
+              ${r.comment ? `<div class="fb-comment">${esc(r.comment)}</div>` : ''}
+            </div>
+            <div class="fb-meta">
+              ${r.order_id ? `<span style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--blue);font-size:.75rem">${esc(r.order_id)}</span><br/>` : ''}
+              ${dateStr}
+            </div>
+          </div>`;
+        }).join('')}
+      </div>`;
+    }
+  }
+
   app.innerHTML = `
     <div class="admin-panel">
       <div class="admin-topbar">
@@ -498,15 +593,17 @@ async function renderAdmin() {
             <div class="admin-stat"><b>${active}</b> activas</div>
             <div class="admin-stat"><b>${orders.filter(o=>o.status==='entregado').length}</b> entregadas</div>
             <div class="admin-stat">Total <b>${fmtPrice(totalRev)}</b></div>
+            ${fbStatHtml}
           </div>
           <button class="admin-logout" id="logoutBtn">Cerrar sesion</button>
         </div>
       </div>
 
+      ${adminFilter !== 'opiniones' ? `
       <div class="admin-search">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
         <input type="search" id="adminSearchInput" placeholder="Buscar por numero, nombre o telefono..." value="${esc(adminSearch)}"/>
-      </div>
+      </div>` : ''}
 
       <div class="admin-filters" id="adminFilters">
         <button class="af-btn ${adminFilter==='todos'?'active':''}" data-f="todos">Todas (${orders.length})</button>
@@ -514,9 +611,11 @@ async function renderAdmin() {
           const c = counts[s.id]||0;
           return `<button class="af-btn ${adminFilter===s.id?'active':''}" data-f="${s.id}">${s.label} (${c})</button>`;
         }).join('')}
+        <button class="af-btn ${adminFilter==='opiniones'?'active':''}" data-f="opiniones">Opiniones (${fbCount})</button>
       </div>
 
-      ${filtered.length === 0 ? '<div class="admin-empty">No hay ordenes con ese filtro.</div>' : `
+      ${adminFilter === 'opiniones' ? fbContentHtml : (
+        filtered.length === 0 ? '<div class="admin-empty">No hay ordenes con ese filtro.</div>' : `
       <table class="admin-table">
         <thead>
           <tr>
@@ -552,10 +651,11 @@ async function renderAdmin() {
             </tr>`;
           }).join('')}
         </tbody>
-      </table>`}
+      </table>`
+      )}
 
       <div class="admin-footer">
-        <button id="exportCsv">Exportar CSV</button>
+        ${adminFilter !== 'opiniones' ? '<button id="exportCsv">Exportar CSV</button>' : ''}
         <button id="refreshBtn">Actualizar</button>
       </div>
     </div>`;
@@ -571,10 +671,13 @@ async function renderAdmin() {
     btn.addEventListener('click', () => { adminFilter = btn.dataset.f; renderAdmin(); });
   });
 
-  /* Search */
-  document.getElementById('adminSearchInput').addEventListener('input', e => {
-    adminSearch = e.target.value; renderAdmin();
-  });
+  /* Search (only shown outside opiniones tab) */
+  const searchEl = document.getElementById('adminSearchInput');
+  if (searchEl) {
+    searchEl.addEventListener('input', e => {
+      adminSearch = e.target.value; renderAdmin();
+    });
+  }
 
   /* Status change */
   document.querySelectorAll('.admin-status-select').forEach(sel => {
@@ -596,28 +699,31 @@ async function renderAdmin() {
   document.getElementById('refreshBtn').addEventListener('click', () => renderAdmin());
 
   /* CSV export */
-  document.getElementById('exportCsv').addEventListener('click', () => {
-    const rows = [['Orden','Fecha','Cliente','Telefono','Direccion','Sector','Metodo','Estado','Items','Total RD$']];
-    orders.forEach(o => {
-      rows.push([
-        o.id, o.createdAt,
-        o.customer ? o.customer.name : '',
-        o.customer ? o.customer.phone : '',
-        o.customer ? o.customer.address : '',
-        o.customer ? o.customer.sector : '',
-        o.paymentMethod === 'online' ? 'PayPal' : o.codeliveryMode,
-        o.status,
-        o.items.map(i => i.qty + 'x ' + i.name).join(' | '),
-        o.totals.total || 0
-      ]);
+  const csvBtn = document.getElementById('exportCsv');
+  if (csvBtn) {
+    csvBtn.addEventListener('click', () => {
+      const rows = [['Orden','Fecha','Cliente','Telefono','Direccion','Sector','Metodo','Estado','Items','Total RD$']];
+      orders.forEach(o => {
+        rows.push([
+          o.id, o.createdAt,
+          o.customer ? o.customer.name : '',
+          o.customer ? o.customer.phone : '',
+          o.customer ? o.customer.address : '',
+          o.customer ? o.customer.sector : '',
+          o.paymentMethod === 'online' ? 'PayPal' : o.codeliveryMode,
+          o.status,
+          o.items.map(i => i.qty + 'x ' + i.name).join(' | '),
+          o.totals.total || 0
+        ]);
+      });
+      const csv = rows.map(r => r.map(c => '"' + String(c||'').replace(/"/g,'""') + '"').join(',')).join('\n');
+      const blob = new Blob(['\uFEFF' + csv], { type:'text/csv;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'ordenes-' + new Date().toISOString().slice(0,10) + '.csv';
+      a.click();
     });
-    const csv = rows.map(r => r.map(c => '"' + String(c||'').replace(/"/g,'""') + '"').join(',')).join('\n');
-    const blob = new Blob(['\uFEFF' + csv], { type:'text/csv;charset=utf-8' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'ordenes-' + new Date().toISOString().slice(0,10) + '.csv';
-    a.click();
-  });
+  }
 }
 </script>
 </body>
