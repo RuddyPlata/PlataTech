@@ -181,6 +181,66 @@
 .fb-recommend.no  { background:#fef2f2; color:#991b1b; border:1px solid rgba(185,28,28,.2); }
 .fb-empty { text-align:center; padding:3rem 1rem; color:var(--ink-3); font-size:.92rem; }
 
+/* ── Products tab ──────────────────────────────────── */
+.prod-topbar { display:flex; align-items:center; justify-content:space-between; gap:.75rem; flex-wrap:wrap; margin-bottom:1rem; }
+.prod-topbar-left { display:flex; align-items:center; gap:.75rem; flex-wrap:wrap; }
+.prod-add-btn {
+  padding:.55rem 1.1rem; border-radius:100px; font:inherit; font-size:.8rem; font-weight:700;
+  background:var(--ink); color:var(--white); border:0; cursor:pointer; transition:background .2s;
+}
+.prod-add-btn:hover { background:var(--blue); }
+.prod-count { font-size:.82rem; color:var(--ink-3); }
+.prod-pub-badge { display:inline-block; padding:.18rem .55rem; border-radius:100px; font-size:.7rem; font-weight:700; }
+.prod-pub-badge.yes { background:#ecfdf5; color:#065f46; border:1px solid rgba(5,150,105,.2); }
+.prod-pub-badge.no  { background:#fef2f2; color:#991b1b; border:1px solid rgba(185,28,28,.2); }
+.prod-action-btn {
+  padding:.3rem .65rem; border-radius:8px; font:inherit; font-size:.75rem; font-weight:600;
+  cursor:pointer; border:1px solid var(--border); background:var(--off-white); color:var(--ink); transition:background .2s, color .2s;
+}
+.prod-action-btn:hover { background:var(--blue-tint); border-color:var(--blue); color:var(--blue); }
+.prod-action-btn.del:hover { background:#fef2f2; border-color:#fecaca; color:#b91c1c; }
+
+/* Product form */
+.prod-form-panel {
+  margin-top:1.25rem; background:var(--white); border:1px solid var(--border);
+  border-radius:14px; padding:1.5rem 1.75rem;
+}
+.prod-form-panel h3 { font-family:'Space Grotesk',sans-serif; font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--ink-3); margin-bottom:1.1rem; }
+.prod-form-grid { display:grid; grid-template-columns:1fr 1fr; gap:.75rem 1rem; }
+.prod-form-field { display:flex; flex-direction:column; gap:.32rem; }
+.prod-form-field.full { grid-column:1 / -1; }
+.prod-form-field label { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-3); }
+.prod-form-field input,
+.prod-form-field select,
+.prod-form-field textarea {
+  padding:.65rem .9rem; border:1.5px solid var(--border); border-radius:10px;
+  font:inherit; font-size:.88rem; color:var(--ink); background:var(--off-white);
+  outline:none; transition:border-color .2s;
+}
+.prod-form-field input:focus,
+.prod-form-field select:focus,
+.prod-form-field textarea:focus { border-color:var(--blue); background:var(--white); }
+.prod-form-field .slug-preview { font-size:.72rem; color:var(--ink-3); margin-top:.2rem; font-family:monospace; }
+.prod-form-check { display:flex; align-items:center; gap:.5rem; font-size:.88rem; font-weight:500; cursor:pointer; margin-top:.4rem; }
+.prod-form-check input[type=checkbox] { width:16px; height:16px; cursor:pointer; accent-color:var(--blue); }
+.prod-form-actions { display:flex; gap:.6rem; margin-top:1.1rem; flex-wrap:wrap; }
+.prod-save-btn {
+  padding:.65rem 1.4rem; border-radius:10px; font:inherit; font-size:.88rem; font-weight:700;
+  background:var(--ink); color:var(--white); border:0; cursor:pointer; transition:background .2s;
+}
+.prod-save-btn:hover { background:var(--blue); }
+.prod-save-btn:disabled { opacity:.55; cursor:not-allowed; }
+.prod-cancel-btn {
+  padding:.65rem 1.1rem; border-radius:10px; font:inherit; font-size:.88rem; font-weight:600;
+  background:var(--off-white); color:var(--ink-2); border:1px solid var(--border); cursor:pointer; transition:background .2s;
+}
+.prod-cancel-btn:hover { background:var(--border); }
+
+@media (max-width:600px) {
+  .prod-form-grid { grid-template-columns:1fr; }
+  .prod-form-field.full { grid-column:1; }
+}
+
 @media (max-width:768px) {
   .lookup-form { flex-direction:column; }
   .admin-table { display:block; overflow-x:auto; }
@@ -255,10 +315,11 @@ const STATUSES = [
   { id:'cancelado',  label:'Cancelado' }
 ];
 
-let view        = 'lookup';
-let adminFilter = 'todos';
-let adminSearch = '';
-let foundOrder  = null;
+let view          = 'lookup';
+let adminFilter   = 'todos';
+let adminSearch   = '';
+let foundOrder    = null;
+let editingProduct = null;
 
 /* ── URL init ──────────────────────────────────────── */
 const urlP = new URLSearchParams(location.search);
@@ -310,6 +371,40 @@ async function sbGetAll() {
 async function sbUpdateStatus(id, status) {
   const { error } = await window.SB.from('orders').update({ status }).eq('id', id);
   if (error) console.error('update error:', error);
+}
+
+/* ── Custom products ───────────────────────────────── */
+const PRODUCT_CATS = ['celulares','accesorios','tablets','laptops','audio','smartwatch','gaming','seguridad','conectividad','varios'];
+
+function slugify(text) {
+  return (text || '').toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').substring(0, 80);
+}
+
+async function fetchCustomProducts() {
+  const { data, error } = await window.SB.from('custom_products').select('*').order('created_at', { ascending: false });
+  if (error) { console.error('custom_products fetch error:', error); return []; }
+  return data || [];
+}
+
+async function saveCustomProduct(data) {
+  if (data.id) {
+    const { error } = await window.SB.from('custom_products').update(data).eq('id', data.id);
+    if (error) { console.error('custom_products update error:', error); return false; }
+  } else {
+    const { id: _id, ...insertData } = data;
+    const { error } = await window.SB.from('custom_products').insert(insertData);
+    if (error) { console.error('custom_products insert error:', error); return false; }
+  }
+  return true;
+}
+
+async function deleteCustomProduct(id) {
+  if (!confirm('¿Eliminar este producto? Esta accion no se puede deshacer.')) return false;
+  const { error } = await window.SB.from('custom_products').delete().eq('id', id);
+  if (error) { console.error('custom_products delete error:', error); return false; }
+  return true;
 }
 
 /* ── Check existing session on load ───────────────── */
@@ -513,10 +608,10 @@ async function fetchFeedback() {
 async function renderAdmin() {
   app.innerHTML = '<div class="spin"></div>';
 
-  const [orders, feedbackRows] = await Promise.all([sbGetAll(), fetchFeedback()]);
+  const [orders, feedbackRows, customProducts] = await Promise.all([sbGetAll(), fetchFeedback(), fetchCustomProducts()]);
 
   const filtered = orders.filter(o => {
-    if (adminFilter === 'opiniones') return false; // feedback tab, skip order filter
+    if (adminFilter === 'opiniones' || adminFilter === 'productos') return false;
     const matchStatus = adminFilter === 'todos' || o.status === adminFilter;
     const q = adminSearch.trim().toLowerCase();
     const matchSearch = !q
@@ -584,6 +679,114 @@ async function renderAdmin() {
     }
   }
 
+  /* Products content */
+  const publishedCount = customProducts.filter(p => p.published).length;
+  const prodFormHtml = `
+    <div class="prod-form-panel" id="prodFormPanel">
+      <h3 id="prodFormTitle">Agregar producto</h3>
+      <div class="prod-form-grid">
+        <div class="prod-form-field">
+          <label>Nombre</label>
+          <input type="text" id="pf-name" placeholder="Ej: iPhone 15 Pro" autocomplete="off"/>
+          <div class="slug-preview" id="pf-slug-preview"></div>
+        </div>
+        <div class="prod-form-field">
+          <label>Marca</label>
+          <input type="text" id="pf-brand" placeholder="Ej: Apple" autocomplete="off"/>
+        </div>
+        <div class="prod-form-field">
+          <label>Categoria</label>
+          <select id="pf-category">
+            <option value="">— Seleccionar —</option>
+            ${PRODUCT_CATS.map(c => `<option value="${c}">${c}</option>`).join('')}
+          </select>
+        </div>
+        <div class="prod-form-field">
+          <label>Variante</label>
+          <input type="text" id="pf-variant" placeholder="Ej: 256GB Negro" autocomplete="off"/>
+        </div>
+        <div class="prod-form-field">
+          <label>Precio (RD$)</label>
+          <input type="number" id="pf-price" placeholder="0" min="0"/>
+        </div>
+        <div class="prod-form-field">
+          <label>Precio anterior (RD$)</label>
+          <input type="number" id="pf-old-price" placeholder="0" min="0"/>
+        </div>
+        <div class="prod-form-field">
+          <label>Stock</label>
+          <input type="number" id="pf-stock" placeholder="0" min="0"/>
+        </div>
+        <div class="prod-form-field">
+          <label>Badge</label>
+          <input type="text" id="pf-badge" placeholder="Ej: Nuevo" autocomplete="off"/>
+        </div>
+        <div class="prod-form-field full">
+          <label>URL de imagen</label>
+          <input type="url" id="pf-image-url" placeholder="https://..." autocomplete="off"/>
+        </div>
+        <div class="prod-form-field full">
+          <label>Descripcion</label>
+          <input type="text" id="pf-description" placeholder="Descripcion breve del producto" autocomplete="off"/>
+        </div>
+        <div class="prod-form-field full">
+          <label class="prod-form-check">
+            <input type="checkbox" id="pf-published"/>
+            Publicado (visible en la tienda)
+          </label>
+        </div>
+      </div>
+      <div class="prod-form-actions">
+        <button class="prod-save-btn" id="prodSaveBtn">Guardar</button>
+        <button class="prod-cancel-btn" id="prodCancelBtn">Cancelar</button>
+      </div>
+    </div>`;
+
+  let prodContentHtml = '';
+  if (adminFilter === 'productos') {
+    prodContentHtml = `
+      <div class="prod-topbar">
+        <div class="prod-topbar-left">
+          <button class="prod-add-btn" id="prodAddBtn">+ Agregar producto</button>
+          <span class="prod-count">${publishedCount} publicado${publishedCount===1?'':'s'} de ${customProducts.length}</span>
+        </div>
+      </div>
+      ${customProducts.length === 0 ? '<div class="admin-empty">No hay productos personalizados aun.</div>' : `
+      <table class="admin-table" id="prodTable">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Categoria</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${customProducts.map(p => `<tr>
+            <td>
+              <div style="font-weight:600;font-size:.85rem">${esc(p.name)}</div>
+              ${p.brand ? `<div style="font-size:.72rem;color:var(--ink-3)">${esc(p.brand)}</div>` : ''}
+              ${p.variant ? `<div style="font-size:.72rem;color:var(--ink-3)">${esc(p.variant)}</div>` : ''}
+            </td>
+            <td style="font-size:.8rem">${esc(p.category||'—')}</td>
+            <td style="font-weight:700;white-space:nowrap">
+              ${'RD$' + Number(p.price||0).toLocaleString('es-DO')}
+              ${p.old_price ? `<br/><span style="font-size:.72rem;color:var(--ink-3);text-decoration:line-through">${'RD$' + Number(p.old_price).toLocaleString('es-DO')}</span>` : ''}
+            </td>
+            <td style="font-size:.85rem">${p.stock != null ? p.stock : '—'}</td>
+            <td><span class="prod-pub-badge ${p.published ? 'yes' : 'no'}">${p.published ? 'Publicado' : 'Oculto'}</span></td>
+            <td style="white-space:nowrap">
+              <button class="prod-action-btn" data-edit-id="${esc(p.id)}">Editar</button>
+              <button class="prod-action-btn del" data-del-id="${esc(p.id)}" style="margin-left:.3rem">Eliminar</button>
+            </td>
+          </tr>`).join('')}
+        </tbody>
+      </table>`}
+      <div id="prodFormContainer" style="display:none">${prodFormHtml}</div>`;
+  }
+
   app.innerHTML = `
     <div class="admin-panel">
       <div class="admin-topbar">
@@ -599,7 +802,7 @@ async function renderAdmin() {
         </div>
       </div>
 
-      ${adminFilter !== 'opiniones' ? `
+      ${(adminFilter !== 'opiniones' && adminFilter !== 'productos') ? `
       <div class="admin-search">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
         <input type="search" id="adminSearchInput" placeholder="Buscar por numero, nombre o telefono..." value="${esc(adminSearch)}"/>
@@ -612,9 +815,10 @@ async function renderAdmin() {
           return `<button class="af-btn ${adminFilter===s.id?'active':''}" data-f="${s.id}">${s.label} (${c})</button>`;
         }).join('')}
         <button class="af-btn ${adminFilter==='opiniones'?'active':''}" data-f="opiniones">Opiniones (${fbCount})</button>
+        <button class="af-btn ${adminFilter==='productos'?'active':''}" data-f="productos">Productos</button>
       </div>
 
-      ${adminFilter === 'opiniones' ? fbContentHtml : (
+      ${adminFilter === 'productos' ? prodContentHtml : adminFilter === 'opiniones' ? fbContentHtml : (
         filtered.length === 0 ? '<div class="admin-empty">No hay ordenes con ese filtro.</div>' : `
       <table class="admin-table">
         <thead>
@@ -655,7 +859,7 @@ async function renderAdmin() {
       )}
 
       <div class="admin-footer">
-        ${adminFilter !== 'opiniones' ? '<button id="exportCsv">Exportar CSV</button>' : ''}
+        ${(adminFilter !== 'opiniones' && adminFilter !== 'productos') ? '<button id="exportCsv">Exportar CSV</button>' : ''}
         <button id="refreshBtn">Actualizar</button>
       </div>
     </div>`;
@@ -722,6 +926,149 @@ async function renderAdmin() {
       a.href = URL.createObjectURL(blob);
       a.download = 'ordenes-' + new Date().toISOString().slice(0,10) + '.csv';
       a.click();
+    });
+  }
+
+  /* ── Products tab event listeners ─────────────────── */
+  if (adminFilter === 'productos') {
+    const formContainer = document.getElementById('prodFormContainer');
+
+    function openProdForm(product) {
+      editingProduct = product || null;
+      const titleEl = document.getElementById('prodFormTitle');
+      if (titleEl) titleEl.textContent = editingProduct ? 'Editar producto' : 'Agregar producto';
+
+      const nameEl     = document.getElementById('pf-name');
+      const brandEl    = document.getElementById('pf-brand');
+      const catEl      = document.getElementById('pf-category');
+      const variantEl  = document.getElementById('pf-variant');
+      const priceEl    = document.getElementById('pf-price');
+      const oldPriceEl = document.getElementById('pf-old-price');
+      const stockEl    = document.getElementById('pf-stock');
+      const badgeEl    = document.getElementById('pf-badge');
+      const imageEl    = document.getElementById('pf-image-url');
+      const descEl     = document.getElementById('pf-description');
+      const pubEl      = document.getElementById('pf-published');
+      const slugPrev   = document.getElementById('pf-slug-preview');
+
+      if (editingProduct) {
+        nameEl.value     = editingProduct.name || '';
+        brandEl.value    = editingProduct.brand || '';
+        catEl.value      = editingProduct.category || '';
+        variantEl.value  = editingProduct.variant || '';
+        priceEl.value    = editingProduct.price != null ? editingProduct.price : '';
+        oldPriceEl.value = editingProduct.old_price != null ? editingProduct.old_price : '';
+        stockEl.value    = editingProduct.stock != null ? editingProduct.stock : '';
+        badgeEl.value    = editingProduct.badge || '';
+        imageEl.value    = editingProduct.image_url || '';
+        descEl.value     = editingProduct.description || '';
+        pubEl.checked    = !!editingProduct.published;
+        slugPrev.textContent = 'slug: ' + (editingProduct.slug || slugify(editingProduct.name || ''));
+      } else {
+        nameEl.value = brandEl.value = catEl.value = variantEl.value = '';
+        priceEl.value = oldPriceEl.value = stockEl.value = badgeEl.value = '';
+        imageEl.value = descEl.value = '';
+        pubEl.checked = true;
+        slugPrev.textContent = '';
+      }
+
+      formContainer.style.display = 'block';
+      nameEl.focus();
+    }
+
+    function closeProdForm() {
+      editingProduct = null;
+      formContainer.style.display = 'none';
+    }
+
+    /* "Agregar producto" button */
+    const addBtn = document.getElementById('prodAddBtn');
+    if (addBtn) addBtn.addEventListener('click', () => openProdForm(null));
+
+    /* Edit buttons */
+    document.querySelectorAll('[data-edit-id]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const p = customProducts.find(x => x.id === btn.dataset.editId);
+        if (p) openProdForm(p);
+      });
+    });
+
+    /* Delete buttons */
+    document.querySelectorAll('[data-del-id]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const ok = await deleteCustomProduct(btn.dataset.delId);
+        if (ok) renderAdmin();
+      });
+    });
+
+    /* Cancel */
+    document.addEventListener('click', function onCancel(e) {
+      if (e.target && e.target.id === 'prodCancelBtn') {
+        closeProdForm();
+        document.removeEventListener('click', onCancel);
+      }
+    });
+
+    /* Save */
+    document.addEventListener('click', function onSave(e) {
+      if (e.target && e.target.id === 'prodSaveBtn') {
+        (async () => {
+          const saveBtn    = document.getElementById('prodSaveBtn');
+          const nameEl     = document.getElementById('pf-name');
+          const brandEl    = document.getElementById('pf-brand');
+          const catEl      = document.getElementById('pf-category');
+          const variantEl  = document.getElementById('pf-variant');
+          const priceEl    = document.getElementById('pf-price');
+          const oldPriceEl = document.getElementById('pf-old-price');
+          const stockEl    = document.getElementById('pf-stock');
+          const badgeEl    = document.getElementById('pf-badge');
+          const imageEl    = document.getElementById('pf-image-url');
+          const descEl     = document.getElementById('pf-description');
+          const pubEl      = document.getElementById('pf-published');
+
+          const name = nameEl.value.trim();
+          if (!name) { nameEl.focus(); return; }
+
+          saveBtn.disabled = true; saveBtn.textContent = 'Guardando...';
+
+          const payload = {
+            slug:        slugify(name),
+            name,
+            brand:       brandEl.value.trim() || null,
+            category:    catEl.value || null,
+            variant:     variantEl.value.trim() || null,
+            price:       priceEl.value !== '' ? parseInt(priceEl.value, 10) : null,
+            old_price:   oldPriceEl.value !== '' ? parseInt(oldPriceEl.value, 10) : null,
+            stock:       stockEl.value !== '' ? parseInt(stockEl.value, 10) : null,
+            badge:       badgeEl.value.trim() || null,
+            badge_text:  badgeEl.value.trim() || null,
+            image_url:   imageEl.value.trim() || null,
+            description: descEl.value.trim() || null,
+            published:   pubEl.checked
+          };
+
+          if (editingProduct && editingProduct.id) {
+            payload.id = editingProduct.id;
+          }
+
+          const ok = await saveCustomProduct(payload);
+          document.removeEventListener('click', onSave);
+          if (ok) {
+            renderAdmin();
+          } else {
+            saveBtn.disabled = false; saveBtn.textContent = 'Guardar';
+            alert('Error al guardar. Revisa la consola.');
+          }
+        })();
+      }
+    });
+
+    /* Live slug preview */
+    document.addEventListener('input', function onNameInput(e) {
+      if (e.target && e.target.id === 'pf-name') {
+        const slugPrev = document.getElementById('pf-slug-preview');
+        if (slugPrev) slugPrev.textContent = e.target.value ? 'slug: ' + slugify(e.target.value) : '';
+      }
     });
   }
 }
