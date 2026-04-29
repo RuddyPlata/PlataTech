@@ -413,12 +413,26 @@ async function delProd(id){
   return !error;
 }
 
+/* ── Admin role check ────────────────────────────────── */
+function isAdmin(session){
+  return session?.user?.app_metadata?.is_admin === true
+      || session?.user?.app_metadata?.is_admin === 'true';
+}
+
+function showNotAdmin(){
+  gateRoot.style.display='';
+  document.getElementById('gErr').textContent='Acceso denegado: esta cuenta no tiene permisos de administrador.';
+  window.SB.auth.signOut();
+}
+
 /* ── Init ────────────────────────────────────────────── */
 (async function init(){
   const {data:{session}}=await window.SB.auth.getSession();
   if(!session){
     gateRoot.style.display='';
     setupGate();
+  } else if(!isAdmin(session)){
+    showNotAdmin();
   } else {
     gateRoot.style.display='none';
     await showAdmin();
@@ -435,11 +449,15 @@ function setupGate(){
     const email=emailEl.value.trim(), pass=passEl.value;
     if(!email||!pass) return;
     btn.disabled=true; btn.textContent='Entrando...';
-    const {error}=await window.SB.auth.signInWithPassword({email,password:pass});
+    const {data,error}=await window.SB.auth.signInWithPassword({email,password:pass});
     if(error){
-      errEl.textContent='Correo o contrasena incorrectos.';
+      errEl.textContent='Correo o contraseña incorrectos.';
       passEl.value=''; passEl.classList.add('err');
       setTimeout(()=>passEl.classList.remove('err'),500);
+      btn.disabled=false; btn.textContent='Entrar al dashboard';
+    } else if(!isAdmin(data.session)){
+      errEl.textContent='Acceso denegado: esta cuenta no tiene permisos de administrador.';
+      await window.SB.auth.signOut();
       btn.disabled=false; btn.textContent='Entrar al dashboard';
     } else {
       gateRoot.style.display='none';
