@@ -82,11 +82,19 @@
 </section>
 
 <!-- ══ FILTERS ═════════════════════════════════════════ -->
-<div class="filter-bar">
+<div class="filter-bar" id="filterBar">
   <div class="container filter-inner">
     <div class="filter-cats" id="filterCats"></div>
     <select class="cat-select" id="catSelect" aria-label="Categoria"></select>
-    <div class="filter-price">
+    <div class="filter-search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input type="search" id="searchInput" placeholder="Buscar producto, marca..."/>
+    </div>
+    <button type="button" class="price-toggle-btn" id="priceToggleBtn" aria-expanded="false">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+      Precio
+    </button>
+    <div class="filter-price" id="filterPrice">
       <span class="filter-price-label">Precio</span>
       <div class="filter-price-slider">
         <div class="filter-price-track"></div>
@@ -96,10 +104,6 @@
       </div>
       <span class="filter-price-value" id="priceText">RD$0 — RD$0</span>
       <button type="button" class="filter-price-reset" id="priceReset" hidden>Limpiar</button>
-    </div>
-    <div class="filter-search">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-      <input type="search" id="searchInput" placeholder="Buscar producto, marca, modelo..."/>
     </div>
   </div>
 </div>
@@ -218,6 +222,38 @@ resetBt.addEventListener('click', () => {
   refreshPriceUI(); renderProducts();
 });
 refreshPriceUI();
+
+/* ── Price panel toggle (mobile) ───────────────────── */
+(function() {
+  const toggleBtn   = document.getElementById('priceToggleBtn');
+  const pricePanel  = document.getElementById('filterPrice');
+  if (!toggleBtn || !pricePanel) return;
+
+  function updateIndicator() {
+    const active = priceMin !== PRICE_LO || priceMax !== PRICE_HI;
+    toggleBtn.classList.toggle('price-active', active);
+  }
+  // Hook into existing price events to update indicator
+  ['input'].forEach(ev => {
+    document.getElementById('priceMin').addEventListener(ev, updateIndicator);
+    document.getElementById('priceMax').addEventListener(ev, updateIndicator);
+  });
+  document.getElementById('priceReset').addEventListener('click', updateIndicator);
+
+  toggleBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    const open = pricePanel.classList.toggle('panel-open');
+    toggleBtn.setAttribute('aria-expanded', open);
+    toggleBtn.classList.toggle('active', open);
+  });
+  document.addEventListener('click', function(e) {
+    if (!pricePanel.contains(e.target) && e.target !== toggleBtn) {
+      pricePanel.classList.remove('panel-open');
+      toggleBtn.classList.remove('active');
+      toggleBtn.setAttribute('aria-expanded', 'false');
+    }
+  });
+})();
 
 /* ── Categories filter ──────────────────────────────── */
 function renderCategories() {
