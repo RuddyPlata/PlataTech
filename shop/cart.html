@@ -838,9 +838,33 @@ async function placeOrder(totals) {
   location.href = `orden.html?n=${encodeURIComponent(order.id)}`;
 }
 
+const PP_FAIL_KEY = 'pp_fail_count';
+const PP_FAIL_MAX = 2;
+
+function ppFails() { return parseInt(sessionStorage.getItem(PP_FAIL_KEY) || '0'); }
+function ppAddFail() {
+  const n = ppFails() + 1;
+  sessionStorage.setItem(PP_FAIL_KEY, n);
+  return n;
+}
+function ppBlockedHtml() {
+  return `<div style="background:#fef2f2;border:1.5px solid #fecaca;border-radius:12px;padding:1.1rem 1.25rem;text-align:center;font-size:.88rem;color:#991b1b;line-height:1.55">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto .5rem;display:block"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+    <b>Pago bloqueado temporalmente.</b><br/>
+    Detectamos multiples intentos fallidos en esta sesion.<br/>
+    Coordina tu pedido por <a href="https://wa.me/18494950959" target="_blank" style="color:#991b1b;font-weight:700">WhatsApp</a> o intenta con contra-entrega.
+  </div>`;
+}
+
 function renderPayPal(totals) {
   const container = document.getElementById('paypalButtonsCart');
   if (!container) return;
+
+  if (ppFails() >= PP_FAIL_MAX) {
+    container.innerHTML = ppBlockedHtml();
+    return;
+  }
+
   container.innerHTML = '';
 
   if (typeof paypal === 'undefined' || !window.paypal || !window.paypal.Buttons) {
