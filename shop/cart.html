@@ -476,7 +476,7 @@ function restoreFormState() {
   });
 }
 
-/* Calcular totales — contra-entrega exonerado de ITBIS, online incluye 18% */
+/* Calcular totales — contra-entrega exonerado de ITBIS, online incluye 18% ITBIS */
 function computeTotals() {
   const items = window.Cart.get();
   let subtotal = 0;
@@ -485,10 +485,10 @@ function computeTotals() {
     if (p) subtotal += p.price * i.qty;
   });
   const noItbis = (paymentMethod === 'contra-entrega');
-  const itbis = noItbis ? 0 : Math.round(subtotal * 0.18);
-  const total = subtotal + itbis;
+  const itbis   = noItbis ? 0 : Math.round(subtotal * 0.18);
+  const total   = subtotal + itbis;
   const itemCount = items.reduce((s, i) => s + i.qty, 0);
-  return { subtotal, discount: 0, subtotalNet: subtotal, itbis, total, itemCount, noItbis };
+  return { subtotal, itbis, total, itemCount, noItbis };
 }
 
 function render() {
@@ -864,8 +864,9 @@ function renderPayPal(totals) {
           };
         }).filter(Boolean);
 
-        const subTotUsd = items.reduce(function(s, i) { return s + (+i.unit_amount.value * +i.quantity); }, 0);
-        const taxUsd = +(subTotUsd * 0.18).toFixed(2);
+        // Apply silent 6% margin buffer on USD amount to cover PayPal fees + min margin
+        const subTotUsd = +(items.reduce(function(s, i) { return s + (+i.unit_amount.value * +i.quantity); }, 0) * 1.06).toFixed(2);
+        const taxUsd    = +(subTotUsd * 0.18).toFixed(2);
 
         return actions.order.create({
           purchase_units: [{
