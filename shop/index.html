@@ -85,6 +85,7 @@
 <div class="filter-bar">
   <div class="container filter-inner">
     <div class="filter-cats" id="filterCats"></div>
+    <select class="cat-select" id="catSelect" aria-label="Categoria"></select>
     <div class="filter-price">
       <span class="filter-price-label">Precio</span>
       <div class="filter-price-slider">
@@ -221,14 +222,21 @@ refreshPriceUI();
 /* ── Categories filter ──────────────────────────────── */
 function renderCategories() {
   const root = document.getElementById('filterCats');
-  root.innerHTML = window.CATEGORIES.map(cat => {
+  const sel  = document.getElementById('catSelect');
+
+  const items = window.CATEGORIES.map(cat => {
     const count = cat.id === 'todos'
       ? window.PRODUCTS.length
       : window.PRODUCTS.filter(p => p.category === cat.id).length;
-    return `<button class="filter-cat ${cat.id === activeCategory ? 'active' : ''}" data-cat="${cat.id}">
+    return { cat, count };
+  });
+
+  // Pill buttons (desktop)
+  root.innerHTML = items.map(({ cat, count }) =>
+    `<button class="filter-cat ${cat.id === activeCategory ? 'active' : ''}" data-cat="${cat.id}">
       ${cat.name} <span style="opacity:.55">(${count})</span>
-    </button>`;
-  }).join('');
+    </button>`
+  ).join('');
   root.querySelectorAll('.filter-cat').forEach(btn => {
     btn.addEventListener('click', () => {
       activeCategory = btn.dataset.cat;
@@ -237,6 +245,19 @@ function renderCategories() {
       renderProducts();
     });
   });
+
+  // Dropdown (mobile)
+  if (sel) {
+    sel.innerHTML = items.map(({ cat, count }) =>
+      `<option value="${cat.id}" ${cat.id === activeCategory ? 'selected' : ''}>${cat.name} (${count})</option>`
+    ).join('');
+    sel.onchange = () => {
+      activeCategory = sel.value;
+      viewMode = 'auto';
+      renderCategories();
+      renderProducts();
+    };
+  }
 }
 
 /* ── Helpers ────────────────────────────────────────── */

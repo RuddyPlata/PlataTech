@@ -972,7 +972,19 @@ function renderPayPal(totals) {
 
       onError: function(err) {
         console.error('PayPal error:', err);
-        alert('Hubo un problema con el pago. Intenta de nuevo o coordina por WhatsApp al 849-495-0959.');
+        const fails = ppAddFail();
+        if (fails >= PP_FAIL_MAX) {
+          container.innerHTML = ppBlockedHtml();
+          if (window.SB) {
+            window.SB.from('payment_blocks').insert({
+              reason: 'consecutive_declines',
+              attempts: fails,
+              ua: navigator.userAgent.substring(0, 200)
+            }).then(() => {});
+          }
+        } else {
+          alert(`Hubo un problema con el pago (intento ${fails} de ${PP_FAIL_MAX}). Verifica tu tarjeta e intenta de nuevo.`);
+        }
       }
     }).render('#paypalButtonsCart');
   } catch (e) {
