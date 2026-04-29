@@ -267,6 +267,33 @@
   .order-form .ff-row { grid-template-columns: 1fr; }
 }
 
+/* Map picker */
+.map-pick-btn {
+  display: flex; align-items: center; gap: .55rem;
+  padding: .7rem 1rem; border-radius: 10px;
+  border: 1.5px dashed var(--border-2); background: var(--off-white);
+  font: inherit; font-size: .86rem; font-weight: 600; color: var(--blue);
+  cursor: pointer; transition: border-color .2s, background .2s;
+  width: 100%;
+}
+.map-pick-btn:hover { border-color: var(--blue); background: var(--blue-tint); }
+.map-pick-btn svg { flex-shrink: 0; }
+.map-pin-label {
+  font-size: .76rem; color: #059669; font-weight: 600;
+  display: flex; align-items: center; gap: .35rem; margin-top: .3rem;
+}
+#mapPickerWrap {
+  border-radius: 14px; overflow: hidden;
+  border: 1.5px solid var(--border);
+  margin-top: .5rem; display: none;
+}
+#mapPickerWrap.open { display: block; }
+#mapDiv { width: 100%; height: 240px; }
+.map-hint {
+  padding: .5rem .85rem; background: var(--blue-tint);
+  font-size: .75rem; color: var(--ink-2); text-align: center;
+}
+
 /* Empty */
 .cart-empty {
   padding: 5rem 2rem; text-align: center;
@@ -344,6 +371,7 @@
     </div>
     <div class="shop-foot-links">
       <a href="index.html">Tienda</a>
+      <a href="ordenes.html">Mis ordenes</a>
       <a href="../index.html">Inicio</a>
       <a href="https://wa.me/18494950959" target="_blank">WhatsApp</a>
     </div>
@@ -355,8 +383,12 @@
 <script src="assets/products-overrides.js"></script>
 <script src="assets/cart.js"></script>
 
-<!-- PayPal SDK — reemplaza YOUR_PAYPAL_CLIENT_ID con tu Client ID real -->
-<script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&currency=USD&components=buttons&disable-funding=credit,card"></script>
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="assets/sb.js"></script>
+
+<!-- PayPal SDK -->
+<script src="https://www.paypal.com/sdk/js?client-id=Aawkw19CboHF0mf8LQKMpu8qsdxx_Lue-ioCF-2KhBmZGhDOSgCXCSU7xDG6D_j09tELCWeVZ8w7y1ME&currency=USD&components=buttons"></script>
 
 <script>
 const root = document.getElementById('cartRoot');
@@ -421,7 +453,8 @@ let paymentMethod  = 'online';       // 'online' | 'contra-entrega'
 let codeliveryMode = 'efectivo';     // 'efectivo' | 'transferencia' (solo aplica si contra-entrega)
 
 /* Estado del formulario (persistido entre re-renders) */
-let formState = { name: '', phone: '', address: '', sector: '', notes: '' };
+let formState = { name: '', email: '', phone: '', address: '', sector: '', notes: '' };
+let pinLocation = null; // { lat, lng } set by map picker
 function captureFormState() {
   const form = document.getElementById('orderForm');
   if (!form) return;
@@ -560,6 +593,11 @@ function render() {
               <div class="ff-error" data-err="name">Requerido</div>
             </div>
             <div>
+              <label for="of-email">Correo electrónico</label>
+              <input type="email" id="of-email" name="email" placeholder="Ej: juan@gmail.com" autocomplete="email" required/>
+              <div class="ff-error" data-err="email">Correo válido requerido</div>
+            </div>
+            <div>
               <label for="of-phone">Teléfono / WhatsApp</label>
               <input type="tel" id="of-phone" name="phone" placeholder="Ej: 809-555-0000" autocomplete="tel" required/>
               <div class="ff-error" data-err="phone">Número de teléfono válido</div>
@@ -577,6 +615,18 @@ function render() {
             <div>
               <label for="of-notes">Referencia o notas (opcional)</label>
               <textarea id="of-notes" name="notes" placeholder="Punto de referencia, horario preferido, etc."></textarea>
+            </div>
+            <div>
+              <label>Ubicación exacta (opcional)</label>
+              <button type="button" class="map-pick-btn" id="mapPickBtn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                Marcar mi ubicación en el mapa
+              </button>
+              <div id="mapPinLabel"></div>
+              <div id="mapPickerWrap">
+                <div id="mapDiv"></div>
+                <div class="map-hint">Arrastra el pin a tu ubicación exacta</div>
+              </div>
             </div>
           </form>` : ''}
 
@@ -687,18 +737,39 @@ function generateOrderNumber() {
   return `PT-${yy}${mm}${dd}-${rnd}`;
 }
 
-function saveOrder(order) {
+async function saveOrder(order) {
+  /* localStorage (fallback/cache local) */
   try {
     const all = JSON.parse(localStorage.getItem(ORDERS_KEY) || '[]');
     all.unshift(order);
-    localStorage.setItem(ORDERS_KEY, JSON.stringify(all.slice(0, 50))); // cap at 50
-  } catch (e) { /* quota exceeded etc., ignore */ }
+    localStorage.setItem(ORDERS_KEY, JSON.stringify(all.slice(0, 50)));
+  } catch (e) {}
+
+  /* Supabase (fuente de verdad central) */
+  if (window.SB) {
+    const { error } = await window.SB.from('orders').insert({
+      id:                 order.id,
+      status:             order.status || 'pendiente',
+      payment_method:     order.paymentMethod || null,
+      paypal_order_id:    order.paypalOrderId || null,
+      paypal_payer:       order.paypalPayer || null,
+      paypal_amount_usd:  order.paypalAmountUsd ? parseFloat(order.paypalAmountUsd) : null,
+      exchange_rate:      order.exchangeRate ? parseFloat(order.exchangeRate) : null,
+      codelivery_mode:    order.codeliveryMode || null,
+      customer:           order.customer,
+      items:              order.items,
+      totals:             order.totals,
+      lat:                order.lat || null,
+      lng:                order.lng || null
+    });
+    if (error) console.error('Supabase saveOrder error:', error);
+  }
 }
 
 function validateOrderForm() {
   const form = document.getElementById('orderForm');
   if (!form) return null;
-  const fields = ['name','phone','address','sector'];
+  const fields = ['name','email','phone','address','sector'];
   let ok = true;
   const data = {};
   fields.forEach(f => {
@@ -707,6 +778,7 @@ function validateOrderForm() {
     const v = (el.value || '').trim();
     data[f] = v;
     let valid = v.length >= 2;
+    if (f === 'email') valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
     if (f === 'phone') valid = /[0-9]{7,}/.test(v.replace(/\D/g,''));
     if (!valid) { el.classList.add('err'); errEl.classList.add('show'); ok = false; }
     else       { el.classList.remove('err'); errEl.classList.remove('show'); }
@@ -715,12 +787,15 @@ function validateOrderForm() {
   return ok ? data : null;
 }
 
-function placeOrder(totals) {
+async function placeOrder(totals) {
   const customer = validateOrderForm();
   if (!customer) {
     document.getElementById('orderForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
   }
+
+  const btn = document.getElementById('placeOrderBtn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Guardando orden...'; }
 
   const items = window.Cart.get().map(i => {
     const p = window.getProductBySlug(i.slug);
@@ -745,13 +820,13 @@ function placeOrder(totals) {
       itbis: totals.itbis,
       total: totals.total,
       itemCount: totals.itemCount
-    }
+    },
+    lat: pinLocation ? pinLocation.lat : null,
+    lng: pinLocation ? pinLocation.lng : null
   };
 
-  saveOrder(order);
+  await saveOrder(order);
   window.Cart.clear();
-
-  /* Redirigir a la página de confirmación de orden */
   location.href = `orden.html?n=${encodeURIComponent(order.id)}`;
 }
 
@@ -806,7 +881,7 @@ function renderPayPal(totals) {
       },
 
       onApprove: function(data, actions) {
-        return actions.order.capture().then(function(details) {
+        return actions.order.capture().then(async function(details) {
           /* Crear orden local igual que contra-entrega */
           var cartItems = window.Cart.get().map(function(i) {
             var p = window.getProductBySlug(i.slug);
@@ -829,6 +904,7 @@ function renderPayPal(totals) {
             codeliveryMode: null,
             customer: {
               name: details.payer ? (details.payer.name.given_name + ' ' + details.payer.name.surname) : '',
+              email: (details.payer && details.payer.email_address) || '',
               phone: '',
               address: '',
               sector: '',
@@ -868,5 +944,145 @@ render();
 window.addEventListener('cart:change', render);
 </script>
 
+<script>
+// Google Maps picker — initialized lazily when user clicks the button
+const GMAPS_KEY = 'AIzaSyAByeccvBa2u-VdhmGhyTIrTsRSJdekBTs';
+let mapsLoaded = false;
+let mapInstance = null;
+let markerInstance = null;
+
+function loadMapsScript() {
+  return new Promise(resolve => {
+    if (window.google && window.google.maps) { resolve(); return; }
+    window._mapsReady = resolve;
+    const s = document.createElement('script');
+    s.src = `https://maps.googleapis.com/maps/api/js?key=${GMAPS_KEY}&callback=_mapsReady&loading=async`;
+    s.async = true; s.defer = true;
+    document.head.appendChild(s);
+  });
+}
+
+document.addEventListener('click', async e => {
+  const btn = e.target.closest('#mapPickBtn');
+  if (!btn) return;
+
+  const wrap = document.getElementById('mapPickerWrap');
+  if (wrap.classList.contains('open')) { wrap.classList.remove('open'); return; }
+
+  btn.textContent = 'Cargando mapa…';
+  btn.disabled = true;
+
+  await loadMapsScript();
+
+  wrap.classList.add('open');
+  btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Cerrar mapa`;
+  btn.disabled = false;
+
+  if (mapInstance) return; // already initialized
+
+  const defaultPos = pinLocation || { lat: 18.4861, lng: -69.9312 };
+
+  mapInstance = new google.maps.Map(document.getElementById('mapDiv'), {
+    center: defaultPos,
+    zoom: 16,
+    mapTypeControl: false,
+    streetViewControl: false,
+    fullscreenControl: false,
+    zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_CENTER }
+  });
+
+  markerInstance = new google.maps.Marker({
+    position: defaultPos,
+    map: mapInstance,
+    draggable: true,
+    animation: google.maps.Animation.DROP,
+    title: 'Arrastra para ajustar'
+  });
+
+  markerInstance.addListener('dragend', () => {
+    const pos = markerInstance.getPosition();
+    pinLocation = { lat: pos.lat(), lng: pos.lng() };
+    updatePinLabel(pinLocation, null);
+  });
+
+  mapInstance.addListener('click', e => {
+    markerInstance.setPosition(e.latLng);
+    pinLocation = { lat: e.latLng.lat(), lng: e.latLng.lng() };
+    updatePinLabel(pinLocation, null);
+  });
+
+  // High-accuracy geolocation: up to 3 attempts every 5s, need 2 readings ≤15m
+  if (navigator.geolocation) {
+    const TARGET_M = 15;
+    const MAX_TRIES = 3;
+    const INTERVAL_MS = 5000;
+    let attempt = 0;
+    let goodReadings = [];
+    let bestReading = null;
+
+    function setMapPin(loc) {
+      mapInstance.setCenter(loc);
+      markerInstance.setPosition(loc);
+      pinLocation = loc;
+    }
+
+    function tryGeo() {
+      attempt++;
+      updatePinLabel(null, `Intento ${attempt}/${MAX_TRIES}…`);
+      navigator.geolocation.getCurrentPosition(pos => {
+        const loc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        const acc = pos.coords.accuracy;
+
+        // Track best reading regardless
+        if (!bestReading || acc < bestReading.acc) bestReading = { loc, acc };
+
+        if (acc <= TARGET_M) {
+          goodReadings.push(loc);
+          if (goodReadings.length >= 2) {
+            // Average the 2 good readings for extra precision
+            const finalLoc = {
+              lat: goodReadings.reduce((s, r) => s + r.lat, 0) / goodReadings.length,
+              lng: goodReadings.reduce((s, r) => s + r.lng, 0) / goodReadings.length
+            };
+            setMapPin(finalLoc);
+            updatePinLabel(finalLoc, null, acc);
+            return; // done
+          }
+        }
+
+        if (attempt < MAX_TRIES) {
+          // Update map with current best while waiting
+          setMapPin(loc);
+          updatePinLabel(loc, null, acc);
+          setTimeout(tryGeo, INTERVAL_MS);
+        } else {
+          // Use best available after max attempts
+          setMapPin(bestReading.loc);
+          updatePinLabel(bestReading.loc, null, bestReading.acc);
+        }
+      }, () => {
+        if (attempt < MAX_TRIES) setTimeout(tryGeo, INTERVAL_MS);
+      }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 });
+    }
+
+    tryGeo();
+  }
+});
+
+function updatePinLabel(loc, status, accuracy) {
+  const el = document.getElementById('mapPinLabel');
+  if (!el) return;
+  if (status) {
+    el.innerHTML = `<span class="map-pin-label" style="color:var(--ink-3)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4"/></svg> ${status}</span>`;
+    return;
+  }
+  const accText = accuracy != null ? ` · precisión ~${Math.round(accuracy)}m` : '';
+  const isGood  = accuracy != null && accuracy <= 15;
+  el.innerHTML = `<span class="map-pin-label" style="${isGood ? '' : 'color:#d97706'}">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+    Ubicación marcada${accText}${isGood ? ' ✓' : ' — ajusta el pin si es necesario'}
+  </span>`;
+}
+</script>
 </body>
 </html>

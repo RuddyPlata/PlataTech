@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Tu opinión - Plata Tech Store</title>
+<link rel="icon" type="image/x-icon" href="../images/favicon-pt.ico"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/shop.css"/>
+<style>
+.fb-section { padding: 4rem 0 6rem; }
+.fb-wrap {
+  max-width: 560px; margin: 0 auto;
+}
+.fb-hero {
+  text-align: center; margin-bottom: 2.5rem;
+}
+.fb-icon {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: linear-gradient(135deg, #059669, #34d399);
+  display: inline-flex; align-items: center; justify-content: center;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 10px 30px rgba(5,150,105,.3);
+  animation: pop .5s cubic-bezier(.16,1,.3,1);
+}
+@keyframes pop {
+  0% { transform: scale(.4); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.fb-hero h1 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(1.8rem, 5vw, 2.5rem); font-weight: 800;
+  letter-spacing: -0.03em; color: var(--ink);
+  margin-bottom: .5rem;
+}
+.fb-hero p {
+  font-size: 1rem; color: var(--ink-2); line-height: 1.55;
+}
+.fb-order-badge {
+  display: inline-flex; align-items: center; gap: .5rem;
+  margin-top: 1rem;
+  padding: .5rem 1rem;
+  background: var(--blue-tint);
+  border: 1.5px solid rgba(20,71,255,.2);
+  border-radius: 100px;
+  font-size: .8rem; color: var(--ink-2);
+}
+.fb-order-badge strong { color: var(--navy); font-family: 'Space Grotesk', sans-serif; }
+
+.fb-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2rem;
+  display: flex; flex-direction: column; gap: 1.75rem;
+}
+.fb-question { display: flex; flex-direction: column; gap: .6rem; }
+.fb-question-label {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1rem; font-weight: 700; color: var(--ink);
+  line-height: 1.35;
+}
+.fb-question-sub {
+  font-size: .82rem; color: var(--ink-3);
+  margin-top: -.3rem;
+}
+
+/* Star rating */
+.star-row {
+  display: flex; gap: .35rem;
+}
+.star-btn {
+  background: none; border: none; cursor: pointer;
+  padding: .1rem; border-radius: 4px;
+  color: #d1d5db;
+  transition: color .15s, transform .15s;
+  font-size: 0; line-height: 0;
+}
+.star-btn svg { display: block; }
+.star-btn:hover,
+.star-btn.active { color: #f59e0b; }
+.star-btn:hover { transform: scale(1.15); }
+.star-label {
+  font-size: .8rem; color: var(--ink-3);
+  margin-top: .35rem;
+}
+
+/* Yes/No */
+.yn-row {
+  display: flex; gap: .65rem;
+}
+.yn-btn {
+  flex: 1; padding: .8rem 1rem;
+  border: 1.5px solid var(--border); border-radius: 12px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: .95rem; font-weight: 700; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: .5rem;
+  transition: border-color .2s, background .2s, transform .15s;
+  background: var(--white); color: var(--ink);
+}
+.yn-btn:hover { border-color: var(--blue); transform: translateY(-1px); }
+.yn-btn.active-yes {
+  border-color: #059669; background: #f0fdf4; color: #059669;
+  box-shadow: 0 0 0 3px rgba(5,150,105,.12);
+}
+.yn-btn.active-no {
+  border-color: #dc2626; background: #fef2f2; color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220,38,38,.12);
+}
+
+/* Comment */
+.fb-textarea {
+  width: 100%; padding: .85rem 1rem;
+  border: 1.5px solid var(--border); border-radius: 12px;
+  font: inherit; font-size: .9rem; color: var(--ink);
+  background: var(--white); outline: none; resize: vertical;
+  min-height: 100px; box-sizing: border-box;
+  transition: border-color .2s, box-shadow .2s;
+}
+.fb-textarea:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(20,71,255,.1);
+}
+
+.fb-submit {
+  width: 100%;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1rem; font-weight: 800;
+  padding: 1rem; border-radius: 12px;
+  background: var(--blue); color: #fff;
+  border: none; cursor: pointer;
+  transition: opacity .2s, transform .15s;
+}
+.fb-submit:hover { opacity: .9; transform: translateY(-1px); }
+.fb-submit:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+/* Thank you state */
+.fb-thanks {
+  text-align: center; padding: 3rem 2rem;
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 20px;
+}
+.fb-thanks-icon {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: linear-gradient(135deg, #059669, #34d399);
+  display: inline-flex; align-items: center; justify-content: center;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 12px 30px rgba(5,150,105,.3);
+  animation: pop .5s cubic-bezier(.16,1,.3,1);
+}
+.fb-thanks h2 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 2rem; font-weight: 800; color: var(--ink);
+  letter-spacing: -0.02em; margin-bottom: .5rem;
+}
+.fb-thanks p { color: var(--ink-2); line-height: 1.6; max-width: 400px; margin: 0 auto 2rem; }
+
+.fb-err {
+  background: #fef2f2; border: 1px solid #fca5a5; color: #dc2626;
+  padding: .75rem 1rem; border-radius: 10px;
+  font-size: .85rem; display: none;
+}
+.fb-err.show { display: block; }
+</style>
+</head>
+<body>
+
+<nav class="shop-nav">
+  <div class="container shop-nav-inner">
+    <a href="index.html" class="shop-brand">
+      <div class="shop-brand-mark"><img src="../images/logo-platatech.png" alt="Plata Tech"/></div>
+      <div>
+        <div class="shop-brand-name">Plata Tech</div>
+        <div class="shop-brand-sub">Store</div>
+      </div>
+    </a>
+  </div>
+</nav>
+
+<section class="fb-section">
+  <div class="container fb-wrap">
+    <div id="fbRoot"></div>
+  </div>
+</section>
+
+<footer class="shop-footer">
+  <div class="container shop-footer-inner">
+    <span>© 2025 Plata Tech Solutions</span>
+    <nav class="shop-footer-links">
+      <a href="index.html">Tienda</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="assets/sb.js"></script>
+<script>
+const orderId = new URLSearchParams(location.search).get('order') || '';
+const root = document.getElementById('fbRoot');
+
+let ratings = { experience: 0, rep: 0 };
+let recommend = null; // true | false
+let comment = '';
+
+function starHtml(name, value) {
+  return Array.from({ length: 5 }, (_, i) => `
+    <button class="star-btn${i < value ? ' active' : ''}" data-star="${name}" data-val="${i + 1}" aria-label="${i + 1} estrella${i ? 's' : ''}">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="${i < value ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.8">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+      </svg>
+    </button>`).join('');
+}
+
+const starLabels = ['', 'Muy malo', 'Regular', 'Bueno', 'Muy bueno', 'Excelente'];
+
+function render() {
+  root.innerHTML = `
+    <div class="fb-hero">
+      <div class="fb-icon">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </div>
+      <h1>¿Cómo fue tu experiencia?</h1>
+      <p>Tu opinión nos ayuda a mejorar. Es rápido — solo 4 preguntas.</p>
+      ${orderId ? `<div class="fb-order-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg> Orden <strong>${orderId}</strong></div>` : ''}
+    </div>
+
+    <div class="fb-card">
+      <!-- Q1: Experiencia general -->
+      <div class="fb-question">
+        <div class="fb-question-label">1. ¿Cómo calificarías tu experiencia con Plata Tech?</div>
+        <div class="star-row" id="stars-experience">${starHtml('experience', ratings.experience)}</div>
+        <div class="star-label">${starLabels[ratings.experience] || 'Selecciona una calificación'}</div>
+      </div>
+
+      <!-- Q2: Atención del representante -->
+      <div class="fb-question">
+        <div class="fb-question-label">2. ¿Cómo fue la atención de nuestro representante?</div>
+        <div class="star-row" id="stars-rep">${starHtml('rep', ratings.rep)}</div>
+        <div class="star-label">${starLabels[ratings.rep] || 'Selecciona una calificación'}</div>
+      </div>
+
+      <!-- Q3: Recomendarías -->
+      <div class="fb-question">
+        <div class="fb-question-label">3. ¿Recomendarías Plata Tech a un amigo o familiar?</div>
+        <div class="yn-row">
+          <button class="yn-btn${recommend === true ? ' active-yes' : ''}" id="ynYes">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 10v12M15 5.88L14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76"/></svg>
+            Sí, claro
+          </button>
+          <button class="yn-btn${recommend === false ? ' active-no' : ''}" id="ynNo">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 14V2M9 18.12L10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76"/></svg>
+            Probablemente no
+          </button>
+        </div>
+      </div>
+
+      <!-- Q4: Comentario -->
+      <div class="fb-question">
+        <div class="fb-question-label">4. ¿Por qué? Cuéntanos más</div>
+        <div class="fb-question-sub">Opcional — pero muy valioso para nosotros</div>
+        <textarea class="fb-textarea" id="fbComment" placeholder="Escribe aquí tu comentario…" maxlength="1000">${comment}</textarea>
+      </div>
+
+      <div class="fb-err" id="fbErr">Por favor califica tu experiencia antes de enviar.</div>
+      <button class="fb-submit" id="fbSubmit">Enviar mi opinión</button>
+    </div>`;
+
+  wireEvents();
+}
+
+function wireEvents() {
+  document.querySelectorAll('.star-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const name = btn.dataset.star;
+      const val  = Number(btn.dataset.val);
+      ratings[name] = val;
+      render();
+    });
+  });
+
+  document.getElementById('ynYes').addEventListener('click', () => { recommend = true; render(); });
+  document.getElementById('ynNo').addEventListener('click',  () => { recommend = false; render(); });
+  document.getElementById('fbComment').addEventListener('input', e => { comment = e.target.value; });
+  document.getElementById('fbSubmit').addEventListener('click', submit);
+}
+
+async function submit() {
+  const errEl = document.getElementById('fbErr');
+  if (!ratings.experience || !ratings.rep || recommend === null) {
+    errEl.classList.add('show');
+    errEl.textContent = 'Por favor responde todas las preguntas antes de enviar.';
+    return;
+  }
+  errEl.classList.remove('show');
+
+  const btn = document.getElementById('fbSubmit');
+  btn.disabled = true;
+  btn.textContent = 'Enviando…';
+
+  const payload = {
+    order_id:    orderId || null,
+    experience:  ratings.experience,
+    rep_rating:  ratings.rep,
+    recommend:   recommend,
+    comment:     document.getElementById('fbComment').value.trim() || null,
+    created_at:  new Date().toISOString()
+  };
+
+  if (window.SB) {
+    try {
+      const { error } = await window.SB.from('feedback').insert(payload);
+      if (error) console.error('Feedback save error:', error);
+    } catch (e) { console.warn('Supabase feedback error:', e); }
+  }
+
+  showThanks();
+}
+
+function showThanks() {
+  root.innerHTML = `
+    <div class="fb-thanks">
+      <div class="fb-thanks-icon">
+        <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
+      </div>
+      <h2>¡Gracias por tu opinión!</h2>
+      <p>Tu feedback es muy valioso para nosotros. Seguiremos trabajando para ofrecerte la mejor experiencia.</p>
+      <a href="index.html" class="btn btn-primary btn-lg">Seguir comprando</a>
+    </div>`;
+}
+
+render();
+</script>
+</body>
+</html>

@@ -282,6 +282,8 @@
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="assets/sb.js"></script>
 <script src="assets/products.js"></script>
 <script src="assets/products-static.js"></script>
 <script src="assets/products-overrides.js"></script>
@@ -290,11 +292,38 @@
 const ORDERS_KEY = 'platatech_orders_v1';
 const WA_NUMBER = '18494950959';
 
-function getOrderById(id) {
+function rowToOrder(r) {
+  return {
+    id: r.id,
+    createdAt: r.created_at,
+    status: r.status,
+    paymentMethod: r.payment_method,
+    paypalOrderId: r.paypal_order_id,
+    paypalAmountUsd: r.paypal_amount_usd,
+    exchangeRate: r.exchange_rate,
+    codeliveryMode: r.codelivery_mode,
+    customer: r.customer,
+    items: r.items,
+    totals: r.totals
+  };
+}
+
+async function getOrderById(id) {
+  // 1. Try localStorage first (instant, works offline)
   try {
     const all = JSON.parse(localStorage.getItem(ORDERS_KEY) || '[]');
-    return all.find(o => o.id === id) || null;
-  } catch (e) { return null; }
+    const local = all.find(o => o.id === id);
+    if (local) return local;
+  } catch (e) {}
+
+  // 2. Fallback to Supabase (cross-device)
+  if (window.SB) {
+    try {
+      const { data, error } = await window.SB.from('orders').select('*').eq('id', id).maybeSingle();
+      if (!error && data) return rowToOrder(data);
+    } catch (e) { console.warn('Supabase lookup failed', e); }
+  }
+  return null;
 }
 
 function fmtDate(iso) {
@@ -355,17 +384,25 @@ function buildInquiryMessage(order) {
   return `Hola, tengo una consulta sobre mi pedido ${order.id} de Plata Tech Store.`;
 }
 
-function render() {
+async function render() {
   const root = document.getElementById('orderRoot');
   const id = new URLSearchParams(location.search).get('n');
-  const order = id ? getOrderById(id) : null;
+
+  if (id) {
+    root.innerHTML = `<div style="text-align:center;padding:4rem 0;color:var(--ink-2);">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite;display:inline-block"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+      <p style="margin-top:.75rem;font-size:.9rem;">Buscando orden…</p>
+    </div>`;
+  }
+
+  const order = id ? await getOrderById(id) : null;
 
   if (!order) {
     root.innerHTML = `
       <div class="not-found">
         <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
         <h2 class="h2">Orden no encontrada</h2>
-        <p style="color:var(--ink-2);margin-bottom:1.5rem;">No pudimos localizar esa orden en este dispositivo.</p>
+        <p style="color:var(--ink-2);margin-bottom:1.5rem;">No pudimos localizar esa orden.</p>
         <a href="index.html" class="btn btn-primary btn-lg">Volver a la tienda</a>
       </div>`;
     return;
@@ -506,6 +543,7 @@ function render() {
 
 render();
 </script>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
 
 </body>
 </html>
