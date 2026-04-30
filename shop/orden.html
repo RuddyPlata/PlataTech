@@ -223,6 +223,54 @@
   .info-label { padding-top: 0; }
   .next-actions .btn-wa-white, .next-actions .btn-ghost-white { width: 100%; justify-content: center; }
 }
+
+/* ── Térmica ─────────────────────────────────────────── */
+#thermalReceipt { display: none; }
+.print-btn {
+  display:inline-flex; align-items:center; gap:.45rem;
+  margin-top:1.25rem; padding:.6rem 1.1rem;
+  border-radius:10px; border:1.5px solid var(--border);
+  background:var(--off-white); color:var(--ink-2);
+  font:inherit; font-size:.82rem; font-weight:600;
+  cursor:pointer; transition:background .2s;
+}
+.print-btn:hover { background:var(--border); }
+
+@media print {
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  nav, footer, .order-hero, .next-card, .print-btn,
+  [href], button, .copy-btn { display: none !important; }
+  body, main { background: #fff !important; margin: 0; padding: 0; }
+  .order-section { padding: 0 !important; }
+  .container { max-width: 100% !important; padding: 0 !important; }
+  .order-grid { display: none !important; }
+  #thermalReceipt { display: block !important; }
+  #orderRoot > div[style*="text-align:center"] { display: none !important; }
+
+  /* Fuente térmica */
+  #thermalReceipt {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11pt;
+    width: 72mm;
+    margin: 0 auto;
+    color: #000;
+    line-height: 1.45;
+  }
+  .t-center { text-align: center; }
+  .t-bold { font-weight: bold; }
+  .t-small { font-size: 9pt; }
+  .t-divider { border: none; border-top: 1px dashed #000; margin: 5px 0; }
+  .t-row { display: flex; justify-content: space-between; }
+  .t-row .t-left { flex: 1; }
+  .t-row .t-right { text-align: right; white-space: nowrap; margin-left: 4px; }
+  .t-total { font-weight: bold; font-size: 13pt; }
+  .t-warranty {
+    font-size: 8.5pt;
+    margin-top: 8px;
+    line-height: 1.4;
+    text-align: justify;
+  }
+}
 </style>
 </head>
 <body>
@@ -527,8 +575,50 @@ async function render() {
       </p>
     </div>
 
-    <div style="text-align:center; margin-top:2rem;">
+    <div style="text-align:center; margin-top:2rem; display:flex; gap:.75rem; justify-content:center; flex-wrap:wrap;">
       <a href="index.html" class="btn btn-ghost">Seguir comprando</a>
+      <button class="print-btn" onclick="window.print()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Imprimir recibo
+      </button>
+    </div>
+
+    <div id="thermalReceipt">
+      <div class="t-center t-bold" style="font-size:13pt">PLATA TECH SOLUTIONS</div>
+      <div class="t-center t-small">Santo Domingo, República Dominicana</div>
+      <div class="t-center t-small">WhatsApp: +1 (849) 495-0959</div>
+      <hr class="t-divider"/>
+      <div class="t-center t-bold">COMPROBANTE DE COMPRA</div>
+      <div class="t-center t-small">Orden: <b>${escapeHtml(order.id)}</b></div>
+      <div class="t-center t-small">${fmtDate(order.createdAt)}</div>
+      <hr class="t-divider"/>
+      <div class="t-small"><b>CLIENTE</b></div>
+      <div class="t-small">${escapeHtml(order.customer.name)}</div>
+      <div class="t-small">${escapeHtml(order.customer.phone)}</div>
+      <div class="t-small">${escapeHtml(order.customer.address)}${order.customer.sector ? ', ' + escapeHtml(order.customer.sector) : ''}</div>
+      ${order.customer.notes ? `<div class="t-small">Nota: ${escapeHtml(order.customer.notes)}</div>` : ''}
+      <hr class="t-divider"/>
+      <div class="t-small"><b>ARTÍCULOS</b></div>
+      ${order.items.map(it => `
+      <div style="margin:3px 0">
+        <div class="t-row">
+          <span class="t-left t-small">${it.qty > 1 ? it.qty + 'x ' : ''}${escapeHtml(it.name)}</span>
+          <span class="t-right t-small">${window.formatPrice(it.subtotal)}</span>
+        </div>
+        ${it.variant ? `<div class="t-small" style="padding-left:8px;color:#333">${escapeHtml(it.variant)}</div>` : ''}
+      </div>`).join('')}
+      <hr class="t-divider"/>
+      <div class="t-row t-small"><span>Subtotal</span><span>${window.formatPrice(order.totals.subtotal)}</span></div>
+      ${order.paymentMethod === 'online' && order.totals.itbis ? `<div class="t-row t-small"><span>ITBIS (18%)</span><span>${window.formatPrice(order.totals.itbis)}</span></div>` : ''}
+      <div class="t-row t-total" style="margin-top:4px;padding-top:4px;border-top:1px solid #000"><span>TOTAL</span><span>${window.formatPrice(order.totals.total)}</span></div>
+      <div class="t-small" style="margin-top:4px">Pago: ${modeLabel(order)}</div>
+      <hr class="t-divider"/>
+      <div class="t-warranty">
+        <b>GARANTÍA:</b> Este producto tiene garantía de 25 días a partir de la fecha de compra. La garantía cubre defectos de fabricación y fallas técnicas en condiciones normales de uso. No aplica en casos de daños por humedad, golpes, caídas, pantalla rota, quemaduras eléctricas por alto voltaje, mal uso, modificaciones o reparaciones no autorizadas.
+      </div>
+      <hr class="t-divider"/>
+      <div class="t-center t-small" style="margin-top:6px">¡Gracias por su compra!</div>
+      <div class="t-center t-small">platatechs.com</div>
     </div>`;
 
   /* Copy order number */
