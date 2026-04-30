@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.paypal.com https://maps.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://*.supabase.co https://open.er-api.com https://maps.googleapis.com https://maps.gstatic.com; object-src 'none'; base-uri 'self';"/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.paypal.com https://maps.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://*.supabase.co https://open.er-api.com https://maps.googleapis.com https://maps.gstatic.com https://www.paypal.com https://*.paypal.com; frame-src https://www.paypal.com https://*.paypal.com; object-src 'none'; base-uri 'self';"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>Admin — Plata Tech Store</title>
 <link rel="icon" type="image/x-icon" href="../images/pt.ico"/>
@@ -374,6 +374,9 @@ async function loadAll(){
     window.SB.from('feedback').select('*').order('created_at',{ascending:false}).limit(100),
     window.SB.from('custom_products').select('*').order('created_at',{ascending:false})
   ]);
+  if(oRes.error) console.error('orders error:',oRes.error);
+  if(fRes.error) console.error('feedback error:',fRes.error);
+  if(pRes.error) console.error('custom_products error:',pRes.error);
   allOrders   = (oRes.data||[]).map(rowToOrder);
   allFeedback = fRes.data||[];
   allProds    = pRes.data||[];
