@@ -50,31 +50,45 @@ serve(async (req: Request) => {
   const LOGO_PT = 'https://platatechs.com/images/logo-platatech.png';
   const LOGO_UG = 'https://platatechs.com/images/logo-ug.png';
 
-  const brandFooter = `<tr><td style="background:#0a1a3e;padding:28px 32px;text-align:center">
+  // Brand colors from the website
+  const C_NAVY = '#0a1a3e';
+  const C_BLUE = '#1e50d4';
+  const C_GOLD = '#d4a24a';
+  const C_GREEN = '#25d366';
+
+  const brandHeader = (title: string, subtitle: string) => `<tr><td style="background:${C_NAVY};padding:0">
     <table width="100%" cellpadding="0" cellspacing="0"><tr>
-      <td style="text-align:center;padding-bottom:16px">
-        <img src="${LOGO_PT}" alt="Plata Tech" width="44" height="44" style="display:inline-block;border-radius:10px;margin-right:12px;vertical-align:middle"/>
-        <img src="${LOGO_UG}" alt="UG" width="44" height="44" style="display:inline-block;border-radius:10px;vertical-align:middle"/>
+      <td width="80" style="padding:24px 0 24px 28px;vertical-align:middle">
+        <img src="${LOGO_PT}" alt="Plata Tech" width="64" height="64" style="display:block;border-radius:14px;border:2px solid rgba(255,255,255,.15)"/>
+      </td>
+      <td style="padding:24px 28px 24px 18px;vertical-align:middle">
+        <h1 style="margin:0;color:#fff;font-size:20px;font-weight:800;line-height:1.3">${title}</h1>
+        <p style="margin:5px 0 0;color:rgba(255,255,255,.65);font-size:13px">${subtitle}</p>
+      </td>
+    </tr></table>
+  </td></tr>`;
+
+  const brandFooter = `<tr><td style="background:${C_NAVY};padding:24px 28px;text-align:center">
+    <table width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td style="text-align:center;padding-bottom:14px">
+        <img src="${LOGO_PT}" alt="Plata Tech" width="36" height="36" style="display:inline-block;border-radius:8px;margin-right:10px;vertical-align:middle"/>
+        <img src="${LOGO_UG}" alt="UG" width="36" height="36" style="display:inline-block;border-radius:8px;vertical-align:middle"/>
       </td>
     </tr><tr>
-      <td style="color:rgba(255,255,255,.7);font-size:12px;line-height:1.6">
-        <strong style="color:#fff">Plata Tech Solutions S.R.L.</strong><br/>
+      <td style="color:rgba(255,255,255,.55);font-size:11px;line-height:1.7">
+        <strong style="color:rgba(255,255,255,.85)">Plata Tech Solutions S.R.L.</strong><br/>
         Santo Domingo, República Dominicana<br/>
-        <a href="https://platatechs.com" style="color:#3b6ef6;text-decoration:none">platatechs.com</a> · <a href="https://wa.me/18494950959" style="color:#25d366;text-decoration:none">WhatsApp</a>
+        <a href="https://platatechs.com" style="color:${C_GOLD};text-decoration:none">platatechs.com</a> · <a href="https://wa.me/18494950959" style="color:${C_GREEN};text-decoration:none">WhatsApp</a>
       </td>
     </tr></table>
   </td></tr>`;
 
   // ── Owner notification email ─────────────────────────────────────────────
-  const ownerHtml = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/></head>
-<body style="margin:0;padding:0;background:#f6f8fb;font-family:'Segoe UI',Arial,sans-serif;color:#1a1a2e">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#f6f8fb;padding:32px 0">
-<tr><td align="center"><table width="600" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08)">
-  <tr><td style="background:#1447ff;padding:28px 32px">
-    <img src="${LOGO_PT}" alt="Plata Tech" width="48" height="48" style="display:block;margin-bottom:14px;border-radius:10px;border:2px solid rgba(255,255,255,.2)"/>
-    <h1 style="margin:0;color:#fff;font-size:22px;font-weight:800">Nueva orden recibida</h1>
-    <p style="margin:6px 0 0;color:rgba(255,255,255,.8);font-size:14px">Plata Tech Store · ${r.id}</p>
-  </td></tr>
+  const ownerHtml = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/></head>
+<body style="margin:0;padding:0;background:#f0f2f5;font-family:'Segoe UI',Arial,sans-serif;color:#1a1a2e">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f0f2f5;padding:24px 8px">
+<tr><td align="center"><table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08)">
+  ${brandHeader('Nueva orden recibida', `Plata Tech Store · ${r.id}`)}
   <tr><td style="padding:28px 32px">
     <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px">
       <tr><td style="padding:4px 0"><strong>Cliente</strong></td><td style="padding:4px 0;text-align:right">${customer?.name ?? '—'}</td></tr>
@@ -90,30 +104,29 @@ serve(async (req: Request) => {
     <table width="100%" cellpadding="0" cellspacing="0" style="background:#f6f8fb;border-radius:10px;padding:14px 16px">
       <tr><td>Subtotal</td><td style="text-align:right">${fmt(totals?.subtotal ?? 0)}</td></tr>
       ${itbisRow}
-      <tr style="font-weight:800;font-size:17px"><td style="padding-top:10px">Total</td><td style="padding-top:10px;text-align:right;color:#1447ff">${fmt(totals?.total ?? 0)}</td></tr>
+      <tr style="font-weight:800;font-size:17px"><td style="padding-top:10px">Total</td><td style="padding-top:10px;text-align:right;color:${C_BLUE}">${fmt(totals?.total ?? 0)}</td></tr>
     </table>
     ${paypalRow}
     <div style="margin-top:28px;text-align:center">
-      <a href="https://platatechs.com/shop/ordenes.html" style="display:inline-block;background:#1447ff;color:#fff;text-decoration:none;padding:12px 28px;border-radius:10px;font-weight:700;font-size:14px">Ver panel de órdenes</a>
+      <a href="https://platatechs.com/shop/ordenes.html" style="display:inline-block;background:${C_BLUE};color:#fff;text-decoration:none;padding:12px 28px;border-radius:10px;font-weight:700;font-size:14px">Ver panel de órdenes</a>
     </div>
   </td></tr>
   ${brandFooter}
 </table></td></tr></table></body></html>`;
 
   // ── Customer confirmation email ───────────────────────────────────────────
-  const customerHtml = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/></head>
-<body style="margin:0;padding:0;background:#f6f8fb;font-family:'Segoe UI',Arial,sans-serif;color:#1a1a2e">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#f6f8fb;padding:32px 0">
-<tr><td align="center"><table width="600" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08)">
-  <tr><td style="background:#1447ff;padding:32px 32px 24px">
-    <img src="${LOGO_PT}" alt="Plata Tech" width="52" height="52" style="display:block;margin-bottom:16px;border-radius:12px;border:2px solid rgba(255,255,255,.2)"/>
-    <h1 style="margin:0;color:#fff;font-size:26px;font-weight:800;line-height:1.2">${method === 'online' ? '¡Pago recibido!' : '¡Orden confirmada!'}</h1>
-    <p style="margin:10px 0 0;color:rgba(255,255,255,.85);font-size:15px">Hola ${customer?.name?.split(' ')[0] ?? ''}, gracias por tu compra.</p>
-  </td></tr>
+  const customerHtml = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/></head>
+<body style="margin:0;padding:0;background:#f0f2f5;font-family:'Segoe UI',Arial,sans-serif;color:#1a1a2e">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f0f2f5;padding:24px 8px">
+<tr><td align="center"><table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08)">
+  ${brandHeader(
+    method === 'online' ? '¡Pago recibido!' : '¡Orden confirmada!',
+    `Hola ${customer?.name?.split(' ')[0] ?? ''}, gracias por tu compra.`
+  )}
   <tr><td style="padding:28px 32px">
-    <div style="background:#f0f7ff;border-left:4px solid #1447ff;border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:24px">
+    <div style="background:#f0f7ff;border-left:4px solid ${C_BLUE};border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:24px">
       <p style="margin:0;font-size:13px;color:#666;text-transform:uppercase;letter-spacing:.08em">Número de orden</p>
-      <p style="margin:4px 0 0;font-size:22px;font-weight:800;color:#1447ff;letter-spacing:.02em">${r.id}</p>
+      <p style="margin:4px 0 0;font-size:22px;font-weight:800;color:${C_BLUE};letter-spacing:.02em">${r.id}</p>
     </div>
     <p style="color:#444;line-height:1.6;margin:0 0 24px">
       ${method === 'online'
@@ -125,7 +138,7 @@ serve(async (req: Request) => {
     <table width="100%" cellpadding="0" cellspacing="0" style="background:#f6f8fb;border-radius:10px;padding:14px 16px;margin-bottom:24px">
       <tr><td style="color:#666">Subtotal</td><td style="text-align:right;color:#666">${fmt(totals?.subtotal ?? 0)}</td></tr>
       ${itbisRow}
-      <tr style="font-weight:800;font-size:17px"><td style="padding-top:10px">Total</td><td style="padding-top:10px;text-align:right;color:#1447ff">${fmt(totals?.total ?? 0)}</td></tr>
+      <tr style="font-weight:800;font-size:17px"><td style="padding-top:10px">Total</td><td style="padding-top:10px;text-align:right;color:${C_BLUE}">${fmt(totals?.total ?? 0)}</td></tr>
     </table>
     <h2 style="font-size:15px;font-weight:700;margin:0 0 12px;padding-bottom:8px;border-bottom:2px solid #f0f0f0">Entrega</h2>
     <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px">
@@ -134,9 +147,9 @@ serve(async (req: Request) => {
       <tr><td style="padding:4px 0;color:#666">Tiempo estimado</td><td style="padding:4px 0;text-align:right;font-weight:700;color:#059669">${sla}</td></tr>
     </table>
     <div style="text-align:center;margin-bottom:24px">
-      <a href="https://platatechs.com/shop/orden.html?n=${r.id}" style="display:inline-block;background:#1447ff;color:#fff;text-decoration:none;padding:13px 32px;border-radius:10px;font-weight:700;font-size:15px">Ver mi orden</a>
+      <a href="https://platatechs.com/shop/orden.html?n=${r.id}" style="display:inline-block;background:${C_BLUE};color:#fff;text-decoration:none;padding:13px 32px;border-radius:10px;font-weight:700;font-size:15px">Ver mi orden</a>
     </div>
-    <p style="font-size:13px;color:#888;text-align:center;line-height:1.6">¿Tienes alguna pregunta? Escríbenos por <a href="https://wa.me/18494950959" style="color:#1447ff">WhatsApp</a> mencionando tu número de orden <strong>${r.id}</strong>.</p>
+    <p style="font-size:13px;color:#888;text-align:center;line-height:1.6">¿Tienes alguna pregunta? Escríbenos por <a href="https://wa.me/18494950959" style="color:${C_BLUE}">WhatsApp</a> mencionando tu número de orden <strong>${r.id}</strong>.</p>
   </td></tr>
   ${brandFooter}
 </table></td></tr></table></body></html>`;
