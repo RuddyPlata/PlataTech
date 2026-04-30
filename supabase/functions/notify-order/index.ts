@@ -39,9 +39,9 @@ serve(async (req: Request) => {
     </tr>`
   ).join('');
 
-  const itbisRow = (totals?.itbis ?? 0) === 0
-    ? `<tr><td style="color:#059669">ITBIS</td><td style="text-align:right;color:#059669">Exonerado</td></tr>`
-    : `<tr><td>ITBIS (18%)</td><td style="text-align:right">${fmt(totals!.itbis!)}</td></tr>`;
+  const itbisRow = (totals?.itbis ?? 0) > 0
+    ? `<tr><td>ITBIS (18%)</td><td style="text-align:right">${fmt(totals!.itbis!)}</td></tr>`
+    : '';
 
   const paypalRow = r.paypal_order_id
     ? `<p style="margin:12px 0 0;font-size:13px;color:#666">PayPal ID: <code style="background:#f0f0f0;padding:2px 6px;border-radius:4px">${r.paypal_order_id}</code> · Cobrado: US$${r.paypal_amount_usd}</p>`

@@ -401,7 +401,7 @@
 
 <script>
 const root = document.getElementById('cartRoot');
-/* Contra-entrega: exonerado de ITBIS. Online: 18% ITBIS incluido. */
+/* Contra-entrega: sin ITBIS en UI. Online: 18% ITBIS incluido. */
 const RATE_FALLBACK = 60;       // Tasa fallback RD$/USD
 
 /* ── Tasa de cambio dinámica USD→DOP ───────────────── */
@@ -438,8 +438,8 @@ const PAYMENT_METHODS = [
   {
     id: 'contra-entrega',
     name: 'Pago contra entrega',
-    sub: 'Efectivo o transferencia · Entrega el mismo día · Sin ITBIS',
-    badge: 'SIN ITBIS',
+    sub: 'Efectivo o transferencia · Entrega el mismo día',
+    badge: 'MISMO DÍA',
     icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M8 21H3v-5M21 3l-7 7M3 21l7-7"/></svg>'
   }
 ];
@@ -547,10 +547,10 @@ function render() {
           <span>Subtotal (${totals.itemCount} ${totals.itemCount === 1 ? 'artículo' : 'artículos'})</span>
           <b>${window.formatPrice(totals.subtotal)}</b>
         </div>
-        <div class="summary-row${totals.noItbis ? ' discount' : ''}">
+        ${!totals.noItbis ? `<div class="summary-row">
           <span>ITBIS (18%)</span>
-          <b>${totals.noItbis ? 'Exonerado' : window.formatPrice(totals.itbis)}</b>
-        </div>
+          <b>${window.formatPrice(totals.itbis)}</b>
+        </div>` : ''}
         <div class="summary-row${deliverySLA().fast ? ' discount' : ''}">
           <span>Entrega</span>
           <b>${deliverySLA().text}</b>
@@ -645,7 +645,7 @@ function render() {
         <div id="payAction"></div>
 
         <div class="summary-note">
-          <strong>Pago contra entrega</strong> (efectivo o transferencia) → entregamos <strong>el mismo día (máx 24h)</strong> dentro del GSD y <strong>no incluye ITBIS</strong>. <strong>Pago online</strong> (PayPal/tarjeta en USD) → <strong>1 a 3 días laborables</strong>, incluye ITBIS. Entregas fuera del GSD coordinamos por WhatsApp. Facturamos con NCF a solicitud.
+          <strong>Pago contra entrega</strong> (efectivo o transferencia) → entregamos <strong>el mismo día (máx 24h)</strong> dentro del GSD. <strong>Pago online</strong> (PayPal/tarjeta en USD) → <strong>1 a 3 días laborables</strong>. Entregas fuera del GSD coordinamos por WhatsApp.
         </div>
 
         <div class="summary-actions">
@@ -719,8 +719,8 @@ function renderAction(totals) {
 
   /* Contra entrega → instrucciones + botón de colocar pedido */
   const instr = codeliveryMode === 'transferencia'
-    ? `<strong>Contra entrega con transferencia · entrega el mismo día (máx 24h):</strong> llevamos tu pedido dentro del GSD, revisas el equipo con calma y pagas por transferencia al recibir. Al confirmar tu orden te contactamos por WhatsApp con los datos bancarios. <strong>Exonerado de ITBIS</strong> por pago directo.`
-    : `<strong>Contra entrega con efectivo · entrega el mismo día (máx 24h):</strong> llevamos tu pedido dentro del GSD, revisas el equipo con calma y pagas en efectivo (RD$) al recibir. Al confirmar tu orden te contactamos por WhatsApp. <strong>Exonerado de ITBIS</strong> por pago directo.`;
+    ? `<strong>Contra entrega con transferencia · entrega el mismo día (máx 24h):</strong> llevamos tu pedido dentro del GSD, revisas el equipo con calma y pagas por transferencia al recibir. Al confirmar tu orden te contactamos por WhatsApp con los datos bancarios.`
+    : `<strong>Contra entrega con efectivo · entrega el mismo día (máx 24h):</strong> llevamos tu pedido dentro del GSD, revisas el equipo con calma y pagas en efectivo (RD$) al recibir. Al confirmar tu orden te contactamos por WhatsApp.`;
 
   box.innerHTML = `
     <div class="pay-instructions">${instr}</div>
