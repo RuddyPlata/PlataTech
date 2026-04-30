@@ -575,20 +575,25 @@ async function render() {
       </p>
     </div>
 
-    <div style="text-align:center; margin-top:2rem; display:flex; gap:.75rem; justify-content:center; flex-wrap:wrap;">
+    <div style="text-align:center; margin-top:2rem;">
       <a href="index.html" class="btn btn-ghost">Seguir comprando</a>
-      <button class="print-btn" onclick="window.print()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-        Imprimir recibo
-      </button>
     </div>
 
     <div id="thermalReceipt">
-      <div class="t-center t-bold" style="font-size:13pt">PLATA TECH SOLUTIONS</div>
+      ${order.paymentMethod === 'online' && order.totals.itbis ? `
+      <div class="t-center t-bold" style="font-size:12pt">PLATA TECH SOLUTIONS S.R.L.</div>
+      <div class="t-center t-small">RNC: 133-66822-1</div>
       <div class="t-center t-small">Santo Domingo, República Dominicana</div>
-      <div class="t-center t-small">WhatsApp: +1 (849) 495-0959</div>
+      <div class="t-center t-small">Tel: +1 (849) 495-0959</div>
+      <hr class="t-divider"/>
+      <div class="t-center t-bold">FACTURA DE CONSUMIDOR FINAL</div>
+      ` : `
+      <div class="t-center t-bold" style="font-size:13pt">PTS</div>
+      <div class="t-center t-small">Plata Tech Solutions S.R.L.</div>
+      <div class="t-center t-small">Santo Domingo · +1 (849) 495-0959</div>
       <hr class="t-divider"/>
       <div class="t-center t-bold">COMPROBANTE DE COMPRA</div>
+      `}
       <div class="t-center t-small">Orden: <b>${escapeHtml(order.id)}</b></div>
       <div class="t-center t-small">${fmtDate(order.createdAt)}</div>
       <hr class="t-divider"/>
@@ -614,7 +619,7 @@ async function render() {
       <div class="t-small" style="margin-top:4px">Pago: ${modeLabel(order)}</div>
       <hr class="t-divider"/>
       <div class="t-warranty">
-        <b>GARANTÍA:</b> Este producto tiene garantía de 25 días a partir de la fecha de compra. La garantía cubre defectos de fabricación y fallas técnicas en condiciones normales de uso. No aplica en casos de daños por humedad, golpes, caídas, pantalla rota, quemaduras eléctricas por alto voltaje, mal uso, modificaciones o reparaciones no autorizadas.
+        <b>GARANTÍA:</b> Este producto tiene garantía de 25 días a partir de la fecha de compra contra defectos de fabricación. No aplica en casos de daños por humedad, golpes, caídas, pantalla rota, quemaduras eléctricas por alto voltaje, mal uso, modificaciones o reparaciones no autorizadas.
       </div>
       <hr class="t-divider"/>
       <div class="t-center t-small" style="margin-top:6px">¡Gracias por su compra!</div>
@@ -630,7 +635,11 @@ async function render() {
   });
 }
 
-render();
+render().then(() => {
+  if (new URLSearchParams(location.search).get('print') === '1') {
+    setTimeout(() => window.print(), 400);
+  }
+});
 </script>
 <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
 

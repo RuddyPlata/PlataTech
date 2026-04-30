@@ -638,7 +638,10 @@ function renderPedidos(){
                 </select>
               </td>
               <td style="font-size:.72rem;color:var(--ink-3);white-space:nowrap">${fmtDate(o.createdAt)}</td>
-              <td>${o.lat&&o.lng?`<a href="https://www.google.com/maps/dir/?api=1&destination=${o.lat},${o.lng}" target="_blank" style="display:inline-flex;align-items:center;gap:.3rem;font-size:.7rem;font-weight:700;color:var(--blue);text-decoration:none;padding:.25rem .52rem;border:1px solid rgba(20,71,255,.25);border-radius:7px;white-space:nowrap"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Navegar</a>`:''}</td>
+              <td style="white-space:nowrap;display:flex;gap:.3rem;align-items:center">
+                ${o.lat&&o.lng?`<a href="https://www.google.com/maps/dir/?api=1&destination=${o.lat},${o.lng}" target="_blank" style="display:inline-flex;align-items:center;gap:.3rem;font-size:.7rem;font-weight:700;color:var(--blue);text-decoration:none;padding:.25rem .52rem;border:1px solid rgba(20,71,255,.25);border-radius:7px;white-space:nowrap"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Navegar</a>`:''}
+                <a href="orden.html?n=${esc(o.id)}&print=1" target="_blank" style="display:inline-flex;align-items:center;gap:.3rem;font-size:.7rem;font-weight:700;color:var(--ink-2);text-decoration:none;padding:.25rem .52rem;border:1px solid var(--border);border-radius:7px;white-space:nowrap"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Imprimir</a>
+              </td>
             </tr>`;
           }).join('')}
         </tbody>
