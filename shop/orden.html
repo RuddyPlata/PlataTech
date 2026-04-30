@@ -353,9 +353,9 @@ function buildSendOrderMessage(order) {
 
   const totalsBlock = [
     `Subtotal: ${window.formatPrice(order.totals.subtotal)}`,
-    order.totals.itbis === 0 ? `ITBIS: Exonerado (pago directo)` : `ITBIS: ${window.formatPrice(order.totals.itbis)}`,
+    order.paymentMethod === 'online' && order.totals.itbis ? `ITBIS (18%): ${window.formatPrice(order.totals.itbis)}` : null,
     `Total: ${window.formatPrice(order.totals.total)}`
-  ].join('\n');
+  ].filter(Boolean).join('\n');
 
   const cust = order.customer;
   const modeText = order.paymentMethod === 'online'
@@ -456,9 +456,7 @@ async function render() {
           <div class="totals-row">
             <span>Subtotal</span><span>${window.formatPrice(order.totals.subtotal)}</span>
           </div>
-          <div class="totals-row${order.totals.itbis === 0 ? ' discount' : ''}">
-            <span>ITBIS (18%)</span><span>${order.totals.itbis === 0 ? 'Exonerado' : window.formatPrice(order.totals.itbis)}</span>
-          </div>
+          ${order.paymentMethod === 'online' && order.totals.itbis ? `<div class="totals-row"><span>ITBIS (18%)</span><span>${window.formatPrice(order.totals.itbis)}</span></div>` : ''}
           <div class="totals-row${order.paymentMethod !== 'online' ? ' discount' : ''}">
             <span>Entrega</span><span>${deliveryLabel(order)}</span>
           </div>

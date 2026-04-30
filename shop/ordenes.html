@@ -300,9 +300,7 @@ function renderResult() {
         </div>
         <div class="ord-totals">
           <div class="ord-tr"><span>Subtotal</span><b>${fmtPrice(o.totals.subtotal)}</b></div>
-          <div class="ord-tr${(o.totals.itbis===0||!o.totals.itbis)?' exon':''}">
-            <span>ITBIS</span><b>${(!o.totals.itbis||o.totals.itbis===0)?'Exonerado':fmtPrice(o.totals.itbis)}</b>
-          </div>
+          ${o.paymentMethod==='online'&&o.totals.itbis?`<div class="ord-tr"><span>ITBIS (18%)</span><b>${fmtPrice(o.totals.itbis)}</b></div>`:''}
           <div class="ord-tr total"><span>Total</span><b>${fmtPrice(o.totals.total)}</b></div>
         </div>
         ${o.customer && o.customer.name ? `
