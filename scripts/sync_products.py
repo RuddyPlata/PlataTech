@@ -526,7 +526,7 @@ def build_products(raw_list, row_to_image: dict | None = None):
             "specs": specs_from_variant(variant),
             "image": image_url,
             "gradient": gradient,
-            "stock": 10,  # disponible (catalogo dinamico - sync diario refleja status real)
+            "stock": 3,  # GT Tech: inventario conservador
             "sourceRow": p["row"],
         })
     return products

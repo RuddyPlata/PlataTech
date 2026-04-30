@@ -608,7 +608,7 @@ def build_products(xlsx_path: Path, row_to_image: dict):
             "specs": specs_from(variant),
             "image": image_path,
             "gradient": gradient,
-            "stock": 10,
+            "stock": 60 if marked < 4000 else 5,
             "_source": "renzo",
             "_row": r_idx,
             "_cost": price,
