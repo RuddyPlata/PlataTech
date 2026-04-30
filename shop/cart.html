@@ -331,10 +331,6 @@
       </div>
     </a>
     <div class="shop-nav-right">
-      <a href="../index.html" class="shop-nav-back nav-site-back">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-        platatechs.com
-      </a>
       <a href="cuenta.html" id="navAccountLink" class="shop-nav-back">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
         <span id="navAccountLabel">Mi cuenta</span>
@@ -884,13 +880,16 @@ async function ppRecordFail() {
   }
 }
 
+let ppRendering = false;
 async function renderPayPal(totals) {
   const container = document.getElementById('paypalButtonsCart');
-  if (!container) return;
+  if (!container || ppRendering) return;
+  ppRendering = true;
 
   const blocked = await ppCheckBlock();
   if (blocked) {
     container.innerHTML = ppBlockedHtml();
+    ppRendering = false;
     return;
   }
 
@@ -903,9 +902,11 @@ async function renderPayPal(totals) {
       tries++;
       if (window.paypal && window.paypal.Buttons) {
         clearInterval(wait);
+        ppRendering = false;
         renderPayPal(totals);
       } else if (tries >= 5) {
         clearInterval(wait);
+        ppRendering = false;
         container.innerHTML = `<div class="paypal-placeholder">
           <b>No se pudo cargar PayPal.</b> Verifica tu conexión o <a href="https://wa.me/18494950959" target="_blank">coordina por WhatsApp</a>.
         </div>`;
@@ -1008,8 +1009,9 @@ async function renderPayPal(totals) {
           alert(`Hubo un problema con el pago (intento ${result.fails} de 2). Verifica tu tarjeta e intenta de nuevo o usa contra-entrega.`);
         }
       }
-    }).render('#paypalButtonsCart');
+    }).render('#paypalButtonsCart').then(() => { ppRendering = false; });
   } catch (e) {
+    ppRendering = false;
     console.error('PayPal render error:', e);
     container.innerHTML = `<div class="paypal-placeholder">
       <b>Error al cargar PayPal.</b> Verifica tu conexión o <a href="https://wa.me/18494950959" target="_blank">coordina por WhatsApp</a>.

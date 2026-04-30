@@ -603,8 +603,7 @@ img { max-width: 100%; display: block; }
 @media (max-width: 768px) {
   .container { padding-inline: 1.1rem; }
 
-  /* Nav: hide main site back link, keep account + cart */
-  .shop-nav-back.nav-site-back { display: none; }
+  /* Nav compact on mobile */
 
   /* Hero: compact */
   .shop-hero { padding: 2.25rem 0 1.75rem; }
