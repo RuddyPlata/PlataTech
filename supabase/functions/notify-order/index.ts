@@ -47,12 +47,31 @@ serve(async (req: Request) => {
     ? `<p style="margin:12px 0 0;font-size:13px;color:#666">PayPal ID: <code style="background:#f0f0f0;padding:2px 6px;border-radius:4px">${r.paypal_order_id}</code> · Cobrado: US$${r.paypal_amount_usd}</p>`
     : '';
 
+  const LOGO_PT = 'https://platatechs.com/images/logo-platatech.png';
+  const LOGO_UG = 'https://platatechs.com/images/logo-ug.png';
+
+  const brandFooter = `<tr><td style="background:#0a1a3e;padding:28px 32px;text-align:center">
+    <table width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td style="text-align:center;padding-bottom:16px">
+        <img src="${LOGO_PT}" alt="Plata Tech" width="44" height="44" style="display:inline-block;border-radius:10px;margin-right:12px;vertical-align:middle"/>
+        <img src="${LOGO_UG}" alt="UG" width="44" height="44" style="display:inline-block;border-radius:10px;vertical-align:middle"/>
+      </td>
+    </tr><tr>
+      <td style="color:rgba(255,255,255,.7);font-size:12px;line-height:1.6">
+        <strong style="color:#fff">Plata Tech Solutions S.R.L.</strong><br/>
+        Santo Domingo, República Dominicana<br/>
+        <a href="https://platatechs.com" style="color:#3b6ef6;text-decoration:none">platatechs.com</a> · <a href="https://wa.me/18494950959" style="color:#25d366;text-decoration:none">WhatsApp</a>
+      </td>
+    </tr></table>
+  </td></tr>`;
+
   // ── Owner notification email ─────────────────────────────────────────────
   const ownerHtml = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/></head>
 <body style="margin:0;padding:0;background:#f6f8fb;font-family:'Segoe UI',Arial,sans-serif;color:#1a1a2e">
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#f6f8fb;padding:32px 0">
 <tr><td align="center"><table width="600" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08)">
   <tr><td style="background:#1447ff;padding:28px 32px">
+    <img src="${LOGO_PT}" alt="Plata Tech" width="48" height="48" style="display:block;margin-bottom:14px;border-radius:10px;border:2px solid rgba(255,255,255,.2)"/>
     <h1 style="margin:0;color:#fff;font-size:22px;font-weight:800">Nueva orden recibida</h1>
     <p style="margin:6px 0 0;color:rgba(255,255,255,.8);font-size:14px">Plata Tech Store · ${r.id}</p>
   </td></tr>
@@ -78,7 +97,7 @@ serve(async (req: Request) => {
       <a href="https://platatechs.com/shop/ordenes.html" style="display:inline-block;background:#1447ff;color:#fff;text-decoration:none;padding:12px 28px;border-radius:10px;font-weight:700;font-size:14px">Ver panel de órdenes</a>
     </div>
   </td></tr>
-  <tr><td style="background:#f6f8fb;padding:18px 32px;text-align:center;font-size:12px;color:#999">Plata Tech Solutions · Santo Domingo, RD</td></tr>
+  ${brandFooter}
 </table></td></tr></table></body></html>`;
 
   // ── Customer confirmation email ───────────────────────────────────────────
@@ -87,7 +106,7 @@ serve(async (req: Request) => {
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#f6f8fb;padding:32px 0">
 <tr><td align="center"><table width="600" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08)">
   <tr><td style="background:#1447ff;padding:32px 32px 24px">
-    <p style="margin:0 0 12px;color:rgba(255,255,255,.7);font-size:13px;text-transform:uppercase;letter-spacing:.1em">Plata Tech Store</p>
+    <img src="${LOGO_PT}" alt="Plata Tech" width="52" height="52" style="display:block;margin-bottom:16px;border-radius:12px;border:2px solid rgba(255,255,255,.2)"/>
     <h1 style="margin:0;color:#fff;font-size:26px;font-weight:800;line-height:1.2">${method === 'online' ? '¡Pago recibido!' : '¡Orden confirmada!'}</h1>
     <p style="margin:10px 0 0;color:rgba(255,255,255,.85);font-size:15px">Hola ${customer?.name?.split(' ')[0] ?? ''}, gracias por tu compra.</p>
   </td></tr>
@@ -119,7 +138,7 @@ serve(async (req: Request) => {
     </div>
     <p style="font-size:13px;color:#888;text-align:center;line-height:1.6">¿Tienes alguna pregunta? Escríbenos por <a href="https://wa.me/18494950959" style="color:#1447ff">WhatsApp</a> mencionando tu número de orden <strong>${r.id}</strong>.</p>
   </td></tr>
-  <tr><td style="background:#f6f8fb;padding:18px 32px;text-align:center;font-size:12px;color:#999">Plata Tech Solutions · Santo Domingo, RD</td></tr>
+  ${brandFooter}
 </table></td></tr></table></body></html>`;
 
   const resendKey  = Deno.env.get('RESEND_API_KEY');
