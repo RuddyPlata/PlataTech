@@ -307,7 +307,7 @@ if (!product) {
 
   const catName = window.CATEGORIES.find(c => c.id === product.category).name;
   const stockLabel = product.stock > 0
-    ? 'Disponible · entrega en 1-3 días'
+    ? 'Disponible · entrega el mismo día'
     : 'Bajo orden · consulta tiempos';
 
   main.innerHTML = `
@@ -336,7 +336,7 @@ if (!product) {
 
             <p class="product-info-short">${escapeHtml(product.short)}</p>
 
-            <div class="product-stock ${product.stock <= 3 ? 'low' : ''}">${stockLabel}</div>
+            <div class="product-stock ${product.stock <= 1 ? 'low' : ''}">${stockLabel}</div>
 
             <div class="qty-row">
               <div class="qty-input">
