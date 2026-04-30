@@ -525,9 +525,9 @@ function render() {
                 <div class="cart-item-row">
                   <div class="cart-item-price">${window.formatPrice(p.price)}</div>
                   <div class="cart-item-qty">
-                    <button data-qty="-" aria-label="Reducir">−</button>
+                    <button data-qty="-" aria-label="Reducir" ${it.qty <= 1 ? 'disabled style="opacity:.35"' : ''}>−</button>
                     <input type="number" value="${it.qty}" min="1" max="${p.stock}" data-qty-input/>
-                    <button data-qty="+" aria-label="Aumentar">+</button>
+                    <button data-qty="+" aria-label="Aumentar" ${it.qty >= p.stock ? 'disabled style="opacity:.35"' : ''}>+</button>
                   </div>
                   <button class="cart-item-remove" data-remove>Eliminar</button>
                 </div>
@@ -660,11 +660,19 @@ function wireItemControls() {
   document.querySelectorAll('.cart-item').forEach(row => {
     const slug = row.dataset.slug;
     const input = row.querySelector('[data-qty-input]');
-    row.querySelector('[data-qty="-"]').addEventListener('click', () => {
+    const btnMinus = row.querySelector('[data-qty="-"]');
+    const btnPlus  = row.querySelector('[data-qty="+"]');
+    function syncBtns() {
+      const p = window.getProductBySlug(slug);
+      const v = +input.value;
+      btnMinus.disabled = v <= 1; btnMinus.style.opacity = v <= 1 ? '.35' : '';
+      btnPlus.disabled  = v >= p.stock; btnPlus.style.opacity  = v >= p.stock ? '.35' : '';
+    }
+    btnMinus.addEventListener('click', () => {
       window.Cart.setQty(slug, Math.max(1, +input.value - 1));
       render();
     });
-    row.querySelector('[data-qty="+"]').addEventListener('click', () => {
+    btnPlus.addEventListener('click', () => {
       const p = window.getProductBySlug(slug);
       window.Cart.setQty(slug, Math.min(p.stock, +input.value + 1));
       render();
