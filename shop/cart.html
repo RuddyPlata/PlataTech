@@ -796,14 +796,19 @@ function wireAuthStep() {
     if (!email || !pw) { showErr('Por favor ingresa tu correo y contraseña.'); return; }
     if (pw.length < 6) { showErr('La contraseña debe tener al menos 6 caracteres.'); return; }
     regBtn.disabled = true; regBtn.textContent = 'Creando cuenta…';
-    const { error } = await window.SB.auth.signUp({ email, password: pw });
+    const { data, error } = await window.SB.auth.signUp({ email, password: pw });
     if (error) {
       if (error.message.toLowerCase().includes('already')) {
         showErr('Ya existe una cuenta con ese correo. Usa "Iniciar sesión".');
       } else { showErr(error.message); }
       regBtn.disabled = false; regBtn.textContent = 'Crear cuenta y continuar';
+    } else if (!data.session) {
+      // Email confirmation required — allow 1 order without confirming
+      window._pendingCheckoutEmail = email;
+      if (!formState.email) formState.email = email;
+      render();
     }
-    // onAuthStateChange handles re-render on success
+    // If data.session exists (confirmations disabled) onAuthStateChange handles it
   });
 
   const loginBtn = document.getElementById('caLoginBtn');
@@ -826,15 +831,22 @@ function renderAction(totals) {
   if (!box) return;
 
   /* Require auth before payment */
-  if (!currentUser) {
+  if (!currentUser && !window._pendingCheckoutEmail) {
     box.innerHTML = renderAuthStep();
     wireAuthStep();
     return;
   }
 
+  /* Notice when email not yet confirmed */
+  const pendingNotice = (!currentUser && window._pendingCheckoutEmail)
+    ? `<div style="background:#fffbe6;border:1px solid rgba(212,162,74,.35);border-radius:10px;padding:.7rem 1rem;font-size:.8rem;color:#8a6d10;margin-bottom:.85rem;line-height:1.5">
+        <strong>Revisa tu correo</strong> — te enviamos un link de confirmación. Puedes hacer tu primer pedido ahora; para futuras compras necesitas confirmar tu email.
+      </div>`
+    : '';
+
   /* Pago online → PayPal */
   if (paymentMethod === 'online') {
-    box.innerHTML = `<div id="paypalButtonsCart"></div>`;
+    box.innerHTML = pendingNotice + `<div id="paypalButtonsCart"></div>`;
     renderPayPal(totals);
     return;
   }
@@ -844,7 +856,7 @@ function renderAction(totals) {
     ? `<strong>Contra entrega con transferencia · entrega el mismo día (máx 24h):</strong> llevamos tu pedido dentro del GSD, revisas el equipo con calma y pagas por transferencia al recibir. Al confirmar tu orden te contactamos por WhatsApp con los datos bancarios.`
     : `<strong>Contra entrega con efectivo · entrega el mismo día (máx 24h):</strong> llevamos tu pedido dentro del GSD, revisas el equipo con calma y pagas en efectivo (RD$) al recibir. Al confirmar tu orden te contactamos por WhatsApp.`;
 
-  box.innerHTML = `
+  box.innerHTML = pendingNotice + `
     <div class="pay-instructions">${instr}</div>
     <button type="button" id="placeOrderBtn"
        class="btn btn-primary btn-lg btn-block" style="margin-top:1rem;">
