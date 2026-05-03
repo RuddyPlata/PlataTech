@@ -30,12 +30,13 @@
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; overflow-x: clip; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   color: var(--ink); background: var(--off-white);
   line-height: 1.55; -webkit-font-smoothing: antialiased;
   min-height: 100vh; display: flex; flex-direction: column;
+  overflow-x: hidden;
 }
 main { flex: 1; }
 a { color: inherit; text-decoration: none; }
@@ -193,12 +194,23 @@ img { max-width: 100%; display: block; }
   display: flex; gap: 1.25rem; align-items: center;
   flex-wrap: wrap;
 }
-.filter-cats {
-  display: flex; gap: .45rem; flex-wrap: wrap; flex: 1; min-width: 0;
-  overflow-x: auto; scrollbar-width: none;
+.filter-cats { display: none; }
+.cat-select {
+  display: block; flex: 0 0 auto;
+  padding: .6rem 2.4rem .6rem 1rem;
+  border-radius: 100px;
+  border: 1.5px solid var(--border-2);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: .88rem; font-weight: 600;
+  color: var(--ink); background: var(--white);
+  -webkit-appearance: none; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234a5573' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right .85rem center;
+  cursor: pointer; outline: none;
+  transition: border-color .2s, box-shadow .2s;
+  min-width: 180px;
 }
-.filter-cats::-webkit-scrollbar { display: none; }
-.cat-select { display: none; }
+.cat-select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(30,80,212,.1); }
 
 /* Price toggle button — mobile only, hidden on desktop */
 .price-toggle-btn { display: none; }
@@ -609,26 +621,17 @@ img { max-width: 100%; display: block; }
   .shop-hero { padding: 2.25rem 0 1.75rem; }
   .shop-hero-desc { font-size: .9rem; line-height: 1.5; }
 
-  /* Filter bar: single row (cat-select | search | precio-btn) + floating price panel */
+  /* Filter bar: single row (cat-select | search | precio-btn) */
   .filter-bar { position: relative; }
   .filter-inner { gap: .45rem; flex-wrap: nowrap; align-items: center; }
-  .filter-cats { display: none; }
 
-  /* Compact category dropdown */
+  /* Compact cat-select on mobile */
   .cat-select {
-    display: block; order: 1;
-    flex: 0 0 auto; max-width: 36%;
+    order: 1; max-width: 36%;
     padding: .52rem 2rem .52rem .85rem;
-    border: 1.5px solid var(--border); border-radius: 100px;
-    font: inherit; font-size: .8rem; font-weight: 600;
-    color: var(--ink); background-color: var(--off-white);
-    appearance: none; -webkit-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-    background-repeat: no-repeat; background-position: right .65rem center;
-    cursor: pointer; outline: none; transition: border-color .2s;
+    font-size: .8rem; min-width: 0;
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
-  .cat-select:focus { border-color: var(--blue); }
 
   /* Search takes remaining space */
   .filter-search { order: 2; flex: 1; min-width: 0; }
