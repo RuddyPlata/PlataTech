@@ -363,7 +363,7 @@ function renderProducts() {
     titleEl.textContent = 'Explora por categoría';
     countEl.textContent = `${window.PRODUCTS.length} productos disponibles · agrupados por tipo`;
     grid.className = 'products-rows';
-    const HOME_CAT_ORDER = ['celulares','accesorios','tablets','laptops','audio','smartwatch','gaming','seguridad','conectividad','varios'];
+    const HOME_CAT_ORDER = ['celulares','camaras','grabadores','alarmas','monitores','almacenamiento','laptops','tablets','audio','smartwatch','conectividad','impresoras','accesorios','seguridad','gaming','varios'];
     const cats = window.CATEGORIES
       .filter(c => c.id !== 'todos')
       .slice()
@@ -375,7 +375,7 @@ function renderProducts() {
     grid.innerHTML = cats.map(cat => {
       const list = window.PRODUCTS.filter(p => p.category === cat.id);
       if (!list.length) return '';
-      const visible = list.slice(0, 4);
+      const visible = list.slice(0, 6);
       return `
         <section class="cat-row" id="cat-${cat.id}">
           <div class="cat-row-head">
