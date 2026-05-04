@@ -21,6 +21,7 @@ const C_GOLD   = '#d4a24a';
 const C_GREEN  = '#25d366';
 
 const fmt = (n: number) => `RD$${Number(n).toLocaleString('es-DO', { minimumFractionDigits: 2 })}`;
+const esc = (s: unknown) => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 
 const brandHeader = (title: string, subtitle: string) => `<tr><td style="background:${C_NAVY};padding:0">
   <table width="100%" cellpadding="0" cellspacing="0"><tr>
@@ -76,6 +77,7 @@ serve(async (req: Request) => {
   const r   = body.record;
   const old = body.old_record;
   const eventType = body.type ?? 'INSERT';
+  console.log('[notify-order] eventType:', eventType, '| status:', (r as Record<string,unknown>)?.status, '| old_status:', (old as Record<string,unknown>)?.status);
 
   if (!r) return new Response('No record', { status: 400 });
 
@@ -114,23 +116,24 @@ serve(async (req: Request) => {
     }
 
     const info = STATUS_INFO[newStatus];
-    const firstName = customer.name?.split(' ')[0] ?? '';
+    const firstName = esc(customer.name?.split(' ')[0] ?? '');
+    const orderId = esc(r.id);
 
     const html = wrap(`
       ${brandHeader(info.label, `Hola ${firstName}, tu orden ha sido actualizada.`)}
       <tr><td style="padding:28px 32px">
         <div style="background:#f0f7ff;border-left:4px solid ${C_BLUE};border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:24px">
           <p style="margin:0;font-size:13px;color:#666;text-transform:uppercase;letter-spacing:.08em">Número de orden</p>
-          <p style="margin:4px 0 0;font-size:22px;font-weight:800;color:${C_BLUE};letter-spacing:.02em">${r.id}</p>
+          <p style="margin:4px 0 0;font-size:22px;font-weight:800;color:${C_BLUE};letter-spacing:.02em">${orderId}</p>
         </div>
         <div style="display:inline-block;background:${info.color}1a;border:1px solid ${info.color}44;border-radius:100px;padding:6px 16px;margin-bottom:20px">
           <span style="font-size:13px;font-weight:700;color:${info.color}">${info.label}</span>
         </div>
         <p style="color:#444;line-height:1.6;margin:0 0 24px">${info.msg}</p>
         <div style="text-align:center;margin-bottom:24px">
-          <a href="https://platatechs.com/shop/orden.html?n=${r.id}" style="display:inline-block;background:${C_BLUE};color:#fff;text-decoration:none;padding:13px 32px;border-radius:10px;font-weight:700;font-size:15px">Ver mi orden</a>
+          <a href="https://platatechs.com/shop/orden.html?n=${orderId}" style="display:inline-block;background:${C_BLUE};color:#fff;text-decoration:none;padding:13px 32px;border-radius:10px;font-weight:700;font-size:15px">Ver mi orden</a>
         </div>
-        <p style="font-size:13px;color:#888;text-align:center;line-height:1.6">¿Tienes alguna pregunta? Escríbenos por <a href="https://wa.me/18494950959" style="color:${C_BLUE}">WhatsApp</a> mencionando tu número de orden <strong>${r.id}</strong>.</p>
+        <p style="font-size:13px;color:#888;text-align:center;line-height:1.6">¿Tienes alguna pregunta? Escríbenos por <a href="https://wa.me/18494950959" style="color:${C_BLUE}">WhatsApp</a> mencionando tu número de orden <strong>${orderId}</strong>.</p>
       </td></tr>`);
 
     const ok = await sendEmail(
@@ -153,7 +156,7 @@ serve(async (req: Request) => {
 
   const itemsHtml = (items ?? []).map(i =>
     `<tr>
-      <td style="padding:6px 0;border-bottom:1px solid #f0f0f0">${i.qty}x ${i.name}${i.variant ? ` <span style="color:#666">(${i.variant})</span>` : ''}</td>
+      <td style="padding:6px 0;border-bottom:1px solid #f0f0f0">${i.qty}x ${esc(i.name)}${i.variant ? ` <span style="color:#666">(${esc(i.variant)})</span>` : ''}</td>
       <td style="padding:6px 0;border-bottom:1px solid #f0f0f0;text-align:right;white-space:nowrap">${fmt(i.subtotal)}</td>
     </tr>`
   ).join('');
@@ -163,18 +166,18 @@ serve(async (req: Request) => {
     : '';
 
   const paypalRow = r.paypal_order_id
-    ? `<p style="margin:12px 0 0;font-size:13px;color:#666">PayPal ID: <code style="background:#f0f0f0;padding:2px 6px;border-radius:4px">${r.paypal_order_id}</code> · Cobrado: US$${r.paypal_amount_usd}</p>`
+    ? `<p style="margin:12px 0 0;font-size:13px;color:#666">PayPal ID: <code style="background:#f0f0f0;padding:2px 6px;border-radius:4px">${esc(r.paypal_order_id)}</code> · Cobrado: US$${esc(r.paypal_amount_usd)}</p>`
     : '';
 
   const ownerHtml = wrap(`
-    ${brandHeader('Nueva orden recibida', `Plata Tech Store · ${r.id}`)}
+    ${brandHeader('Nueva orden recibida', `Plata Tech Store · ${esc(r.id)}`)}
     <tr><td style="padding:28px 32px">
       <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px">
-        <tr><td style="padding:4px 0"><strong>Cliente</strong></td><td style="padding:4px 0;text-align:right">${customer?.name ?? '—'}</td></tr>
-        <tr><td style="padding:4px 0"><strong>Email</strong></td><td style="padding:4px 0;text-align:right">${customer?.email ?? '—'}</td></tr>
-        <tr><td style="padding:4px 0"><strong>Teléfono</strong></td><td style="padding:4px 0;text-align:right">${customer?.phone ?? '—'}</td></tr>
-        <tr><td style="padding:4px 0"><strong>Dirección</strong></td><td style="padding:4px 0;text-align:right">${customer?.address ?? '—'}, ${customer?.sector ?? ''}</td></tr>
-        ${customer?.notes ? `<tr><td style="padding:4px 0"><strong>Notas</strong></td><td style="padding:4px 0;text-align:right">${customer.notes}</td></tr>` : ''}
+        <tr><td style="padding:4px 0"><strong>Cliente</strong></td><td style="padding:4px 0;text-align:right">${esc(customer?.name) || '—'}</td></tr>
+        <tr><td style="padding:4px 0"><strong>Email</strong></td><td style="padding:4px 0;text-align:right">${esc(customer?.email) || '—'}</td></tr>
+        <tr><td style="padding:4px 0"><strong>Teléfono</strong></td><td style="padding:4px 0;text-align:right">${esc(customer?.phone) || '—'}</td></tr>
+        <tr><td style="padding:4px 0"><strong>Dirección</strong></td><td style="padding:4px 0;text-align:right">${esc(customer?.address) || '—'}, ${esc(customer?.sector)}</td></tr>
+        ${customer?.notes ? `<tr><td style="padding:4px 0"><strong>Notas</strong></td><td style="padding:4px 0;text-align:right">${esc(customer.notes)}</td></tr>` : ''}
         <tr><td style="padding:4px 0"><strong>Pago</strong></td><td style="padding:4px 0;text-align:right">${payLabel}</td></tr>
         <tr><td style="padding:4px 0"><strong>Entrega</strong></td><td style="padding:4px 0;text-align:right">${sla}</td></tr>
       </table>
@@ -191,20 +194,21 @@ serve(async (req: Request) => {
       </div>
     </td></tr>`);
 
+  const firstName = esc(customer?.name?.split(' ')[0] ?? '');
   const customerHtml = wrap(`
     ${brandHeader(
       method === 'online' ? '¡Pago recibido!' : '¡Orden confirmada!',
-      `Hola ${customer?.name?.split(' ')[0] ?? ''}, gracias por tu compra.`
+      `Hola ${firstName}, gracias por tu compra.`
     )}
     <tr><td style="padding:28px 32px">
       <div style="background:#f0f7ff;border-left:4px solid ${C_BLUE};border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:24px">
         <p style="margin:0;font-size:13px;color:#666;text-transform:uppercase;letter-spacing:.08em">Número de orden</p>
-        <p style="margin:4px 0 0;font-size:22px;font-weight:800;color:${C_BLUE};letter-spacing:.02em">${r.id}</p>
+        <p style="margin:4px 0 0;font-size:22px;font-weight:800;color:${C_BLUE};letter-spacing:.02em">${esc(r.id)}</p>
       </div>
       <p style="color:#444;line-height:1.6;margin:0 0 24px">
         ${method === 'online'
           ? 'Tu pago fue procesado exitosamente. Un representante te contactará por WhatsApp para coordinar la entrega en <strong>1 a 3 días laborables</strong>.'
-          : 'Recibimos tu pedido. Un representante te contactará por WhatsApp al <strong>' + (customer?.phone ?? '') + '</strong> para confirmar y coordinar la entrega <strong>hoy mismo</strong> (máx 24h).'}
+          : 'Recibimos tu pedido. Un representante te contactará por WhatsApp al <strong>' + esc(customer?.phone) + '</strong> para confirmar y coordinar la entrega <strong>hoy mismo</strong> (máx 24h).'}
       </p>
       <h2 style="font-size:15px;font-weight:700;margin:0 0 12px;padding-bottom:8px;border-bottom:2px solid #f0f0f0">Tu pedido</h2>
       <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px">${itemsHtml}</table>
@@ -215,14 +219,14 @@ serve(async (req: Request) => {
       </table>
       <h2 style="font-size:15px;font-weight:700;margin:0 0 12px;padding-bottom:8px;border-bottom:2px solid #f0f0f0">Entrega</h2>
       <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px">
-        <tr><td style="padding:4px 0;color:#666">Dirección</td><td style="padding:4px 0;text-align:right">${customer?.address ?? '—'}, ${customer?.sector ?? ''}</td></tr>
+        <tr><td style="padding:4px 0;color:#666">Dirección</td><td style="padding:4px 0;text-align:right">${esc(customer?.address) || '—'}, ${esc(customer?.sector)}</td></tr>
         <tr><td style="padding:4px 0;color:#666">Método de pago</td><td style="padding:4px 0;text-align:right">${payLabel}</td></tr>
         <tr><td style="padding:4px 0;color:#666">Tiempo estimado</td><td style="padding:4px 0;text-align:right;font-weight:700;color:#059669">${sla}</td></tr>
       </table>
       <div style="text-align:center;margin-bottom:24px">
-        <a href="https://platatechs.com/shop/orden.html?n=${r.id}" style="display:inline-block;background:${C_BLUE};color:#fff;text-decoration:none;padding:13px 32px;border-radius:10px;font-weight:700;font-size:15px">Ver mi orden</a>
+        <a href="https://platatechs.com/shop/orden.html?n=${esc(r.id)}" style="display:inline-block;background:${C_BLUE};color:#fff;text-decoration:none;padding:13px 32px;border-radius:10px;font-weight:700;font-size:15px">Ver mi orden</a>
       </div>
-      <p style="font-size:13px;color:#888;text-align:center;line-height:1.6">¿Tienes alguna pregunta? Escríbenos por <a href="https://wa.me/18494950959" style="color:${C_BLUE}">WhatsApp</a> mencionando tu número de orden <strong>${r.id}</strong>.</p>
+      <p style="font-size:13px;color:#888;text-align:center;line-height:1.6">¿Tienes alguna pregunta? Escríbenos por <a href="https://wa.me/18494950959" style="color:${C_BLUE}">WhatsApp</a> mencionando tu número de orden <strong>${esc(r.id)}</strong>.</p>
     </td></tr>`);
 
   const [ownerOk, customerOk] = await Promise.all([

@@ -324,7 +324,7 @@ NS_R   = "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}"
 NS_A   = "{http://schemas.openxmlformats.org/drawingml/2006/main}"
 
 def _save_resized(src_bytes: bytes, dest_path: Path, max_dim: int = 800, jpeg_quality: int = 78):
-    """Resize/recompress imagen a max_dim de lado mayor, output JPEG. Reduce drasticamente el peso."""
+    """Resize/recompress imagen a max_dim de lado mayor, output JPEG + WebP. Reduce drasticamente el peso."""
     from PIL import Image
     im = Image.open(io.BytesIO(src_bytes))
     if im.mode in ('RGBA', 'P', 'LA'):
@@ -338,6 +338,9 @@ def _save_resized(src_bytes: bytes, dest_path: Path, max_dim: int = 800, jpeg_qu
         scale = max_dim / max(w, h)
         im = im.resize((int(w * scale), int(h * scale)), Image.LANCZOS)
     im.save(dest_path, format='JPEG', quality=jpeg_quality, optimize=True, progressive=True)
+    # Also save WebP version alongside JPEG for browser use
+    webp_path = dest_path.with_suffix('.webp')
+    im.save(webp_path, format='WEBP', quality=72, method=4)
 
 def extract_images_by_row(xlsx_path: Path, out_dir: Path) -> dict:
     """Devuelve {row_1based: 'assets/img/.../file.jpg'} (path web relativo a shop/).
@@ -609,9 +612,17 @@ window.formatPrice = function(n) {
 window.renderProductMock = function(product, size) {
   size = size || 200;
   if (product.image) {
-    return '<img src="' + product.image + '" alt="' + (product.name || '') +
-           '" loading="lazy" style="max-width:100%;max-height:' + size +
-           'px;object-fit:contain"/>';
+    var src = product.image;
+    var webp = src.replace(/\\.(jpg|jpeg|png)$/i, '.webp');
+    var altTxt = (product.name || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+    var styleStr = 'max-width:100%;max-height:' + size + 'px;object-fit:contain';
+    if (webp !== src) {
+      return '<picture><source srcset="' + webp + '" type="image/webp"/>' +
+             '<img src="' + src + '" alt="' + altTxt +
+             '" loading="lazy" decoding="async" style="' + styleStr + '"/></picture>';
+    }
+    return '<img src="' + src + '" alt="' + altTxt +
+           '" loading="lazy" decoding="async" style="' + styleStr + '"/>';
   }
   var g = product.gradient || ['#2a2a2a', '#111'];
   var gid = 'g_' + (product.slug || 'x').replace(/[^a-z0-9]/g, '_');

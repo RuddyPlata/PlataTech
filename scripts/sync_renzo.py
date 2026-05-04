@@ -105,6 +105,8 @@ def _save_resized(src_bytes: bytes, dest_path: Path, max_dim: int = 800, jpeg_qu
         scale = max_dim / max(w, h)
         im = im.resize((int(w * scale), int(h * scale)), Image.LANCZOS)
     im.save(dest_path, format='JPEG', quality=jpeg_quality, optimize=True, progressive=True)
+    # Also save WebP version alongside JPEG for browser use
+    im.save(dest_path.with_suffix('.webp'), format='WEBP', quality=72, method=4)
 
 def extract_images_by_row(xlsx_path: Path, out_dir: Path) -> dict:
     """Devuelve {row_1based: 'assets/img/.../file.jpg'} (path web relativo a shop/).

@@ -28,7 +28,8 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700&family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet"/>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700&family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'"/>
+<noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700&family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet"/></noscript>
 
   <style>
   /* ╔══════════════════════════════════════════════════════════╗
@@ -367,11 +368,11 @@
   /* ╔══════════════════════════════════════════════════════════╗
      ║  WHY US                                                  ║
      ╚══════════════════════════════════════════════════════════╝ */
-  .why { padding: 7rem 0; background: rgba(245,248,255,.72); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .why { padding: 7rem 0; background: rgba(11,29,62,.75); border-top: 1px solid rgba(255,255,255,.08); border-bottom: 1px solid rgba(255,255,255,.08); }
   .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
   .why-label { margin-bottom: 1rem; }
-  .why-title { margin-bottom: 1.25rem; }
-  .why-body { color: var(--ink-2); font-size: 1rem; line-height: 1.78; margin-bottom: 1rem; }
+  .why-title { margin-bottom: 1.25rem; color: var(--white); }
+  .why-body { color: rgba(255,255,255,.7); font-size: 1rem; line-height: 1.78; margin-bottom: 1rem; }
   .about-pills { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: 1.5rem; }
   .pill {
     padding: .32rem .9rem; border-radius: 100px;
@@ -379,6 +380,7 @@
     background: var(--blue-pale); color: var(--blue);
     border: 1px solid rgba(30,80,212,.15);
   }
+  .why .pill { background: rgba(255,255,255,.1); color: rgba(255,255,255,.85); border: 1px solid rgba(255,255,255,.18); }
   .feat-list { display: flex; flex-direction: column; gap: 1rem; }
   .feat {
     display: flex; gap: 1rem; align-items: flex-start;
@@ -523,11 +525,11 @@
   }
   .shop-show-card-mark {
     width: 40px; height: 40px; border-radius: 10px;
-    background: linear-gradient(135deg, var(--navy), var(--blue));
+    background: var(--white);
     padding: 5px; display: flex; align-items: center; justify-content: center;
     box-shadow: 0 4px 14px rgba(20,71,255,.22);
   }
-  .shop-show-card-mark img { width: 100%; height: 100%; object-fit: contain; filter: brightness(0) invert(1); }
+  .shop-show-card-mark img { width: 100%; height: 100%; object-fit: contain; }
   .shop-show-card-brand { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: .95rem; color: var(--ink); }
   .shop-show-card-sub { font-size: .72rem; color: var(--ink-3); }
 
@@ -555,8 +557,6 @@
     background: linear-gradient(180deg, rgba(11,29,62,.55), rgba(11,29,62,.75));
     padding: 7rem 0;
     position: relative; overflow: hidden;
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
   }
   .cta-orb { position: absolute; border-radius: 50%; filter: blur(70px); pointer-events: none; opacity: .3; }
   .cta-orb-1 { width: 400px; height: 400px; background: var(--blue); top: -100px; right: -50px; }
@@ -762,6 +762,15 @@
     opacity: 1 !important; transform: none !important;
   }
   @media (min-width: 1024px) { .gl4-slide { flex: 0 0 440px; } }
+  @media (max-width: 1024px) {
+    .svc-carousel-wrap { padding-inline: 0; }
+    .gl4-overflow { padding-inline: 1.25rem; scroll-padding-left: 1.25rem; }
+    .gl4-track { justify-content: flex-start; }
+    .gl4-slide { flex: 0 0 75vw; }
+  }
+  @media (max-width: 640px) {
+    .gl4-slide { flex: 0 0 70vw; }
+  }
   .gl4-card {
     position: relative; min-height: 27rem;
     border-radius: .875rem; overflow: hidden;
@@ -890,7 +899,7 @@
   <div class="nav-bg"></div>
   <div class="container nav-inner">
     <a href="#inicio" class="nav-logo">
-      <img src="images/logo-platatech.png" alt="Plata Tech Solutions" style="height:40px;width:auto;object-fit:contain;"/>
+      <img src="images/logo-platatech.webp" alt="Plata Tech Solutions" style="height:40px;width:auto;object-fit:contain;"/>
     </a>
     <ul class="nav-links">
       <li><a href="#servicios">Servicios</a></li>
@@ -925,7 +934,7 @@
 <section id="inicio" class="hero">
   <div class="container hero-inner">
     <div class="hero-logo-big" id="heroLogo">
-      <img src="images/logo-platatech.png" alt="Plata Tech Solutions"/>
+      <img src="images/logo-platatech.webp" alt="Plata Tech Solutions"/>
     </div>
 
     <div>
@@ -1162,6 +1171,32 @@
         </div>
       </div>
 
+      <!-- 11. Sheetrock y Drywall -->
+      <div class="gl4-slide">
+        <div class="gl4-card" data-msg="Hola, necesito información sobre instalación de sheetrock y drywall (divisiones, tabiques, cielos rasos). ¿Pueden cotizarme?">
+          <img class="gl4-img" src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80&auto=format&fit=crop" alt="Sheetrock y Drywall"/>
+          <div class="gl4-overlay"></div>
+          <div class="gl4-body">
+            <div class="gl4-body-title">Sheetrock y Drywall</div>
+            <div class="gl4-body-desc">Divisiones, tabiques y cielos rasos en sistema drywall para casas, locales y edificios. Acabados limpios, rápidos y de larga duración.</div>
+            <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12. Pintura Profesional -->
+      <div class="gl4-slide">
+        <div class="gl4-card" data-msg="Hola, me interesa el servicio de pintura profesional (interior o exterior). ¿Cuánto cuesta y qué tipo de acabados ofrecen?">
+          <img class="gl4-img" src="https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=800&q=80&auto=format&fit=crop" alt="Pintura Profesional"/>
+          <div class="gl4-overlay"></div>
+          <div class="gl4-body">
+            <div class="gl4-body-title">Pintura Profesional</div>
+            <div class="gl4-body-desc">Pintura de interiores y exteriores para casas, locales y edificios. Maquinaria de última generación para aplicación con pistola y acabados impecables.</div>
+            <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          </div>
+        </div>
+      </div>
+
     </div><!-- /gl4-track -->
     </div><!-- /svcWrapper -->
     <button class="svc-float-btn svc-float-next" id="svcNext" aria-label="Siguiente">
@@ -1334,7 +1369,7 @@
         <div class="div-stripe" style="background:linear-gradient(90deg,#1e50d4,#3b6ef6);"></div>
         <div class="div-body">
           <div class="div-head">
-            <img src="images/logo-platatech.png" alt="Plata Tech Security" style="height:60px;width:auto;object-fit:contain;"/>
+            <img src="images/logo-platatech.webp" alt="Plata Tech Security" style="height:60px;width:auto;object-fit:contain;"/>
             <span class="div-badge">Activo</span>
           </div>
           <div class="div-name">Plata Tech Security</div>
@@ -1382,7 +1417,7 @@
         <div class="div-stripe" style="background:linear-gradient(90deg,#0055ff,#3378ff);"></div>
         <div class="div-body">
           <div class="div-head">
-            <img src="images/logo-ug.png" alt="UltimoGadget" style="height:60px;width:auto;object-fit:contain;"/>
+            <img src="images/logo-ug.webp" alt="UltimoGadget" style="height:60px;width:auto;object-fit:contain;"/>
             <span class="div-badge">Activo</span>
           </div>
           <div class="div-name">UltimoGadget</div>
@@ -1412,7 +1447,7 @@
 
       <div class="shop-show-text" data-reveal>
         <p class="label">Tienda Oficial</p>
-        <h2 class="shop-show-title">Compra con la misma<br/><em>tranquilidad</em> con la que instalamos</h2>
+        <h2 class="shop-show-title">Compra con la misma<br/><em>confianza</em> con la que instalamos</h2>
         <p class="shop-show-desc">Celulares, cámaras, laptops y accesorios oficiales de Plata Tech Security y UltimoGadget — con factura NCF, garantía respaldada y un equipo que responde cuando lo necesitas. No solo te vendemos el equipo: te acompañamos.</p>
 
         <div class="shop-show-trust">
@@ -1438,9 +1473,9 @@
         <div class="shop-show-sub">
           <span>Productos oficiales de</span>
           <div class="shop-show-sub-logos">
-            <img src="images/logo-platatech.png" alt="Plata Tech Security"/>
+            <img src="images/logo-platatech.webp" alt="Plata Tech Security"/>
             <span class="sep"></span>
-            <img src="images/logo-ug.png" alt="UltimoGadget"/>
+            <img src="images/logo-ug.webp" alt="UltimoGadget"/>
           </div>
         </div>
       </div>
@@ -1448,7 +1483,7 @@
       <div class="shop-show-visual" data-reveal>
         <div class="shop-show-card">
           <div class="shop-show-card-head">
-            <div class="shop-show-card-mark"><img src="images/logo-platatech.png" alt="Plata Tech"/></div>
+            <div class="shop-show-card-mark"><img src="images/logo-platatech.webp" alt="Plata Tech"/></div>
             <div>
               <div class="shop-show-card-brand">Plata Tech Store</div>
               <div class="shop-show-card-sub">Tienda oficial · RNC · NCF</div>
@@ -1517,7 +1552,7 @@
 <!-- ── FOOTER ────────────────────────────────────────────── -->
 <footer class="footer">
   <div class="container footer-inner">
-    <div class="footer-logo"><img src="images/logo-platatech.png" alt="Plata Tech Solutions SRL" style="height:32px;width:auto;object-fit:contain;"/>Plata Tech Solutions SRL</div>
+    <div class="footer-logo"><img src="images/logo-platatech.webp" alt="Plata Tech Solutions SRL" style="height:32px;width:auto;object-fit:contain;"/>Plata Tech Solutions SRL</div>
     <div class="footer-links">
       <a href="#inicio">Inicio</a>
       <a href="#servicios">Servicios</a>

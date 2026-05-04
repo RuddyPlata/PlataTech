@@ -5,7 +5,7 @@
    Regenerar: python scripts/sync_products.py
    ════════════════════════════════════════════════════════ */
 
-window.PRODUCTS_LAST_SYNC = "2026-04-29 03:28:58 -0400";
+window.PRODUCTS_LAST_SYNC = "2026-04-30 11:36:29 -0400";
 
 window.PRODUCTS = [
   {
@@ -20,7 +20,7 @@ window.PRODUCTS = [
     specs: ["64GB + MSD 64GB = 128GB", "4GB RAM", "14\" FHD", "INTEL N6000", "WINDOWS 11"],
     image: "assets/img/ydc/r5.jpg",
     gradient: ["#2a2d3a", "#0f1218"],
-    stock: 10
+    stock: 3
   },
   {
     id: 6,
@@ -34,7 +34,7 @@ window.PRODUCTS = [
     specs: ["128GB EMMC 5.1", "14” HD", "4GB RAM", "INTEL N4500 2.8GHZ", "4GB DDR4-2933MHZ", "WINDOWS 11S"],
     image: "assets/img/ydc/r6.jpg",
     gradient: ["#2a2d3a", "#0f1218"],
-    stock: 10
+    stock: 3
   },
   {
     id: 7,
@@ -48,7 +48,7 @@ window.PRODUCTS = [
     specs: ["128GB EMMC 5.1. 15.6\" FHD", "4GB RAM", "INTEL N100", "WIFI 6", "BT 5.1", "WINDOWS 11S"],
     image: "assets/img/ydc/r7.jpg",
     gradient: ["#2a2d3a", "#0f1218"],
-    stock: 10
+    stock: 3
   },
   {
     id: 9,
@@ -62,7 +62,7 @@ window.PRODUCTS = [
     specs: ["128GB UFS", "14” HD", "4GB RAM DDR4-3200MHZ", "INTEL N150 3.6 GHZ", "WIFI 6", "BT 5.4", "WINDOWS 11S"],
     image: "assets/img/ydc/r9.jpg",
     gradient: ["#2a2d3a", "#0f1218"],
-    stock: 10
+    stock: 3
   },
   {
     id: 19,
@@ -76,7 +76,7 @@ window.PRODUCTS = [
     specs: ["512GB SSD", "15.6\" FHD 2K 120HZ TOUCH", "8GB RAM DDR4-2666MHZ", "INTEL CORE I5-1334U 13VA GEN. 4.6GHZ", "WIFI 6", "BT 5.3", "WINDOWS 11"],
     image: "assets/img/ydc/r19.jpg",
     gradient: ["#2a2d3a", "#0f1218"],
-    stock: 10
+    stock: 3
   },
   {
     id: 20,
@@ -90,7 +90,7 @@ window.PRODUCTS = [
     specs: ["512GB SSD", "13\" LIQUID RETINA", "8GB UNIFIED RAM", "PROC. A18 PRO", "TOUCH ID", "WIFI 6E", "BT 6", "MAC OS V16.0 \"SEQUOIA\""],
     image: "assets/img/ydc/r20.jpg",
     gradient: ["#2a2d3a", "#0f1218"],
-    stock: 10
+    stock: 3
   },
   {
     id: 26,
@@ -104,7 +104,7 @@ window.PRODUCTS = [
     specs: [],
     image: "assets/img/ydc/r26.jpg",
     gradient: ["#1f4a6b", "#0a2540"],
-    stock: 10
+    stock: 3
   },
   {
     id: 28,
@@ -118,7 +118,7 @@ window.PRODUCTS = [
     specs: [],
     image: "assets/img/ydc/r28.jpg",
     gradient: ["#1f4a6b", "#0a2540"],
-    stock: 10
+    stock: 3
   },
   {
     id: 31,
@@ -132,7 +132,7 @@ window.PRODUCTS = [
     specs: [],
     image: "assets/img/ydc/r31.jpg",
     gradient: ["#1a2f4a", "#0a1525"],
-    stock: 10
+    stock: 3
   },
   {
     id: 57,
@@ -146,7 +146,7 @@ window.PRODUCTS = [
     specs: ["COMPLETO"],
     image: "assets/img/ydc/r57.jpg",
     gradient: ["#3a3a3a", "#1a1a1a"],
-    stock: 10
+    stock: 3
   },
   {
     id: 58,
@@ -160,7 +160,7 @@ window.PRODUCTS = [
     specs: ["COMPLETO"],
     image: "assets/img/ydc/r58.jpg",
     gradient: ["#3a3a3a", "#1a1a1a"],
-    stock: 10
+    stock: 3
   },
   {
     id: 59,
@@ -174,7 +174,7 @@ window.PRODUCTS = [
     specs: ["COMPLETO"],
     image: "assets/img/ydc/r59.jpg",
     gradient: ["#3a3a3a", "#1a1a1a"],
-    stock: 10
+    stock: 3
   },
   {
     id: 60,
@@ -188,7 +188,7 @@ window.PRODUCTS = [
     specs: ["AUDÍFONOS BLUETOOTH INALÁMBRICOS"],
     image: "assets/img/ydc/r60.jpg",
     gradient: ["#3a2540", "#1a0d20"],
-    stock: 10
+    stock: 3
   },
   {
     id: 67,
@@ -202,7 +202,7 @@ window.PRODUCTS = [
     specs: ["LINKSYS"],
     image: "assets/img/ydc/r67.jpg",
     gradient: ["#1f4a6b", "#0a2540"],
-    stock: 10
+    stock: 3
   },
   {
     id: 68,
@@ -216,7 +216,7 @@ window.PRODUCTS = [
     specs: [],
     image: "assets/img/ydc/r68.jpg",
     gradient: ["#1f4a6b", "#0a2540"],
-    stock: 10
+    stock: 3
   },
   {
     id: 74,
@@ -230,7 +230,7 @@ window.PRODUCTS = [
     specs: ["16GB", "8\"", "2GB RAM"],
     image: "assets/img/ydc/r74.jpg",
     gradient: ["#1f3a4a", "#0a1a25"],
-    stock: 10
+    stock: 3
   },
   {
     id: 79,
@@ -244,7 +244,7 @@ window.PRODUCTS = [
     specs: ["32GB", "8\"", "3GB RAM", "4G LTE", "COVER"],
     image: "assets/img/ydc/r79.jpg",
     gradient: ["#1f3a4a", "#0a1a25"],
-    stock: 10
+    stock: 3
   },
   {
     id: 80,
@@ -258,7 +258,7 @@ window.PRODUCTS = [
     specs: ["32GB", "10.1\"", "4GB RAM", "5G"],
     image: "assets/img/ydc/r80.jpg",
     gradient: ["#1f3a4a", "#0a1a25"],
-    stock: 10
+    stock: 3
   },
   {
     id: 96,
@@ -272,7 +272,7 @@ window.PRODUCTS = [
     specs: ["128GB", "11\". 16GB RAM 6+10", "4G LTE", "HACE LLAMADAS", "COVER + TECLADO + MOUSE", "8200 MAH"],
     image: "assets/img/ydc/r96.jpg",
     gradient: ["#1f3a4a", "#0a1a25"],
-    stock: 10
+    stock: 3
   },
   {
     id: 126,
@@ -286,7 +286,7 @@ window.PRODUCTS = [
     specs: ["128GB", "11\"", "4GB RAM"],
     image: "assets/img/ydc/r126.jpg",
     gradient: ["#1f3a4a", "#0a1a25"],
-    stock: 10
+    stock: 3
   },
   {
     id: 130,
@@ -300,7 +300,7 @@ window.PRODUCTS = [
     specs: ["128GB", "12.1\" 120HZ", "6GB RAM"],
     image: "assets/img/ydc/r130.jpg",
     gradient: ["#1f3a4a", "#0a1a25"],
-    stock: 10
+    stock: 3
   },
   {
     id: 131,
@@ -314,7 +314,7 @@ window.PRODUCTS = [
     specs: ["256GB", "12.1\" 120HZ", "8GB RAM"],
     image: "assets/img/ydc/r131.jpg",
     gradient: ["#1f3a4a", "#0a1a25"],
-    stock: 10
+    stock: 3
   },
   {
     id: 132,
@@ -328,7 +328,7 @@ window.PRODUCTS = [
     specs: ["128GB", "11.2\" 144HZ", "8GB RAM"],
     image: "assets/img/ydc/r132.jpg",
     gradient: ["#1f3a4a", "#0a1a25"],
-    stock: 10
+    stock: 3
   },
   {
     id: 134,
@@ -342,7 +342,7 @@ window.PRODUCTS = [
     specs: ["128GB", "8.7\" 90HZ", "8GB RAM 4+4", "COVER"],
     image: "assets/img/ydc/r134.jpg",
     gradient: ["#1f3a4a", "#0a1a25"],
-    stock: 10
+    stock: 3
   },
   {
     id: 135,
@@ -356,7 +356,7 @@ window.PRODUCTS = [
     specs: ["128GB", "8\"", "16GB RAM (4+12)", "8000 MAH", "INCLUYE LAPIZ TACTIL", "COVER"],
     image: "assets/img/ydc/r135.jpg",
     gradient: ["#1f3a4a", "#0a1a25"],
-    stock: 10
+    stock: 3
   },
   {
     id: 136,
@@ -370,7 +370,7 @@ window.PRODUCTS = [
     specs: ["128GB", "8\"", "12GB RAM (4+8)", "ULTRA RESISTENTE"],
     image: "assets/img/ydc/r136.jpg",
     gradient: ["#1f3a4a", "#0a1a25"],
-    stock: 10
+    stock: 3
   },
   {
     id: 166,
@@ -384,7 +384,7 @@ window.PRODUCTS = [
     specs: ["16GB", "5.5\"", "4GB RAM 2+2"],
     image: "assets/img/ydc/r166.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 167,
@@ -398,7 +398,7 @@ window.PRODUCTS = [
     specs: ["16GB", "5.5\"", "3GB RAM"],
     image: "assets/img/ydc/r167.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 170,
@@ -412,7 +412,7 @@ window.PRODUCTS = [
     specs: ["32GB", "6.52\"", "3GB RAM"],
     image: "assets/img/ydc/r170.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 172,
@@ -426,7 +426,7 @@ window.PRODUCTS = [
     specs: ["32GB", "6.5\" HD+", "3GB RAM"],
     image: "assets/img/ydc/r172.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 212,
@@ -440,7 +440,7 @@ window.PRODUCTS = [
     specs: ["32GB", "6.6\" HD+", "3GB RAM"],
     image: "assets/img/ydc/r212.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 224,
@@ -454,7 +454,7 @@ window.PRODUCTS = [
     specs: ["64GB", "6.6\" HD+", "8GB RAM 4+4 + AUD. INALÁMBRICO"],
     image: "assets/img/ydc/r224.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 225,
@@ -468,7 +468,7 @@ window.PRODUCTS = [
     specs: ["128GB", "6.6\" HD+", "8GB RAM 4+4 + AUD. INALÁMBRICO"],
     image: "assets/img/ydc/r225.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 226,
@@ -482,7 +482,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.6\" HD+", "8GB RAM 4+4 + AUD. INALÁMBRICO"],
     image: "assets/img/ydc/r226.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 230,
@@ -496,7 +496,7 @@ window.PRODUCTS = [
     specs: ["64GB", "6.6\"", "4GB RAM 2+2", "HUELLA"],
     image: "assets/img/ydc/r230.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 231,
@@ -510,7 +510,7 @@ window.PRODUCTS = [
     specs: ["128GB", "6.7\" HD+", "8GB RAM 4+4", "HUELLA"],
     image: "assets/img/ydc/r231.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 251,
@@ -524,7 +524,7 @@ window.PRODUCTS = [
     specs: ["64GB", "6.56\" 120HZ", "6GB RAM 2+4"],
     image: "assets/img/ydc/r251.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 255,
@@ -538,7 +538,7 @@ window.PRODUCTS = [
     specs: ["64GB", "6.52\"", "6GB RAM 2+4"],
     image: "assets/img/ydc/r255.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 256,
@@ -552,7 +552,7 @@ window.PRODUCTS = [
     specs: ["64GB", "6.52\"", "9GB RAM 3+6"],
     image: "assets/img/ydc/r256.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 257,
@@ -566,7 +566,7 @@ window.PRODUCTS = [
     specs: ["128GB", "6.52\"", "12GB RAM 4+8"],
     image: "assets/img/ydc/r257.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 267,
@@ -580,7 +580,7 @@ window.PRODUCTS = [
     specs: ["128GB", "6.6\"", "9GB RAM 3+6"],
     image: "assets/img/ydc/r267.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 279,
@@ -594,7 +594,7 @@ window.PRODUCTS = [
     specs: ["64GB", "6.52\"", "6GB RAM 2+4"],
     image: "assets/img/ydc/r279.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 280,
@@ -608,7 +608,7 @@ window.PRODUCTS = [
     specs: ["64GB", "6.75\" 90HZ", "6GB RAM 2+4"],
     image: "assets/img/ydc/r280.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 284,
@@ -622,7 +622,7 @@ window.PRODUCTS = [
     specs: ["128GB", "6.75\" HD+", "12GB RAM 4+8"],
     image: "assets/img/ydc/r284.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 285,
@@ -636,7 +636,7 @@ window.PRODUCTS = [
     specs: ["128GB", "6.75\" HD+", "12GB RAM 4+8", "50MP"],
     image: "assets/img/ydc/r285.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 288,
@@ -650,7 +650,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.9\" 120HZ", "14GB RAM 4+10", "6000 MAH"],
     image: "assets/img/ydc/r288.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 289,
@@ -664,7 +664,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.75\" 120HZ", "20GB RAM 8+12", "108MP"],
     image: "assets/img/ydc/r289.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 300,
@@ -678,7 +678,7 @@ window.PRODUCTS = [
     specs: ["1.93\"", "300MAH"],
     image: "assets/img/ydc/r300.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 301,
@@ -692,7 +692,7 @@ window.PRODUCTS = [
     specs: ["2.02\"", "410MAH"],
     image: "assets/img/ydc/r301.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 302,
@@ -706,7 +706,7 @@ window.PRODUCTS = [
     specs: ["1.52\"", "410MAH"],
     image: "assets/img/ydc/r302.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 303,
@@ -720,7 +720,7 @@ window.PRODUCTS = [
     specs: ["128GB", "6.75\" HD+ 90HZ", "12GB RAM 4+8", "PANT. TRASERA 1.23\""],
     image: "assets/img/ydc/r303.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 304,
@@ -734,7 +734,7 @@ window.PRODUCTS = [
     specs: ["128GB", "6.75\" HD+ 90HZ", "16GB RAM 6+10", "PANT. TRAS. 1.46\""],
     image: "assets/img/ydc/r304.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 305,
@@ -748,7 +748,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.88\" HD+ 90HZ", "12GB RAM 4+8"],
     image: "assets/img/ydc/r305.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 306,
@@ -762,7 +762,7 @@ window.PRODUCTS = [
     specs: ["128GB", "6.56\" 90HZ", "16GB RAM 6+10"],
     image: "assets/img/ydc/r306.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 307,
@@ -776,7 +776,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.75\" 90HZ", "12GB RAM 6+6"],
     image: "assets/img/ydc/r307.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 308,
@@ -790,7 +790,7 @@ window.PRODUCTS = [
     specs: ["128GB", "6.56\" 90HZ", "16GB RAM 6+10", "PANT. TRAS. 1.32\""],
     image: "assets/img/ydc/r308.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 309,
@@ -804,7 +804,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.88\" FHD+ 120HZ", "24GB RAM 12+12", "PANT", "TRAS. 1.72\""],
     image: "assets/img/ydc/r309.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 310,
@@ -818,7 +818,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.88\" FHD+ 120HZ", "16GB RAM 8+8", "PANT", "TRAS. 1.72\""],
     image: "assets/img/ydc/r310.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 311,
@@ -832,7 +832,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.95\" FHD+ 144HZ", "24GB RAM (12+12)", "DIMENSITY 8200 (4NM)", "100MP"],
     image: "assets/img/ydc/r311.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 312,
@@ -846,7 +846,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.53\" 90HZ", "12GB RAM 6+6", "DOBLE FOCO", "10600 MAH"],
     image: "assets/img/ydc/r312.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 313,
@@ -860,7 +860,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.58\" FHD+ 120HZ", "24GB RAM 12+12", "PANT. TRAS. 1.32\"", "10600 MAH"],
     image: "assets/img/ydc/r313.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 314,
@@ -874,7 +874,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.58\" FHD+ 120HZ", "32GB RAM 16+16", "PANT. TRAS. 1.85\"", "10200 MAH"],
     image: "assets/img/ydc/r314.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 315,
@@ -888,7 +888,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.72\" FHD+ 120HZ", "32GB RAM 16+16", "PANT. TRAS. 1.46\"", "10200 MAH"],
     image: "assets/img/ydc/r315.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 316,
@@ -902,7 +902,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.72\" FHD+ 120HZ", "16GB RAM 6+10", "ALTAVOZ 123DB", "10200 MAH"],
     image: "assets/img/ydc/r316.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 317,
@@ -916,7 +916,7 @@ window.PRODUCTS = [
     specs: ["128GB", "6.88\" FHD+ 120HZ", "16GB RAM 6+10", "ALTAVOZ 123DB", "FOCO DUAL-LED 1000 LUMENS", "ANTORCHA 1200 LUMENS", "15300 MAH"],
     image: "assets/img/ydc/r317.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 318,
@@ -930,7 +930,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.58\" FHD+ 120HZ", "24GB RAM 12+12", "PANT. TRAS. 1.32\""],
     image: "assets/img/ydc/r318.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 336,
@@ -944,7 +944,7 @@ window.PRODUCTS = [
     specs: ["128GB", "6.88\". 16GB RAM 4+12", "10", "000MAH", "BOCINA ALTOPARLANTE"],
     image: "assets/img/ydc/r336.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 338,
@@ -958,7 +958,7 @@ window.PRODUCTS = [
     specs: ["128GB", "6.88\". 16GB RAM 4+12"],
     image: "assets/img/ydc/r338.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 339,
@@ -972,7 +972,7 @@ window.PRODUCTS = [
     specs: ["128GB", "6.88\". 16GB RAM 4+12"],
     image: "assets/img/ydc/r339.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 340,
@@ -986,7 +986,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.88\". 24GB RAM 8+16"],
     image: "assets/img/ydc/r340.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 341,
@@ -1000,7 +1000,7 @@ window.PRODUCTS = [
     specs: ["128GB", "6.88\". 16GB RAM 4+12", "DOBLE PANTALLA"],
     image: "assets/img/ydc/r341.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 342,
@@ -1014,7 +1014,7 @@ window.PRODUCTS = [
     specs: ["128GB", "6.88\". 16GB RAM 4+12", "DOBLE PANTALLA"],
     image: "assets/img/ydc/r342.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 343,
@@ -1028,7 +1028,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.88\". 24GB RAM 8+16", "DOBLE PANTALLA"],
     image: "assets/img/ydc/r343.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 344,
@@ -1042,7 +1042,7 @@ window.PRODUCTS = [
     specs: ["256GB", "7.2\"", "24GB RAM 8+16", "DOBLE PANTALLA", "6000MAH"],
     image: "assets/img/ydc/r344.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 345,
@@ -1056,7 +1056,7 @@ window.PRODUCTS = [
     specs: ["512GB", "7.2\"", "24GB RAM 8+16", "DOBLE PANTALLA", "6000MAH"],
     image: "assets/img/ydc/r345.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 346,
@@ -1070,7 +1070,7 @@ window.PRODUCTS = [
     specs: ["128GB", "6.63\" 90HZ", "16GB RAM 4+12"],
     image: "assets/img/ydc/r346.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 352,
@@ -1084,7 +1084,7 @@ window.PRODUCTS = [
     specs: ["64GB", "6\"", "16GB RAM 4+12", "DOBLE LINTERNA"],
     image: "assets/img/ydc/r352.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 354,
@@ -1098,7 +1098,7 @@ window.PRODUCTS = [
     specs: ["64GB", "6.52\"", "16GB RAM 4+12"],
     image: "assets/img/ydc/r354.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 355,
@@ -1112,7 +1112,7 @@ window.PRODUCTS = [
     specs: ["128GB", "6.52\"", "12GB RAM 6+6"],
     image: "assets/img/ydc/r355.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 357,
@@ -1126,7 +1126,7 @@ window.PRODUCTS = [
     specs: ["128GB", "6.52\"", "16GB RAM 4+12"],
     image: "assets/img/ydc/r357.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 358,
@@ -1140,7 +1140,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.52\"", "24GB RAM 6+16"],
     image: "assets/img/ydc/r358.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 359,
@@ -1154,7 +1154,7 @@ window.PRODUCTS = [
     specs: ["128GB", "6.52\"", "16GB RAM 4+12"],
     image: "assets/img/ydc/r359.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 360,
@@ -1168,7 +1168,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.52\"", "24GB RAM 8+16"],
     image: "assets/img/ydc/r360.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 361,
@@ -1182,7 +1182,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.52\"", "24GB RAM 8+16"],
     image: "assets/img/ydc/r361.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 362,
@@ -1196,7 +1196,7 @@ window.PRODUCTS = [
     specs: ["128GB", "6.52\"", "16GB RAM 4+12", "INCL. BOCINA Y LINTERNA"],
     image: "assets/img/ydc/r362.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 363,
@@ -1210,7 +1210,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.52\"", "24GB RAM 8+16", "INCL. BOCINA Y LINTERNA"],
     image: "assets/img/ydc/r363.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 364,
@@ -1224,7 +1224,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.7\" FHD+", "16GB RAM 4+12"],
     image: "assets/img/ydc/r364.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 367,
@@ -1238,7 +1238,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.52\"", "24GB RAM 6+18"],
     image: "assets/img/ydc/r367.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 369,
@@ -1252,7 +1252,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.6\"", "16GB RAM 4+12"],
     image: "assets/img/ydc/r369.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 374,
@@ -1266,7 +1266,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.52\"", "24GB RAM 6+18"],
     image: "assets/img/ydc/r374.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 376,
@@ -1280,7 +1280,7 @@ window.PRODUCTS = [
     specs: ["512GB", "6.6\" FHD+ 120HZ", "36GB RAM 12+24", "11000MAH"],
     image: "assets/img/ydc/r376.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 379,
@@ -1294,7 +1294,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.6\"", "24GB RAM 8+16", "22000 MAH"],
     image: "assets/img/ydc/r379.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 380,
@@ -1308,7 +1308,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.8\" 120HZ", "36GB RAM 12+24", "108MP", "16000 MAH", "BOCINA ALTOPARLANTE Y LINTERNA INTEGRADA"],
     image: "assets/img/ydc/r380.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 381,
@@ -1322,7 +1322,7 @@ window.PRODUCTS = [
     specs: ["512GB", "6.8\" 120HZ", "36GB RAM 12+24", "108MP", "16000 MAH", "BOCINA ALTOPARLANTE Y LINTERNA INTEGRADA"],
     image: "assets/img/ydc/r381.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 382,
@@ -1336,7 +1336,7 @@ window.PRODUCTS = [
     specs: ["256GB", "7.2\" 120HZ", "24GB RAM 8+16", "108MP", "10000 MAH"],
     image: "assets/img/ydc/r382.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 387,
@@ -1350,7 +1350,7 @@ window.PRODUCTS = [
     specs: ["1TB \"1000GB\"", "6.78\" 120HZ", "72GB RAM 24+48", "INCL. RELOJ-AUDIFONO ADAPTABLE"],
     image: "assets/img/ydc/r387.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 401,
@@ -1364,7 +1364,7 @@ window.PRODUCTS = [
     specs: ["64GB", "6.6\" 90HZ", "8GB RAM 3+5"],
     image: "assets/img/ydc/r401.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 402,
@@ -1378,7 +1378,7 @@ window.PRODUCTS = [
     specs: ["128GB", "6.6\" 90HZ", "8GB RAM 3+5"],
     image: "assets/img/ydc/r402.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 403,
@@ -1392,7 +1392,7 @@ window.PRODUCTS = [
     specs: ["128GB. 6.75\" 90HZ", "12GB RAM 4+8", "IP64"],
     image: "assets/img/ydc/r403.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 404,
@@ -1406,7 +1406,7 @@ window.PRODUCTS = [
     specs: ["256GB. 6.75\" 90HZ", "12GB RAM 4+8", "IP64"],
     image: "assets/img/ydc/r404.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 405,
@@ -1420,7 +1420,7 @@ window.PRODUCTS = [
     specs: ["64GB", "6.75\" 120HZ", "8GB RAM 3+5", "IP65"],
     image: "assets/img/ydc/r405.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 423,
@@ -1434,7 +1434,7 @@ window.PRODUCTS = [
     specs: ["64GB", "6.67\" 120HZ", "6GB RAM 3+3"],
     image: "assets/img/ydc/r423.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 428,
@@ -1448,7 +1448,7 @@ window.PRODUCTS = [
     specs: ["64GB. 6.74\" 120HZ", "8GB RAM 4+4"],
     image: "assets/img/ydc/r428.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 430,
@@ -1462,7 +1462,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.77\" 120HZ", "16RAM 8+8"],
     image: "assets/img/ydc/r430.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 431,
@@ -1476,7 +1476,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.78\" 144HZ", "16GB RAM 8+8"],
     image: "assets/img/ydc/r431.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 432,
@@ -1490,7 +1490,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.78\" 144HZ", "16GB RAM 8+8"],
     image: "assets/img/ydc/r432.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 494,
@@ -1504,7 +1504,7 @@ window.PRODUCTS = [
     specs: ["64GB", "6.88\" 120HZ", "12GB RAM 4+8", "50MP", "5200MAH"],
     image: "assets/img/ydc/r494.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 495,
@@ -1518,7 +1518,7 @@ window.PRODUCTS = [
     specs: ["128GB", "6.88\" 120HZ", "12GB RAM 4+8", "50MP", "5200MAH"],
     image: "assets/img/ydc/r495.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 496,
@@ -1532,7 +1532,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.88\" 120HZ", "12GB RAM 4+8", "50MP", "5200MAH"],
     image: "assets/img/ydc/r496.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 498,
@@ -1546,7 +1546,7 @@ window.PRODUCTS = [
     specs: ["128GB", "6.72\" 120HZ", "12GB RAM 4+8", "50MP", "5200MAH"],
     image: "assets/img/ydc/r498.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 499,
@@ -1560,7 +1560,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.72\" 120HZ", "12GB RAM 4+8", "50MP", "5200MAH"],
     image: "assets/img/ydc/r499.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 503,
@@ -1574,7 +1574,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.72\" FHD+ 120HZ", "24GB RAM 8+16"],
     image: "assets/img/ydc/r503.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 508,
@@ -1588,7 +1588,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.67\" 120HZ", "16GB RAM 8+8"],
     image: "assets/img/ydc/r508.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 509,
@@ -1602,7 +1602,7 @@ window.PRODUCTS = [
     specs: ["512GB", "6.7\" 144HZ", "36GB RAM 12+24"],
     image: "assets/img/ydc/r509.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 524,
@@ -1616,7 +1616,7 @@ window.PRODUCTS = [
     specs: ["512GB", "6.7\"", "24GB RAM"],
     image: "assets/img/ydc/r524.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 531,
@@ -1630,7 +1630,7 @@ window.PRODUCTS = [
     specs: [],
     image: "assets/img/ydc/r531.jpg",
     gradient: ["#1a2f4a", "#0a1525"],
-    stock: 10
+    stock: 3
   },
   {
     id: 532,
@@ -1644,7 +1644,7 @@ window.PRODUCTS = [
     specs: [],
     image: "assets/img/ydc/r532.jpg",
     gradient: ["#1a2f4a", "#0a1525"],
-    stock: 10
+    stock: 3
   },
   {
     id: 533,
@@ -1658,7 +1658,7 @@ window.PRODUCTS = [
     specs: [],
     image: "assets/img/ydc/r533.jpg",
     gradient: ["#1a2f4a", "#0a1525"],
-    stock: 10
+    stock: 3
   },
   {
     id: 534,
@@ -1672,7 +1672,7 @@ window.PRODUCTS = [
     specs: [],
     image: "assets/img/ydc/r534.jpg",
     gradient: ["#3a2540", "#1a0d20"],
-    stock: 10
+    stock: 3
   },
   {
     id: 535,
@@ -1686,7 +1686,7 @@ window.PRODUCTS = [
     specs: [],
     image: "assets/img/ydc/r535.jpg",
     gradient: ["#3a2540", "#1a0d20"],
-    stock: 10
+    stock: 3
   },
   {
     id: 536,
@@ -1700,7 +1700,7 @@ window.PRODUCTS = [
     specs: [],
     image: "assets/img/ydc/r536.jpg",
     gradient: ["#1a3a3a", "#0a1a1a"],
-    stock: 10
+    stock: 3
   },
   {
     id: 537,
@@ -1714,7 +1714,7 @@ window.PRODUCTS = [
     specs: [],
     image: "assets/img/ydc/r537.jpg",
     gradient: ["#1a3a3a", "#0a1a1a"],
-    stock: 10
+    stock: 3
   },
   {
     id: 539,
@@ -1728,7 +1728,7 @@ window.PRODUCTS = [
     specs: ["64GB", "6.88\" 120HZ", "6GB RAM 3+3"],
     image: "assets/img/ydc/r539.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 541,
@@ -1742,7 +1742,7 @@ window.PRODUCTS = [
     specs: ["64GB", "6.9\" 120HZ", "8GB RAM 4+4", "6000 MAH"],
     image: "assets/img/ydc/r541.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 551,
@@ -1756,7 +1756,7 @@ window.PRODUCTS = [
     specs: ["128GB", "6.9\" 120HZ", "8GB RAM 4+4"],
     image: "assets/img/ydc/r551.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 552,
@@ -1770,7 +1770,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.9\" 120HZ", "8GB RAM 4+4"],
     image: "assets/img/ydc/r552.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 571,
@@ -1784,7 +1784,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.67\"", "8GB RAM"],
     image: "assets/img/ydc/r571.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 574,
@@ -1798,7 +1798,7 @@ window.PRODUCTS = [
     specs: ["128GB", "6.67\" 120HZ", "6GB RAM"],
     image: "assets/img/ydc/r574.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 575,
@@ -1812,7 +1812,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.67\" 120HZ", "8GB RAM"],
     image: "assets/img/ydc/r575.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 576,
@@ -1826,7 +1826,7 @@ window.PRODUCTS = [
     specs: ["128GB", "6.77\" AMOLED 120HZ", "6GB RAM"],
     image: "assets/img/ydc/r576.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 577,
@@ -1840,7 +1840,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.77\" AMOLED 120HZ", "8GB RAM"],
     image: "assets/img/ydc/r577.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 578,
@@ -1854,7 +1854,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.77\" AMOLED 120HZ", "8GB RAM", "200MP"],
     image: "assets/img/ydc/r578.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 579,
@@ -1868,7 +1868,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.83\" AMOLED 120HZ", "8GB RAM", "200MP"],
     image: "assets/img/ydc/r579.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 580,
@@ -1882,7 +1882,7 @@ window.PRODUCTS = [
     specs: ["512GB", "6.83\" AMOLED 120HZ", "8GB RAM", "200MP"],
     image: "assets/img/ydc/r580.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 581,
@@ -1896,7 +1896,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.83\" AMOLED 120HZ", "8GB RAM", "200MP"],
     image: "assets/img/ydc/r581.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 582,
@@ -1910,7 +1910,7 @@ window.PRODUCTS = [
     specs: ["512GB", "6.83\" AMOLED 120HZ", "12GB RAM", "200MP"],
     image: "assets/img/ydc/r582.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 592,
@@ -1924,7 +1924,7 @@ window.PRODUCTS = [
     specs: ["128GB", "6.9\" 120HZ", "12GB RAM 4+4"],
     image: "assets/img/ydc/r592.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 593,
@@ -1938,7 +1938,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.9\" 144HZ", "16GB RAM 8+8", "7000MAH"],
     image: "assets/img/ydc/r593.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 604,
@@ -1952,7 +1952,7 @@ window.PRODUCTS = [
     specs: ["512GB", "6.67\" 120HZ", "12GB RAM"],
     image: "assets/img/ydc/r604.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 605,
@@ -1966,7 +1966,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.59\" AMOLED 120HZ", "16GB RAM 8+8", "6500 MAH"],
     image: "assets/img/ydc/r605.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 606,
@@ -1980,7 +1980,7 @@ window.PRODUCTS = [
     specs: ["512GB", "6.59\" AMOLED 120HZ", "24GB RAM 12+12", "6500 MAH"],
     image: "assets/img/ydc/r606.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 607,
@@ -1994,7 +1994,7 @@ window.PRODUCTS = [
     specs: ["512GB", "6.83\" AMOLED 120HZ", "24GB RAM 12+12", "8500 MAH"],
     image: "assets/img/ydc/r607.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 621,
@@ -2008,7 +2008,7 @@ window.PRODUCTS = [
     specs: [],
     image: "assets/img/ydc/r621.jpg",
     gradient: ["#3a2540", "#1a0d20"],
-    stock: 10
+    stock: 3
   },
   {
     id: 622,
@@ -2022,7 +2022,7 @@ window.PRODUCTS = [
     specs: [],
     image: "assets/img/ydc/r622.jpg",
     gradient: ["#3a2540", "#1a0d20"],
-    stock: 10
+    stock: 3
   },
   {
     id: 623,
@@ -2036,7 +2036,7 @@ window.PRODUCTS = [
     specs: [],
     image: "assets/img/ydc/r623.jpg",
     gradient: ["#3a2540", "#1a0d20"],
-    stock: 10
+    stock: 3
   },
   {
     id: 624,
@@ -2050,7 +2050,7 @@ window.PRODUCTS = [
     specs: ["64GB", "6.74\" 90HZ", "6GB RAM 3+3"],
     image: "assets/img/ydc/r624.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 626,
@@ -2064,7 +2064,7 @@ window.PRODUCTS = [
     specs: ["64GB", "6.74\" 90HZ", "8GB RAM 4+4", "50MP"],
     image: "assets/img/ydc/r626.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 631,
@@ -2078,7 +2078,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.61\" 120HZ", "12GB RAM 6+6"],
     image: "assets/img/ydc/r631.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 633,
@@ -2092,7 +2092,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.77\" 120HZ", "12GB RAM 6+6"],
     image: "assets/img/ydc/r633.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 634,
@@ -2106,7 +2106,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.7\" AMOLED 120HZ", "16GB RAM 8+8"],
     image: "assets/img/ydc/r634.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 635,
@@ -2120,7 +2120,7 @@ window.PRODUCTS = [
     specs: ["512GB", "6.7\" AMOLED 120HZ", "16GB RAM 8+8"],
     image: "assets/img/ydc/r635.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 636,
@@ -2134,7 +2134,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.77\" 120HZ", "16GB RAM 8+8", "50MP"],
     image: "assets/img/ydc/r636.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 637,
@@ -2148,7 +2148,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.7\" AMOLED 128HZ", "16GB RAM 8+8", "108MP"],
     image: "assets/img/ydc/r637.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 640,
@@ -2162,7 +2162,7 @@ window.PRODUCTS = [
     specs: [],
     image: "assets/img/ydc/r640.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 642,
@@ -2176,7 +2176,7 @@ window.PRODUCTS = [
     specs: ["512GB", "6.8\" AMOLED 120HZ", "12GB RAM"],
     image: "assets/img/ydc/r642.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 665,
@@ -2190,7 +2190,7 @@ window.PRODUCTS = [
     specs: [],
     image: "assets/img/ydc/r665.jpg",
     gradient: ["#3a2540", "#1a0d20"],
-    stock: 10
+    stock: 3
   },
   {
     id: 666,
@@ -2204,7 +2204,7 @@ window.PRODUCTS = [
     specs: ["64GB", "6.7", "4GB RAM"],
     image: "assets/img/ydc/r666.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 677,
@@ -2218,7 +2218,7 @@ window.PRODUCTS = [
     specs: ["64GB", "6.7 90HZ", "4GB RAM", "50MP"],
     image: "assets/img/ydc/r677.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 678,
@@ -2232,7 +2232,7 @@ window.PRODUCTS = [
     specs: ["64GB", "6.7 90HZ", "4GB RAM", "50MP"],
     image: "assets/img/ydc/r678.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 679,
@@ -2246,7 +2246,7 @@ window.PRODUCTS = [
     specs: ["128GB", "6.7 90HZ", "4GB RAM", "50MP"],
     image: "assets/img/ydc/r679.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 680,
@@ -2260,7 +2260,7 @@ window.PRODUCTS = [
     specs: ["128GB", "6.7\" AMOLED 90HZ", "4GB RAM"],
     image: "assets/img/ydc/r680.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 702,
@@ -2274,7 +2274,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.7\" AMOLED 120HZ", "8GB RAM"],
     image: "assets/img/ydc/r702.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 707,
@@ -2288,7 +2288,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.7\" AMOLED 120HZ", "16GB RAM 8+8"],
     image: "assets/img/ydc/r707.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 717,
@@ -2302,7 +2302,7 @@ window.PRODUCTS = [
     specs: ["512GB", "6.9\"", "12GB RAM"],
     image: "assets/img/ydc/r717.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 718,
@@ -2316,7 +2316,7 @@ window.PRODUCTS = [
     specs: ["1TB", "6.9\"", "12GB RAM"],
     image: "assets/img/ydc/r718.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 719,
@@ -2330,7 +2330,7 @@ window.PRODUCTS = [
     specs: ["256GB", "6.9\"", "12GB RAM"],
     image: "assets/img/ydc/r719.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 720,
@@ -2344,7 +2344,7 @@ window.PRODUCTS = [
     specs: ["512GB", "6.9\"", "12GB RAM"],
     image: "assets/img/ydc/r720.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
   {
     id: 721,
@@ -2358,7 +2358,7 @@ window.PRODUCTS = [
     specs: ["1TB", "6.9\"", "16GB RAM"],
     image: "assets/img/ydc/r721.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 10
+    stock: 3
   },
 ];
 
@@ -2425,9 +2425,17 @@ window.formatPrice = function(n) {
 window.renderProductMock = function(product, size) {
   size = size || 200;
   if (product.image) {
-    return '<img src="' + product.image + '" alt="' + (product.name || '') +
-           '" loading="lazy" style="max-width:100%;max-height:' + size +
-           'px;object-fit:contain"/>';
+    var src = product.image;
+    var webp = src.replace(/\.(jpg|jpeg|png)$/i, '.webp');
+    var altTxt = (product.name || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+    var styleStr = 'max-width:100%;max-height:' + size + 'px;object-fit:contain';
+    if (webp !== src) {
+      return '<picture><source srcset="' + webp + '" type="image/webp"/>' +
+             '<img src="' + src + '" alt="' + altTxt +
+             '" loading="lazy" decoding="async" style="' + styleStr + '"/></picture>';
+    }
+    return '<img src="' + src + '" alt="' + altTxt +
+           '" loading="lazy" decoding="async" style="' + styleStr + '"/>';
   }
   var g = product.gradient || ['#2a2a2a', '#111'];
   var gid = 'g_' + (product.slug || 'x').replace(/[^a-z0-9]/g, '_');

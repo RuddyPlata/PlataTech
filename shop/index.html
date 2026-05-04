@@ -30,7 +30,8 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet"/>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'"/>
+<noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet"/></noscript>
 <link rel="stylesheet" href="assets/shop.css"/>
 </head>
 <body>
@@ -39,7 +40,7 @@
 <nav class="shop-nav">
   <div class="container shop-nav-inner">
     <a href="index.html" class="shop-brand">
-      <div class="shop-brand-mark"><img src="../images/logo-platatech.png" alt="Plata Tech"/></div>
+      <div class="shop-brand-mark"><img src="../images/logo-platatech.webp" alt="Plata Tech"/></div>
       <div>
         <div class="shop-brand-name">Plata Tech Store</div>
         <div class="shop-brand-sub">Tienda oficial</div>
@@ -70,9 +71,9 @@
     <div class="shop-hero-divs">
       <span class="shop-hero-divs-label">Productos oficiales de</span>
       <div class="shop-hero-divs-logos">
-        <img src="../images/logo-platatech.png" alt="Plata Tech Security"/>
+        <img src="../images/logo-platatech.webp" alt="Plata Tech Security"/>
         <span class="sep"></span>
-        <img src="../images/logo-ug.png" alt="UltimoGadget"/>
+        <img src="../images/logo-ug.webp" alt="UltimoGadget"/>
       </div>
     </div>
   </div>
@@ -136,7 +137,7 @@
 <footer class="shop-foot">
   <div class="container shop-foot-inner">
     <div class="shop-foot-brand">
-      <img src="../images/logo-platatech.png" class="shop-foot-logo" alt="Plata Tech Solutions"/>
+      <img src="../images/logo-platatech.webp" class="shop-foot-logo" alt="Plata Tech Solutions"/>
       <div>
         Plata Tech Solutions S.R.L.
         <small>Tienda oficial · RNC formal · Facturas con NCF</small>
@@ -145,9 +146,9 @@
     <div class="shop-foot-divs">
       <span class="shop-foot-divs-label">Divisiones</span>
       <div class="shop-foot-divs-logos">
-        <img src="../images/logo-platatech.png" alt="Plata Tech Security"/>
+        <img src="../images/logo-platatech.webp" alt="Plata Tech Security"/>
         <span class="sep"></span>
-        <img src="../images/logo-ug.png" alt="UltimoGadget"/>
+        <img src="../images/logo-ug.webp" alt="UltimoGadget"/>
       </div>
     </div>
     <div class="shop-foot-links">
@@ -311,22 +312,23 @@ function applySort(list) {
 }
 
 function productCardHtml(p) {
+  const esc = window.escapeHtml;
   return `
-    <a href="product.html?p=${p.slug}" class="product-card">
+    <a href="product.html?p=${esc(p.slug)}" class="product-card">
       <div class="product-vis">
-        ${p.badge ? `<span class="product-badge ${p.badge}">${p.badgeText || ''}</span>` : ''}
+        ${p.badge ? `<span class="product-badge ${esc(p.badge)}">${esc(p.badgeText || '')}</span>` : ''}
         ${window.renderProductMock(p, 180)}
       </div>
       <div class="product-body">
-        <div class="product-brand">${p.brand}</div>
-        <div class="product-name">${p.name}</div>
-        <div class="product-variant">${p.variant || ''}</div>
+        <div class="product-brand">${esc(p.brand)}</div>
+        <div class="product-name">${esc(p.name)}</div>
+        <div class="product-variant">${esc(p.variant || '')}</div>
         <div class="product-foot">
           <div class="product-price">
             ${p.oldPrice ? `<span class="product-price-old">${window.formatPrice(p.oldPrice)}</span>` : ''}
             ${window.formatPrice(p.price)}
           </div>
-          <button class="product-add" aria-label="Agregar al carrito" data-add="${p.slug}">
+          <button class="product-add" aria-label="Agregar al carrito" data-add="${esc(p.slug)}">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
           </button>
         </div>

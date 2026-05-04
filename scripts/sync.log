@@ -1,0 +1,19 @@
+[jue. 30/04/2026 11:34:05.31] Iniciando sync rapido (cache)...  
+[sync] Usando cache: B:\Pts\.tmp\ydc.xlsx
+[sync] 530 filas ocultas en el sheet (descartadas)
+[sync] 193 filas de producto crudas leidas del sheet
+[sync] 668 imagenes embebidas extraidas a B:\Pts\shop\assets\img\ydc
+[sync] 168 productos validos despues de filtros
+[sync] Por categoria:
+   celulares        131
+   tablets           11
+   audio              7
+   laptops            6
+   conectividad       4
+   seguridad          4
+   accesorios         3
+   smartwatch         2
+[sync] 168 productos escritos a B:\Pts\shop\assets\products.js
+[sync] Listo.
+[jue. 30/04/2026 11:36:30.39] Sync rapido completado.   
+ 

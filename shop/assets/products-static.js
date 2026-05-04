@@ -20,7 +20,7 @@
       specs: ["2MP"],
       image: "assets/img/renzo/r5.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50006,
@@ -34,7 +34,7 @@
       specs: ["5MP"],
       image: "assets/img/renzo/r6.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50007,
@@ -48,7 +48,7 @@
       specs: ["2MP"],
       image: "assets/img/renzo/r7.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50008,
@@ -62,7 +62,7 @@
       specs: ["2MP"],
       image: "assets/img/renzo/r8.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50010,
@@ -76,7 +76,7 @@
       specs: ["4 CANALES"],
       image: "assets/img/renzo/r10.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50011,
@@ -90,7 +90,7 @@
       specs: ["4 CANALES"],
       image: "assets/img/renzo/r11.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50012,
@@ -104,7 +104,7 @@
       specs: ["8 CANALES"],
       image: "assets/img/renzo/r12.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50013,
@@ -118,7 +118,7 @@
       specs: ["8 CANALES"],
       image: "assets/img/renzo/r13.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50014,
@@ -132,7 +132,7 @@
       specs: ["16 CANALES"],
       image: "assets/img/renzo/r14.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50015,
@@ -146,7 +146,7 @@
       specs: ["16 CANALES"],
       image: "assets/img/renzo/r15.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50016,
@@ -160,7 +160,7 @@
       specs: ["32 CANALES"],
       image: "assets/img/renzo/r16.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50019,
@@ -174,7 +174,7 @@
       specs: ["2MP"],
       image: "assets/img/renzo/r19.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50020,
@@ -188,7 +188,7 @@
       specs: ["4MP"],
       image: "assets/img/renzo/r20.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50021,
@@ -202,7 +202,7 @@
       specs: ["8MP"],
       image: "assets/img/renzo/r21.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50022,
@@ -216,7 +216,7 @@
       specs: ["5MP"],
       image: "assets/img/renzo/r22.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50024,
@@ -230,7 +230,7 @@
       specs: ["2MP"],
       image: "assets/img/renzo/r24.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50025,
@@ -244,7 +244,7 @@
       specs: ["4MP"],
       image: "assets/img/renzo/r25.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50026,
@@ -258,7 +258,7 @@
       specs: ["8 CANALES"],
       image: "assets/img/renzo/r26.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50027,
@@ -272,7 +272,7 @@
       specs: ["16 CANALES"],
       image: "assets/img/renzo/r27.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50028,
@@ -286,7 +286,7 @@
       specs: ["32 CANALES", "16 PUERTOS"],
       image: "assets/img/renzo/r28.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50029,
@@ -300,7 +300,7 @@
       specs: ["64 CANALES", "10TB"],
       image: "assets/img/renzo/r29.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50030,
@@ -314,7 +314,7 @@
       specs: ["256 CANALES", "16TB"],
       image: "assets/img/renzo/r30.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50033,
@@ -328,7 +328,7 @@
       specs: ["2MP"],
       image: "assets/img/renzo/r33.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50034,
@@ -342,7 +342,7 @@
       specs: ["2MP"],
       image: "assets/img/renzo/r34.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50035,
@@ -356,7 +356,7 @@
       specs: ["2MP"],
       image: "assets/img/renzo/r35.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50036,
@@ -370,7 +370,7 @@
       specs: ["2MP"],
       image: "assets/img/renzo/r36.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50038,
@@ -384,7 +384,7 @@
       specs: ["4 CANALES"],
       image: "assets/img/renzo/r38.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50039,
@@ -398,7 +398,7 @@
       specs: ["8 CANALES"],
       image: "assets/img/renzo/r39.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50042,
@@ -412,7 +412,7 @@
       specs: ["2MP"],
       image: "assets/img/renzo/r42.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50043,
@@ -426,7 +426,7 @@
       specs: ["4MP"],
       image: "assets/img/renzo/r43.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50045,
@@ -440,7 +440,7 @@
       specs: ["8MP", "8 CANALES"],
       image: "assets/img/renzo/r45.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50046,
@@ -454,7 +454,7 @@
       specs: ["8MP", "16 CANALES"],
       image: "assets/img/renzo/r46.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50048,
@@ -468,7 +468,7 @@
       specs: [],
       image: "assets/img/renzo/r48.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50051,
@@ -482,7 +482,7 @@
       specs: ["2MP"],
       image: "assets/img/renzo/r51.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50052,
@@ -496,7 +496,7 @@
       specs: ["2MP"],
       image: "assets/img/renzo/r52.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50054,
@@ -510,7 +510,7 @@
       specs: ["4MP"],
       image: "assets/img/renzo/r54.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50055,
@@ -524,7 +524,7 @@
       specs: [],
       image: "assets/img/renzo/r55.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50056,
@@ -538,7 +538,7 @@
       specs: [],
       image: "assets/img/renzo/r56.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50057,
@@ -552,7 +552,7 @@
       specs: ["4 CANALES"],
       image: "assets/img/renzo/r57.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50058,
@@ -566,7 +566,7 @@
       specs: ["8 CANALES"],
       image: "assets/img/renzo/r58.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50060,
@@ -580,7 +580,7 @@
       specs: [],
       image: "assets/img/renzo/r60.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50061,
@@ -594,7 +594,7 @@
       specs: [],
       image: "assets/img/renzo/r61.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50062,
@@ -608,7 +608,7 @@
       specs: [],
       image: "assets/img/renzo/r62.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50063,
@@ -622,7 +622,7 @@
       specs: [],
       image: "assets/img/renzo/r63.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50064,
@@ -636,7 +636,7 @@
       specs: [],
       image: "assets/img/renzo/r64.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50065,
@@ -650,7 +650,7 @@
       specs: [],
       image: "assets/img/renzo/r65.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50066,
@@ -664,7 +664,7 @@
       specs: [],
       image: "assets/img/renzo/r66.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50067,
@@ -678,7 +678,7 @@
       specs: [],
       image: "assets/img/renzo/r67.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50068,
@@ -692,7 +692,7 @@
       specs: [],
       image: "assets/img/renzo/r68.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50069,
@@ -706,7 +706,7 @@
       specs: [],
       image: "assets/img/renzo/r69.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50070,
@@ -720,7 +720,7 @@
       specs: [],
       image: "assets/img/renzo/r70.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50071,
@@ -734,7 +734,7 @@
       specs: [],
       image: "assets/img/renzo/r71.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50072,
@@ -748,7 +748,7 @@
       specs: [],
       image: "assets/img/renzo/r72.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50073,
@@ -762,7 +762,7 @@
       specs: [],
       image: "assets/img/renzo/r73.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50075,
@@ -776,7 +776,7 @@
       specs: [],
       image: "assets/img/renzo/r75.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50077,
@@ -790,7 +790,7 @@
       specs: [],
       image: "assets/img/renzo/r77.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50078,
@@ -804,7 +804,7 @@
       specs: [],
       image: "assets/img/renzo/r78.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50079,
@@ -818,7 +818,7 @@
       specs: [],
       image: "assets/img/renzo/r79.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50080,
@@ -832,7 +832,7 @@
       specs: [],
       image: "assets/img/renzo/r80.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50081,
@@ -846,7 +846,7 @@
       specs: [],
       image: "assets/img/renzo/r81.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50082,
@@ -860,7 +860,7 @@
       specs: [],
       image: "assets/img/renzo/r82.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50083,
@@ -874,7 +874,7 @@
       specs: [],
       image: "assets/img/renzo/r83.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50084,
@@ -888,7 +888,7 @@
       specs: [],
       image: "assets/img/renzo/r84.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50085,
@@ -902,7 +902,7 @@
       specs: [],
       image: "assets/img/renzo/r85.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50086,
@@ -916,7 +916,7 @@
       specs: [],
       image: "assets/img/renzo/r86.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50088,
@@ -930,7 +930,7 @@
       specs: [],
       image: "assets/img/renzo/r88.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50089,
@@ -944,7 +944,7 @@
       specs: [],
       image: "assets/img/renzo/r89.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50091,
@@ -958,7 +958,7 @@
       specs: [],
       image: "assets/img/renzo/r91.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50094,
@@ -972,7 +972,7 @@
       specs: [],
       image: "assets/img/renzo/r94.jpg",
       gradient: ["#1f4a6b", "#0a2540"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50095,
@@ -986,7 +986,7 @@
       specs: [],
       image: "assets/img/renzo/r95.jpg",
       gradient: ["#1f4a6b", "#0a2540"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50096,
@@ -1000,7 +1000,7 @@
       specs: [],
       image: "assets/img/renzo/r96.jpg",
       gradient: ["#1f4a6b", "#0a2540"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50097,
@@ -1014,7 +1014,7 @@
       specs: [],
       image: "assets/img/renzo/r97.jpg",
       gradient: ["#1f4a6b", "#0a2540"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50100,
@@ -1028,7 +1028,7 @@
       specs: [],
       image: "assets/img/renzo/r100.jpg",
       gradient: ["#1f4a6b", "#0a2540"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50102,
@@ -1042,7 +1042,7 @@
       specs: [],
       image: "assets/img/renzo/r102.jpg",
       gradient: ["#1f4a6b", "#0a2540"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50103,
@@ -1056,7 +1056,7 @@
       specs: [],
       image: "assets/img/renzo/r103.jpg",
       gradient: ["#1f4a6b", "#0a2540"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50104,
@@ -1070,7 +1070,7 @@
       specs: [],
       image: "assets/img/renzo/r104.jpg",
       gradient: ["#1f4a6b", "#0a2540"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50105,
@@ -1084,7 +1084,7 @@
       specs: [],
       image: "assets/img/renzo/r105.jpg",
       gradient: ["#1f4a6b", "#0a2540"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50106,
@@ -1098,7 +1098,7 @@
       specs: [],
       image: "assets/img/renzo/r106.jpg",
       gradient: ["#1f4a6b", "#0a2540"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50107,
@@ -1112,7 +1112,7 @@
       specs: [],
       image: "assets/img/renzo/r107.jpg",
       gradient: ["#1f4a6b", "#0a2540"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50108,
@@ -1126,7 +1126,7 @@
       specs: [],
       image: "assets/img/renzo/r108.jpg",
       gradient: ["#1f4a6b", "#0a2540"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50109,
@@ -1140,7 +1140,7 @@
       specs: [],
       image: "assets/img/renzo/r109.jpg",
       gradient: ["#1f4a6b", "#0a2540"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50110,
@@ -1154,7 +1154,7 @@
       specs: [],
       image: "assets/img/renzo/r110.jpg",
       gradient: ["#1f4a6b", "#0a2540"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50111,
@@ -1168,7 +1168,7 @@
       specs: [],
       image: "assets/img/renzo/r111.jpg",
       gradient: ["#1f4a6b", "#0a2540"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50114,
@@ -1182,7 +1182,7 @@
       specs: ["4 ANTENAS"],
       image: "assets/img/renzo/r114.jpg",
       gradient: ["#1f4a6b", "#0a2540"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50117,
@@ -1196,7 +1196,7 @@
       specs: ["3 ANTENAS"],
       image: "assets/img/renzo/r117.jpg",
       gradient: ["#1f4a6b", "#0a2540"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50119,
@@ -1210,7 +1210,7 @@
       specs: ["2 ANTENAS"],
       image: "assets/img/renzo/r119.jpg",
       gradient: ["#1f4a6b", "#0a2540"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50120,
@@ -1224,7 +1224,7 @@
       specs: ["4 ANTENAS"],
       image: "assets/img/renzo/r120.jpg",
       gradient: ["#1f4a6b", "#0a2540"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50121,
@@ -1238,7 +1238,7 @@
       specs: ["5 PUERTOS"],
       image: "assets/img/renzo/r121.jpg",
       gradient: ["#1f4a6b", "#0a2540"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50122,
@@ -1252,7 +1252,7 @@
       specs: ["8 PUERTOS"],
       image: "assets/img/renzo/r122.jpg",
       gradient: ["#1f4a6b", "#0a2540"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50123,
@@ -1266,7 +1266,7 @@
       specs: ["4 PUERTOS"],
       image: "assets/img/renzo/r123.jpg",
       gradient: ["#1f4a6b", "#0a2540"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50124,
@@ -1280,7 +1280,7 @@
       specs: ["8 PUERTOS"],
       image: "assets/img/renzo/r124.jpg",
       gradient: ["#1f4a6b", "#0a2540"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50125,
@@ -1294,7 +1294,7 @@
       specs: ["16 PUERTOS"],
       image: "assets/img/renzo/r125.jpg",
       gradient: ["#1f4a6b", "#0a2540"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50126,
@@ -1308,7 +1308,7 @@
       specs: ["24 PUERTOS"],
       image: "assets/img/renzo/r126.jpg",
       gradient: ["#1f4a6b", "#0a2540"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50127,
@@ -1322,7 +1322,7 @@
       specs: [],
       image: "assets/img/renzo/r127.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50128,
@@ -1336,7 +1336,7 @@
       specs: [],
       image: "assets/img/renzo/r128.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50129,
@@ -1350,7 +1350,7 @@
       specs: [],
       image: "assets/img/renzo/r129.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50130,
@@ -1364,7 +1364,7 @@
       specs: [],
       image: "assets/img/renzo/r130.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50131,
@@ -1378,7 +1378,7 @@
       specs: [],
       image: "assets/img/renzo/r131.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50132,
@@ -1392,7 +1392,7 @@
       specs: [],
       image: "assets/img/renzo/r132.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50133,
@@ -1406,7 +1406,7 @@
       specs: [],
       image: "assets/img/renzo/r133.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50134,
@@ -1420,7 +1420,7 @@
       specs: [],
       image: "assets/img/renzo/r134.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50137,
@@ -1434,7 +1434,7 @@
       specs: [],
       image: "assets/img/renzo/r137.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50138,
@@ -1448,7 +1448,7 @@
       specs: [],
       image: "assets/img/renzo/r138.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50139,
@@ -1462,7 +1462,7 @@
       specs: [],
       image: "assets/img/renzo/r139.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50140,
@@ -1476,7 +1476,7 @@
       specs: [],
       image: "assets/img/renzo/r140.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50141,
@@ -1490,7 +1490,7 @@
       specs: [],
       image: "assets/img/renzo/r141.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50142,
@@ -1504,7 +1504,7 @@
       specs: [],
       image: "assets/img/renzo/r142.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50143,
@@ -1518,7 +1518,7 @@
       specs: [],
       image: "assets/img/renzo/r143.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50144,
@@ -1532,7 +1532,7 @@
       specs: [],
       image: "assets/img/renzo/r144.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50145,
@@ -1546,7 +1546,7 @@
       specs: [],
       image: "assets/img/renzo/r145.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50146,
@@ -1560,7 +1560,7 @@
       specs: [],
       image: "assets/img/renzo/r146.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50147,
@@ -1574,7 +1574,7 @@
       specs: [],
       image: "assets/img/renzo/r147.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50148,
@@ -1588,7 +1588,7 @@
       specs: [],
       image: "assets/img/renzo/r148.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50149,
@@ -1602,7 +1602,7 @@
       specs: [],
       image: "assets/img/renzo/r149.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50150,
@@ -1616,7 +1616,7 @@
       specs: [],
       image: "assets/img/renzo/r150.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50151,
@@ -1630,7 +1630,7 @@
       specs: [],
       image: "assets/img/renzo/r151.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50152,
@@ -1644,7 +1644,7 @@
       specs: [],
       image: "assets/img/renzo/r152.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50153,
@@ -1658,7 +1658,7 @@
       specs: [],
       image: "assets/img/renzo/r153.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50154,
@@ -1672,7 +1672,7 @@
       specs: [],
       image: "assets/img/renzo/r154.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50155,
@@ -1686,7 +1686,7 @@
       specs: [],
       image: "assets/img/renzo/r155.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50156,
@@ -1700,7 +1700,7 @@
       specs: [],
       image: "assets/img/renzo/r156.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50157,
@@ -1714,7 +1714,7 @@
       specs: [],
       image: "assets/img/renzo/r157.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50158,
@@ -1728,7 +1728,7 @@
       specs: [],
       image: "assets/img/renzo/r158.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50159,
@@ -1742,7 +1742,7 @@
       specs: [],
       image: "assets/img/renzo/r159.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50160,
@@ -1756,7 +1756,7 @@
       specs: [],
       image: "assets/img/renzo/r160.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50161,
@@ -1770,7 +1770,7 @@
       specs: [],
       image: "assets/img/renzo/r161.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50164,
@@ -1784,7 +1784,7 @@
       specs: [],
       image: "assets/img/renzo/r164.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50165,
@@ -1798,7 +1798,7 @@
       specs: [],
       image: "assets/img/renzo/r165.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50166,
@@ -1812,7 +1812,7 @@
       specs: [],
       image: "assets/img/renzo/r166.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50167,
@@ -1826,7 +1826,7 @@
       specs: [],
       image: "assets/img/renzo/r167.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50168,
@@ -1840,7 +1840,7 @@
       specs: [],
       image: "assets/img/renzo/r168.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50169,
@@ -1854,7 +1854,7 @@
       specs: [],
       image: "assets/img/renzo/r169.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50170,
@@ -1868,7 +1868,7 @@
       specs: [],
       image: "assets/img/renzo/r170.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50171,
@@ -1882,7 +1882,7 @@
       specs: [],
       image: "assets/img/renzo/r171.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50172,
@@ -1896,7 +1896,7 @@
       specs: [],
       image: "assets/img/renzo/r172.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50174,
@@ -1910,7 +1910,7 @@
       specs: [],
       image: "assets/img/renzo/r174.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50177,
@@ -1924,7 +1924,7 @@
       specs: ["15 \""],
       image: "assets/img/renzo/r177.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50178,
@@ -1938,7 +1938,7 @@
       specs: ["17 \""],
       image: "assets/img/renzo/r178.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50180,
@@ -1952,7 +1952,7 @@
       specs: ["17 \""],
       image: "assets/img/renzo/r180.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50181,
@@ -1966,7 +1966,7 @@
       specs: ["19 \""],
       image: "assets/img/renzo/r181.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50182,
@@ -1980,7 +1980,7 @@
       specs: ["19 \""],
       image: "assets/img/renzo/r182.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50183,
@@ -1994,7 +1994,7 @@
       specs: ["22 \""],
       image: "assets/img/renzo/r183.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50184,
@@ -2008,7 +2008,7 @@
       specs: ["22 \""],
       image: "assets/img/renzo/r184.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50185,
@@ -2022,7 +2022,7 @@
       specs: ["22 \""],
       image: "assets/img/renzo/r185.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50186,
@@ -2036,7 +2036,7 @@
       specs: ["22 \""],
       image: "assets/img/renzo/r186.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50187,
@@ -2050,7 +2050,7 @@
       specs: ["23 \""],
       image: "assets/img/renzo/r187.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50188,
@@ -2064,7 +2064,7 @@
       specs: ["24 \""],
       image: "assets/img/renzo/r188.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50189,
@@ -2078,7 +2078,7 @@
       specs: ["24 \""],
       image: "assets/img/renzo/r189.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50191,
@@ -2092,7 +2092,7 @@
       specs: ["27 \""],
       image: "assets/img/renzo/r191.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50192,
@@ -2106,7 +2106,7 @@
       specs: ["20 \"", "75HZ"],
       image: "assets/img/renzo/r192.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50193,
@@ -2120,7 +2120,7 @@
       specs: ["24 \"", "100HZ"],
       image: "assets/img/renzo/r193.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50195,
@@ -2134,7 +2134,7 @@
       specs: ["500GB"],
       image: "assets/img/renzo/r195.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50196,
@@ -2148,7 +2148,7 @@
       specs: ["500GB"],
       image: "assets/img/renzo/r196.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50197,
@@ -2162,7 +2162,7 @@
       specs: ["1TB"],
       image: "assets/img/renzo/r197.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50198,
@@ -2176,7 +2176,7 @@
       specs: ["1TB"],
       image: "assets/img/renzo/r198.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50199,
@@ -2190,7 +2190,7 @@
       specs: ["2TB"],
       image: "assets/img/renzo/r199.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50200,
@@ -2204,7 +2204,7 @@
       specs: ["2TB"],
       image: "assets/img/renzo/r200.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50201,
@@ -2218,7 +2218,7 @@
       specs: ["4TB"],
       image: "assets/img/renzo/r201.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50204,
@@ -2232,7 +2232,7 @@
       specs: [],
       image: "assets/img/renzo/r204.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50205,
@@ -2246,7 +2246,7 @@
       specs: [],
       image: "assets/img/renzo/r205.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50206,
@@ -2260,7 +2260,7 @@
       specs: [],
       image: "assets/img/renzo/r206.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50207,
@@ -2274,7 +2274,7 @@
       specs: [],
       image: "assets/img/renzo/r207.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50208,
@@ -2288,7 +2288,7 @@
       specs: [],
       image: "assets/img/renzo/r208.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50209,
@@ -2302,7 +2302,7 @@
       specs: [],
       image: "assets/img/renzo/r209.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50210,
@@ -2316,7 +2316,7 @@
       specs: [],
       image: "assets/img/renzo/r210.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50211,
@@ -2330,7 +2330,7 @@
       specs: [],
       image: "assets/img/renzo/r211.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50212,
@@ -2344,7 +2344,7 @@
       specs: [],
       image: "assets/img/renzo/r212.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50213,
@@ -2358,7 +2358,7 @@
       specs: [],
       image: "assets/img/renzo/r213.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50214,
@@ -2372,7 +2372,7 @@
       specs: [],
       image: "assets/img/renzo/r214.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50215,
@@ -2386,7 +2386,7 @@
       specs: [],
       image: "assets/img/renzo/r215.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50216,
@@ -2400,7 +2400,7 @@
       specs: [],
       image: "assets/img/renzo/r216.jpg",
       gradient: ["#1f4a6b", "#0a2540"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50217,
@@ -2414,7 +2414,7 @@
       specs: [],
       image: "assets/img/renzo/r217.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50218,
@@ -2428,7 +2428,7 @@
       specs: [],
       image: "assets/img/renzo/r218.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50219,
@@ -2442,7 +2442,7 @@
       specs: [],
       image: "assets/img/renzo/r219.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50220,
@@ -2456,7 +2456,7 @@
       specs: [],
       image: "assets/img/renzo/r220.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50221,
@@ -2470,7 +2470,7 @@
       specs: [],
       image: "assets/img/renzo/r221.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50222,
@@ -2484,7 +2484,7 @@
       specs: [],
       image: "assets/img/renzo/r222.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50223,
@@ -2498,7 +2498,7 @@
       specs: [],
       image: "assets/img/renzo/r223.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50224,
@@ -2512,7 +2512,7 @@
       specs: [],
       image: "assets/img/renzo/r224.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50225,
@@ -2526,7 +2526,7 @@
       specs: [],
       image: "assets/img/renzo/r225.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50226,
@@ -2540,7 +2540,7 @@
       specs: [],
       image: "assets/img/renzo/r226.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50227,
@@ -2554,7 +2554,7 @@
       specs: [],
       image: "assets/img/renzo/r227.jpg",
       gradient: ["#1a2f4a", "#0a1525"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50228,
@@ -2568,7 +2568,7 @@
       specs: [],
       image: "assets/img/renzo/r228.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50230,
@@ -2582,7 +2582,7 @@
       specs: [],
       image: "assets/img/renzo/r230.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50231,
@@ -2596,7 +2596,7 @@
       specs: [],
       image: "assets/img/renzo/r231.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50232,
@@ -2610,7 +2610,7 @@
       specs: [],
       image: "assets/img/renzo/r232.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50233,
@@ -2624,7 +2624,7 @@
       specs: [],
       image: "assets/img/renzo/r233.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50234,
@@ -2638,7 +2638,7 @@
       specs: [],
       image: "assets/img/renzo/r234.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50235,
@@ -2652,7 +2652,7 @@
       specs: [],
       image: "assets/img/renzo/r235.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50236,
@@ -2666,7 +2666,7 @@
       specs: [],
       image: "assets/img/renzo/r236.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50237,
@@ -2680,7 +2680,7 @@
       specs: [],
       image: "assets/img/renzo/r237.jpg",
       gradient: ["#1f4a6b", "#0a2540"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50238,
@@ -2694,7 +2694,7 @@
       specs: [],
       image: "assets/img/renzo/r238.jpg",
       gradient: ["#1f4a6b", "#0a2540"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50239,
@@ -2708,7 +2708,7 @@
       specs: [],
       image: "assets/img/renzo/r239.jpg",
       gradient: ["#1f4a6b", "#0a2540"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50240,
@@ -2722,7 +2722,7 @@
       specs: [],
       image: "assets/img/renzo/r240.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50242,
@@ -2736,7 +2736,7 @@
       specs: [],
       image: "assets/img/renzo/r242.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50243,
@@ -2750,7 +2750,7 @@
       specs: [],
       image: "assets/img/renzo/r243.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50244,
@@ -2764,7 +2764,7 @@
       specs: [],
       image: "assets/img/renzo/r244.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50245,
@@ -2778,7 +2778,7 @@
       specs: [],
       image: "assets/img/renzo/r245.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50246,
@@ -2792,7 +2792,7 @@
       specs: [],
       image: "assets/img/renzo/r246.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50247,
@@ -2806,7 +2806,7 @@
       specs: [],
       image: "assets/img/renzo/r247.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50248,
@@ -2820,7 +2820,7 @@
       specs: [],
       image: "assets/img/renzo/r248.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50249,
@@ -2834,7 +2834,7 @@
       specs: [],
       image: "assets/img/renzo/r249.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50250,
@@ -2848,7 +2848,7 @@
       specs: [],
       image: "assets/img/renzo/r250.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50251,
@@ -2862,7 +2862,7 @@
       specs: [],
       image: "assets/img/renzo/r251.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50252,
@@ -2876,7 +2876,7 @@
       specs: [],
       image: "assets/img/renzo/r252.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50254,
@@ -2890,7 +2890,7 @@
       specs: [],
       image: "assets/img/renzo/r254.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50255,
@@ -2904,7 +2904,7 @@
       specs: [],
       image: "assets/img/renzo/r255.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50256,
@@ -2918,7 +2918,7 @@
       specs: [],
       image: "assets/img/renzo/r256.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50257,
@@ -2932,7 +2932,7 @@
       specs: [],
       image: "assets/img/renzo/r257.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50258,
@@ -2946,7 +2946,7 @@
       specs: [],
       image: "assets/img/renzo/r258.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50259,
@@ -2960,7 +2960,7 @@
       specs: [],
       image: "assets/img/renzo/r259.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50260,
@@ -2974,7 +2974,7 @@
       specs: [],
       image: "assets/img/renzo/r260.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50261,
@@ -2988,7 +2988,7 @@
       specs: [],
       image: "assets/img/renzo/r261.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50262,
@@ -3002,7 +3002,7 @@
       specs: [],
       image: "assets/img/renzo/r262.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50263,
@@ -3016,7 +3016,7 @@
       specs: [],
       image: "assets/img/renzo/r263.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50264,
@@ -3030,7 +3030,7 @@
       specs: [],
       image: "assets/img/renzo/r264.jpg",
       gradient: ["#3a3a3a", "#1a1a1a"],
-      stock: 10
+      stock: 60
     },
     {
       id: 50265,
@@ -3044,7 +3044,7 @@
       specs: [],
       image: "assets/img/renzo/r265.jpg",
       gradient: ["#3a2540", "#1a0d20"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50266,
@@ -3058,7 +3058,7 @@
       specs: [],
       image: "assets/img/renzo/r266.jpg",
       gradient: ["#3a2540", "#1a0d20"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50267,
@@ -3072,7 +3072,7 @@
       specs: ["128GB"],
       image: "assets/img/renzo/r267.jpg",
       gradient: ["#2d2d35", "#0a0a0c"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50268,
@@ -3086,7 +3086,7 @@
       specs: ["64GB"],
       image: "assets/img/renzo/r268.jpg",
       gradient: ["#2d2d35", "#0a0a0c"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50269,
@@ -3100,7 +3100,7 @@
       specs: ["256GB"],
       image: "assets/img/renzo/r269.jpg",
       gradient: ["#2d2d35", "#0a0a0c"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50270,
@@ -3114,7 +3114,7 @@
       specs: ["128GB"],
       image: "assets/img/renzo/r270.jpg",
       gradient: ["#2d2d35", "#0a0a0c"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50271,
@@ -3128,7 +3128,7 @@
       specs: ["256GB"],
       image: "assets/img/renzo/r271.jpg",
       gradient: ["#2d2d35", "#0a0a0c"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50272,
@@ -3142,7 +3142,7 @@
       specs: ["256GB"],
       image: "assets/img/renzo/r272.jpg",
       gradient: ["#2d2d35", "#0a0a0c"],
-      stock: 10
+      stock: 5
     },
     {
       id: 50274,
@@ -3156,7 +3156,7 @@
       specs: ["32GB"],
       image: "assets/img/renzo/r274.jpg",
       gradient: ["#1f3a4a", "#0a1a25"],
-      stock: 10
+      stock: 5
     },
   ];
   Array.prototype.push.apply(window.PRODUCTS, STATIC);

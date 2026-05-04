@@ -9,7 +9,8 @@
   <title>Plata Tech Security | Seguridad Inteligente</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700&family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet"/>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700&family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'"/>
+<noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700&family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet"/></noscript>
 
   <style>
   :root {
@@ -599,9 +600,96 @@
   }
   .wa-float:hover .wa-tooltip { opacity: 1; }
 
+  /* ╔══════════════════════════════════════════════════════════╗
+     ║  KITS RENZO                                              ║
+     ╚══════════════════════════════════════════════════════════╝ */
+  .kits-renzo { padding: 7rem 0; background: var(--navy-2); border-top: 1px solid var(--border-b); }
+  .kr-cat { margin-bottom: 4rem; }
+  .kr-cat:last-child { margin-bottom: 0; }
+  .kr-cat-head {
+    display: flex; align-items: center; gap: 1rem;
+    margin-bottom: 1.75rem; padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-b);
+  }
+  .kr-cat-icon {
+    width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .kr-cat-icon.alarm { background: var(--gold-pale); color: var(--gold-l); border: 1px solid var(--gold-border); }
+  .kr-cat-icon.cam   { background: var(--blue-pale); color: var(--blue-3);  border: 1px solid var(--blue-border); }
+  .kr-cat-text {}
+  .kr-cat-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.1rem; font-weight: 800; color: var(--white); }
+  .kr-cat-sub   { font-size: .77rem; color: var(--text-dim); margin-top: .15rem; }
+
+  .kr-grid   { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
+  .kr-grid-3 { grid-template-columns: repeat(3, 1fr); }
+
+  .krcard {
+    border-radius: 16px; overflow: hidden;
+    background: rgba(15,36,80,.8); border: 1px solid var(--border-b);
+    display: flex; flex-direction: column; position: relative;
+    transition: transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s, border-color .25s;
+  }
+  .krcard:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); border-color: rgba(59,110,246,.3); }
+  .krcard.krfeatured { border-color: rgba(59,110,246,.3); }
+  .krcard-vis {
+    position: relative; background: rgba(11,22,50,.9);
+    border-bottom: 1px solid var(--border-b);
+    display: flex; align-items: center; justify-content: center;
+    padding: 1.5rem 2rem; min-height: 120px;
+  }
+  .krcard-img { max-height: 88px; max-width: 100%; width: auto; object-fit: contain; }
+  .krcard-badge {
+    position: absolute; top: .75rem; right: .75rem;
+    padding: .22rem .6rem; border-radius: 100px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: .6rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
+  }
+  .krcard-badge.alarm   { background: var(--gold-pale); color: var(--gold-l);  border: 1px solid var(--gold-border); }
+  .krcard-badge.cam     { background: var(--blue-pale); color: var(--blue-3);  border: 1px solid var(--blue-border); }
+  .krcard-badge.popular { background: linear-gradient(135deg, var(--gold), var(--gold-l)); color: var(--navy); }
+
+  .krcard-body { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; }
+  .krcard-type { font-family: 'Space Grotesk', sans-serif; font-size: .62rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--blue-3); margin-bottom: .3rem; }
+  .krcard-name { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1rem; font-weight: 800; color: var(--white); line-height: 1.25; margin-bottom: 1rem; }
+
+  .krcard-items { display: flex; flex-direction: column; gap: .28rem; margin-bottom: 1rem; }
+  .krcard-item {
+    display: flex; align-items: center; gap: .45rem;
+    font-size: .76rem; color: var(--text-mid);
+    padding: .38rem .55rem; border-radius: 7px;
+    background: rgba(255,255,255,.025); border: 1px solid rgba(255,255,255,.05);
+  }
+  .krcard-qty {
+    font-family: 'Space Grotesk', sans-serif; font-size: .65rem; font-weight: 700;
+    color: var(--blue-3); background: var(--blue-pale); border: 1px solid var(--blue-border);
+    border-radius: 4px; padding: .08rem .35rem; flex-shrink: 0; min-width: 22px; text-align: center;
+  }
+  .krcard-qty.gold { color: var(--gold-l); background: var(--gold-pale); border-color: var(--gold-border); }
+  .krcard-iname { flex: 1; line-height: 1.3; }
+
+  .krcard-pricing { margin-top: auto; padding-top: .85rem; border-top: 1px solid var(--border-b); }
+  .krcard-orig  { font-size: .76rem; color: var(--text-dim); text-decoration: line-through; margin-bottom: .2rem; }
+  .krcard-price { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--gold-l); letter-spacing: -.02em; }
+  .krcard-save  {
+    display: inline-block; margin-top: .3rem; width: fit-content;
+    font-size: .7rem; color: #4ade80;
+    background: rgba(74,222,128,.08); border: 1px solid rgba(74,222,128,.18);
+    padding: .18rem .55rem; border-radius: 100px;
+  }
+  .krcard-cta {
+    display: flex; align-items: center; justify-content: center; gap: .5rem;
+    padding: .75rem 1.25rem; border-radius: 100px; margin-top: 1rem;
+    background: #25d366; color: #fff;
+    font-family: 'Plus Jakarta Sans', sans-serif; font-size: .82rem; font-weight: 700;
+    box-shadow: 0 6px 20px rgba(37,211,102,.25); transition: transform .25s, box-shadow .25s;
+  }
+  .krcard-cta:hover { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(37,211,102,.42); }
+
   /* ── Responsive ─────────────────────────────────────────── */
   @media (max-width: 1024px) {
     .why-grid { grid-template-columns: repeat(2,1fr); }
+    .kr-grid-3 { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 860px) {
     .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
@@ -614,6 +702,7 @@
   @media (max-width: 640px) {
     .products-grid { grid-template-columns: 1fr; }
     .why-grid      { grid-template-columns: 1fr; }
+    .kr-grid, .kr-grid-3 { grid-template-columns: 1fr; }
     .hero-stats    { grid-template-columns: repeat(2,1fr); }
     .cta-inner     { padding: 2.5rem 1.5rem; }
     .hero-btns     { flex-direction: column; }
@@ -647,7 +736,7 @@
       </a>
       <div class="nav-sep"></div>
       <a href="#inicio" class="nav-logo">
-        <img src="images/logo-platatech.png" alt="Plata Tech Security" style="height:40px;width:auto;object-fit:contain;"/>
+        <img src="images/logo-platatech.webp" alt="Plata Tech Security" style="height:40px;width:auto;object-fit:contain;"/>
       </a>
     </div>
     <ul class="nav-links">
@@ -679,7 +768,7 @@
 
   <div class="container hero-inner">
     <div class="hero-logo-big" id="heroLogo">
-      <img src="images/logo-platatech.png" alt="Plata Tech Security"/>
+      <img src="images/logo-platatech.webp" alt="Plata Tech Security"/>
     </div>
 
     <div>
@@ -984,6 +1073,244 @@
   </div>
 </section>
 
+<!-- ── KITS RENZO ─────────────────────────────────────────── -->
+<section id="kits" class="kits-renzo">
+  <div class="container">
+
+    <div class="sec-head" data-reveal>
+      <p class="label">Kits Armados</p>
+      <h2 class="h2">Equipos reales,<br/>precios directos</h2>
+      <p class="sec-sub">Kits completos con productos Hikvision, UNV y EPCOM. Precio incluye el hardware — instalación y configuración se cotizan aparte según tu proyecto.</p>
+    </div>
+
+    <!-- ── ALARMAS ─────────────────── -->
+    <div class="kr-cat">
+      <div class="kr-cat-head">
+        <div class="kr-cat-icon alarm">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </div>
+        <div class="kr-cat-text">
+          <div class="kr-cat-title">Kits de Alarmas Hikvision</div>
+          <div class="kr-cat-sub">Sistema AX inalámbrico — sensor de movimiento, ventana, sirena y panel central</div>
+        </div>
+      </div>
+
+      <div class="kr-grid kr-grid-3">
+
+        <!-- Kit Alarma AX-HOME Básico -->
+        <div class="krcard">
+          <div class="krcard-vis">
+            <span class="krcard-badge alarm">Residencial</span>
+            <img class="krcard-img" src="shop/assets/img/renzo/r65.jpg" alt="Kit Alarma AX-HOME" loading="lazy"/>
+          </div>
+          <div class="krcard-body">
+            <div class="krcard-type">Alarma · AX-HOME</div>
+            <div class="krcard-name">Alarma AX-HOME Básico</div>
+            <div class="krcard-items">
+              <div class="krcard-item"><span class="krcard-qty gold">1x</span><span class="krcard-iname">Kit base AX-HOME inalámbrica</span></div>
+              <div class="krcard-item"><span class="krcard-qty gold">2x</span><span class="krcard-iname">Sensor de movimiento</span></div>
+              <div class="krcard-item"><span class="krcard-qty gold">2x</span><span class="krcard-iname">Sensor de ventana/puerta</span></div>
+              <div class="krcard-item"><span class="krcard-qty gold">1x</span><span class="krcard-iname">Sirena interna inalámbrica</span></div>
+            </div>
+            <div class="krcard-pricing">
+              <div class="krcard-orig">Piezas individuales: RD$15,176</div>
+              <div class="krcard-price">RD$24,499</div>
+              <div class="krcard-save">Precio total instalado y configurado</div>
+            </div>
+            <a href="https://wa.me/18494950959?text=Hola%2C%20me%20interesa%20el%20Kit%20Alarma%20AX-HOME%20B%C3%A1sico%20de%20Hikvision.%20%C2%BFCu%C3%A1l%20es%20el%20precio%20total%20con%20instalaci%C3%B3n%3F" target="_blank" class="krcard-cta">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+              Cotizar con instalación
+            </a>
+          </div>
+        </div>
+
+        <!-- Kit Alarma AX-HOME Plus -->
+        <div class="krcard">
+          <div class="krcard-vis">
+            <span class="krcard-badge alarm">Residencial Plus</span>
+            <img class="krcard-img" src="shop/assets/img/renzo/r65.jpg" alt="Kit Alarma AX-HOME Plus" loading="lazy"/>
+          </div>
+          <div class="krcard-body">
+            <div class="krcard-type">Alarma · AX-HOME</div>
+            <div class="krcard-name">Alarma AX-HOME Plus</div>
+            <div class="krcard-items">
+              <div class="krcard-item"><span class="krcard-qty gold">1x</span><span class="krcard-iname">Kit base AX-HOME inalámbrica</span></div>
+              <div class="krcard-item"><span class="krcard-qty gold">4x</span><span class="krcard-iname">Sensor de movimiento</span></div>
+              <div class="krcard-item"><span class="krcard-qty gold">4x</span><span class="krcard-iname">Sensor de ventana/puerta</span></div>
+              <div class="krcard-item"><span class="krcard-qty gold">1x</span><span class="krcard-iname">Sirena interna inalámbrica</span></div>
+              <div class="krcard-item"><span class="krcard-qty gold">1x</span><span class="krcard-iname">Sirena de estrobo cableada</span></div>
+            </div>
+            <div class="krcard-pricing">
+              <div class="krcard-orig">Piezas individuales: RD$20,802</div>
+              <div class="krcard-price">RD$33,999</div>
+              <div class="krcard-save">Precio total instalado y configurado</div>
+            </div>
+            <a href="https://wa.me/18494950959?text=Hola%2C%20me%20interesa%20el%20Kit%20Alarma%20AX-HOME%20Plus%20de%20Hikvision.%20%C2%BFCu%C3%A1l%20es%20el%20precio%20total%20con%20instalaci%C3%B3n%3F" target="_blank" class="krcard-cta">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+              Cotizar con instalación
+            </a>
+          </div>
+        </div>
+
+        <!-- Kit Alarma AX-PRO Comercial -->
+        <div class="krcard krfeatured">
+          <div class="krcard-vis">
+            <span class="krcard-badge popular">Comercial Pro</span>
+            <img class="krcard-img" src="shop/assets/img/renzo/r60.jpg" alt="Kit Alarma AX-PRO" loading="lazy"/>
+          </div>
+          <div class="krcard-body">
+            <div class="krcard-type">Alarma · AX-PRO</div>
+            <div class="krcard-name">Alarma AX-PRO Comercial</div>
+            <div class="krcard-items">
+              <div class="krcard-item"><span class="krcard-qty gold">1x</span><span class="krcard-iname">Kit base AX-PRO inalámbrica</span></div>
+              <div class="krcard-item"><span class="krcard-qty gold">3x</span><span class="krcard-iname">Sensor movimiento AX-PRO</span></div>
+              <div class="krcard-item"><span class="krcard-qty gold">2x</span><span class="krcard-iname">Sensor ventana AX-PRO</span></div>
+              <div class="krcard-item"><span class="krcard-qty gold">1x</span><span class="krcard-iname">Sirena interna inalámbrica</span></div>
+              <div class="krcard-item"><span class="krcard-qty gold">1x</span><span class="krcard-iname">Sirena externa inalámbrica</span></div>
+            </div>
+            <div class="krcard-pricing">
+              <div class="krcard-orig">Piezas individuales: RD$27,657</div>
+              <div class="krcard-price">RD$42,999</div>
+              <div class="krcard-save">Precio total instalado y configurado</div>
+            </div>
+            <a href="https://wa.me/18494950959?text=Hola%2C%20me%20interesa%20el%20Kit%20Alarma%20AX-PRO%20Comercial%20de%20Hikvision.%20%C2%BFCu%C3%A1l%20es%20el%20precio%20total%20con%20instalaci%C3%B3n%3F" target="_blank" class="krcard-cta">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+              Cotizar con instalación
+            </a>
+          </div>
+        </div>
+
+      </div><!-- /kr-grid alarmas -->
+    </div><!-- /kr-cat alarmas -->
+
+    <!-- ── CÁMARAS ─────────────────── -->
+    <div class="kr-cat">
+      <div class="kr-cat-head">
+        <div class="kr-cat-icon cam">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+        </div>
+        <div class="kr-cat-text">
+          <div class="kr-cat-title">Kits de Cámaras UNV / EPCOM</div>
+          <div class="kr-cat-sub">Sistemas analógicos DVR y sistemas IP con NVR PoE — imagen a color día y noche</div>
+        </div>
+      </div>
+
+      <div class="kr-grid">
+
+        <!-- Kit 4 Cámaras UNV Color Hunter -->
+        <div class="krcard">
+          <div class="krcard-vis">
+            <span class="krcard-badge cam">Básico Hogar</span>
+            <img class="krcard-img" src="shop/assets/img/renzo/r5.jpg" alt="Cámara UNV Color Hunter" loading="lazy"/>
+          </div>
+          <div class="krcard-body">
+            <div class="krcard-type">Analógico · DVR 4CH</div>
+            <div class="krcard-name">Kit 4 Cámaras Color Hunter UNV</div>
+            <div class="krcard-items">
+              <div class="krcard-item"><span class="krcard-qty">1x</span><span class="krcard-iname">DVR UNV 4 canales Lite</span></div>
+              <div class="krcard-item"><span class="krcard-qty">4x</span><span class="krcard-iname">Cámara UNV 2MP Color Hunter + Audio</span></div>
+              <div class="krcard-item"><span class="krcard-qty">1x</span><span class="krcard-iname">Monitor dedicado</span></div>
+              <div class="krcard-item"><span class="krcard-qty">1x</span><span class="krcard-iname">Disco duro 1TB + cables</span></div>
+            </div>
+            <div class="krcard-pricing">
+              <div class="krcard-orig">Solo el hardware: RD$6,720</div>
+              <div class="krcard-price">RD$18,999</div>
+              <div class="krcard-save">Monitor, HDD, cable e instalación incluidos</div>
+            </div>
+            <a href="https://wa.me/18494950959?text=Hola%2C%20me%20interesa%20el%20Kit%204%20C%C3%A1maras%20Color%20Hunter%20UNV%20(DVR%204CH).%20%C2%BFCu%C3%A1l%20es%20el%20precio%20con%20instalaci%C3%B3n%3F" target="_blank" class="krcard-cta">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+              Cotizar con instalación
+            </a>
+          </div>
+        </div>
+
+        <!-- Kit 8 Cámaras UNV Color Hunter -->
+        <div class="krcard krfeatured">
+          <div class="krcard-vis">
+            <span class="krcard-badge popular">Más Popular</span>
+            <img class="krcard-img" src="shop/assets/img/renzo/r12.jpg" alt="DVR UNV 8 canales" loading="lazy"/>
+          </div>
+          <div class="krcard-body">
+            <div class="krcard-type">Analógico · DVR 8CH</div>
+            <div class="krcard-name">Kit 8 Cámaras Color Hunter UNV</div>
+            <div class="krcard-items">
+              <div class="krcard-item"><span class="krcard-qty">1x</span><span class="krcard-iname">DVR UNV 8 canales Lite</span></div>
+              <div class="krcard-item"><span class="krcard-qty">8x</span><span class="krcard-iname">Cámara UNV 2MP Color Hunter + Audio</span></div>
+              <div class="krcard-item"><span class="krcard-qty">1x</span><span class="krcard-iname">Monitor 17" con base</span></div>
+              <div class="krcard-item"><span class="krcard-qty">1x</span><span class="krcard-iname">Disco duro 1TB + cables</span></div>
+            </div>
+            <div class="krcard-pricing">
+              <div class="krcard-orig">Solo el hardware: RD$11,696</div>
+              <div class="krcard-price">RD$32,999</div>
+              <div class="krcard-save">Monitor, HDD, cable e instalación incluidos</div>
+            </div>
+            <a href="https://wa.me/18494950959?text=Hola%2C%20me%20interesa%20el%20Kit%208%20C%C3%A1maras%20Color%20Hunter%20UNV%20(DVR%208CH).%20%C2%BFCu%C3%A1l%20es%20el%20precio%20con%20instalaci%C3%B3n%3F" target="_blank" class="krcard-cta">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+              Cotizar con instalación
+            </a>
+          </div>
+        </div>
+
+        <!-- Kit 4 Cámaras IP EPCOM 4MP -->
+        <div class="krcard">
+          <div class="krcard-vis">
+            <span class="krcard-badge cam">Negocio IP</span>
+            <img class="krcard-img" src="shop/assets/img/renzo/r43.jpg" alt="Cámara IP EPCOM 4MP" loading="lazy"/>
+          </div>
+          <div class="krcard-body">
+            <div class="krcard-type">IP · NVR PoE 8CH</div>
+            <div class="krcard-name">Kit 4 Cámaras IP EPCOM 4MP</div>
+            <div class="krcard-items">
+              <div class="krcard-item"><span class="krcard-qty">1x</span><span class="krcard-iname">NVR EPCOM 8 canales todo PoE</span></div>
+              <div class="krcard-item"><span class="krcard-qty">4x</span><span class="krcard-iname">Cámara IP EPCOM Dual Light 4MP + Audio</span></div>
+              <div class="krcard-item"><span class="krcard-qty">1x</span><span class="krcard-iname">Monitor 17" con base</span></div>
+              <div class="krcard-item"><span class="krcard-qty">1x</span><span class="krcard-iname">Disco duro 1TB + cables</span></div>
+            </div>
+            <div class="krcard-pricing">
+              <div class="krcard-orig">Solo el hardware: RD$26,617</div>
+              <div class="krcard-price">RD$42,999</div>
+              <div class="krcard-save">Monitor, HDD, cable e instalación incluidos</div>
+            </div>
+            <a href="https://wa.me/18494950959?text=Hola%2C%20me%20interesa%20el%20Kit%204%20C%C3%A1maras%20IP%20EPCOM%204MP%20(NVR%20PoE).%20%C2%BFCu%C3%A1l%20es%20el%20precio%20con%20instalaci%C3%B3n%3F" target="_blank" class="krcard-cta">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+              Cotizar con instalación
+            </a>
+          </div>
+        </div>
+
+        <!-- Kit 8 Cámaras IP EPCOM Full Color -->
+        <div class="krcard krfeatured">
+          <div class="krcard-vis">
+            <span class="krcard-badge popular">Empresa</span>
+            <img class="krcard-img" src="shop/assets/img/renzo/r45.jpg" alt="NVR EPCOM 8 canales" loading="lazy"/>
+          </div>
+          <div class="krcard-body">
+            <div class="krcard-type">IP · NVR PoE 8CH</div>
+            <div class="krcard-name">Kit 8 Cámaras IP EPCOM Full Color</div>
+            <div class="krcard-items">
+              <div class="krcard-item"><span class="krcard-qty">1x</span><span class="krcard-iname">NVR EPCOM 8 canales todo PoE</span></div>
+              <div class="krcard-item"><span class="krcard-qty">8x</span><span class="krcard-iname">Cámara IP EPCOM Dual Light 2MP + Audio</span></div>
+              <div class="krcard-item"><span class="krcard-qty">1x</span><span class="krcard-iname">Monitor 17" con base</span></div>
+              <div class="krcard-item"><span class="krcard-qty">1x</span><span class="krcard-iname">Disco duro 1TB + cables</span></div>
+            </div>
+            <div class="krcard-pricing">
+              <div class="krcard-orig">Solo el hardware: RD$35,865</div>
+              <div class="krcard-price">RD$59,999</div>
+              <div class="krcard-save">Monitor, HDD, cable e instalación incluidos</div>
+            </div>
+            <a href="https://wa.me/18494950959?text=Hola%2C%20me%20interesa%20el%20Kit%208%20C%C3%A1maras%20IP%20EPCOM%20Full%20Color%20(NVR%20PoE).%20%C2%BFCu%C3%A1l%20es%20el%20precio%20con%20instalaci%C3%B3n%3F" target="_blank" class="krcard-cta">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+              Cotizar con instalación
+            </a>
+          </div>
+        </div>
+
+      </div><!-- /kr-grid cámaras -->
+    </div><!-- /kr-cat cámaras -->
+
+  </div>
+</section>
+
 <!-- ── WHY US ─────────────────────────────────────────────── -->
 <section id="nosotros" class="why">
   <div class="container">
@@ -1055,7 +1382,7 @@
 <footer class="footer">
   <div class="container footer-inner">
     <div class="footer-logo">
-      <img src="images/logo-platatech.png" alt="Plata Tech Security" style="height:32px;width:auto;object-fit:contain;"/>
+      <img src="images/logo-platatech.webp" alt="Plata Tech Security" style="height:32px;width:auto;object-fit:contain;"/>
       Plata Tech Security
     </div>
     <div class="footer-links">
