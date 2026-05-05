@@ -190,6 +190,8 @@ def parse_price(val) -> int | None:
 def apply_margin(cost: int, category: str) -> int:
     if category == 'seguridad':
         return int(round(cost * 1.25))
+    if cost < 500:
+        return cost * 3
     if cost < 1000:
         return cost + 1000
     if cost < 15000:

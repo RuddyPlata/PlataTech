@@ -160,6 +160,24 @@
       50258,50259,
       // All-in-one POS
       50260,50261
+    ],
+    seguridad: [
+      // Gabinetes de red / rack
+      50130,50131,50132,50133,50134
+    ],
+    herramientas: [
+      // Red: probador, kit, ponchadora
+      50127,50128,50129,
+      // Taladros
+      50224,50225,
+      // Ferreteria: tornillos, tarugos, abrazaderas, grapas
+      50220,50221,50222,50243,50244,
+      // Canalizacion: conduflex, cinta pasacables
+      50223,50228,
+      // Adhesivo
+      50219,
+      // Electrico: protector de voltaje
+      50242
     ]
   };
 
@@ -179,12 +197,13 @@
   var existing = {};
   for (var i = 0; i < window.CATEGORIES.length; i++) existing[window.CATEGORIES[i].id] = true;
   var NEW_CATS = [
-    { id: 'camaras',        name: 'Cámaras',        icon: 'camera'     },
-    { id: 'grabadores',     name: 'DVR / NVR',      icon: 'hard-drive' },
-    { id: 'alarmas',        name: 'Alarmas',         icon: 'bell'       },
-    { id: 'monitores',      name: 'Monitores',       icon: 'monitor'    },
-    { id: 'almacenamiento', name: 'Almacenamiento',  icon: 'database'   },
-    { id: 'impresoras',     name: 'Impresoras',      icon: 'printer'    }
+    { id: 'camaras',        name: 'Cámaras',           icon: 'camera'     },
+    { id: 'grabadores',     name: 'DVR / NVR',         icon: 'hard-drive' },
+    { id: 'alarmas',        name: 'Alarmas',            icon: 'bell'       },
+    { id: 'monitores',      name: 'Monitores',          icon: 'monitor'    },
+    { id: 'almacenamiento', name: 'Almacenamiento',     icon: 'database'   },
+    { id: 'impresoras',     name: 'Impresoras',         icon: 'printer'    },
+    { id: 'herramientas',   name: 'Herramientas',       icon: 'tool'       }
   ];
   for (var i = 0; i < NEW_CATS.length; i++) {
     if (!existing[NEW_CATS[i].id]) window.CATEGORIES.push(NEW_CATS[i]);

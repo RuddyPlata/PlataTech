@@ -1,8 +1,16 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-3L0THHV7FQ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-3L0THHV7FQ');
+</script>
 <meta charset="UTF-8"/>
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.paypal.com https://maps.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://*.supabase.co https://open.er-api.com https://maps.googleapis.com https://maps.gstatic.com https://www.paypal.com https://*.paypal.com; frame-src https://www.paypal.com https://*.paypal.com; object-src 'none'; base-uri 'self';"/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.paypal.com https://maps.googleapis.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://*.supabase.co https://open.er-api.com https://maps.googleapis.com https://maps.gstatic.com https://www.paypal.com https://*.paypal.com https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com; frame-src https://www.paypal.com https://*.paypal.com https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com; object-src 'none'; base-uri 'self';"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>Plata Tech Store · Celulares, laptops y tecnología en RD</title>
 <meta name="description" content="Tienda oficial Plata Tech Solutions S.R.L. en Santo Domingo. Celulares, laptops, tablets, cámaras de seguridad, accesorios. Originales, garantía, factura con NCF."/>
@@ -275,6 +283,16 @@ function renderCategories() {
     btn.addEventListener('click', () => {
       activeCategory = btn.dataset.cat;
       viewMode = 'auto';
+      if (activeCategory !== 'todos' && sortBy === 'default') {
+        sortBy = 'price-desc';
+        const ss = document.getElementById('sortSelect');
+        if (ss) ss.value = 'price-desc';
+      }
+      if (activeCategory === 'todos') {
+        sortBy = 'default';
+        const ss = document.getElementById('sortSelect');
+        if (ss) ss.value = 'default';
+      }
       renderCategories();
       renderProducts();
     });
@@ -288,6 +306,16 @@ function renderCategories() {
     sel.onchange = () => {
       activeCategory = sel.value;
       viewMode = 'auto';
+      if (activeCategory !== 'todos' && sortBy === 'default') {
+        sortBy = 'price-desc';
+        const ss = document.getElementById('sortSelect');
+        if (ss) ss.value = 'price-desc';
+      }
+      if (activeCategory === 'todos') {
+        sortBy = 'default';
+        const ss = document.getElementById('sortSelect');
+        if (ss) ss.value = 'default';
+      }
       renderCategories();
       renderProducts();
     };
@@ -363,7 +391,7 @@ function renderProducts() {
     titleEl.textContent = 'Explora por categoría';
     countEl.textContent = `${window.PRODUCTS.length} productos disponibles · agrupados por tipo`;
     grid.className = 'products-rows';
-    const HOME_CAT_ORDER = ['celulares','camaras','grabadores','alarmas','monitores','almacenamiento','laptops','tablets','audio','smartwatch','conectividad','impresoras','accesorios','seguridad','gaming','varios'];
+    const HOME_CAT_ORDER = ['celulares','camaras','grabadores','alarmas','monitores','almacenamiento','laptops','tablets','audio','smartwatch','conectividad','impresoras','herramientas','accesorios','seguridad','gaming','varios'];
     const cats = window.CATEGORIES
       .filter(c => c.id !== 'todos')
       .slice()
@@ -394,6 +422,11 @@ function renderProducts() {
       btn.addEventListener('click', () => {
         activeCategory = btn.dataset.cat;
         viewMode = 'auto';
+        if (sortBy === 'default') {
+          sortBy = 'price-desc';
+          const ss = document.getElementById('sortSelect');
+          if (ss) ss.value = 'price-desc';
+        }
         renderCategories();
         renderProducts();
         const head = document.querySelector('.products-head');
@@ -452,7 +485,14 @@ document.getElementById('viewFlatBtn').addEventListener('click', () => {
 /* ── Init ───────────────────────────────────────────── */
 const urlParams = new URLSearchParams(window.location.search);
 const urlCat = urlParams.get('cat');
-if (urlCat && window.CATEGORIES.some(c => c.id === urlCat)) activeCategory = urlCat;
+if (urlCat && window.CATEGORIES.some(c => c.id === urlCat)) {
+  activeCategory = urlCat;
+  if (activeCategory !== 'todos') {
+    sortBy = 'price-desc';
+    const ss = document.getElementById('sortSelect');
+    if (ss) ss.value = 'price-desc';
+  }
+}
 
 renderCategories();
 renderProducts();
