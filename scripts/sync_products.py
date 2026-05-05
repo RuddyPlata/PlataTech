@@ -346,7 +346,11 @@ def extract_images_by_row(xlsx_path: Path, out_dir: Path) -> dict:
     """Devuelve {row_1based: 'assets/img/.../file.jpg'} (path web relativo a shop/).
     Las imagenes se redimensionan a max 800px de lado mayor y se reencode JPEG q78."""
     if out_dir.exists():
-        shutil.rmtree(out_dir)
+        shutil.rmtree(out_dir, ignore_errors=True)
+        # Fallback para Windows donde rmtree puede fallar con subdirectorios bloqueados
+        if out_dir.exists():
+            import subprocess
+            subprocess.run(['cmd', '/c', 'rd', '/s', '/q', str(out_dir)], check=False)
     out_dir.mkdir(parents=True, exist_ok=True)
     z = zipfile.ZipFile(xlsx_path)
     names = z.namelist()
