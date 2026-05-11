@@ -1000,58 +1000,11 @@ async function placeOrder(totals) {
   location.href = `orden.html?n=${encodeURIComponent(order.id)}`;
 }
 
-let ppIsBlocked = false; // always re-verified server-side on each load
-
-function ppBlockedHtml() {
-  return `<div style="background:#fef2f2;border:1.5px solid #fecaca;border-radius:12px;padding:1.25rem;text-align:center;font-size:.88rem;color:#991b1b;line-height:1.6">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto .55rem;display:block"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
-    <b>Pagos bloqueados desde este dispositivo.</b><br/>
-    Se detectaron múltiples intentos fallidos.<br/>
-    Coordina tu pedido por <a href="https://wa.me/18494950959" target="_blank" style="color:#991b1b;font-weight:700">WhatsApp</a> o usa contra-entrega.
-  </div>`;
-}
-
-// Check block status — always asks server (real IP); fail CLOSED on network error
-async function ppCheckBlock() {
-  if (ppIsBlocked) return true;
-  try {
-    const { data } = await window.SB.functions.invoke('payment-guard', {
-      body: { action: 'check' }
-    });
-    if (data?.blocked) ppIsBlocked = true;
-    return !!data?.blocked;
-  } catch (e) {
-    ppIsBlocked = true; // fail closed — if guard unreachable, block PayPal
-    return true;
-  }
-}
-
-// Record a PayPal failure server-side (by real IP)
-async function ppRecordFail() {
-  try {
-    const { data } = await window.SB.functions.invoke('payment-guard', {
-      body: { action: 'fail', ua: navigator.userAgent.substring(0, 250) }
-    });
-    if (data?.blocked) ppIsBlocked = true;
-    return data || { fails: 1, blocked: false };
-  } catch (e) {
-    ppIsBlocked = true; // fail closed on network error
-    return { fails: 1, blocked: true };
-  }
-}
-
 let ppRendering = false;
 async function renderPayPal(totals) {
   const container = document.getElementById('paypalButtonsCart');
   if (!container || ppRendering) return;
   ppRendering = true;
-
-  const blocked = await ppCheckBlock();
-  if (blocked) {
-    container.innerHTML = ppBlockedHtml();
-    ppRendering = false;
-    return;
-  }
 
   container.innerHTML = '';
 
@@ -1160,14 +1113,13 @@ async function renderPayPal(totals) {
         });
       },
 
-      onError: async function(err) {
+      onCancel: function() {
+        // User closed the PayPal popup — nothing to do.
+      },
+
+      onError: function(err) {
         console.error('PayPal error:', err);
-        const result = await ppRecordFail();
-        if (result.blocked || ppIsBlocked) {
-          container.innerHTML = ppBlockedHtml();
-        } else {
-          alert(`Hubo un problema con el pago (intento ${result.fails} de 2). Verifica tu tarjeta e intenta de nuevo o usa contra-entrega.`);
-        }
+        alert('Hubo un problema con PayPal. Reintenta en unos segundos o usa contra-entrega.');
       }
     }).render('#paypalButtonsCart').then(() => { ppRendering = false; });
   } catch (e) {

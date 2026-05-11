@@ -766,26 +766,26 @@
   .svc-float-next { right: 1.5rem; }
   @media (max-width: 640px) { .svc-float-btn { display: none; } }
   .gl4-slide {
-    flex: 0 0 360px; scroll-snap-align: start;
+    flex: 0 0 320px; scroll-snap-align: start;
     opacity: 1 !important; transform: none !important;
   }
-  @media (min-width: 1024px) { .gl4-slide { flex: 0 0 440px; } }
+  @media (min-width: 1024px) { .gl4-slide { flex: 0 0 340px; } }
   @media (max-width: 1024px) {
     .svc-carousel-wrap { padding-inline: 0; }
     .gl4-overflow { padding-inline: 1.25rem; scroll-padding-left: 1.25rem; }
     .gl4-track { justify-content: flex-start; }
-    .gl4-slide { flex: 0 0 75vw; }
+    .gl4-slide { flex: 0 0 70vw; }
   }
   @media (max-width: 640px) {
-    .gl4-slide { flex: 0 0 70vw; }
+    .gl4-slide { flex: 0 0 78vw; }
   }
   .gl4-card {
     position: relative; min-height: 27rem;
     border-radius: .875rem; overflow: hidden;
     display: block;
   }
-  @media (min-width: 768px)  { .gl4-card { aspect-ratio: 5/4; min-height: auto; } }
-  @media (min-width: 1024px) { .gl4-card { aspect-ratio: 16/9; } }
+  @media (min-width: 768px)  { .gl4-card { aspect-ratio: 3/4; min-height: auto; } }
+  @media (min-width: 1024px) { .gl4-card { aspect-ratio: 4/5; } }
   .gl4-img {
     position: absolute; inset: 0;
     width: 100%; height: 100%;
@@ -843,6 +843,58 @@
   @media (max-width: 680px) {
     .gl4-header { flex-direction: column; align-items: flex-start; }
     .gl4-nav-btns { align-self: flex-end; }
+  }
+
+  /* Expand toggle button */
+  .svc-expand-row {
+    display: flex; justify-content: center;
+    margin-top: 2rem;
+  }
+  .svc-expand-btn {
+    display: inline-flex; align-items: center; gap: .55rem;
+    padding: .85rem 1.6rem; border-radius: 100px;
+    background: var(--white); color: var(--navy);
+    border: 1.5px solid var(--border);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: .88rem; font-weight: 600;
+    cursor: pointer;
+    transition: background .2s, border-color .2s, color .2s, transform .2s, box-shadow .2s;
+  }
+  .svc-expand-btn:hover {
+    background: var(--navy); border-color: var(--navy); color: var(--white);
+    transform: translateY(-2px); box-shadow: 0 6px 22px rgba(11,29,62,.18);
+  }
+  .svc-expand-btn .svc-expand-icon { transition: transform .3s ease; }
+  .services.expanded .svc-expand-btn .svc-expand-icon { transform: rotate(180deg); }
+
+  /* Expanded (brochure) grid */
+  .services.expanded .svc-carousel-wrap { padding-inline: 0; }
+  .services.expanded .svc-float-btn,
+  .services.expanded .gl4-dots-row { display: none; }
+  .services.expanded .gl4-overflow {
+    overflow: visible; scroll-snap-type: none;
+    padding-inline: 0;
+  }
+  .services.expanded .gl4-track {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-inline: 1.5rem;
+    justify-content: stretch;
+  }
+  .services.expanded .gl4-slide {
+    flex: initial; width: 100%; scroll-snap-align: none;
+  }
+  .services.expanded .gl4-card {
+    aspect-ratio: 3/4; min-height: auto;
+  }
+  .services.expanded .gl4-body-desc {
+    -webkit-line-clamp: unset; display: block; overflow: visible;
+  }
+  @media (min-width: 1024px) {
+    .services.expanded .gl4-card { aspect-ratio: 4/5; }
   }
 
   /* ── Circular Testimonials ───────────────────────────── */
@@ -1213,6 +1265,13 @@
   </div><!-- /svc-carousel-wrap -->
 
   <div class="gl4-dots-row" id="carouselDots"></div>
+
+  <div class="svc-expand-row">
+    <button type="button" class="svc-expand-btn" id="svcExpandBtn" aria-expanded="false" aria-controls="svcWrapper">
+      <span id="svcExpandLabel">Ver todos los servicios</span>
+      <svg class="svc-expand-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+  </div>
 
 </section>
 
@@ -1919,6 +1978,21 @@ document.querySelectorAll('.gl4-card[data-msg]').forEach(card => {
   if (nextBtn) nextBtn.addEventListener('click', () => wrapper.scrollBy({ left:  slideWidth(), behavior: 'smooth' }));
   wrapper.addEventListener('scroll', updateUI, { passive: true });
   updateUI();
+
+  const section = document.getElementById('servicios');
+  const expandBtn = document.getElementById('svcExpandBtn');
+  const expandLabel = document.getElementById('svcExpandLabel');
+  if (section && expandBtn && expandLabel) {
+    expandBtn.addEventListener('click', () => {
+      const isExpanded = section.classList.toggle('expanded');
+      expandBtn.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
+      expandLabel.textContent = isExpanded ? 'Mostrar menos' : 'Ver todos los servicios';
+      if (!isExpanded) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setTimeout(updateUI, 400);
+      }
+    });
+  }
 })();
 </script>
 
