@@ -11,10 +11,53 @@
 </script>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="Plata Tech Security - Camaras Hikvision ColorVu, alarmas, CCTV y control de acceso. Instalacion profesional en Santo Domingo."/>
+  <meta name="description" content="Cámaras Hikvision ColorVu, alarmas, portones automáticos y domótica en Santo Domingo. Instalación certificada, precios transparentes. Cotiza gratis."/>
+  <meta name="keywords" content="cámaras seguridad Santo Domingo, Hikvision ColorVu República Dominicana, alarmas residenciales RD, portón automático Santo Domingo, domótica smart home República Dominicana, control acceso biométrico RD, CCTV Santo Domingo"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://platatechs.com/security"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://platatechs.com/security"/>
+  <meta property="og:title" content="Seguridad & Automatización | Plata Tech Solutions | Santo Domingo"/>
+  <meta property="og:description" content="Cámaras Hikvision, alarmas, portones automáticos y domótica. Todo instalado y configurado en Santo Domingo, RD."/>
+  <meta property="og:image" content="https://platatechs.com/images/logo-platatech.png"/>
+  <meta property="og:locale" content="es_DO"/>
+  <meta property="og:site_name" content="Plata Tech Solutions SRL"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Seguridad & Automatización | Plata Tech | Santo Domingo"/>
+  <meta name="twitter:description" content="Cámaras Hikvision ColorVu, alarmas, portones automáticos y domótica en Santo Domingo, RD."/>
+  <meta name="twitter:image" content="https://platatechs.com/images/logo-platatech.png"/>
+  <meta name="geo.region" content="DO-01"/>
+  <meta name="geo.placename" content="Santo Domingo, República Dominicana"/>
   <link rel="icon" type="image/x-icon" href="images/pt.ico"/>
   <link rel="shortcut icon" href="images/pt.ico"/>
-  <title>Plata Tech Security | Seguridad Inteligente</title>
+  <title>Seguridad & Automatización | Plata Tech Solutions | Santo Domingo, RD</title>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Plata Tech Solutions SRL — Seguridad y Automatización",
+    "description": "Instalación de cámaras Hikvision, alarmas, portones automáticos y domótica en Santo Domingo, República Dominicana.",
+    "url": "https://platatechs.com/security",
+    "telephone": "+18494950959",
+    "email": "ruddy.plata@gmail.com",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Santo Domingo",
+      "addressCountry": "DO"
+    },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Servicios de Seguridad y Automatización",
+      "itemListElement": [
+        {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Cámaras de seguridad CCTV Hikvision ColorVu"}},
+        {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Alarmas y sensores inalámbricos Hikvision"}},
+        {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Control de acceso biométrico y RFID"}},
+        {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Portones automáticos deslizantes y batientes"}},
+        {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Domótica y casa inteligente"}}
+      ]
+    }
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700&family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'"/>
@@ -360,7 +403,7 @@
     border-bottom: 1px solid var(--border-b);
     padding: 2rem 0;
   }
-  .sbar-row { display: grid; grid-template-columns: repeat(4,1fr); }
+  .sbar-row { display: grid; grid-template-columns: repeat(5,1fr); }
   .sbar-item {
     display: flex; align-items: center; gap: .85rem;
     padding: 1rem 1.5rem;
@@ -702,10 +745,41 @@
   }
   .krcard-cta:hover { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(37,211,102,.42); }
 
+  /* ── AUTOMATION SERVICES (photo cards) */
+  .svc-overview { padding: 6rem 0 7rem; background: var(--navy-2); border-top: 1px solid var(--border-b); }
+  .svc-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; margin-top: 3.5rem; }
+  .svc-card { position: relative; border-radius: 16px; overflow: hidden; aspect-ratio: 3/4; background: #080f20; border: 1px solid var(--border-b); transition: transform .4s cubic-bezier(.16,1,.3,1); }
+  .svc-card:hover { transform: translateY(-8px); }
+  .svc-card:hover .svc-bg { transform: scale(1.08); }
+  .svc-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform .5s ease; }
+  .svc-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(5,14,30,.92) 0%, rgba(5,14,30,.4) 55%, transparent 100%); }
+  .svc-star { position: absolute; top: 1rem; right: 1rem; font-family: 'Space Grotesk', sans-serif; font-size: .6rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; background: linear-gradient(135deg, var(--gold), var(--gold-l)); color: var(--navy); padding: .25rem .65rem; border-radius: 100px; }
+  .svc-body { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem 1.25rem 1.25rem; }
+  .svc-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 1.1rem; color: var(--white); margin-bottom: .4rem; }
+  .svc-desc { font-size: .78rem; color: rgba(255,255,255,.72); line-height: 1.55; margin-bottom: .85rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .svc-tags { display: flex; flex-wrap: wrap; gap: .3rem; margin-bottom: .85rem; }
+  .svc-tag { font-size: .65rem; font-family: 'Space Grotesk', sans-serif; font-weight: 600; color: var(--blue-3); background: var(--blue-pale); border: 1px solid var(--blue-border); padding: .18rem .5rem; border-radius: 5px; }
+  .svc-cta { display: inline-flex; align-items: center; gap: .4rem; font-size: .82rem; font-weight: 700; color: var(--gold-l); transition: gap .2s, color .2s; }
+  .svc-cta:hover { gap: .75rem; color: var(--white); }
+
+  /* ── FAQ */
+  .faq-sec { padding: 6rem 0 5rem; background: var(--navy); border-top: 1px solid var(--border-b); }
+  .faq-wrap { max-width: 720px; margin: 3.5rem auto 0; display: flex; flex-direction: column; gap: .75rem; }
+  .faq-item { background: rgba(255,255,255,.04); border: 1px solid var(--border-b); border-radius: var(--r); overflow: hidden; transition: border-color .3s; }
+  .faq-item.open { border-color: var(--blue-border); }
+  .faq-q { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.2rem 1.5rem; cursor: pointer; user-select: none; }
+  .faq-q-text { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: .95rem; color: var(--white); }
+  .faq-icon { width: 24px; height: 24px; border-radius: 50%; background: var(--blue-pale); border: 1px solid var(--blue-border); display: flex; align-items: center; justify-content: center; color: var(--blue-3); flex-shrink: 0; transition: transform .3s, background .3s; }
+  .faq-item.open .faq-icon { transform: rotate(45deg); background: var(--blue-2); color: #fff; border-color: var(--blue-2); }
+  .faq-a { max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+  .faq-item.open .faq-a { max-height: 300px; }
+  .faq-a-inner { padding: 0 1.5rem 1.25rem; font-size: .88rem; color: var(--text-mid); line-height: 1.7; }
+
   /* ── Responsive ─────────────────────────────────────────── */
   @media (max-width: 1024px) {
     .why-grid { grid-template-columns: repeat(2,1fr); }
     .kr-grid-3 { grid-template-columns: repeat(2, 1fr); }
+    .svc-grid { grid-template-columns: repeat(2,1fr); }
   }
   @media (max-width: 860px) {
     .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
@@ -719,6 +793,7 @@
     .products-grid { grid-template-columns: 1fr; }
     .why-grid      { grid-template-columns: 1fr; }
     .kr-grid, .kr-grid-3 { grid-template-columns: 1fr; }
+    .svc-grid      { grid-template-columns: 1fr; }
     .hero-stats    { grid-template-columns: repeat(2,1fr); }
     .cta-inner     { padding: 2.5rem 1.5rem; }
     .hero-btns     { flex-direction: column; }
@@ -728,6 +803,29 @@
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
   }
+
+  /* ── TEAM SECTION */
+  .team-sec { padding: 6rem 0; background: var(--navy-2); border-top: 1px solid var(--border-b); }
+  .team-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; max-width: 820px; margin: 3.5rem auto 0; }
+  .team-card { display: flex; flex-direction: column; align-items: center; text-align: center; background: rgba(255,255,255,.04); border: 1px solid var(--border-b); border-radius: 20px; padding: 2.5rem 2rem; transition: border-color .3s, background .3s; }
+  .team-card:hover { border-color: var(--gold-border); background: rgba(255,255,255,.07); }
+  .team-photo-wrap { width: 220px; height: 220px; border-radius: 50%; overflow: hidden; border: 2.5px solid var(--gold-border); box-shadow: 0 0 0 8px rgba(200,146,42,.08); margin-bottom: 1.5rem; flex-shrink: 0; }
+  .team-photo-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+  .team-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 1.15rem; color: var(--white); margin-bottom: .3rem; }
+  .team-role { font-family: 'Space Grotesk', sans-serif; font-size: .7rem; font-weight: 600; letter-spacing: .13em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+  .team-bio { font-size: .86rem; color: var(--text-mid); line-height: 1.7; }
+  @media (max-width: 640px) { .team-grid { grid-template-columns: 1fr; } }
+
+  /* ── LIGHT SECTIONS */
+  .sec-light { background: #f4f6fb; border-top-color: rgba(11,29,62,.09); }
+  .sec-light .h2 { color: #0b1d3e; }
+  .sec-light .sec-sub { color: rgba(11,29,62,.56); }
+  .sec-light .faq-item { background: #fff; border-color: rgba(11,29,62,.1); }
+  .sec-light .faq-item.open { border-color: var(--gold-border); }
+  .sec-light .faq-q-text { color: #0b1d3e; }
+  .sec-light .faq-a-inner { color: rgba(11,29,62,.62); }
+  .sec-light .faq-icon { background: var(--gold-pale); border-color: var(--gold-border); color: var(--gold-l); }
+  .sec-light .faq-item.open .faq-icon { background: var(--gold); color: var(--navy); border-color: var(--gold); }
   </style>
 </head>
 <body>
@@ -790,15 +888,13 @@
     <div>
       <div class="hero-badge" id="heroBadge">
         <span class="badge-dot"></span>
-        Lider en Seguridad Electronica
+        Seguridad + Automatización — Santo Domingo
       </div>
       <h1 class="h1 hero-title" id="heroTitle">
-        Seguridad<br/><em>inteligente</em><br/>para tu hogar<br/>y negocio
+        Protegida.<br/>Automatizada.<br/><em>Bajo control.</em>
       </h1>
       <p class="hero-desc" id="heroDesc">
-        Instalacion profesional de camaras Hikvision ColorVu, alarmas
-        y CCTV. Vision a color 24/7, acceso remoto y soporte tecnico
-        garantizado en Santo Domingo.
+        Cámaras Hikvision ColorVu, alarmas, portones automáticos y domótica. Instalación certificada. Un solo equipo para toda tu propiedad en Santo Domingo.
       </p>
       <div class="hero-btns" id="heroBtns">
         <a href="https://wa.me/18494950959?text=Hola%2C%20quiero%20cotizar%20un%20sistema%20de%20seguridad" target="_blank" class="btn btn-wa js-magnetic">
@@ -816,9 +912,9 @@
         <div class="hstat-desc">ColorVu, visión nocturna a color 24/7</div>
       </div>
       <div class="hstat hstat-feat">
-        <svg class="hstat-ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        <div class="hstat-title">Sensores Inteligentes</div>
-        <div class="hstat-desc">Movimiento, humo, CO2, puertas y ventanas</div>
+        <svg class="hstat-ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <div class="hstat-title">Portones Automáticos</div>
+        <div class="hstat-desc">Control por app, mando y teclado. Backup para apagones</div>
       </div>
       <div class="hstat hstat-feat">
         <span class="hstat-badge">Opcional</span>
@@ -827,10 +923,9 @@
         <div class="hstat-desc">Central de alarmas con respuesta inmediata</div>
       </div>
       <div class="hstat hstat-feat">
-        <span class="hstat-badge">Opcional</span>
-        <svg class="hstat-ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 5-3.5 9-9 9s-9-4-9-9 3.5-9 9-9c2.5 0 4.8.8 6.6 2.3"/></svg>
-        <div class="hstat-title">Garantía Extendida</div>
-        <div class="hstat-desc">Cobertura ampliada sobre equipos e instalación</div>
+        <svg class="hstat-ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <div class="hstat-title">Domótica y Smart Home</div>
+        <div class="hstat-desc">Luces, A/C y cortinas controlados desde el celular</div>
       </div>
     </div>
   </div>
@@ -878,7 +973,16 @@
         </div>
         <div>
           <div class="sbar-name">Monitoreo Remoto</div>
-          <div class="sbar-sub">App movil incluida</div>
+          <div class="sbar-sub">App móvil incluida</div>
+        </div>
+      </div>
+      <div class="sbar-item" style="border-right:none;">
+        <div class="sbar-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div>
+          <div class="sbar-name">Domótica</div>
+          <div class="sbar-sub">Luces, A/C y portones</div>
         </div>
       </div>
     </div>
@@ -1204,12 +1308,46 @@
   </div>
 </section>
 
+<!-- ── AUTOMATIZACIÓN: Servicios ──────────────────────────── -->
+<section class="svc-overview sec-light">
+  <div class="container">
+    <div class="sec-head" data-reveal>
+      <p class="label">Automatización</p>
+      <h2 class="h2">Tu propiedad bajo<br/>control desde el celular</h2>
+      <p class="sec-sub">Portones automáticos, domótica y climatización inteligente. Instalamos, configuramos y te enseñamos todo antes de irnos.</p>
+    </div>
+    <div class="svc-grid" style="grid-template-columns:1fr 1fr;max-width:780px;margin-left:auto;margin-right:auto;">
+      <div class="svc-card">
+        <img class="svc-bg" src="Automatizacion/a21d8345-99a6-47ae-b56c-59a258e76876.png" alt="Portón automático deslizante moderno con motor"/>
+        <div class="svc-overlay"></div>
+        <span class="svc-star">Más solicitado</span>
+        <div class="svc-body">
+          <div class="svc-name">Portones Automáticos</div>
+          <div class="svc-desc">Motor para portones deslizantes y batientes. Control por mando, celular y teclado. Con respaldo para apagones — el portón siempre funciona.</div>
+          <div class="svc-tags"><span class="svc-tag">Deslizante</span><span class="svc-tag">Batiente</span><span class="svc-tag">WiFi</span><span class="svc-tag">Backup apagón</span></div>
+          <a href="https://wa.me/18494950959?text=Hola%2C%20me%20interesa%20cotizar%20un%20port%C3%B3n%20autom%C3%A1tico." target="_blank" class="svc-cta">Cotizar →</a>
+        </div>
+      </div>
+      <div class="svc-card">
+        <img class="svc-bg" src="Automatizacion/d2c88362-7240-468e-b343-4b8e6f404283.jpg" alt="App smart home controlando iluminación LED de casa de noche"/>
+        <div class="svc-overlay"></div>
+        <div class="svc-body">
+          <div class="svc-name">Domótica y Smart Home</div>
+          <div class="svc-desc">Automatización de luces, A/C y cortinas. Control total desde una app. Escenas, horarios y ahorro de energía automático sin cambiar hábitos.</div>
+          <div class="svc-tags"><span class="svc-tag">Luces</span><span class="svc-tag">A/C</span><span class="svc-tag">Alexa</span><span class="svc-tag">Google Home</span></div>
+          <a href="https://wa.me/18494950959?text=Hola%2C%20me%20interesa%20cotizar%20dom%C3%B3tica%20para%20mi%20propiedad." target="_blank" class="svc-cta">Cotizar →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ── WHY US ─────────────────────────────────────────────── -->
 <section id="nosotros" class="why">
   <div class="container">
     <div class="sec-head" data-reveal>
-      <p class="label">Por Que Elegirnos</p>
-      <h2 class="h2">El equipo que protege<br/>lo que mas te importa</h2>
+      <p class="label">Por qué elegirnos</p>
+      <h2 class="h2">Un solo equipo para<br/>proteger y automatizar</h2>
     </div>
     <div class="why-grid">
       <div class="wcard">
@@ -1246,6 +1384,74 @@
   </div>
 </section>
 
+<!-- ── TEAM ──────────────────────────────────────────────── -->
+<section class="team-sec">
+  <div class="container">
+    <div class="sec-head" data-reveal>
+      <p class="label">El equipo</p>
+      <h2 class="h2">La persona detrás<br/>de cada proyecto</h2>
+      <p class="sec-sub">Sin intermediarios. Si hay un problema, tienes una persona — con nombre y apellido — que responde.</p>
+    </div>
+    <div class="team-grid" style="grid-template-columns:1fr;max-width:400px;">
+      <div class="team-card" data-reveal>
+        <div class="team-photo-wrap">
+          <img src="Remodelacion/CEO%20Ruddy%20Plata.png" alt="Ing. Ruddy Plata — CEO Plata Tech Solutions"/>
+        </div>
+        <div class="team-name">Ing. Ruddy Plata</div>
+        <div class="team-role">CEO & Fundador · Plata Tech Solutions</div>
+        <p class="team-bio">Ingeniero y fundador de Plata Tech Solutions SRL. Supervisa cada instalación y está disponible directamente por WhatsApp. Empresa registrada, factura NCF, garantía real.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ ───────────────────────────────────────────────── -->
+<section class="faq-sec sec-light">
+  <div class="container">
+    <div class="sec-head" data-reveal>
+      <p class="label">Preguntas frecuentes</p>
+      <h2 class="h2">Lo que siempre preguntan</h2>
+    </div>
+    <div class="faq-wrap">
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-q-text">¿Las cámaras Hikvision ColorVu graban en color de noche?</span>
+          <div class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">Sí. Las cámaras ColorVu tienen un LED suplementario blanco que ilumina la escena en color incluso sin luz ambiental. A diferencia de las cámaras IR tradicionales que solo graban en blanco y negro de noche, ColorVu captura el color de ropa, vehículos y objetos — lo que hace mucho más útil el video para identificar personas.</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-q-text">¿Cuántas cámaras necesito para mi casa o negocio?</span>
+          <div class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">Depende del espacio. Una residencia estándar normalmente cubre bien con 4 cámaras (entrada principal, portón, patio, área de parqueo). Un negocio pequeño puede necesitar 4–8 según las áreas críticas. Hacemos una visita gratuita para recomendar la cantidad correcta — sin intentar venderte más de lo que necesitas.</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-q-text">¿El portón automático funciona en los apagones?</span>
+          <div class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">Sí, todos los motores que instalamos incluyen batería de respaldo interna. En caso de apagón, el motor sigue funcionando con el control remoto por varias horas. También hay apertura manual de emergencia. En RD esto no es opcional — es parte del estándar de nuestra instalación.</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-q-text">¿Puedo ver las cámaras y controlar el portón desde el celular?</span>
+          <div class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">Sí a ambas. Las cámaras Hikvision se monitorean en tiempo real desde la app Hik-Connect, con notificaciones de movimiento. Los portones WiFi se abren y cierran desde la app del motor, y puedes ver el registro de actividad. Te configuramos todo y te explicamos cómo usar todo antes de irnos.</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-q-text">¿Hacen los dos — seguridad y automatización — en un mismo proyecto?</span>
+          <div class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">Sí, y de hecho es lo que más recomendamos. Cámaras + alarmas + portón automático + domótica en un solo proyecto significa una sola visita de diagnóstico, un presupuesto integrado y una instalación coordinada. Nada de coordinar contratistas diferentes. Todo en un solo equipo.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ── CTA ───────────────────────────────────────────────── -->
 <section id="contacto" class="cta-sec">
   <div class="cta-orb cta-orb-1"></div>
@@ -1275,16 +1481,16 @@
 <footer class="footer">
   <div class="container footer-inner">
     <div class="footer-logo">
-      <img src="images/logo-platatech.webp" alt="Plata Tech Security" style="height:32px;width:auto;object-fit:contain;"/>
-      Plata Tech Security
+      <img src="images/logo-platatech.webp" alt="Plata Tech Solutions" style="height:32px;width:auto;object-fit:contain;"/>
+      Plata Tech Solutions SRL
     </div>
     <div class="footer-links">
       <a href="index.html">PlataTechs.com</a>
-      <a href="#productos">Productos</a>
+      <a href="#kits">Kits de Seguridad</a>
       <a href="https://instagram.com/PlataTec" target="_blank">@PlataTec</a>
       <a href="#contacto">Contacto</a>
     </div>
-    <p class="footer-copy">&copy; 2025 Plata Tech Solutions - Santo Domingo, RD</p>
+    <p class="footer-copy">&copy; 2025 Plata Tech Solutions SRL &mdash; Santo Domingo, RD</p>
   </div>
 </footer>
 
@@ -1389,6 +1595,24 @@ document.querySelectorAll('.js-magnetic').forEach(btn => {
   });
   btn.addEventListener('mouseleave', () => {
     gsap.to(btn, { x: 0, y: 0, duration: .65, ease: 'elastic.out(1,.5)' });
+  });
+});
+
+/* ── Svc cards stagger ──────────────────────────────── */
+gsap.utils.toArray('.svc-card').forEach((el, i) => {
+  gsap.fromTo(el, { opacity: 0, y: 50 }, {
+    opacity: 1, y: 0, duration: .85, ease: 'power3.out', delay: i * .12,
+    scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
+  });
+});
+
+/* ── FAQ accordion ──────────────────────────────────── */
+document.querySelectorAll('.faq-q').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
   });
 });
 

@@ -414,6 +414,10 @@
     display: grid; grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem; margin-top: 3.5rem;
   }
+  .div-grid-brands { grid-template-columns: repeat(2, 1fr); max-width: 740px; margin-top: 0; }
+  .div-brands-sep { margin: 2.5rem 0 1.75rem; display: flex; align-items: center; gap: 1rem; }
+  .div-brands-sep::before, .div-brands-sep::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .div-brands-label { font-family: 'Space Grotesk', sans-serif; font-size: .68rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap; }
   .div-card {
     background: var(--white); border: 1px solid var(--border);
     border-radius: 18px; overflow: hidden;
@@ -631,6 +635,7 @@
   @media (max-width: 680px) {
     .svc-grid  { grid-template-columns: 1fr; }
     .div-grid  { grid-template-columns: 1fr; }
+    .div-grid-brands { grid-template-columns: 1fr; }
     .stats-row { grid-template-columns: repeat(2,1fr); }
     .stat { border-right: none; border-bottom: 1px solid var(--border); padding: 1rem; }
     .stat:nth-child(2n) { border-right: none; }
@@ -821,6 +826,13 @@
   }
   .gl4-arrow-icon { transition: transform .25s; }
   .gl4-card:hover .gl4-arrow-icon { transform: translateX(5px); }
+  .gl4-div-link {
+    display: inline-flex; align-items: center; gap: .3rem;
+    margin-top: .55rem; font-size: .72rem; font-weight: 600;
+    color: rgba(255,255,255,.48); text-decoration: none;
+    transition: color .2s; line-height: 1;
+  }
+  .gl4-div-link:hover { color: rgba(255,255,255,.9); }
   .gl4-dots-row { display: flex; justify-content: center; margin-top: 2rem; gap: .5rem; }
   .gl4-dot {
     width: 8px; height: 8px; border-radius: 50%;
@@ -1110,6 +1122,7 @@
             <div class="gl4-body-title">Electricidad Residencial y Comercial</div>
             <div class="gl4-body-desc">Instalaciónes eléctricas completas para casas, negocios y edificios. Tableros, cableado, tomas y emergencias.</div>
             <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+            <a class="gl4-div-link" href="energia.html" onclick="event.stopPropagation()">División Energía →</a>
           </div>
         </div>
       </div>
@@ -1123,6 +1136,7 @@
             <div class="gl4-body-title">Aire Acondicionado</div>
             <div class="gl4-body-desc">Instalación, mantenimiento y reparación de sistemas split, cassette y central para cualquier espacio.</div>
             <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+            <a class="gl4-div-link" href="energia.html" onclick="event.stopPropagation()">División Energía →</a>
           </div>
         </div>
       </div>
@@ -1136,6 +1150,7 @@
             <div class="gl4-body-title">Instalación de Inversores</div>
             <div class="gl4-body-desc">Energia sin interrupciones. Instalamos inversores y sistemas de baterias de todas las marcas para hogar y negocio.</div>
             <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+            <a class="gl4-div-link" href="energia.html" onclick="event.stopPropagation()">División Energía →</a>
           </div>
         </div>
       </div>
@@ -1149,6 +1164,7 @@
             <div class="gl4-body-title">Redes Privadas</div>
             <div class="gl4-body-desc">Redes LAN/WiFi para hogares y empresas. Configuración de VPN, routers, switches y puntos de acceso profesionales.</div>
             <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+            <a class="gl4-div-link" href="redes.html" onclick="event.stopPropagation()">División Redes →</a>
           </div>
         </div>
       </div>
@@ -1162,6 +1178,7 @@
             <div class="gl4-body-title">Portones Electricos</div>
             <div class="gl4-body-desc">Portones corredizos y abatibles con control por mando, app móvil o huella digital. Instalación y automatización.</div>
             <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+            <a class="gl4-div-link" href="automatizacion.html" onclick="event.stopPropagation()">División Automatización →</a>
           </div>
         </div>
       </div>
@@ -1175,6 +1192,7 @@
             <div class="gl4-body-title">Domótica y Automatización</div>
             <div class="gl4-body-desc">Control inteligente desde tu celular. Luces, climatizacion, seguridad y mas integrados en un solo sistema Smart Home.</div>
             <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+            <a class="gl4-div-link" href="automatizacion.html" onclick="event.stopPropagation()">División Automatización →</a>
           </div>
         </div>
       </div>
@@ -1188,6 +1206,7 @@
             <div class="gl4-body-title">Remodelación de Interiores</div>
             <div class="gl4-body-desc">Espacios transformados con PVC, sheetrock y drywall. Cielos rasos, divisiones y acabados de alta calidad.</div>
             <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+            <a class="gl4-div-link" href="remodelacion.html" onclick="event.stopPropagation()">División Remodelación →</a>
           </div>
         </div>
       </div>
@@ -1201,6 +1220,7 @@
             <div class="gl4-body-title">Paginas Web y Software</div>
             <div class="gl4-body-desc">Sitios web profesionales, tiendas en linea y aplicaciones a medida que hacen crecer tu negocio.</div>
             <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+            <a class="gl4-div-link" href="digital.html" onclick="event.stopPropagation()">División Digital →</a>
           </div>
         </div>
       </div>
@@ -1214,6 +1234,7 @@
             <div class="gl4-body-title">Servidores e Infraestructura IT</div>
             <div class="gl4-body-desc">Instalación y administración de servidores físicos y virtuales. Infraestructura IT completa para empresas.</div>
             <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+            <a class="gl4-div-link" href="digital.html" onclick="event.stopPropagation()">División Digital →</a>
           </div>
         </div>
       </div>
@@ -1227,6 +1248,7 @@
             <div class="gl4-body-title">Inteligencia Artificial para tu Negocio</div>
             <div class="gl4-body-desc">Chatbots 24/7, automatización de procesos y análisis de datos para generar ventajas competitivas reales.</div>
             <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+            <a class="gl4-div-link" href="digital.html" onclick="event.stopPropagation()">División Digital →</a>
           </div>
         </div>
       </div>
@@ -1240,6 +1262,7 @@
             <div class="gl4-body-title">Sheetrock y Drywall</div>
             <div class="gl4-body-desc">Divisiones, tabiques y cielos rasos en sistema drywall para casas, locales y edificios. Acabados limpios, rápidos y de larga duración.</div>
             <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+            <a class="gl4-div-link" href="remodelacion.html" onclick="event.stopPropagation()">División Remodelación →</a>
           </div>
         </div>
       </div>
@@ -1253,6 +1276,7 @@
             <div class="gl4-body-title">Pintura Profesional</div>
             <div class="gl4-body-desc">Pintura de interiores y exteriores para casas, locales y edificios. Maquinaria de última generación para aplicación con pistola y acabados impecables.</div>
             <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+            <a class="gl4-div-link" href="remodelacion.html" onclick="event.stopPropagation()">División Remodelación →</a>
           </div>
         </div>
       </div>
@@ -1425,47 +1449,166 @@
   <div class="container">
     <div class="section-header" data-reveal>
       <p class="label">Nuestras Divisiones</p>
-      <h2 class="h2">Tres marcas especializadas</h2>
-      <p class="section-sub">Ademas de nuestros servicios generales, operamos divisiones especializadas para seguridad electronica, plataforma automotriz y gadgets.</p>
+      <h2 class="h2">Seis divisiones, un solo equipo</h2>
+      <p class="section-sub">Tecnología Digital es nuestra especialidad principal. Las demás divisiones completan la oferta integral de Plata Tech — todas bajo la misma empresa registrada con garantía incluida.</p>
     </div>
 
+    <!-- 6 Plata Tech service divisions -->
     <div class="div-grid">
 
-      <!-- Plata Tech Security -->
-      <div class="div-card js-tilt" data-href="security.html">
-        <div class="div-stripe" style="background:linear-gradient(90deg,#1e50d4,#3b6ef6);"></div>
+      <!-- Tecnología Digital — PRIMERO (fuerte principal) -->
+      <div class="div-card js-tilt" data-href="digital.html">
+        <div class="div-stripe" style="background:linear-gradient(90deg,#059669,#10b981);"></div>
         <div class="div-body">
           <div class="div-head">
-            <img src="images/logo-platatech.webp" alt="Plata Tech Security" style="height:60px;width:auto;object-fit:contain;"/>
-            <span class="div-badge">Activo</span>
+            <div class="div-icon" style="background:rgba(5,150,105,.12);border:1px solid rgba(5,150,105,.28);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            </div>
+            <span class="div-badge" style="background:rgba(5,150,105,.15);color:#059669;border-color:rgba(5,150,105,.35);">Nuestro Fuerte</span>
           </div>
-          <div class="div-name">Plata Tech Security</div>
-          <div class="div-tagline" style="color:#1e50d4;">Protección Inteligente 24/7</div>
-          <p class="div-desc">Cámaras Hikvision ColorVu, alarmas, CCTV y control de acceso. Instalación certificada para hogares y negocios.</p>
+          <div class="div-name">Tecnología Digital</div>
+          <div class="div-tagline" style="color:#059669;">Web · Software · IA · Servidores</div>
+          <p class="div-desc">Páginas web, sistemas a medida e inteligencia artificial para negocios en Santo Domingo. Tu código, tu dominio, soporte incluido.</p>
           <div class="div-btns">
-            <a href="security.html" class="div-btn" style="background:#1e50d4;">
-              Ver cotizaciónes
+            <a href="digital.html" class="div-btn" style="background:#059669;">
+              Ver servicios
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-            <a href="https://www.instagram.com/platatec/" target="_blank" rel="noopener" class="div-btn-ig">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-              Instagram
             </a>
           </div>
         </div>
       </div>
+
+      <!-- Remodelación -->
+      <div class="div-card js-tilt" data-href="remodelacion.html">
+        <div class="div-stripe" style="background:linear-gradient(90deg,#c8922a,#e6aa3c);"></div>
+        <div class="div-body">
+          <div class="div-head">
+            <div class="div-icon" style="background:rgba(200,146,42,.12);border:1px solid rgba(200,146,42,.28);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c8922a" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <span class="div-badge">Activo</span>
+          </div>
+          <div class="div-name">Remodelación</div>
+          <div class="div-tagline" style="color:#c8922a;">Pintura · Cielos Rasos · Sheetrock</div>
+          <p class="div-desc">La única pintura a pistola profesional en Santo Domingo. Interiores, exteriores, cielos rasos y PVC. Entrega limpia, siempre.</p>
+          <div class="div-btns">
+            <a href="remodelacion.html" class="div-btn" style="background:#c8922a;">
+              Ver servicios
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Energía -->
+      <div class="div-card js-tilt" data-href="energia.html">
+        <div class="div-stripe" style="background:linear-gradient(90deg,#e07b14,#f59e3a);"></div>
+        <div class="div-body">
+          <div class="div-head">
+            <div class="div-icon" style="background:rgba(224,123,20,.12);border:1px solid rgba(224,123,20,.28);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e07b14" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
+            <span class="div-badge">Activo</span>
+          </div>
+          <div class="div-name">Energía</div>
+          <div class="div-tagline" style="color:#e07b14;">Eléctrica · Inversores · A/C</div>
+          <p class="div-desc">Electricidad residencial y comercial, instalación de inversores y baterías, aire acondicionado y emergencias eléctricas.</p>
+          <div class="div-btns">
+            <a href="energia.html" class="div-btn" style="background:#e07b14;">
+              Ver servicios
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Automatización -->
+      <div class="div-card js-tilt" data-href="automatizacion.html">
+        <div class="div-stripe" style="background:linear-gradient(90deg,#7c3aed,#a78bfa);"></div>
+        <div class="div-body">
+          <div class="div-head">
+            <div class="div-icon" style="background:rgba(124,58,237,.12);border:1px solid rgba(124,58,237,.28);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M8.46 8.46a5 5 0 0 0 0 7.07"/></svg>
+            </div>
+            <span class="div-badge">Activo</span>
+          </div>
+          <div class="div-name">Automatización</div>
+          <div class="div-tagline" style="color:#7c3aed;">Portones · Domótica · Smart Home</div>
+          <p class="div-desc">Portones automáticos, domótica y control inteligente del hogar. Controla tu propiedad desde el celular, con o sin internet.</p>
+          <div class="div-btns">
+            <a href="automatizacion.html" class="div-btn" style="background:#7c3aed;">
+              Ver servicios
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seguridad -->
+      <div class="div-card js-tilt" data-href="security.html">
+        <div class="div-stripe" style="background:linear-gradient(90deg,#1e50d4,#3b6ef6);"></div>
+        <div class="div-body">
+          <div class="div-head">
+            <div class="div-icon" style="background:rgba(30,80,212,.12);border:1px solid rgba(30,80,212,.28);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1e50d4" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <span class="div-badge">Activo</span>
+          </div>
+          <div class="div-name">Seguridad</div>
+          <div class="div-tagline" style="color:#1e50d4;">Cámaras · Alarmas · Control de Acceso</div>
+          <p class="div-desc">Cámaras Hikvision ColorVu, alarmas, CCTV, portones y control de acceso. Instalación certificada para hogares y negocios.</p>
+          <div class="div-btns">
+            <a href="security.html" class="div-btn" style="background:#1e50d4;">
+              Ver servicios
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Redes -->
+      <div class="div-card js-tilt" data-href="redes.html">
+        <div class="div-stripe" style="background:linear-gradient(90deg,#0891b2,#22d3ee);"></div>
+        <div class="div-body">
+          <div class="div-head">
+            <div class="div-icon" style="background:rgba(8,145,178,.12);border:1px solid rgba(8,145,178,.28);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0891b2" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20" stroke-linecap="round" stroke-width="3"/></svg>
+            </div>
+            <span class="div-badge">Activo</span>
+          </div>
+          <div class="div-name">Redes & Conectividad</div>
+          <div class="div-tagline" style="color:#0891b2;">WiFi · Cableado · CCTV IP</div>
+          <p class="div-desc">Redes WiFi empresariales, cableado estructurado, puntos de acceso y conectividad confiable para negocios y residencias.</p>
+          <div class="div-btns">
+            <a href="redes.html" class="div-btn" style="background:#0891b2;">
+              Ver servicios
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+    <!-- Marcas del ecosistema -->
+    <div class="div-brands-sep">
+      <div class="div-brands-label">Marcas del ecosistema</div>
+    </div>
+
+    <div class="div-grid div-grid-brands">
 
       <!-- MekaFix -->
       <div class="div-card js-tilt" data-href="https://mekafix.com">
         <div class="div-stripe" style="background:linear-gradient(90deg,#ea580c,#f97316);"></div>
         <div class="div-body">
           <div class="div-head">
-            <img src="images/logo-mekafix.jpg" alt="MekaFix" style="height:60px;width:auto;object-fit:contain;"/>
+            <img src="images/logo-mekafix.jpg" alt="MekaFix" style="height:52px;width:auto;object-fit:contain;"/>
             <span class="div-badge">Beta</span>
           </div>
           <div class="div-name">MekaFix</div>
-          <div class="div-tagline" style="color:#ea580c;">Tu mecanico en un clic</div>
-          <p class="div-desc">Plataforma digital que conecta propietarios de vehiculos con mecanicos certificados. IA para diagnostico, marketplace y citas online.</p>
+          <div class="div-tagline" style="color:#ea580c;">Tu mecánico en un clic</div>
+          <p class="div-desc">Plataforma digital que conecta propietarios de vehículos con mecánicos certificados. IA para diagnóstico, marketplace y citas online.</p>
           <div class="div-btns">
             <a href="https://mekafix.com" target="_blank" rel="noopener" class="div-btn" style="background:#ea580c;">
               Visitar mekafix.com
@@ -1484,11 +1627,11 @@
         <div class="div-stripe" style="background:linear-gradient(90deg,#0055ff,#3378ff);"></div>
         <div class="div-body">
           <div class="div-head">
-            <img src="images/logo-ug.webp" alt="UltimoGadget" style="height:60px;width:auto;object-fit:contain;"/>
+            <img src="images/logo-ug.webp" alt="UltimoGadget" style="height:52px;width:auto;object-fit:contain;"/>
             <span class="div-badge">Activo</span>
           </div>
           <div class="div-name">UltimoGadget</div>
-          <div class="div-tagline" style="color:#0055ff;">Tech Store & Reparacion</div>
+          <div class="div-tagline" style="color:#0055ff;">Tech Store & Reparación</div>
           <p class="div-desc">Celulares, laptops, auriculares, accesorios y drones. Servicio técnico profesional para dispositivos móviles y electrónicos.</p>
           <div class="div-btns">
             <a href="ultimogadget.html" class="div-btn" style="background:#0055ff;">
@@ -1626,6 +1769,7 @@
       <a href="#divisiones">Divisiones</a>
       <a href="shop/index.html">Tienda</a>
       <a href="security.html">Security</a>
+      <a href="digital.html">Digital</a>
       <a href="#contacto">Contacto</a>
     </div>
     <p class="footer-copy">&copy; 2025 PlataTechs.com - Santo Domingo, RD</p>
@@ -2033,10 +2177,17 @@ document.querySelectorAll('.gl4-card[data-msg]').forEach(card => {
     '    uv+=.1*cos(i*vec2(.1+.01*i,.8)+i*i+T*.5+.1*uv.x);',
     '    vec2 p=uv;',
     '    float d=length(p);',
-    '    vec3 tint=0.65+0.55*vec3(sin(i*0.7),sin(i*0.7+2.094),sin(i*0.7+4.188));',
+    '    vec3 dc;',
+    '    if(i<3.0)dc=vec3(0.902,0.667,0.235);',
+    '    else if(i<5.0)dc=vec3(0.961,0.620,0.227);',
+    '    else if(i<7.0)dc=vec3(0.655,0.545,0.980);',
+    '    else if(i<9.0)dc=vec3(0.376,0.565,1.000);',
+    '    else if(i<11.0)dc=vec3(0.133,0.827,0.933);',
+    '    else dc=vec3(0.020,0.733,0.408);',
+    '    vec3 tint=mix(dc,vec3(1.0),0.22);',
     '    col+=.00125/d*tint*(sin(i*0.7)+1.8);',
     '    float b=noise(i+p+bg*1.731);',
-    '    vec3 tint2=0.6+0.55*vec3(sin(i*0.9+1.2),sin(i*0.9+3.3),sin(i*0.9+5.4));',
+    '    vec3 tint2=dc*1.1;',
     '    col+=.002*b*tint2/length(max(p,vec2(b*p.x*.02,p.y)));',
     '    col=mix(col,vec3(bg*.005,bg*.035,bg*.26),d);',
     '  }',

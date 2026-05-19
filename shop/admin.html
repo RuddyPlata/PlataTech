@@ -190,6 +190,18 @@ table.t tr:hover td{background:rgba(20,71,255,.018)}
 .fb-rec.no{background:#fef2f2;color:#991b1b;border:1px solid rgba(185,28,28,.2)}
 .star-row{display:flex;align-items:center;gap:.2rem}
 
+/* Quote status pills */
+.s-borrador{background:#f3f4f6;color:#374151;border:1px solid rgba(55,65,81,.2)}
+.s-enviada{background:#eff6ff;color:#1d4ed8;border:1px solid rgba(29,78,216,.2)}
+.s-aceptada{background:#ecfdf5;color:#065f46;border:1px solid rgba(5,150,105,.2)}
+.s-rechazada{background:#fef2f2;color:#991b1b;border:1px solid rgba(185,28,28,.2)}
+.s-vencida{background:#fffbeb;color:#92400e;border:1px solid rgba(217,119,6,.2)}
+/* Quote item inputs */
+.q-item-desc{width:100%;padding:.4rem .6rem;border:1.5px solid var(--border);border-radius:8px;font:inherit;font-size:.85rem;color:var(--ink);background:var(--off);outline:none;transition:border-color .2s}
+.q-item-desc:focus{border-color:var(--blue);background:var(--white)}
+.q-item-num{padding:.4rem .5rem;border:1.5px solid var(--border);border-radius:8px;font:inherit;font-size:.85rem;color:var(--ink);background:var(--off);outline:none;text-align:right;transition:border-color .2s;display:block;width:100%}
+.q-item-num:focus{border-color:var(--blue);background:var(--white)}
+
 /* Responsive */
 @media(max-width:768px){
   .adm-sidebar{transform:translateX(-100%)}
@@ -282,6 +294,12 @@ table.t tr:hover td{background:rgba(20,71,255,.018)}
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           Opiniones
           <span class="adm-nav-badge" id="navBadgeOp">0</span>
+        </button>
+        <div class="adm-nav-label" style="margin-top:.75rem">Ventas</div>
+        <button class="adm-nav-item" data-s="cotizaciones">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          Cotizaciones
+          <span class="adm-nav-badge" id="navBadgeCot"></span>
         </button>
       </nav>
       <div class="adm-sidebar-bottom">
@@ -393,6 +411,13 @@ async function loadAll(){
   const active = allOrders.filter(o=>['pendiente','pagado','contactado','encamino'].includes(o.status)).length;
   document.getElementById('navBadgePedidos').textContent = active||allOrders.length;
   document.getElementById('navBadgeOp').textContent = allFeedback.length;
+
+  await loadQuotes();
+  const cotBadgeEl=document.getElementById('navBadgeCot');
+  if(cotBadgeEl){
+    const env=allQuotes.filter(q=>q.status==='enviada').length;
+    cotBadgeEl.textContent=env||allQuotes.length||'';
+  }
 }
 
 async function updateStatus(id,status){
@@ -515,7 +540,7 @@ function go(s){
   document.querySelectorAll('.adm-nav-item').forEach(b=>b.classList.remove('active'));
   const btn=document.querySelector(`.adm-nav-item[data-s="${s}"]`);
   if(btn) btn.classList.add('active');
-  const titles={resumen:'Resumen',pedidos:'Pedidos',productos:'Productos',opiniones:'Opiniones'};
+  const titles={resumen:'Resumen',pedidos:'Pedidos',productos:'Productos',opiniones:'Opiniones',cotizaciones:'Cotizaciones'};
   const t=document.getElementById('topTitle');
   if(t) t.textContent=titles[s]||s;
   renderSection();
@@ -523,10 +548,11 @@ function go(s){
 window.go=go;
 
 function renderSection(){
-  if(section==='resumen')    renderResumen();
-  else if(section==='pedidos')    renderPedidos();
-  else if(section==='productos')  renderProductos();
-  else if(section==='opiniones')  renderOpiniones();
+  if(section==='resumen')           renderResumen();
+  else if(section==='pedidos')      renderPedidos();
+  else if(section==='productos')    renderProductos();
+  else if(section==='opiniones')    renderOpiniones();
+  else if(section==='cotizaciones') renderCotizaciones();
 }
 
 /* ── RESUMEN ─────────────────────────────────────────── */
@@ -915,6 +941,452 @@ function openDrawer(prod){
   });
 
   wrap.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ── COTIZACIONES ────────────────────────────────────── */
+let allQuotes          = [];
+let quoteFilter        = 'todos';
+let quoteSearch        = '';
+let editingQuote       = null;
+let quotesTableMissing = false;
+let qRowIdx            = 0;
+
+const QUOTE_STATUSES = [
+  {id:'borrador',  label:'Borrador'},
+  {id:'enviada',   label:'Enviada'},
+  {id:'aceptada',  label:'Aceptada'},
+  {id:'rechazada', label:'Rechazada'},
+  {id:'vencida',   label:'Vencida'}
+];
+
+function qsLabel(s){ return (QUOTE_STATUSES.find(x=>x.id===s)||QUOTE_STATUSES[0]).label; }
+
+function nextQuoteNumber(){
+  const yr=new Date().getFullYear(), pfx='COT-'+yr+'-';
+  const nums=allQuotes.map(q=>q.number||'').filter(n=>n.startsWith(pfx)).map(n=>parseInt(n.slice(pfx.length))||0);
+  return pfx+String((nums.length?Math.max(...nums):0)+1).padStart(3,'0');
+}
+
+async function loadQuotes(){
+  const {data,error}=await window.SB.from('quotations').select('*').order('created_at',{ascending:false});
+  if(error){ console.warn('quotations:',error.message); allQuotes=[]; quotesTableMissing=(error.code==='42P01'); }
+  else { allQuotes=data||[]; quotesTableMissing=false; }
+}
+
+async function saveQuote(payload){
+  if(payload.id){
+    const {error}=await window.SB.from('quotations').update(payload).eq('id',payload.id);
+    return !error;
+  } else {
+    const {id:_,...ins}=payload;
+    const {error}=await window.SB.from('quotations').insert(ins);
+    return !error;
+  }
+}
+
+async function deleteQuote(id){
+  if(!confirm('Eliminar esta cotizacion? No se puede deshacer.')) return false;
+  const {error}=await window.SB.from('quotations').delete().eq('id',id);
+  return !error;
+}
+
+function calcQItems(){
+  let subtotal=0, totalDisc=0;
+  document.querySelectorAll('#qItemsTbody .q-row').forEach(row=>{
+    const isDisc=row.dataset.type==='discount';
+    const up=parseFloat(row.querySelector('.q-up').value)||0;
+    const qty=isDisc?1:parseFloat(row.querySelector('.q-qty')?.value)||0;
+    const rowTot=isDisc?up:qty*up;
+    if(isDisc){ totalDisc+=rowTot; row.querySelector('.q-tot').textContent='- '+fmtPrice(rowTot); }
+    else { subtotal+=rowTot; row.querySelector('.q-tot').textContent=fmtPrice(rowTot); }
+  });
+  const net=subtotal-totalDisc;
+  const withItbis=document.getElementById('qItbis')?.checked;
+  const itbis=withItbis?Math.round(net*.18):0;
+  const total=net+itbis;
+  const set=(id,v)=>{ const e=document.getElementById(id); if(e) e.textContent=v; };
+  set('qSubtotalVal',fmtPrice(subtotal));
+  set('qDiscVal',totalDisc>0?'- '+fmtPrice(totalDisc):'—');
+  const dr=document.getElementById('qDiscRow'); if(dr) dr.style.opacity=totalDisc>0?'1':'.4';
+  set('qItbisVal',withItbis?fmtPrice(itbis):'—');
+  set('qTotalVal',fmtPrice(total));
+}
+
+function addItemRow(desc,qty,up){
+  qRowIdx++;
+  const tbody=document.getElementById('qItemsTbody'); if(!tbody) return;
+  const tr=document.createElement('tr');
+  tr.className='q-row'; tr.dataset.type='item';
+  tr.innerHTML=`
+    <td style="padding:.3rem"><input class="q-item-desc" type="text" value="${esc(desc||'')}" placeholder="Descripcion del producto o servicio" autocomplete="off"/></td>
+    <td style="padding:.3rem"><input class="q-item-num q-qty" type="number" value="${qty||1}" min="0.01" step="any" style="width:65px"/></td>
+    <td style="padding:.3rem"><input class="q-item-num q-up" type="number" value="${up!=null&&up!==''?up:''}" min="0" step="any" placeholder="0" style="width:105px"/></td>
+    <td class="q-tot" style="padding:.3rem .55rem;text-align:right;font-weight:700;white-space:nowrap;min-width:90px">${fmtPrice((qty||1)*(up||0))}</td>
+    <td style="padding:.3rem"><button type="button" class="act-btn del q-del-btn" style="padding:.2rem .48rem;font-size:.72rem">&#x2715;</button></td>`;
+  tbody.appendChild(tr);
+  tr.querySelector('.q-qty').addEventListener('input',calcQItems);
+  tr.querySelector('.q-up').addEventListener('input',calcQItems);
+  tr.querySelector('.q-del-btn').addEventListener('click',()=>{ tr.remove(); calcQItems(); });
+  calcQItems();
+}
+
+function addDiscountRow(desc,amount){
+  qRowIdx++;
+  const tbody=document.getElementById('qItemsTbody'); if(!tbody) return;
+  const tr=document.createElement('tr');
+  tr.className='q-row'; tr.dataset.type='discount';
+  tr.innerHTML=`
+    <td style="padding:.3rem"><div style="display:flex;align-items:center;gap:.4rem">
+      <span style="flex-shrink:0;font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;border-radius:4px;padding:.1rem .35rem">DESC.</span>
+      <input class="q-item-desc" type="text" value="${esc(desc||'')}" placeholder="Descripcion del descuento" autocomplete="off" style="flex:1"/>
+    </div></td>
+    <td style="padding:.3rem;text-align:center;color:var(--ink-3);font-size:.8rem">—</td>
+    <td style="padding:.3rem"><input class="q-item-num q-up" type="number" value="${amount!=null&&amount!==''?amount:''}" min="0" step="any" placeholder="0" style="width:105px"/></td>
+    <td class="q-tot" style="padding:.3rem .55rem;text-align:right;font-weight:700;white-space:nowrap;color:#b91c1c;min-width:90px">${amount?'- '+fmtPrice(amount):'—'}</td>
+    <td style="padding:.3rem"><button type="button" class="act-btn del q-del-btn" style="padding:.2rem .48rem;font-size:.72rem">&#x2715;</button></td>`;
+  tbody.appendChild(tr);
+  tr.querySelector('.q-up').addEventListener('input',calcQItems);
+  tr.querySelector('.q-del-btn').addEventListener('click',()=>{ tr.remove(); calcQItems(); });
+  calcQItems();
+}
+
+function setupCatalogPicker(){
+  const btn=document.getElementById('qCatalogBtn');
+  const panel=document.getElementById('qCatalogPanel');
+  const srch=document.getElementById('qCatSearch');
+  if(!btn||!panel) return;
+  btn.addEventListener('click',()=>{
+    const open=panel.style.display!=='none';
+    panel.style.display=open?'none':'block';
+    if(!open){ renderCatalogList(''); srch.value=''; srch.focus(); }
+  });
+  srch.addEventListener('input',()=>renderCatalogList(srch.value));
+}
+
+function renderCatalogList(search){
+  const list=document.getElementById('qCatList'); if(!list) return;
+  const q=(search||'').toLowerCase();
+  const prods=(allProds||[]).filter(p=>p.published&&(!q||(p.name||'').toLowerCase().includes(q)||(p.brand||'').toLowerCase().includes(q)));
+  if(!prods.length){
+    list.innerHTML=`<div style="text-align:center;padding:.85rem;font-size:.8rem;color:var(--ink-3)">${allProds.filter(p=>p.published).length===0?'No hay productos publicados.':'Sin resultados.'}</div>`;
+    return;
+  }
+  list.innerHTML=prods.map(p=>`
+    <button type="button" class="q-prod-item" data-pid="${esc(p.id)}" style="width:100%;display:flex;align-items:center;gap:.6rem;padding:.5rem .65rem;border:0;background:transparent;border-radius:8px;cursor:pointer;text-align:left;transition:background .12s">
+      ${p.image_url?`<img src="${esc(p.image_url)}" style="width:32px;height:32px;border-radius:6px;object-fit:cover;border:1px solid var(--border);flex-shrink:0" alt=""/>`:`<div style="width:32px;height:32px;border-radius:6px;border:1px solid var(--border);background:var(--off);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--ink-3)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="21 15 16 10 5 21"/></svg></div>`}
+      <div style="flex:1;min-width:0">
+        <div style="font-size:.82rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(p.name)}</div>
+        ${p.brand?`<div style="font-size:.7rem;color:var(--ink-3)">${esc(p.brand)}${p.variant?' &middot; '+esc(p.variant):''}</div>`:''}
+      </div>
+      <div style="font-size:.84rem;font-weight:800;white-space:nowrap;color:var(--blue)">${fmtPrice(p.price)}</div>
+    </button>`).join('');
+  list.querySelectorAll('.q-prod-item').forEach(b=>{
+    b.addEventListener('mouseenter',()=>b.style.background='var(--blue-t)');
+    b.addEventListener('mouseleave',()=>b.style.background='transparent');
+    b.addEventListener('click',()=>{
+      const p=allProds.find(x=>x.id===b.dataset.pid);
+      if(p){ addItemRow(p.name+(p.variant?' - '+p.variant:''),1,p.price); document.getElementById('qCatalogPanel').style.display='none'; }
+    });
+  });
+}
+
+function renderCotizaciones(){
+  if(quotesTableMissing){
+    content.innerHTML=`
+      <div class="tbl-wrap" style="padding:2rem 1.5rem">
+        <div style="max-width:580px;margin:0 auto;text-align:center">
+          <div style="font-size:2.2rem;margin-bottom:1rem">&#x1F5D2;</div>
+          <h3 style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;margin-bottom:.7rem">Tabla no encontrada</h3>
+          <p style="color:var(--ink-2);font-size:.88rem;line-height:1.6;margin-bottom:1.25rem">
+            Crea la tabla <code style="background:var(--off);padding:.15rem .4rem;border-radius:5px;font-family:monospace;font-size:.82rem">quotations</code> en Supabase con este SQL:
+          </p>
+          <pre style="background:#0d1117;color:#e8eaf0;padding:1.1rem 1.25rem;border-radius:12px;text-align:left;font-size:.73rem;line-height:1.75;overflow-x:auto">CREATE TABLE quotations (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  number TEXT UNIQUE NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  valid_until DATE,
+  status TEXT DEFAULT 'borrador',
+  client JSONB DEFAULT '{}',
+  items JSONB DEFAULT '[]',
+  totals JSONB DEFAULT '{}',
+  notes TEXT
+);
+ALTER TABLE quotations ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "admin full" ON quotations
+  USING (true) WITH CHECK (true);</pre>
+          <button class="act-btn primary" onclick="loadAll().then(()=>renderCotizaciones())" style="margin-top:1.25rem">Reintentar</button>
+        </div>
+      </div>`;
+    return;
+  }
+  const counts={};
+  allQuotes.forEach(q=>{ counts[q.status]=(counts[q.status]||0)+1; });
+  const filtered=allQuotes.filter(q=>{
+    const ms=quoteFilter==='todos'||q.status===quoteFilter;
+    const qq=quoteSearch.trim().toLowerCase();
+    return ms&&(!qq||(q.number||'').toLowerCase().includes(qq)||(q.client?.name||'').toLowerCase().includes(qq)||(q.client?.company||'').toLowerCase().includes(qq));
+  });
+  const total=allQuotes.length, aceptadas=counts['aceptada']||0, enviadas=counts['enviada']||0;
+  const valorAcep=allQuotes.filter(q=>q.status==='aceptada').reduce((s,q)=>s+(q.totals?.total||0),0);
+
+  content.innerHTML=`
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1.25rem;flex-wrap:wrap">
+      <div>
+        <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.05rem;font-weight:800">${total} cotizaci${total===1?'on':'ones'}</div>
+        <div style="font-size:.75rem;color:var(--ink-3);margin-top:.1rem">${enviadas} enviada${enviadas===1?'':'s'} &middot; ${aceptadas} aceptada${aceptadas===1?'':'s'}</div>
+      </div>
+      <button class="act-btn primary" id="addQuoteBtn">+ Nueva cotizacion</button>
+    </div>
+    <div class="stat-grid" style="margin-bottom:1.25rem">
+      <div class="stat-card"><div class="stat-icon" style="background:#eff6ff"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#1447ff" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><div class="stat-val">${total}</div><div class="stat-label">Total</div></div>
+      <div class="stat-card"><div class="stat-icon" style="background:#e0f2fe"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0369a1" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg></div><div class="stat-val">${enviadas}</div><div class="stat-label">Enviadas</div></div>
+      <div class="stat-card"><div class="stat-icon" style="background:#ecfdf5"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></div><div class="stat-val">${aceptadas}</div><div class="stat-label">Aceptadas</div></div>
+      <div class="stat-card"><div class="stat-icon" style="background:#ecfdf5"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div class="stat-val" style="font-size:1.3rem">${fmtPrice(valorAcep)}</div><div class="stat-label">Valor aceptado</div></div>
+    </div>
+    <div class="tbl-wrap">
+      <div class="tbl-head">
+        <h3>${filtered.length} resultado${filtered.length===1?'':'s'}</h3>
+        <div class="tbl-head-right">
+          <div class="srch">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input type="search" id="qtSrch" placeholder="Buscar..." value="${esc(quoteSearch)}"/>
+          </div>
+        </div>
+      </div>
+      <div class="tbl-pills">
+        <button class="pill ${quoteFilter==='todos'?'active':''}" data-qf="todos">Todas (${total})</button>
+        ${QUOTE_STATUSES.map(s=>`<button class="pill ${quoteFilter===s.id?'active':''}" data-qf="${s.id}">${s.label} (${counts[s.id]||0})</button>`).join('')}
+      </div>
+      ${filtered.length===0?'<div class="t-empty">Sin resultados. Crea tu primera cotizacion.</div>':`
+      <table class="t">
+        <thead><tr><th>N&deg; Cotizacion</th><th>Cliente</th><th>Items</th><th>Total</th><th>Estado</th><th>Fecha</th><th>Acciones</th></tr></thead>
+        <tbody>${filtered.map(q=>`<tr>
+            <td><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.82rem;color:var(--blue)">${esc(q.number||'—')}</span></td>
+            <td>
+              <div style="font-weight:600">${esc(q.client?.name||'—')}</div>
+              ${q.client?.company?`<div style="font-size:.7rem;color:var(--ink-3)">${esc(q.client.company)}</div>`:''}
+              ${q.client?.phone?`<div style="font-size:.7rem;color:var(--ink-3)">${esc(q.client.phone)}</div>`:''}
+            </td>
+            <td style="font-size:.76rem;color:var(--ink-2)">${(q.items||[]).length} art.</td>
+            <td style="font-weight:700;white-space:nowrap">${fmtPrice(q.totals?.total||0)}</td>
+            <td><select class="status-sel" data-qid="${esc(q.id)}">${QUOTE_STATUSES.map(s=>`<option value="${s.id}" ${q.status===s.id?'selected':''}>${s.label}</option>`).join('')}</select></td>
+            <td style="font-size:.72rem;color:var(--ink-3);white-space:nowrap">${fmtDateShort(q.created_at)}</td>
+            <td style="white-space:nowrap;display:flex;gap:.3rem;align-items:center">
+              <button class="act-btn" data-qedit="${esc(q.id)}">Editar</button>
+              <button class="act-btn" data-qprint="${esc(q.id)}" data-qfmt="normal" title="Hoja carta/A4"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> A4</button>
+              <button class="act-btn" data-qprint="${esc(q.id)}" data-qfmt="thermal" title="Termica 80mm"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> 80mm</button>
+              <button class="act-btn del" data-qdel="${esc(q.id)}">Elim.</button>
+            </td>
+          </tr>`).join('')}</tbody>
+      </table>`}
+    </div>`;
+
+  document.getElementById('addQuoteBtn')?.addEventListener('click',()=>openQuoteDrawer(null));
+  document.getElementById('qtSrch')?.addEventListener('input',e=>{ quoteSearch=e.target.value; renderCotizaciones(); });
+  document.querySelectorAll('.pill[data-qf]').forEach(b=>b.addEventListener('click',()=>{ quoteFilter=b.dataset.qf; renderCotizaciones(); }));
+  document.querySelectorAll('.status-sel[data-qid]').forEach(sel=>{
+    sel.addEventListener('change',async()=>{
+      await window.SB.from('quotations').update({status:sel.value}).eq('id',sel.dataset.qid);
+      const q=allQuotes.find(x=>x.id===sel.dataset.qid); if(q) q.status=sel.value;
+      renderCotizaciones();
+    });
+  });
+  document.querySelectorAll('[data-qedit]').forEach(b=>b.addEventListener('click',()=>{ const q=allQuotes.find(x=>x.id===b.dataset.qedit); if(q) openQuoteDrawer(q); }));
+  document.querySelectorAll('[data-qprint]').forEach(b=>b.addEventListener('click',()=>{ const q=allQuotes.find(x=>x.id===b.dataset.qprint); if(q) printQuote(q,b.dataset.qfmt); }));
+  document.querySelectorAll('[data-qdel]').forEach(b=>b.addEventListener('click',async()=>{
+    const ok=await deleteQuote(b.dataset.qdel);
+    if(ok){ allQuotes=allQuotes.filter(x=>x.id!==b.dataset.qdel); renderCotizaciones(); }
+  }));
+}
+
+function openQuoteDrawer(q){
+  editingQuote=q||null; qRowIdx=0;
+  const num=q?q.number:nextQuoteNumber();
+  const validDef=q?.valid_until||(()=>{ const d=new Date(); d.setDate(d.getDate()+15); return d.toISOString().slice(0,10); })();
+
+  content.innerHTML=`
+    <div class="drawer" style="max-width:820px">
+      <h3 style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem">
+        <span>${q?'Editar cotizacion':'Nueva cotizacion'}</span>
+        <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.9rem;color:var(--blue)">${esc(num)}</span>
+      </h3>
+      <div class="form-grid" style="margin-bottom:1.25rem">
+        <div class="form-field"><label>Estado</label><select id="qStatus">${QUOTE_STATUSES.map(s=>`<option value="${s.id}" ${(q?.status||'borrador')===s.id?'selected':''}>${s.label}</option>`).join('')}</select></div>
+        <div class="form-field"><label>Valida hasta</label><input type="date" id="qValidUntil" value="${esc(validDef)}"/></div>
+      </div>
+      <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:.76rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);margin-bottom:.6rem">Datos del cliente</div>
+      <div class="form-grid" style="margin-bottom:1.5rem">
+        <div class="form-field"><label>Nombre *</label><input type="text" id="qCName" value="${esc(q?.client?.name||'')}" placeholder="Nombre del cliente" autocomplete="off"/></div>
+        <div class="form-field"><label>Empresa</label><input type="text" id="qCCompany" value="${esc(q?.client?.company||'')}" placeholder="Empresa (opcional)" autocomplete="off"/></div>
+        <div class="form-field"><label>Telefono</label><input type="tel" id="qCPhone" value="${esc(q?.client?.phone||'')}" placeholder="809-000-0000" autocomplete="off"/></div>
+        <div class="form-field"><label>Email</label><input type="email" id="qCEmail" value="${esc(q?.client?.email||'')}" placeholder="email@cliente.com" autocomplete="off"/></div>
+      </div>
+      <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:.76rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);margin-bottom:.6rem">Articulos</div>
+      <div style="overflow-x:auto;margin-bottom:.6rem">
+        <table style="width:100%;border-collapse:collapse;min-width:480px">
+          <thead><tr style="background:var(--off)">
+            <th style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-3);padding:.5rem .4rem;border-bottom:2px solid var(--border);text-align:left">Descripcion</th>
+            <th style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-3);padding:.5rem .4rem;border-bottom:2px solid var(--border);text-align:right;width:75px">Cant.</th>
+            <th style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-3);padding:.5rem .4rem;border-bottom:2px solid var(--border);text-align:right;width:120px">Precio / Desc.</th>
+            <th style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-3);padding:.5rem .4rem;border-bottom:2px solid var(--border);text-align:right;width:95px">Total</th>
+            <th style="width:36px;border-bottom:2px solid var(--border)"></th>
+          </tr></thead>
+          <tbody id="qItemsTbody"></tbody>
+        </table>
+      </div>
+      <div style="display:flex;gap:.45rem;flex-wrap:wrap;margin-bottom:1rem">
+        <button type="button" class="act-btn" id="qAddItemBtn">+ Articulo manual</button>
+        <button type="button" class="act-btn" id="qCatalogBtn">+ Del catalogo</button>
+        <button type="button" class="act-btn" id="qAddDiscBtn" style="color:#b91c1c;border-color:#fecaca">+ Descuento</button>
+      </div>
+      <div id="qCatalogPanel" style="display:none;border:1.5px solid var(--blue);border-radius:12px;padding:.85rem;background:var(--white);margin-bottom:1rem">
+        <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:.76rem;font-weight:800;margin-bottom:.6rem">Catalogo de productos</div>
+        <div class="srch" style="margin-bottom:.6rem"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input type="search" id="qCatSearch" placeholder="Buscar producto..." style="width:100%;max-width:300px"/></div>
+        <div id="qCatList" style="max-height:220px;overflow-y:auto"></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem">
+        <label class="form-check" style="font-size:.84rem"><input type="checkbox" id="qItbis" ${q?.totals?.itbis?'checked':''}/>Incluir ITBIS (18%)</label>
+      </div>
+      <div style="margin-left:auto;max-width:280px;border:1px solid var(--border);border-radius:10px;padding:.85rem 1.1rem;background:var(--off)">
+        <div style="display:flex;justify-content:space-between;font-size:.86rem;color:var(--ink-2);padding:.25rem 0"><span>Subtotal</span><span id="qSubtotalVal" style="font-weight:600">RD$0</span></div>
+        <div id="qDiscRow" style="display:flex;justify-content:space-between;font-size:.86rem;color:#b91c1c;padding:.25rem 0;opacity:.4"><span>Descuentos</span><span id="qDiscVal" style="font-weight:600">—</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:.86rem;color:var(--ink-2);padding:.25rem 0"><span>ITBIS 18%</span><span id="qItbisVal" style="font-weight:600">—</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:1.02rem;font-weight:800;border-top:1.5px solid var(--border);padding:.55rem 0 .1rem;margin-top:.25rem"><span>Total</span><span id="qTotalVal">RD$0</span></div>
+      </div>
+      <div class="form-field full" style="margin-top:1.25rem">
+        <label>Notas / Condiciones</label>
+        <textarea id="qNotes" style="min-height:76px" placeholder="Ej: Precio incluye instalacion. Garantia 12 meses...">${esc(q?.notes||'')}</textarea>
+      </div>
+      <div class="form-actions" style="margin-top:1.25rem">
+        <button class="save-btn" id="qSaveBtn">Guardar cotizacion</button>
+        ${q?`<button class="act-btn" id="qPrintNormalBtn" style="display:flex;align-items:center;gap:.4rem"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Imprimir A4/Carta</button>
+        <button class="act-btn" id="qPrintThermBtn" style="display:flex;align-items:center;gap:.4rem"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Imprimir 80mm</button>`:''}
+        <button class="cancel-btn" id="qCancelBtn">Cancelar</button>
+      </div>
+    </div>`;
+
+  if(q?.items?.length) q.items.forEach(it=>{ if(it.type==='discount') addDiscountRow(it.description,it.amount??Math.abs(it.total||0)); else addItemRow(it.description,it.qty,it.unit_price); });
+  else addItemRow('',1,null);
+  calcQItems();
+
+  document.getElementById('qAddItemBtn').addEventListener('click',()=>addItemRow('',1,null));
+  document.getElementById('qAddDiscBtn').addEventListener('click',()=>addDiscountRow('',null));
+  document.getElementById('qItbis').addEventListener('change',calcQItems);
+  document.getElementById('qCancelBtn').addEventListener('click',()=>{ editingQuote=null; renderCotizaciones(); });
+  setupCatalogPicker();
+
+  function collectCurrentData(){
+    const items=[];
+    let subtotal=0,totalDisc=0;
+    document.querySelectorAll('#qItemsTbody .q-row').forEach(row=>{
+      const isDisc=row.dataset.type==='discount';
+      const desc=row.querySelector('.q-item-desc').value.trim();
+      const up=parseFloat(row.querySelector('.q-up').value)||0;
+      if(!desc&&!up) return;
+      if(isDisc){ totalDisc+=up; items.push({type:'discount',description:desc,amount:up,total:-up}); }
+      else{ const qty=parseFloat(row.querySelector('.q-qty')?.value)||0,tot=qty*up; subtotal+=tot; items.push({type:'item',description:desc,qty,unit_price:up,total:tot}); }
+    });
+    const net=subtotal-totalDisc;
+    const withItbis=document.getElementById('qItbis').checked;
+    const itbis=withItbis?Math.round(net*.18):0;
+    return {...(q||{}),number:num,items,totals:{subtotal,discounts:totalDisc,itbis,total:net+itbis},
+      client:{name:document.getElementById('qCName').value.trim(),company:document.getElementById('qCCompany').value.trim()||null,phone:document.getElementById('qCPhone').value.trim()||null,email:document.getElementById('qCEmail').value.trim()||null},
+      notes:document.getElementById('qNotes').value.trim()||null,
+      valid_until:document.getElementById('qValidUntil').value||null};
+  }
+
+  if(q){
+    document.getElementById('qPrintNormalBtn')?.addEventListener('click',()=>printQuote(collectCurrentData(),'normal'));
+    document.getElementById('qPrintThermBtn')?.addEventListener('click',()=>printQuote(collectCurrentData(),'thermal'));
+  }
+
+  document.getElementById('qSaveBtn').addEventListener('click',async()=>{
+    const name=document.getElementById('qCName').value.trim();
+    if(!name){ document.getElementById('qCName').focus(); return; }
+    const data=collectCurrentData();
+    const btn=document.getElementById('qSaveBtn');
+    btn.disabled=true; btn.textContent='Guardando...';
+    const payload={...data};
+    if(editingQuote) payload.id=editingQuote.id;
+    const ok=await saveQuote(payload);
+    if(ok){
+      await loadQuotes();
+      const cotBadgeEl=document.getElementById('navBadgeCot');
+      if(cotBadgeEl){ const env=allQuotes.filter(q=>q.status==='enviada').length; cotBadgeEl.textContent=env||allQuotes.length||''; }
+      editingQuote=null; renderCotizaciones();
+    } else {
+      btn.disabled=false; btn.textContent='Guardar cotizacion';
+      alert('Error al guardar. Revisa la consola.');
+    }
+  });
+  content.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function buildNormalHtml(q){
+  const items=q.items||[];
+  const rows=items.map(it=>it.type==='discount'?`
+    <tr><td colspan="2" style="padding:.5rem .75rem;border-bottom:1px solid #f0f0f0;font-size:.88rem;color:#b91c1c;font-style:italic">Descuento: ${esc(it.description||'')}</td><td style="padding:.5rem .75rem;border-bottom:1px solid #f0f0f0;text-align:right;font-weight:700;color:#b91c1c;font-size:.88rem">- ${fmtPrice(it.amount||0)}</td><td></td></tr>`:`
+    <tr><td style="padding:.5rem .75rem;border-bottom:1px solid #f0f0f0;font-size:.88rem">${esc(it.description||'')}</td><td style="padding:.5rem .75rem;border-bottom:1px solid #f0f0f0;text-align:right;font-size:.88rem">${it.qty}</td><td style="padding:.5rem .75rem;border-bottom:1px solid #f0f0f0;text-align:right;font-size:.88rem">${fmtPrice(it.unit_price||0)}</td><td style="padding:.5rem .75rem;border-bottom:1px solid #f0f0f0;text-align:right;font-weight:700;font-size:.88rem">${fmtPrice(it.total||0)}</td></tr>`).join('');
+  const sub=q.totals?.subtotal||0,disc=q.totals?.discounts||0,itbis=q.totals?.itbis||0,total=q.totals?.total||0;
+  const vDate=q.valid_until?new Date(q.valid_until+'T12:00:00').toLocaleDateString('es-DO',{day:'2-digit',month:'long',year:'numeric'}):'—';
+  const cDate=q.created_at?new Date(q.created_at).toLocaleDateString('es-DO',{day:'2-digit',month:'long',year:'numeric'}):new Date().toLocaleDateString('es-DO',{day:'2-digit',month:'long',year:'numeric'});
+  return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/><title>Cotizacion ${esc(q.number||'')}</title>
+<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,Helvetica,sans-serif;color:#0d1117;background:#fff;padding:2cm}@page{size:letter;margin:1.5cm 2cm}@media print{body{padding:0}}.no-print{position:fixed;top:1rem;right:1rem;background:#0d1117;color:#fff;border:0;padding:.65rem 1.2rem;border-radius:8px;cursor:pointer;font-size:.9rem;font-weight:700;font-family:Arial,sans-serif}@media print{.no-print{display:none}}.header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.75rem;padding-bottom:1.25rem;border-bottom:3px solid #0d1117}.brand{font-size:1.5rem;font-weight:900}.brand span{color:#1447ff}.brand-info{font-size:.74rem;color:#4b5563;margin-top:.3rem;line-height:1.65}.doc-info{text-align:right}.doc-label{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:#9ca3af;margin-bottom:.2rem}.doc-num{font-size:1.1rem;font-weight:900;color:#1447ff;font-family:'Courier New',monospace}.doc-meta{font-size:.78rem;color:#4b5563;margin-top:.22rem;line-height:1.5}.sec-label{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.16em;color:#9ca3af;margin-bottom:.4rem;margin-top:1.4rem}.client-box{display:inline-block;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:.75rem 1rem;min-width:240px}.client-name{font-size:.95rem;font-weight:700}.client-info{font-size:.78rem;color:#4b5563;margin-top:.18rem;line-height:1.55}table{width:100%;border-collapse:collapse;margin-top:1.4rem}thead th{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#9ca3af;padding:.55rem .75rem;border-bottom:2px solid #0d1117;background:#f9fafb;text-align:left}thead th:not(:first-child){text-align:right}.totals-box{margin-top:1.4rem;margin-left:auto;width:260px;border:1px solid #e5e7eb;border-radius:8px;padding:.8rem 1rem;background:#f9fafb}.t-row{display:flex;justify-content:space-between;font-size:.86rem;color:#4b5563;padding:.22rem 0}.t-row.red{color:#b91c1c}.t-row.big{font-size:1.05rem;font-weight:900;color:#0d1117;border-top:2px solid #0d1117;margin-top:.4rem;padding-top:.5rem}.validity{margin-top:1.4rem;padding:.65rem 1rem;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;font-size:.8rem;color:#92400e}.notes-box{margin-top:1.1rem;font-size:.8rem;color:#4b5563;line-height:1.65;border-left:3px solid #e5e7eb;padding-left:.85rem}.footer{margin-top:2.25rem;border-top:1px solid #e5e7eb;padding-top:.75rem;display:flex;justify-content:space-between;font-size:.7rem;color:#9ca3af}</style></head>
+<body>
+<button class="no-print" onclick="window.print()">Imprimir / Guardar PDF</button>
+<div class="header"><div><div class="brand">Plata<span>Tech</span></div><div class="brand-info">Plata Tech Solutions SRL<br/>Santo Domingo, Republica Dominicana<br/>Tel: 849-495-0959 &nbsp;|&nbsp; platatechs.com</div></div><div class="doc-info"><div class="doc-label">Cotizacion</div><div class="doc-num">${esc(q.number||'')}</div><div class="doc-meta">Emitida: ${cDate}<br/>Valida hasta: ${vDate}</div></div></div>
+<div class="sec-label">Para</div>
+<div class="client-box"><div class="client-name">${esc(q.client?.name||'—')}</div><div class="client-info">${q.client?.company?esc(q.client.company)+'<br/>':''}${q.client?.phone?esc(q.client.phone):''}${q.client?.phone&&q.client?.email?' &nbsp;|&nbsp; ':''}${q.client?.email?esc(q.client.email):''}</div></div>
+<table><thead><tr><th>Descripcion</th><th style="text-align:right;width:70px">Cant.</th><th style="text-align:right;width:130px">Precio unit.</th><th style="text-align:right;width:130px">Total</th></tr></thead><tbody>${rows||'<tr><td colspan="4" style="padding:.75rem;text-align:center;color:#9ca3af">Sin articulos</td></tr>'}</tbody></table>
+<div class="totals-box"><div class="t-row"><span>Subtotal</span><span>${fmtPrice(sub)}</span></div>${disc?`<div class="t-row red"><span>Descuentos</span><span>- ${fmtPrice(disc)}</span></div>`:''}${itbis?`<div class="t-row"><span>ITBIS (18%)</span><span>${fmtPrice(itbis)}</span></div>`:''}<div class="t-row big"><span>Total</span><span>${fmtPrice(total)}</span></div></div>
+${q.valid_until?`<div class="validity">Esta cotizacion es valida hasta el <strong>${vDate}</strong>.</div>`:''}
+${q.notes?`<div class="sec-label" style="margin-top:1.4rem">Notas y condiciones</div><div class="notes-box">${esc(q.notes).replace(/\n/g,'<br/>')}</div>`:''}
+<div class="footer"><span>&copy; 2026 Plata Tech Solutions SRL &mdash; Precios en pesos dominicanos (RD$)</span><span>Ing. Ruddy Plata &mdash; CEO &amp; Fundador</span></div>
+</body></html>`;
+}
+
+function buildThermalHtml(q){
+  const items=q.items||[];
+  const sub=q.totals?.subtotal||0,disc=q.totals?.discounts||0,itbis=q.totals?.itbis||0,total=q.totals?.total||0;
+  const vDate=q.valid_until?new Date(q.valid_until+'T12:00:00').toLocaleDateString('es-DO',{day:'2-digit',month:'short',year:'numeric'}):'—';
+  const cDate=q.created_at?new Date(q.created_at).toLocaleDateString('es-DO',{day:'2-digit',month:'short',year:'numeric'}):new Date().toLocaleDateString('es-DO',{day:'2-digit',month:'short',year:'numeric'});
+  const itemsHtml=items.map(it=>it.type==='discount'?`<div style="font-size:10px;padding-left:4px;color:#c0392b">DESCT: ${esc(it.description||'')} - ${fmtPrice(it.amount||0)}</div>`:`<div style="font-size:11px;word-break:break-word">${esc(it.description||'')}</div><div style="display:flex;justify-content:space-between;font-size:11px;padding-left:6px;padding-bottom:3px"><span>${it.qty} x ${fmtPrice(it.unit_price||0)}</span><span>${fmtPrice(it.total||0)}</span></div>`).join('');
+  return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/><title>COT ${esc(q.number||'')}</title>
+<style>*{box-sizing:border-box;margin:0;padding:0}@page{size:80mm auto;margin:0}body{font-family:'Courier New',Courier,monospace;font-size:12px;width:72mm;margin:0 auto;padding:4mm 3mm 8mm;color:#000;background:#fff}.line{border-top:1px dashed #000;margin:3px 0}.center{text-align:center}.bold{font-weight:bold}.row{display:flex;justify-content:space-between;font-size:11px;margin:2px 0}.no-print{position:fixed;top:6px;right:6px;background:#000;color:#fff;border:0;padding:.45rem .8rem;border-radius:5px;cursor:pointer;font-size:11px;font-family:sans-serif}@media print{.no-print{display:none}}</style></head>
+<body>
+<button class="no-print" onclick="window.print()">Imprimir</button>
+<div class="center bold" style="font-size:14px">PLATA TECH</div>
+<div class="center" style="font-size:10px">platatechs.com | 849-495-0959</div>
+<div class="line"></div>
+<div class="row"><span class="bold">COTIZACION</span><span class="bold">${esc(q.number||'')}</span></div>
+<div class="row"><span>Fecha:</span><span>${cDate}</span></div>
+<div class="row"><span>Valida:</span><span>${vDate}</span></div>
+<div class="line"></div>
+<div class="bold" style="font-size:11px">Cliente:</div>
+<div style="font-size:11px">${esc(q.client?.name||'—')}</div>
+${q.client?.company?`<div style="font-size:10px">${esc(q.client.company)}</div>`:''}
+${q.client?.phone?`<div style="font-size:10px">Tel: ${esc(q.client.phone)}</div>`:''}
+<div class="line"></div>
+${itemsHtml}
+<div class="line"></div>
+<div class="row"><span>Subtotal</span><span>${fmtPrice(sub)}</span></div>
+${disc?`<div class="row" style="color:#c0392b"><span>Descuentos</span><span>- ${fmtPrice(disc)}</span></div>`:''}
+${itbis?`<div class="row"><span>ITBIS 18%</span><span>${fmtPrice(itbis)}</span></div>`:''}
+<div class="line"></div>
+<div style="display:flex;justify-content:space-between;font-weight:bold;font-size:13px"><span>TOTAL</span><span>${fmtPrice(total)}</span></div>
+${q.notes?`<div class="line"></div><div style="font-size:10px;word-break:break-word">${esc(q.notes)}</div>`:''}
+<div class="line"></div>
+<div class="center" style="font-size:10px">Ing. Ruddy Plata | CEO &amp; Fundador</div>
+<div class="center" style="font-size:10px">Gracias por confiar en Plata Tech</div>
+</body></html>`;
+}
+
+function printQuote(q,format){
+  const w=window.open('','_blank');
+  if(!w){ alert('Habilita ventanas emergentes para imprimir.'); return; }
+  w.document.write(format==='thermal'?buildThermalHtml(q):buildNormalHtml(q));
+  w.document.close(); w.focus();
+  setTimeout(()=>{ try{ w.print(); }catch(e){} },700);
 }
 
 /* ── OPINIONES ───────────────────────────────────────── */
