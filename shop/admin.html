@@ -512,7 +512,7 @@ function setupGate(){
 
 async function showAdmin(){
   adminRoot.style.display='';
-  await loadAll();
+  await Promise.all([loadAll(), preloadLogo()]);
   setupShell();
   go('resumen');
 }
@@ -1385,9 +1385,16 @@ function openQuoteDrawer(q){
   content.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-function quoteLogoUrl(){
-  return window.location.origin+'/images/logo-platatech.webp';
+let _logoDataUrl=null;
+async function preloadLogo(){
+  try{
+    const r=await fetch(window.location.origin+'/images/logo-platatech.webp');
+    if(!r.ok) return;
+    const blob=await r.blob();
+    _logoDataUrl=await new Promise(res=>{ const fr=new FileReader(); fr.onload=()=>res(fr.result); fr.readAsDataURL(blob); });
+  }catch(e){ console.warn('logo preload:',e); }
 }
+function quoteLogoUrl(){ return _logoDataUrl||''; }
 
 function buildNormalHtml(q){
   const logoUrl=quoteLogoUrl();
