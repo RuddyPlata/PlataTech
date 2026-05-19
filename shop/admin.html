@@ -977,13 +977,16 @@ async function loadQuotes(){
   else { allQuotes=data||[]; quotesTableMissing=false; }
 }
 
+let _lastSaveErr=null;
 async function saveQuote(payload){
   if(payload.id){
     const {error}=await window.SB.from('quotations').update(payload).eq('id',payload.id);
+    _lastSaveErr=error||null; if(error) console.error('saveQuote update:',error);
     return !error;
   } else {
     const {id:_,...ins}=payload;
     const {error}=await window.SB.from('quotations').insert(ins);
+    _lastSaveErr=error||null; if(error) console.error('saveQuote insert:',error);
     return !error;
   }
 }
@@ -995,25 +998,35 @@ async function deleteQuote(id){
 }
 
 function calcQItems(){
-  let subtotal=0, totalDisc=0;
+  // Paso 1: sumar items (necesario antes de calcular descuentos en %)
+  let subtotal=0;
   document.querySelectorAll('#qItemsTbody .q-row').forEach(row=>{
-    const isDisc=row.dataset.type==='discount';
+    if(row.dataset.type==='discount') return;
+    const qty=parseFloat(row.querySelector('.q-qty')?.value)||0;
     const up=parseFloat(row.querySelector('.q-up').value)||0;
-    const qty=isDisc?1:parseFloat(row.querySelector('.q-qty')?.value)||0;
-    const rowTot=isDisc?up:qty*up;
-    if(isDisc){ totalDisc+=rowTot; row.querySelector('.q-tot').textContent='- '+fmtPrice(rowTot); }
-    else { subtotal+=rowTot; row.querySelector('.q-tot').textContent=fmtPrice(rowTot); }
+    const tot=qty*up;
+    subtotal+=tot;
+    row.querySelector('.q-tot').textContent=fmtPrice(tot);
+  });
+  // Paso 2: calcular descuentos (fijo o %)
+  let totalDisc=0;
+  document.querySelectorAll('#qItemsTbody .q-row').forEach(row=>{
+    if(row.dataset.type!=='discount') return;
+    const dtype=row.querySelector('.q-disc-type')?.value||'fixed';
+    const val=parseFloat(row.querySelector('.q-up').value)||0;
+    const discAmt=dtype==='pct'?Math.round(subtotal*val/100):val;
+    totalDisc+=discAmt;
+    row.querySelector('.q-tot').textContent='- '+fmtPrice(discAmt);
   });
   const net=subtotal-totalDisc;
   const withItbis=document.getElementById('qItbis')?.checked;
   const itbis=withItbis?Math.round(net*.18):0;
-  const total=net+itbis;
   const set=(id,v)=>{ const e=document.getElementById(id); if(e) e.textContent=v; };
   set('qSubtotalVal',fmtPrice(subtotal));
   set('qDiscVal',totalDisc>0?'- '+fmtPrice(totalDisc):'—');
   const dr=document.getElementById('qDiscRow'); if(dr) dr.style.opacity=totalDisc>0?'1':'.4';
   set('qItbisVal',withItbis?fmtPrice(itbis):'—');
-  set('qTotalVal',fmtPrice(total));
+  set('qTotalVal',fmtPrice(net+itbis));
 }
 
 function addItemRow(desc,qty,up){
@@ -1034,22 +1047,29 @@ function addItemRow(desc,qty,up){
   calcQItems();
 }
 
-function addDiscountRow(desc,amount){
+function addDiscountRow(desc,amount,dtype){
   qRowIdx++;
   const tbody=document.getElementById('qItemsTbody'); if(!tbody) return;
   const tr=document.createElement('tr');
   tr.className='q-row'; tr.dataset.type='discount';
+  const dt=dtype||'fixed';
   tr.innerHTML=`
     <td style="padding:.3rem"><div style="display:flex;align-items:center;gap:.4rem">
       <span style="flex-shrink:0;font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;border-radius:4px;padding:.1rem .35rem">DESC.</span>
       <input class="q-item-desc" type="text" value="${esc(desc||'')}" placeholder="Descripcion del descuento" autocomplete="off" style="flex:1"/>
     </div></td>
-    <td style="padding:.3rem;text-align:center;color:var(--ink-3);font-size:.8rem">—</td>
-    <td style="padding:.3rem"><input class="q-item-num q-up" type="number" value="${amount!=null&&amount!==''?amount:''}" min="0" step="any" placeholder="0" style="width:105px"/></td>
-    <td class="q-tot" style="padding:.3rem .55rem;text-align:right;font-weight:700;white-space:nowrap;color:#b91c1c;min-width:90px">${amount?'- '+fmtPrice(amount):'—'}</td>
+    <td style="padding:.3rem">
+      <select class="q-disc-type" style="width:100%;padding:.38rem .4rem;border:1.5px solid var(--border);border-radius:8px;font:inherit;font-size:.8rem;background:var(--off);outline:none;color:var(--ink)">
+        <option value="fixed" ${dt==='fixed'?'selected':''}>RD$ fijo</option>
+        <option value="pct" ${dt==='pct'?'selected':''}>% porcentaje</option>
+      </select>
+    </td>
+    <td style="padding:.3rem"><input class="q-item-num q-up" type="number" value="${amount!=null&&amount!==''?amount:''}" min="0" step="any" placeholder="0" style="width:88px"/></td>
+    <td class="q-tot" style="padding:.3rem .55rem;text-align:right;font-weight:700;white-space:nowrap;color:#b91c1c;min-width:90px">—</td>
     <td style="padding:.3rem"><button type="button" class="act-btn del q-del-btn" style="padding:.2rem .48rem;font-size:.72rem">&#x2715;</button></td>`;
   tbody.appendChild(tr);
   tr.querySelector('.q-up').addEventListener('input',calcQItems);
+  tr.querySelector('.q-disc-type').addEventListener('change',calcQItems);
   tr.querySelector('.q-del-btn').addEventListener('click',()=>{ tr.remove(); calcQItems(); });
   calcQItems();
 }
@@ -1293,7 +1313,7 @@ function openQuoteDrawer(q){
       </div>
     </div>`;
 
-  if(q?.items?.length) q.items.forEach(it=>{ if(it.type==='discount') addDiscountRow(it.description,it.amount??Math.abs(it.total||0)); else addItemRow(it.description,it.qty,it.unit_price); });
+  if(q?.items?.length) q.items.forEach(it=>{ if(it.type==='discount') addDiscountRow(it.description,it.amount,it.disc_type||'fixed'); else addItemRow(it.description,it.qty,it.unit_price); });
   else addItemRow('',1,null);
   calcQItems();
 
@@ -1304,15 +1324,29 @@ function openQuoteDrawer(q){
   setupCatalogPicker();
 
   function collectCurrentData(){
-    const items=[];
-    let subtotal=0,totalDisc=0;
+    // Paso 1: recolectar items y calcular subtotal
+    const rawItems=[];
+    let subtotal=0;
     document.querySelectorAll('#qItemsTbody .q-row').forEach(row=>{
       const isDisc=row.dataset.type==='discount';
       const desc=row.querySelector('.q-item-desc').value.trim();
       const up=parseFloat(row.querySelector('.q-up').value)||0;
       if(!desc&&!up) return;
-      if(isDisc){ totalDisc+=up; items.push({type:'discount',description:desc,amount:up,total:-up}); }
-      else{ const qty=parseFloat(row.querySelector('.q-qty')?.value)||0,tot=qty*up; subtotal+=tot; items.push({type:'item',description:desc,qty,unit_price:up,total:tot}); }
+      if(isDisc){
+        rawItems.push({type:'discount',description:desc,disc_type:row.querySelector('.q-disc-type')?.value||'fixed',val:up});
+      } else {
+        const qty=parseFloat(row.querySelector('.q-qty')?.value)||0,tot=qty*up;
+        subtotal+=tot;
+        rawItems.push({type:'item',description:desc,qty,unit_price:up,total:tot});
+      }
+    });
+    // Paso 2: resolver descuentos (% necesita el subtotal final)
+    let totalDisc=0;
+    const items=rawItems.map(i=>{
+      if(i.type!=='discount') return i;
+      const discAmt=i.disc_type==='pct'?Math.round(subtotal*i.val/100):i.val;
+      totalDisc+=discAmt;
+      return {type:'discount',description:i.description,disc_type:i.disc_type,amount:i.val,discount_amount:discAmt,total:-discAmt};
     });
     const net=subtotal-totalDisc;
     const withItbis=document.getElementById('qItbis').checked;
@@ -1344,7 +1378,8 @@ function openQuoteDrawer(q){
       editingQuote=null; renderCotizaciones();
     } else {
       btn.disabled=false; btn.textContent='Guardar cotizacion';
-      alert('Error al guardar. Revisa la consola.');
+      const msg=_lastSaveErr?.message||_lastSaveErr?.code||'Error desconocido';
+      alert('Error al guardar: '+msg);
     }
   });
   content.scrollIntoView({behavior:'smooth',block:'start'});
@@ -1353,7 +1388,7 @@ function openQuoteDrawer(q){
 function buildNormalHtml(q){
   const items=q.items||[];
   const rows=items.map(it=>it.type==='discount'?`
-    <tr><td colspan="2" style="padding:.5rem .75rem;border-bottom:1px solid #f0f0f0;font-size:.88rem;color:#b91c1c;font-style:italic">Descuento: ${esc(it.description||'')}</td><td style="padding:.5rem .75rem;border-bottom:1px solid #f0f0f0;text-align:right;font-weight:700;color:#b91c1c;font-size:.88rem">- ${fmtPrice(it.amount||0)}</td><td></td></tr>`:`
+    <tr><td colspan="2" style="padding:.5rem .75rem;border-bottom:1px solid #f0f0f0;font-size:.88rem;color:#b91c1c;font-style:italic">Descuento${it.disc_type==='pct'?' ('+it.amount+'%)':''}: ${esc(it.description||'')}</td><td></td><td style="padding:.5rem .75rem;border-bottom:1px solid #f0f0f0;text-align:right;font-weight:700;color:#b91c1c;font-size:.88rem">- ${fmtPrice(it.discount_amount??it.amount??0)}</td></tr>`:`
     <tr><td style="padding:.5rem .75rem;border-bottom:1px solid #f0f0f0;font-size:.88rem">${esc(it.description||'')}</td><td style="padding:.5rem .75rem;border-bottom:1px solid #f0f0f0;text-align:right;font-size:.88rem">${it.qty}</td><td style="padding:.5rem .75rem;border-bottom:1px solid #f0f0f0;text-align:right;font-size:.88rem">${fmtPrice(it.unit_price||0)}</td><td style="padding:.5rem .75rem;border-bottom:1px solid #f0f0f0;text-align:right;font-weight:700;font-size:.88rem">${fmtPrice(it.total||0)}</td></tr>`).join('');
   const sub=q.totals?.subtotal||0,disc=q.totals?.discounts||0,itbis=q.totals?.itbis||0,total=q.totals?.total||0;
   const vDate=q.valid_until?new Date(q.valid_until+'T12:00:00').toLocaleDateString('es-DO',{day:'2-digit',month:'long',year:'numeric'}):'—';
@@ -1378,7 +1413,7 @@ function buildThermalHtml(q){
   const sub=q.totals?.subtotal||0,disc=q.totals?.discounts||0,itbis=q.totals?.itbis||0,total=q.totals?.total||0;
   const vDate=q.valid_until?new Date(q.valid_until+'T12:00:00').toLocaleDateString('es-DO',{day:'2-digit',month:'short',year:'numeric'}):'—';
   const cDate=q.created_at?new Date(q.created_at).toLocaleDateString('es-DO',{day:'2-digit',month:'short',year:'numeric'}):new Date().toLocaleDateString('es-DO',{day:'2-digit',month:'short',year:'numeric'});
-  const itemsHtml=items.map(it=>it.type==='discount'?`<div style="font-size:10px;padding-left:4px;color:#c0392b">DESCT: ${esc(it.description||'')} - ${fmtPrice(it.amount||0)}</div>`:`<div style="font-size:11px;word-break:break-word">${esc(it.description||'')}</div><div style="display:flex;justify-content:space-between;font-size:11px;padding-left:6px;padding-bottom:3px"><span>${it.qty} x ${fmtPrice(it.unit_price||0)}</span><span>${fmtPrice(it.total||0)}</span></div>`).join('');
+  const itemsHtml=items.map(it=>it.type==='discount'?`<div style="font-size:10px;padding-left:4px;color:#c0392b">DESCT${it.disc_type==='pct'?' '+it.amount+'%':''}: ${esc(it.description||'')} - ${fmtPrice(it.discount_amount??it.amount??0)}</div>`:`<div style="font-size:11px;word-break:break-word">${esc(it.description||'')}</div><div style="display:flex;justify-content:space-between;font-size:11px;padding-left:6px;padding-bottom:3px"><span>${it.qty} x ${fmtPrice(it.unit_price||0)}</span><span>${fmtPrice(it.total||0)}</span></div>`).join('');
   return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/><title>COT ${esc(q.number||'')}</title>
 <style>*{box-sizing:border-box;margin:0;padding:0}@page{size:80mm auto;margin:0}body{font-family:'Courier New',Courier,monospace;font-size:12px;width:72mm;margin:0 auto;padding:4mm 3mm 8mm;color:#000;background:#fff}.line{border-top:1px dashed #000;margin:3px 0}.center{text-align:center}.bold{font-weight:bold}.row{display:flex;justify-content:space-between;font-size:11px;margin:2px 0}.no-print{position:fixed;top:6px;right:6px;background:#000;color:#fff;border:0;padding:.45rem .8rem;border-radius:5px;cursor:pointer;font-size:11px;font-family:sans-serif}@media print{.no-print{display:none}}</style></head>
 <body>
