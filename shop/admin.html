@@ -333,6 +333,9 @@ table.t tr:hover td{background:rgba(20,71,255,.018)}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="assets/sb.js"></script>
+<script src="assets/products.js"></script>
+<script src="assets/products-static.js"></script>
+<script src="assets/products-overrides.js"></script>
 <script>
 /* ── State ──────────────────────────────────────────── */
 let section     = 'resumen';
@@ -964,7 +967,8 @@ function qsLabel(s){ return (QUOTE_STATUSES.find(x=>x.id===s)||QUOTE_STATUSES[0]
 function nextQuoteNumber(){
   const yr=new Date().getFullYear(), pfx='COT-'+yr+'-';
   const nums=allQuotes.map(q=>q.number||'').filter(n=>n.startsWith(pfx)).map(n=>parseInt(n.slice(pfx.length))||0);
-  return pfx+String((nums.length?Math.max(...nums):0)+1).padStart(3,'0');
+  const next=(nums.length?Math.max(...nums):0)+1;
+  return pfx+String(Math.max(next,110)).padStart(3,'0');
 }
 
 async function loadQuotes(){
@@ -1063,29 +1067,53 @@ function setupCatalogPicker(){
   srch.addEventListener('input',()=>renderCatalogList(srch.value));
 }
 
+function buildCombinedCatalog(){
+  // Custom products (Supabase) first — tienen prioridad visual
+  const custom=(allProds||[]).filter(p=>p.published).map(p=>({
+    _label:'Custom',
+    name:p.name, brand:p.brand||'', variant:p.variant||'',
+    price:p.price, img:p.image_url||null
+  }));
+  // YDC + RENZO catalog (window.PRODUCTS)
+  const ydc=(window.PRODUCTS||[]).map(p=>({
+    _label:null,
+    name:p.name, brand:p.brand||'', variant:p.variant||'',
+    price:p.price, img:p.image||(Array.isArray(p.images)&&p.images[0])||null
+  }));
+  return [...custom,...ydc];
+}
+
 function renderCatalogList(search){
   const list=document.getElementById('qCatList'); if(!list) return;
   const q=(search||'').toLowerCase();
-  const prods=(allProds||[]).filter(p=>p.published&&(!q||(p.name||'').toLowerCase().includes(q)||(p.brand||'').toLowerCase().includes(q)));
-  if(!prods.length){
-    list.innerHTML=`<div style="text-align:center;padding:.85rem;font-size:.8rem;color:var(--ink-3)">${allProds.filter(p=>p.published).length===0?'No hay productos publicados.':'Sin resultados.'}</div>`;
+  const all=buildCombinedCatalog();
+  const filtered=all.filter(p=>!q
+    ||(p.name||'').toLowerCase().includes(q)
+    ||(p.brand||'').toLowerCase().includes(q)
+    ||(p.variant||'').toLowerCase().includes(q));
+  if(!filtered.length){
+    list.innerHTML=`<div style="text-align:center;padding:.85rem;font-size:.8rem;color:var(--ink-3)">${all.length===0?'No hay productos en el catalogo.':'Sin resultados.'}</div>`;
     return;
   }
-  list.innerHTML=prods.map(p=>`
-    <button type="button" class="q-prod-item" data-pid="${esc(p.id)}" style="width:100%;display:flex;align-items:center;gap:.6rem;padding:.5rem .65rem;border:0;background:transparent;border-radius:8px;cursor:pointer;text-align:left;transition:background .12s">
-      ${p.image_url?`<img src="${esc(p.image_url)}" style="width:32px;height:32px;border-radius:6px;object-fit:cover;border:1px solid var(--border);flex-shrink:0" alt=""/>`:`<div style="width:32px;height:32px;border-radius:6px;border:1px solid var(--border);background:var(--off);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--ink-3)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="21 15 16 10 5 21"/></svg></div>`}
+  const shown=filtered.slice(0,80);
+  list.innerHTML=shown.map((p,i)=>`
+    <button type="button" class="q-prod-item" data-pi="${i}"
+      data-pname="${esc(p.name+(p.variant?' - '+p.variant:''))}" data-pprice="${p.price}"
+      style="width:100%;display:flex;align-items:center;gap:.6rem;padding:.48rem .65rem;border:0;background:transparent;border-radius:8px;cursor:pointer;text-align:left;transition:background .12s">
+      ${p.img?`<img src="${esc(p.img)}" style="width:30px;height:30px;border-radius:6px;object-fit:cover;border:1px solid var(--border);flex-shrink:0" alt=""/>`:`<div style="width:30px;height:30px;border-radius:6px;border:1px solid var(--border);background:var(--off);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--ink-3)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="21 15 16 10 5 21"/></svg></div>`}
       <div style="flex:1;min-width:0">
-        <div style="font-size:.82rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(p.name)}</div>
-        ${p.brand?`<div style="font-size:.7rem;color:var(--ink-3)">${esc(p.brand)}${p.variant?' &middot; '+esc(p.variant):''}</div>`:''}
+        <div style="font-size:.81rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(p.name)}</div>
+        ${p.brand||p.variant?`<div style="font-size:.69rem;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(p.brand)}${p.brand&&p.variant?' &middot; ':''}${esc(p.variant)}</div>`:''}
       </div>
-      <div style="font-size:.84rem;font-weight:800;white-space:nowrap;color:var(--blue)">${fmtPrice(p.price)}</div>
+      <div style="font-size:.82rem;font-weight:800;white-space:nowrap;color:var(--blue);padding-left:.3rem">${fmtPrice(p.price)}</div>
     </button>`).join('');
+  if(filtered.length>80) list.innerHTML+=`<div style="text-align:center;padding:.5rem;font-size:.75rem;color:var(--ink-3)">Mostrando 80 de ${filtered.length}. Refina la busqueda.</div>`;
   list.querySelectorAll('.q-prod-item').forEach(b=>{
     b.addEventListener('mouseenter',()=>b.style.background='var(--blue-t)');
     b.addEventListener('mouseleave',()=>b.style.background='transparent');
     b.addEventListener('click',()=>{
-      const p=allProds.find(x=>x.id===b.dataset.pid);
-      if(p){ addItemRow(p.name+(p.variant?' - '+p.variant:''),1,p.price); document.getElementById('qCatalogPanel').style.display='none'; }
+      addItemRow(b.dataset.pname,1,parseFloat(b.dataset.pprice));
+      document.getElementById('qCatalogPanel').style.display='none';
     });
   });
 }
