@@ -1478,7 +1478,7 @@ ${q.notes?`<div class="sec-label" style="margin-top:1.4rem">Notas y condiciones<
 </body></html>`;
 }
 
-function buildThermalHtml(q,opts){
+function buildThermalBodyHtml(q,opts){
   const docType=(opts&&opts.docType)||'cotizacion';
   const emKey=(opts&&opts.emitter)||'platatech';
   const em=EMITTERS[emKey]||EMITTERS.platatech;
@@ -1491,11 +1491,7 @@ function buildThermalHtml(q,opts){
   const cDate=q.created_at?new Date(q.created_at).toLocaleDateString('es-DO',{day:'2-digit',month:'short',year:'numeric'}):new Date().toLocaleDateString('es-DO',{day:'2-digit',month:'short',year:'numeric'});
   const itemsHtml=items.map(it=>it.type==='discount'?`<div style="font-size:10px;padding-left:4px;color:#c0392b">DESCT${it.disc_type==='pct'?' '+it.amount+'%':''}: ${esc(it.description||'')} - ${fmtPrice(it.discount_amount??it.amount??0)}</div>`:`<div style="font-size:11px;word-break:break-word">${esc(it.description||'')}</div><div style="display:flex;justify-content:space-between;font-size:11px;padding-left:6px;padding-bottom:3px"><span>${it.qty} x ${fmtPrice(it.unit_price||0)}</span><span>${fmtPrice(it.total||0)}</span></div>`).join('');
   const logoImg=logoUrl?`<div class="center" style="margin-bottom:3px"><img src="${logoUrl}" alt="" style="height:52px;width:auto" onerror="this.style.display='none'"/></div>`:'';
-  return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/><title>${dt.prefix} ${esc(docNum)}</title>
-<style>*{box-sizing:border-box;margin:0;padding:0}@page{size:80mm auto;margin:0}body{font-family:'Courier New',Courier,monospace;font-size:12px;width:72mm;margin:0 auto;padding:4mm 3mm 8mm;color:#000;background:#fff}.line{border-top:1px dashed #000;margin:3px 0}.center{text-align:center}.bold{font-weight:bold}.row{display:flex;justify-content:space-between;font-size:11px;margin:2px 0}.no-print{position:fixed;top:6px;right:6px;background:#000;color:#fff;border:0;padding:.45rem .8rem;border-radius:5px;cursor:pointer;font-size:11px;font-family:sans-serif}@media print{.no-print{display:none}}</style></head>
-<body>
-<button class="no-print" onclick="window.print()">Imprimir</button>
-${logoImg}
+  return `${logoImg}
 <div class="center bold" style="font-size:13px">${em.brandText}</div>
 <div class="center" style="font-size:10px">${em.web} | ${em.phone}</div>
 <div class="line"></div>
@@ -1518,8 +1514,83 @@ ${itbis?`<div class="row"><span>ITBIS 18%</span><span>${fmtPrice(itbis)}</span><
 ${q.notes?`<div class="line"></div><div style="font-size:10px;word-break:break-word">${esc(q.notes)}</div>`:''}
 <div class="line"></div>
 <div class="center" style="font-size:10px">${em.sign}</div>
-<div class="center" style="font-size:10px">${em.thanks}</div>
+<div class="center" style="font-size:10px">${em.thanks}</div>`;
+}
+
+function buildThermalHtml(q,opts){
+  const docType=(opts&&opts.docType)||'cotizacion';
+  const dt=DOC_TYPES[docType]||DOC_TYPES.cotizacion;
+  const docNum=docNumberFor(q,docType);
+  return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/><title>${dt.prefix} ${esc(docNum)}</title>
+<style>*{box-sizing:border-box;margin:0;padding:0}@page{size:80mm auto;margin:0}body{font-family:'Courier New',Courier,monospace;font-size:12px;width:72mm;margin:0 auto;padding:4mm 3mm 8mm;color:#000;background:#fff}.line{border-top:1px dashed #000;margin:3px 0}.center{text-align:center}.bold{font-weight:bold}.row{display:flex;justify-content:space-between;font-size:11px;margin:2px 0}.no-print{position:fixed;top:6px;right:6px;background:#000;color:#fff;border:0;padding:.45rem .8rem;border-radius:5px;cursor:pointer;font-size:11px;font-family:sans-serif}@media print{.no-print{display:none}}</style></head>
+<body>
+<button class="no-print" onclick="window.print()">Imprimir</button>
+${buildThermalBodyHtml(q,opts)}
 </body></html>`;
+}
+
+let _html2pdfLoadPromise=null;
+function ensureHtml2Pdf(){
+  if(window.html2pdf) return Promise.resolve();
+  if(_html2pdfLoadPromise) return _html2pdfLoadPromise;
+  _html2pdfLoadPromise=new Promise((resolve,reject)=>{
+    const s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+    s.onload=()=>resolve();
+    s.onerror=()=>{ _html2pdfLoadPromise=null; reject(new Error('No se pudo cargar la libreria de PDF')); };
+    document.head.appendChild(s);
+  });
+  return _html2pdfLoadPromise;
+}
+
+async function downloadThermalPdf(q,opts){
+  const goBtn=document.getElementById('poGo');
+  try{ await ensureHtml2Pdf(); }
+  catch(e){ alert('Error: '+e.message); return; }
+
+  const styleEl=document.createElement('style');
+  styleEl.textContent=`#thermal-pdf-wrap{font-family:'Courier New',Courier,monospace;font-size:12px;width:72mm;margin:0;padding:4mm 3mm 8mm;color:#000;background:#fff;box-sizing:border-box}
+#thermal-pdf-wrap *{box-sizing:border-box;margin:0;padding:0}
+#thermal-pdf-wrap .line{border-top:1px dashed #000;margin:3px 0}
+#thermal-pdf-wrap .center{text-align:center}
+#thermal-pdf-wrap .bold{font-weight:bold}
+#thermal-pdf-wrap .row{display:flex;justify-content:space-between;font-size:11px;margin:2px 0}`;
+  document.head.appendChild(styleEl);
+
+  const wrap=document.createElement('div');
+  wrap.id='thermal-pdf-wrap';
+  wrap.style.cssText='position:fixed;left:-9999px;top:0;width:80mm;z-index:-1';
+  wrap.innerHTML=buildThermalBodyHtml(q,opts);
+  document.body.appendChild(wrap);
+
+  await Promise.all([...wrap.querySelectorAll('img')].map(img=>
+    img.complete&&img.naturalWidth>0
+      ?Promise.resolve()
+      :new Promise(res=>{ img.onload=img.onerror=res; setTimeout(res,1500); })
+  ));
+  await new Promise(r=>setTimeout(r,80));
+
+  const heightPx=wrap.scrollHeight;
+  const heightMm=Math.max(40,Math.ceil(heightPx*25.4/96)+2);
+  const dt=DOC_TYPES[opts.docType]||DOC_TYPES.cotizacion;
+  const docNum=docNumberFor(q,opts.docType);
+  const safeName=(docNum||dt.prefix).replace(/[^a-zA-Z0-9-]/g,'')||'documento';
+
+  try{
+    await window.html2pdf().set({
+      margin:0,
+      filename:safeName+'-80mm.pdf',
+      image:{type:'jpeg',quality:0.96},
+      html2canvas:{scale:3,useCORS:true,backgroundColor:'#ffffff'},
+      jsPDF:{unit:'mm',format:[80,heightMm],orientation:'portrait',compress:true}
+    }).from(wrap).save();
+  }catch(e){
+    console.error('PDF error:',e);
+    alert('Error generando PDF: '+(e.message||e));
+  }finally{
+    document.body.removeChild(wrap);
+    document.head.removeChild(styleEl);
+  }
 }
 
 function showPrintOptions(callback){
@@ -1539,8 +1610,8 @@ function showPrintOptions(callback){
     </div>
     <div style="margin-bottom:1.25rem">
       <div style="font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-3);margin-bottom:.45rem">Formato</div>
-      <label style="display:block;padding:.4rem 0;font-size:.88rem;cursor:pointer"><input type="radio" name="poFmt" value="normal" checked style="margin-right:.5rem"/>A4 / Carta</label>
-      <label style="display:block;padding:.4rem 0;font-size:.88rem;cursor:pointer"><input type="radio" name="poFmt" value="thermal" style="margin-right:.5rem"/>Termica 80mm</label>
+      <label style="display:block;padding:.4rem 0;font-size:.88rem;cursor:pointer"><input type="radio" name="poFmt" value="normal" checked style="margin-right:.5rem"/>A4 / Carta (imprimir / PDF)</label>
+      <label style="display:block;padding:.4rem 0;font-size:.88rem;cursor:pointer"><input type="radio" name="poFmt" value="thermal" style="margin-right:.5rem"/>Termica 80mm (descarga PDF)</label>
     </div>
     <div style="display:flex;gap:.5rem;justify-content:flex-end">
       <button class="cancel-btn" id="poCancel">Cancelar</button>
@@ -1566,9 +1637,13 @@ function printQuote(q,format,docType,emitter){
     return;
   }
   const opts={docType,emitter};
+  if(format==='thermal'){
+    downloadThermalPdf(q,opts);
+    return;
+  }
   const w=window.open('','_blank');
   if(!w){ alert('Habilita ventanas emergentes para imprimir.'); return; }
-  w.document.write(format==='thermal'?buildThermalHtml(q,opts):buildNormalHtml(q,opts));
+  w.document.write(buildNormalHtml(q,opts));
   w.document.close(); w.focus();
   setTimeout(()=>{ try{ w.print(); }catch(e){} },700);
 }
