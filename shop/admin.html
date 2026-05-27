@@ -512,7 +512,7 @@ function setupGate(){
 
 async function showAdmin(){
   adminRoot.style.display='';
-  await Promise.all([loadAll(), preloadLogo()]);
+  await Promise.all([loadAll(), preloadLogos()]);
   setupShell();
   go('resumen');
 }
@@ -1221,8 +1221,7 @@ CREATE POLICY "admin full" ON quotations
             <td style="font-size:.72rem;color:var(--ink-3);white-space:nowrap">${fmtDateShort(q.created_at)}</td>
             <td style="white-space:nowrap;display:flex;gap:.3rem;align-items:center">
               <button class="act-btn" data-qedit="${esc(q.id)}">Editar</button>
-              <button class="act-btn" data-qprint="${esc(q.id)}" data-qfmt="normal" title="Hoja carta/A4"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> A4</button>
-              <button class="act-btn" data-qprint="${esc(q.id)}" data-qfmt="thermal" title="Termica 80mm"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> 80mm</button>
+              <button class="act-btn" data-qprint="${esc(q.id)}" title="Cotizacion o Factura"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Imprimir</button>
               <button class="act-btn del" data-qdel="${esc(q.id)}">Elim.</button>
             </td>
           </tr>`).join('')}</tbody>
@@ -1240,7 +1239,7 @@ CREATE POLICY "admin full" ON quotations
     });
   });
   document.querySelectorAll('[data-qedit]').forEach(b=>b.addEventListener('click',()=>{ const q=allQuotes.find(x=>x.id===b.dataset.qedit); if(q) openQuoteDrawer(q); }));
-  document.querySelectorAll('[data-qprint]').forEach(b=>b.addEventListener('click',()=>{ const q=allQuotes.find(x=>x.id===b.dataset.qprint); if(q) printQuote(q,b.dataset.qfmt); }));
+  document.querySelectorAll('[data-qprint]').forEach(b=>b.addEventListener('click',()=>{ const q=allQuotes.find(x=>x.id===b.dataset.qprint); if(q) printQuote(q); }));
   document.querySelectorAll('[data-qdel]').forEach(b=>b.addEventListener('click',async()=>{
     const ok=await deleteQuote(b.dataset.qdel);
     if(ok){ allQuotes=allQuotes.filter(x=>x.id!==b.dataset.qdel); renderCotizaciones(); }
@@ -1307,8 +1306,7 @@ function openQuoteDrawer(q){
       </div>
       <div class="form-actions" style="margin-top:1.25rem">
         <button class="save-btn" id="qSaveBtn">Guardar cotizacion</button>
-        ${q?`<button class="act-btn" id="qPrintNormalBtn" style="display:flex;align-items:center;gap:.4rem"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Imprimir A4/Carta</button>
-        <button class="act-btn" id="qPrintThermBtn" style="display:flex;align-items:center;gap:.4rem"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Imprimir 80mm</button>`:''}
+        ${q?`<button class="act-btn" id="qPrintBtn" style="display:flex;align-items:center;gap:.4rem"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Imprimir (Cot. / Factura)</button>`:''}
         <button class="cancel-btn" id="qCancelBtn">Cancelar</button>
       </div>
     </div>`;
@@ -1358,8 +1356,7 @@ function openQuoteDrawer(q){
   }
 
   if(q){
-    document.getElementById('qPrintNormalBtn')?.addEventListener('click',()=>printQuote(collectCurrentData(),'normal'));
-    document.getElementById('qPrintThermBtn')?.addEventListener('click',()=>printQuote(collectCurrentData(),'thermal'));
+    document.getElementById('qPrintBtn')?.addEventListener('click',()=>printQuote(collectCurrentData()));
   }
 
   document.getElementById('qSaveBtn').addEventListener('click',async()=>{
@@ -1385,19 +1382,78 @@ function openQuoteDrawer(q){
   content.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-let _logoDataUrl=null;
-async function preloadLogo(){
-  try{
-    const r=await fetch(window.location.origin+'/images/logo-platatech.webp');
-    if(!r.ok) return;
-    const blob=await r.blob();
-    _logoDataUrl=await new Promise(res=>{ const fr=new FileReader(); fr.onload=()=>res(fr.result); fr.readAsDataURL(blob); });
-  }catch(e){ console.warn('logo preload:',e); }
+const EMITTERS={
+  platatech:{
+    label:'Plata Tech',
+    brandHtml:'Plata<span style="color:#1447ff">Tech</span>',
+    brandText:'PLATA TECH',
+    legal:'Plata Tech Solutions SRL',
+    address:'Santo Domingo, Republica Dominicana',
+    phone:'849-495-0959',
+    web:'platatechs.com',
+    logoPath:'/images/logo-platatech.webp',
+    footer:'&copy; 2026 Plata Tech Solutions SRL &mdash; Precios en pesos dominicanos (RD$)',
+    sign:'Ing. Ruddy Plata &mdash; CEO &amp; Fundador',
+    thanks:'Gracias por confiar en Plata Tech'
+  },
+  ultimogadget:{
+    label:'UltimoGadget',
+    brandHtml:'Ultimo<span style="color:#1447ff">Gadget</span>',
+    brandText:'ULTIMOGADGET',
+    legal:'UltimoGadget',
+    address:'Santo Domingo, Republica Dominicana',
+    phone:'849-495-0959',
+    web:'instagram.com/ultimogadget',
+    logoPath:'/images/logo-ug.webp',
+    footer:'&copy; 2026 UltimoGadget &mdash; Precios en pesos dominicanos (RD$)',
+    sign:'UltimoGadget &mdash; Tech Store &amp; Reparacion',
+    thanks:'Gracias por tu compra en UltimoGadget'
+  },
+  personal:{
+    label:'Personal (Ing. Ruddy Plata)',
+    brandHtml:'Ing. Ruddy <span style="color:#1447ff">Plata</span>',
+    brandText:'ING. RUDDY PLATA',
+    legal:'Ing. Ruddy Plata',
+    address:'Santo Domingo, Republica Dominicana',
+    phone:'849-495-0959',
+    web:'ruddyplata@icloud.com',
+    logoPath:null,
+    footer:'&copy; 2026 &mdash; Precios en pesos dominicanos (RD$)',
+    sign:'Ing. Ruddy Plata',
+    thanks:'Gracias por su confianza'
+  }
+};
+const DOC_TYPES={
+  cotizacion:{label:'Cotizacion',title:'COTIZACION',prefix:'COT',showValidity:true},
+  factura:   {label:'Factura',   title:'FACTURA',   prefix:'FAC',showValidity:false}
+};
+const _logoCache={};
+async function preloadLogos(){
+  for(const [k,em] of Object.entries(EMITTERS)){
+    if(!em.logoPath) continue;
+    try{
+      const r=await fetch(window.location.origin+em.logoPath);
+      if(!r.ok) continue;
+      const blob=await r.blob();
+      _logoCache[k]=await new Promise(res=>{ const fr=new FileReader(); fr.onload=()=>res(fr.result); fr.readAsDataURL(blob); });
+    }catch(e){ console.warn('logo preload '+k+':',e); }
+  }
 }
-function quoteLogoUrl(){ return _logoDataUrl||''; }
+function emitterLogoUrl(key){ return _logoCache[key]||''; }
+function docNumberFor(q,docType){
+  const num=q.number||'';
+  const dt=DOC_TYPES[docType]||DOC_TYPES.cotizacion;
+  if(!num) return '';
+  return num.replace(/^(COT|FAC)-/,dt.prefix+'-');
+}
 
-function buildNormalHtml(q){
-  const logoUrl=quoteLogoUrl();
+function buildNormalHtml(q,opts){
+  const docType=(opts&&opts.docType)||'cotizacion';
+  const emKey=(opts&&opts.emitter)||'platatech';
+  const em=EMITTERS[emKey]||EMITTERS.platatech;
+  const dt=DOC_TYPES[docType]||DOC_TYPES.cotizacion;
+  const logoUrl=emitterLogoUrl(emKey);
+  const docNum=docNumberFor(q,docType);
   const items=q.items||[];
   const rows=items.map(it=>it.type==='discount'?`
     <tr><td colspan="2" style="padding:.5rem .75rem;border-bottom:1px solid #f0f0f0;font-size:.88rem;color:#b91c1c;font-style:italic">Descuento${it.disc_type==='pct'?' ('+it.amount+'%)':''}: ${esc(it.description||'')}</td><td></td><td style="padding:.5rem .75rem;border-bottom:1px solid #f0f0f0;text-align:right;font-weight:700;color:#b91c1c;font-size:.88rem">- ${fmtPrice(it.discount_amount??it.amount??0)}</td></tr>`:`
@@ -1405,39 +1461,47 @@ function buildNormalHtml(q){
   const sub=q.totals?.subtotal||0,disc=q.totals?.discounts||0,itbis=q.totals?.itbis||0,total=q.totals?.total||0;
   const vDate=q.valid_until?new Date(q.valid_until+'T12:00:00').toLocaleDateString('es-DO',{day:'2-digit',month:'long',year:'numeric'}):'—';
   const cDate=q.created_at?new Date(q.created_at).toLocaleDateString('es-DO',{day:'2-digit',month:'long',year:'numeric'}):new Date().toLocaleDateString('es-DO',{day:'2-digit',month:'long',year:'numeric'});
-  return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/><title>Cotizacion ${esc(q.number||'')}</title>
-<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,Helvetica,sans-serif;color:#0d1117;background:#fff;padding:2cm}@page{size:letter;margin:1.5cm 2cm}@media print{body{padding:0}}.no-print{position:fixed;top:1rem;right:1rem;background:#0d1117;color:#fff;border:0;padding:.65rem 1.2rem;border-radius:8px;cursor:pointer;font-size:.9rem;font-weight:700;font-family:Arial,sans-serif}@media print{.no-print{display:none}}.header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.75rem;padding-bottom:1.25rem;border-bottom:3px solid #0d1117}.brand{font-size:1.5rem;font-weight:900}.brand span{color:#1447ff}.brand-info{font-size:.74rem;color:#4b5563;margin-top:.3rem;line-height:1.65}.doc-info{text-align:right}.doc-label{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:#9ca3af;margin-bottom:.2rem}.doc-num{font-size:1.1rem;font-weight:900;color:#1447ff;font-family:'Courier New',monospace}.doc-meta{font-size:.78rem;color:#4b5563;margin-top:.22rem;line-height:1.5}.sec-label{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.16em;color:#9ca3af;margin-bottom:.4rem;margin-top:1.4rem}.client-box{display:inline-block;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:.75rem 1rem;min-width:240px}.client-name{font-size:.95rem;font-weight:700}.client-info{font-size:.78rem;color:#4b5563;margin-top:.18rem;line-height:1.55}table{width:100%;border-collapse:collapse;margin-top:1.4rem}thead th{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#9ca3af;padding:.55rem .75rem;border-bottom:2px solid #0d1117;background:#f9fafb;text-align:left}thead th:not(:first-child){text-align:right}.totals-box{margin-top:1.4rem;margin-left:auto;width:260px;border:1px solid #e5e7eb;border-radius:8px;padding:.8rem 1rem;background:#f9fafb}.t-row{display:flex;justify-content:space-between;font-size:.86rem;color:#4b5563;padding:.22rem 0}.t-row.red{color:#b91c1c}.t-row.big{font-size:1.05rem;font-weight:900;color:#0d1117;border-top:2px solid #0d1117;margin-top:.4rem;padding-top:.5rem}.validity{margin-top:1.4rem;padding:.65rem 1rem;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;font-size:.8rem;color:#92400e}.notes-box{margin-top:1.1rem;font-size:.8rem;color:#4b5563;line-height:1.65;border-left:3px solid #e5e7eb;padding-left:.85rem}.footer{margin-top:2.25rem;border-top:1px solid #e5e7eb;padding-top:.75rem;display:flex;justify-content:space-between;font-size:.7rem;color:#9ca3af}</style></head>
+  const logoImg=logoUrl?`<img src="${logoUrl}" alt="${esc(em.label)}" style="height:70px;width:auto;flex-shrink:0" onerror="this.style.display='none'"/>`:'';
+  const metaLine=dt.showValidity?`Emitida: ${cDate}<br/>Valida hasta: ${vDate}`:`Fecha: ${cDate}`;
+  return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/><title>${dt.title} ${esc(docNum)}</title>
+<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,Helvetica,sans-serif;color:#0d1117;background:#fff;padding:2cm}@page{size:letter;margin:1.5cm 2cm}@media print{body{padding:0}}.no-print{position:fixed;top:1rem;right:1rem;background:#0d1117;color:#fff;border:0;padding:.65rem 1.2rem;border-radius:8px;cursor:pointer;font-size:.9rem;font-weight:700;font-family:Arial,sans-serif}@media print{.no-print{display:none}}.header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.75rem;padding-bottom:1.25rem;border-bottom:3px solid #0d1117}.brand{font-size:1.5rem;font-weight:900}.brand-info{font-size:.74rem;color:#4b5563;margin-top:.3rem;line-height:1.65}.doc-info{text-align:right}.doc-label{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:#9ca3af;margin-bottom:.2rem}.doc-num{font-size:1.1rem;font-weight:900;color:#1447ff;font-family:'Courier New',monospace}.doc-meta{font-size:.78rem;color:#4b5563;margin-top:.22rem;line-height:1.5}.sec-label{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.16em;color:#9ca3af;margin-bottom:.4rem;margin-top:1.4rem}.client-box{display:inline-block;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:.75rem 1rem;min-width:240px}.client-name{font-size:.95rem;font-weight:700}.client-info{font-size:.78rem;color:#4b5563;margin-top:.18rem;line-height:1.55}table{width:100%;border-collapse:collapse;margin-top:1.4rem}thead th{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#9ca3af;padding:.55rem .75rem;border-bottom:2px solid #0d1117;background:#f9fafb;text-align:left}thead th:not(:first-child){text-align:right}.totals-box{margin-top:1.4rem;margin-left:auto;width:260px;border:1px solid #e5e7eb;border-radius:8px;padding:.8rem 1rem;background:#f9fafb}.t-row{display:flex;justify-content:space-between;font-size:.86rem;color:#4b5563;padding:.22rem 0}.t-row.red{color:#b91c1c}.t-row.big{font-size:1.05rem;font-weight:900;color:#0d1117;border-top:2px solid #0d1117;margin-top:.4rem;padding-top:.5rem}.validity{margin-top:1.4rem;padding:.65rem 1rem;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;font-size:.8rem;color:#92400e}.notes-box{margin-top:1.1rem;font-size:.8rem;color:#4b5563;line-height:1.65;border-left:3px solid #e5e7eb;padding-left:.85rem}.footer{margin-top:2.25rem;border-top:1px solid #e5e7eb;padding-top:.75rem;display:flex;justify-content:space-between;font-size:.7rem;color:#9ca3af}</style></head>
 <body>
 <button class="no-print" onclick="window.print()">Imprimir / Guardar PDF</button>
-<div class="header"><div style="display:flex;align-items:center;gap:.85rem"><img src="${logoUrl}" alt="Plata Tech" style="height:70px;width:auto;flex-shrink:0" onerror="this.style.display='none'"/><div><div class="brand">Plata<span>Tech</span></div><div class="brand-info">Plata Tech Solutions SRL<br/>Santo Domingo, Republica Dominicana<br/>Tel: 849-495-0959 &nbsp;|&nbsp; platatechs.com</div></div></div><div class="doc-info"><div class="doc-label">Cotizacion</div><div class="doc-num">${esc(q.number||'')}</div><div class="doc-meta">Emitida: ${cDate}<br/>Valida hasta: ${vDate}</div></div></div>
+<div class="header"><div style="display:flex;align-items:center;gap:.85rem">${logoImg}<div><div class="brand">${em.brandHtml}</div><div class="brand-info">${em.legal}<br/>${em.address}<br/>Tel: ${em.phone} &nbsp;|&nbsp; ${em.web}</div></div></div><div class="doc-info"><div class="doc-label">${dt.title}</div><div class="doc-num">${esc(docNum)}</div><div class="doc-meta">${metaLine}</div></div></div>
 <div class="sec-label">Para</div>
 <div class="client-box"><div class="client-name">${esc(q.client?.name||'—')}</div><div class="client-info">${q.client?.company?esc(q.client.company)+'<br/>':''}${q.client?.phone?esc(q.client.phone):''}${q.client?.phone&&q.client?.email?' &nbsp;|&nbsp; ':''}${q.client?.email?esc(q.client.email):''}</div></div>
 <table><thead><tr><th>Descripcion</th><th style="text-align:right;width:70px">Cant.</th><th style="text-align:right;width:130px">Precio unit.</th><th style="text-align:right;width:130px">Total</th></tr></thead><tbody>${rows||'<tr><td colspan="4" style="padding:.75rem;text-align:center;color:#9ca3af">Sin articulos</td></tr>'}</tbody></table>
 <div class="totals-box"><div class="t-row"><span>Subtotal</span><span>${fmtPrice(sub)}</span></div>${disc?`<div class="t-row red"><span>Descuentos</span><span>- ${fmtPrice(disc)}</span></div>`:''}${itbis?`<div class="t-row"><span>ITBIS (18%)</span><span>${fmtPrice(itbis)}</span></div>`:''}<div class="t-row big"><span>Total</span><span>${fmtPrice(total)}</span></div></div>
-${q.valid_until?`<div class="validity">Esta cotizacion es valida hasta el <strong>${vDate}</strong>.</div>`:''}
+${dt.showValidity&&q.valid_until?`<div class="validity">Esta cotizacion es valida hasta el <strong>${vDate}</strong>.</div>`:''}
 ${q.notes?`<div class="sec-label" style="margin-top:1.4rem">Notas y condiciones</div><div class="notes-box">${esc(q.notes).replace(/\n/g,'<br/>')}</div>`:''}
-<div class="footer"><span>&copy; 2026 Plata Tech Solutions SRL &mdash; Precios en pesos dominicanos (RD$)</span><span>Ing. Ruddy Plata &mdash; CEO &amp; Fundador</span></div>
+<div class="footer"><span>${em.footer}</span><span>${em.sign}</span></div>
 </body></html>`;
 }
 
-function buildThermalHtml(q){
-  const logoUrl=quoteLogoUrl();
+function buildThermalHtml(q,opts){
+  const docType=(opts&&opts.docType)||'cotizacion';
+  const emKey=(opts&&opts.emitter)||'platatech';
+  const em=EMITTERS[emKey]||EMITTERS.platatech;
+  const dt=DOC_TYPES[docType]||DOC_TYPES.cotizacion;
+  const logoUrl=emitterLogoUrl(emKey);
+  const docNum=docNumberFor(q,docType);
   const items=q.items||[];
   const sub=q.totals?.subtotal||0,disc=q.totals?.discounts||0,itbis=q.totals?.itbis||0,total=q.totals?.total||0;
   const vDate=q.valid_until?new Date(q.valid_until+'T12:00:00').toLocaleDateString('es-DO',{day:'2-digit',month:'short',year:'numeric'}):'—';
   const cDate=q.created_at?new Date(q.created_at).toLocaleDateString('es-DO',{day:'2-digit',month:'short',year:'numeric'}):new Date().toLocaleDateString('es-DO',{day:'2-digit',month:'short',year:'numeric'});
   const itemsHtml=items.map(it=>it.type==='discount'?`<div style="font-size:10px;padding-left:4px;color:#c0392b">DESCT${it.disc_type==='pct'?' '+it.amount+'%':''}: ${esc(it.description||'')} - ${fmtPrice(it.discount_amount??it.amount??0)}</div>`:`<div style="font-size:11px;word-break:break-word">${esc(it.description||'')}</div><div style="display:flex;justify-content:space-between;font-size:11px;padding-left:6px;padding-bottom:3px"><span>${it.qty} x ${fmtPrice(it.unit_price||0)}</span><span>${fmtPrice(it.total||0)}</span></div>`).join('');
-  return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/><title>COT ${esc(q.number||'')}</title>
+  const logoImg=logoUrl?`<div class="center" style="margin-bottom:3px"><img src="${logoUrl}" alt="" style="height:52px;width:auto" onerror="this.style.display='none'"/></div>`:'';
+  return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/><title>${dt.prefix} ${esc(docNum)}</title>
 <style>*{box-sizing:border-box;margin:0;padding:0}@page{size:80mm auto;margin:0}body{font-family:'Courier New',Courier,monospace;font-size:12px;width:72mm;margin:0 auto;padding:4mm 3mm 8mm;color:#000;background:#fff}.line{border-top:1px dashed #000;margin:3px 0}.center{text-align:center}.bold{font-weight:bold}.row{display:flex;justify-content:space-between;font-size:11px;margin:2px 0}.no-print{position:fixed;top:6px;right:6px;background:#000;color:#fff;border:0;padding:.45rem .8rem;border-radius:5px;cursor:pointer;font-size:11px;font-family:sans-serif}@media print{.no-print{display:none}}</style></head>
 <body>
 <button class="no-print" onclick="window.print()">Imprimir</button>
-<div class="center" style="margin-bottom:3px"><img src="${logoUrl}" alt="" style="height:52px;width:auto" onerror="this.style.display='none'"/></div>
-<div class="center bold" style="font-size:13px">PLATA TECH</div>
-<div class="center" style="font-size:10px">platatechs.com | 849-495-0959</div>
+${logoImg}
+<div class="center bold" style="font-size:13px">${em.brandText}</div>
+<div class="center" style="font-size:10px">${em.web} | ${em.phone}</div>
 <div class="line"></div>
-<div class="row"><span class="bold">COTIZACION</span><span class="bold">${esc(q.number||'')}</span></div>
+<div class="row"><span class="bold">${dt.title}</span><span class="bold">${esc(docNum)}</span></div>
 <div class="row"><span>Fecha:</span><span>${cDate}</span></div>
-<div class="row"><span>Valida:</span><span>${vDate}</span></div>
+${dt.showValidity?`<div class="row"><span>Valida:</span><span>${vDate}</span></div>`:''}
 <div class="line"></div>
 <div class="bold" style="font-size:11px">Cliente:</div>
 <div style="font-size:11px">${esc(q.client?.name||'—')}</div>
@@ -1453,15 +1517,58 @@ ${itbis?`<div class="row"><span>ITBIS 18%</span><span>${fmtPrice(itbis)}</span><
 <div style="display:flex;justify-content:space-between;font-weight:bold;font-size:13px"><span>TOTAL</span><span>${fmtPrice(total)}</span></div>
 ${q.notes?`<div class="line"></div><div style="font-size:10px;word-break:break-word">${esc(q.notes)}</div>`:''}
 <div class="line"></div>
-<div class="center" style="font-size:10px">Ing. Ruddy Plata | CEO &amp; Fundador</div>
-<div class="center" style="font-size:10px">Gracias por confiar en Plata Tech</div>
+<div class="center" style="font-size:10px">${em.sign}</div>
+<div class="center" style="font-size:10px">${em.thanks}</div>
 </body></html>`;
 }
 
-function printQuote(q,format){
+function showPrintOptions(callback){
+  const overlay=document.createElement('div');
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(13,17,23,.55);display:flex;align-items:center;justify-content:center;z-index:9999;padding:1rem';
+  const emRadios=Object.entries(EMITTERS).map(([k,e],i)=>`<label style="display:block;padding:.4rem 0;font-size:.88rem;cursor:pointer"><input type="radio" name="poEmit" value="${k}" ${i===0?'checked':''} style="margin-right:.5rem"/>${esc(e.label)}</label>`).join('');
+  const dtRadios=Object.entries(DOC_TYPES).map(([k,d],i)=>`<label style="display:block;padding:.4rem 0;font-size:.88rem;cursor:pointer"><input type="radio" name="poType" value="${k}" ${i===0?'checked':''} style="margin-right:.5rem"/>${esc(d.label)}</label>`).join('');
+  overlay.innerHTML=`<div style="background:#fff;padding:1.5rem;border-radius:14px;min-width:320px;max-width:90vw;box-shadow:0 20px 60px rgba(0,0,0,.3)">
+    <h3 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.05rem;font-weight:800;margin-bottom:1.1rem">Opciones de impresion</h3>
+    <div style="margin-bottom:1rem">
+      <div style="font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-3);margin-bottom:.45rem">Tipo de documento</div>
+      ${dtRadios}
+    </div>
+    <div style="margin-bottom:1rem">
+      <div style="font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-3);margin-bottom:.45rem">Emisor</div>
+      ${emRadios}
+    </div>
+    <div style="margin-bottom:1.25rem">
+      <div style="font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-3);margin-bottom:.45rem">Formato</div>
+      <label style="display:block;padding:.4rem 0;font-size:.88rem;cursor:pointer"><input type="radio" name="poFmt" value="normal" checked style="margin-right:.5rem"/>A4 / Carta</label>
+      <label style="display:block;padding:.4rem 0;font-size:.88rem;cursor:pointer"><input type="radio" name="poFmt" value="thermal" style="margin-right:.5rem"/>Termica 80mm</label>
+    </div>
+    <div style="display:flex;gap:.5rem;justify-content:flex-end">
+      <button class="cancel-btn" id="poCancel">Cancelar</button>
+      <button class="save-btn" id="poGo">Imprimir</button>
+    </div>
+  </div>`;
+  document.body.appendChild(overlay);
+  const close=()=>overlay.remove();
+  overlay.querySelector('#poCancel').onclick=close;
+  overlay.querySelector('#poGo').onclick=()=>{
+    const docType=overlay.querySelector('input[name="poType"]:checked').value;
+    const emitter=overlay.querySelector('input[name="poEmit"]:checked').value;
+    const fmt=overlay.querySelector('input[name="poFmt"]:checked').value;
+    close();
+    callback({docType,emitter,format:fmt});
+  };
+  overlay.addEventListener('click',ev=>{ if(ev.target===overlay) close(); });
+}
+
+function printQuote(q,format,docType,emitter){
+  if(!docType||!emitter){
+    showPrintOptions(o=>printQuote(q,o.format,o.docType,o.emitter));
+    return;
+  }
+  const opts={docType,emitter};
   const w=window.open('','_blank');
   if(!w){ alert('Habilita ventanas emergentes para imprimir.'); return; }
-  w.document.write(format==='thermal'?buildThermalHtml(q):buildNormalHtml(q));
+  w.document.write(format==='thermal'?buildThermalHtml(q,opts):buildNormalHtml(q,opts));
   w.document.close(); w.focus();
   setTimeout(()=>{ try{ w.print(); }catch(e){} },700);
 }
