@@ -1529,18 +1529,21 @@ ${buildThermalBodyHtml(q,opts)}
 </body></html>`;
 }
 
-let _html2pdfLoadPromise=null;
-function ensureHtml2Pdf(){
-  if(window.html2pdf) return Promise.resolve();
-  if(_html2pdfLoadPromise) return _html2pdfLoadPromise;
-  _html2pdfLoadPromise=new Promise((resolve,reject)=>{
+function _getJsPdfCtor(){
+  return (window.jspdf&&window.jspdf.jsPDF)||window.jsPDF||(window.html2pdf&&window.html2pdf.jsPDF)||null;
+}
+let _jspdfLoadPromise=null;
+function ensureJsPdf(){
+  if(_getJsPdfCtor()) return Promise.resolve();
+  if(_jspdfLoadPromise) return _jspdfLoadPromise;
+  _jspdfLoadPromise=new Promise((resolve,reject)=>{
     const s=document.createElement('script');
-    s.src='https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js';
-    s.onload=()=>resolve();
-    s.onerror=()=>{ _html2pdfLoadPromise=null; reject(new Error('No se pudo cargar la libreria de PDF')); };
+    s.src='https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js';
+    s.onload=()=>{ if(_getJsPdfCtor()) resolve(); else { _jspdfLoadPromise=null; reject(new Error('jsPDF cargo pero no expuso constructor')); } };
+    s.onerror=()=>{ _jspdfLoadPromise=null; reject(new Error('No se pudo cargar jsPDF')); };
     document.head.appendChild(s);
   });
-  return _html2pdfLoadPromise;
+  return _jspdfLoadPromise;
 }
 
 function _decodeEntities(s){
@@ -1565,9 +1568,9 @@ async function _logoToPng(dataUrl){
 }
 
 async function downloadThermalPdf(q,opts){
-  try{ await ensureHtml2Pdf(); }
+  try{ await ensureJsPdf(); }
   catch(e){ alert('Error: '+e.message); return; }
-  const jsPDFCtor=window.jspdf&&window.jspdf.jsPDF;
+  const jsPDFCtor=_getJsPdfCtor();
   if(!jsPDFCtor){ alert('jsPDF no disponible'); return; }
 
   const em=EMITTERS[opts.emitter]||EMITTERS.platatech;
