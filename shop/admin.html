@@ -1535,7 +1535,7 @@ function ensureHtml2Pdf(){
   if(_html2pdfLoadPromise) return _html2pdfLoadPromise;
   _html2pdfLoadPromise=new Promise((resolve,reject)=>{
     const s=document.createElement('script');
-    s.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+    s.src='https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js';
     s.onload=()=>resolve();
     s.onerror=()=>{ _html2pdfLoadPromise=null; reject(new Error('No se pudo cargar la libreria de PDF')); };
     document.head.appendChild(s);
