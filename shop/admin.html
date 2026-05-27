@@ -1544,12 +1544,16 @@ function ensureHtml2Pdf(){
 }
 
 async function downloadThermalPdf(q,opts){
-  const goBtn=document.getElementById('poGo');
   try{ await ensureHtml2Pdf(); }
   catch(e){ alert('Error: '+e.message); return; }
 
+  const loader=document.createElement('div');
+  loader.style.cssText='position:fixed;inset:0;background:rgba(13,17,23,.7);display:flex;align-items:center;justify-content:center;z-index:99999;font-family:sans-serif;font-size:14px';
+  loader.innerHTML='<div style="background:#fff;color:#000;padding:1.1rem 1.6rem;border-radius:10px;font-weight:600">Generando PDF...</div>';
+  document.body.appendChild(loader);
+
   const styleEl=document.createElement('style');
-  styleEl.textContent=`#thermal-pdf-wrap{font-family:'Courier New',Courier,monospace;font-size:12px;width:72mm;margin:0;padding:4mm 3mm 8mm;color:#000;background:#fff;box-sizing:border-box}
+  styleEl.textContent=`#thermal-pdf-wrap{font-family:'Courier New',Courier,monospace;font-size:12px;width:80mm;margin:0;padding:4mm 3mm 8mm;color:#000;background:#fff;box-sizing:border-box}
 #thermal-pdf-wrap *{box-sizing:border-box;margin:0;padding:0}
 #thermal-pdf-wrap .line{border-top:1px dashed #000;margin:3px 0}
 #thermal-pdf-wrap .center{text-align:center}
@@ -1559,7 +1563,7 @@ async function downloadThermalPdf(q,opts){
 
   const wrap=document.createElement('div');
   wrap.id='thermal-pdf-wrap';
-  wrap.style.cssText='position:fixed;left:-9999px;top:0;width:80mm;z-index:-1';
+  wrap.style.cssText='position:fixed;left:0;top:0;z-index:99998';
   wrap.innerHTML=buildThermalBodyHtml(q,opts);
   document.body.appendChild(wrap);
 
@@ -1568,9 +1572,10 @@ async function downloadThermalPdf(q,opts){
       ?Promise.resolve()
       :new Promise(res=>{ img.onload=img.onerror=res; setTimeout(res,1500); })
   ));
-  await new Promise(r=>setTimeout(r,80));
+  await new Promise(r=>setTimeout(r,120));
 
-  const heightPx=wrap.scrollHeight;
+  const widthPx=wrap.offsetWidth;
+  const heightPx=wrap.offsetHeight;
   const heightMm=Math.max(40,Math.ceil(heightPx*25.4/96)+2);
   const dt=DOC_TYPES[opts.docType]||DOC_TYPES.cotizacion;
   const docNum=docNumberFor(q,opts.docType);
@@ -1581,15 +1586,16 @@ async function downloadThermalPdf(q,opts){
       margin:0,
       filename:safeName+'-80mm.pdf',
       image:{type:'jpeg',quality:0.96},
-      html2canvas:{scale:3,useCORS:true,backgroundColor:'#ffffff'},
+      html2canvas:{scale:3,useCORS:true,backgroundColor:'#ffffff',width:widthPx,height:heightPx,windowWidth:widthPx,windowHeight:heightPx,scrollX:0,scrollY:0},
       jsPDF:{unit:'mm',format:[80,heightMm],orientation:'portrait',compress:true}
     }).from(wrap).save();
   }catch(e){
     console.error('PDF error:',e);
     alert('Error generando PDF: '+(e.message||e));
   }finally{
-    document.body.removeChild(wrap);
-    document.head.removeChild(styleEl);
+    if(wrap.parentNode) wrap.parentNode.removeChild(wrap);
+    if(styleEl.parentNode) styleEl.parentNode.removeChild(styleEl);
+    if(loader.parentNode) loader.parentNode.removeChild(loader);
   }
 }
 
