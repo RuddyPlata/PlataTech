@@ -1673,7 +1673,8 @@ async function downloadThermalPdf(q,opts){
     return y+4;
   }
 
-  const heightMm=Math.max(40,Math.ceil(render(null)));
+  const measurePdf=new jsPDFCtor({unit:'mm',format:[W,2000],orientation:'portrait'});
+  const heightMm=Math.max(40,Math.ceil(render(measurePdf)));
   const pdf=new jsPDFCtor({unit:'mm',format:[W,heightMm],orientation:'portrait',compress:true});
   render(pdf);
   const safeName=(docNum||dt.prefix).replace(/[^a-zA-Z0-9-]/g,'')||'documento';
