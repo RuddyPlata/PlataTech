@@ -9,6 +9,8 @@
   gtag('js', new Date());
   gtag('config', 'G-3L0THHV7FQ');
 </script>
+  <!-- Plata Tech: tracking de leads (clic WhatsApp = conversión) -->
+  <script defer src="lead-tracking.js"></script>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="Plata Tech Solutions: domótica, electricidad, portones eléctricos, inversores, A/C y remodelación en Santo Domingo. 87 clientes satisfechos. Soporte y garantía post-instalación gratis 3 meses."/>
@@ -464,102 +466,127 @@
   .div-btn-ig:hover { transform: translateX(4px); opacity: .88; }
 
   /* ╔══════════════════════════════════════════════════════════╗
-     ║  SHOP SHOWCASE                                           ║
+     ║  TIENDA VIRTUAL (PRODUCTOS)                              ║
      ╚══════════════════════════════════════════════════════════╝ */
-  .shop-show {
+  .store-sec {
     padding: 6.5rem 0; position: relative; overflow: hidden;
     background: linear-gradient(180deg, var(--blue-tint) 0%, var(--off-white) 100%);
     border-top: 1px solid var(--border);
   }
-  .shop-show::before {
+  .store-sec::before {
     content: ''; position: absolute; top: -120px; right: -80px;
     width: 360px; height: 360px; border-radius: 50%;
     background: radial-gradient(circle, rgba(30,80,212,.10), transparent 70%);
     pointer-events: none;
   }
-  .shop-show-inner {
-    display: grid; grid-template-columns: 1.1fr 1fr;
-    gap: 4rem; align-items: center; position: relative; z-index: 1;
-  }
-  .shop-show-text .label { margin-bottom: 1rem; }
-  .shop-show-title {
+  .store-sec .container { position: relative; z-index: 1; }
+  .store-head { text-align: center; max-width: 720px; margin: 0 auto 1.4rem; }
+  .store-head .label { margin-bottom: .85rem; }
+  .store-title {
     font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800;
-    font-size: clamp(1.9rem, 3.4vw, 2.6rem); line-height: 1.1;
-    color: var(--ink); margin-bottom: 1.25rem; letter-spacing: -.02em;
+    font-size: clamp(1.9rem, 3.4vw, 2.6rem); line-height: 1.12;
+    color: var(--ink); margin-bottom: 1rem; letter-spacing: -.02em;
   }
-  .shop-show-title em { color: var(--blue); font-style: normal; }
-  .shop-show-desc {
-    font-size: 1rem; color: var(--ink-2); line-height: 1.75;
-    max-width: 520px; margin-bottom: 2rem;
+  .store-title em { color: var(--blue); font-style: normal; }
+  .store-desc {
+    font-size: 1rem; color: var(--ink-2); line-height: 1.7;
+    max-width: 560px; margin: 0 auto;
   }
-  .shop-show-trust {
-    display: flex; flex-wrap: wrap; gap: .65rem; margin-bottom: 2rem;
+  .store-trust {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: .6rem; margin: 1.8rem 0 3rem;
   }
-  .shop-show-trust span {
+  .store-trust span {
     display: inline-flex; align-items: center; gap: .45rem;
-    padding: .45rem .9rem; border-radius: 100px;
+    padding: .5rem 1rem; border-radius: 100px;
     background: var(--white); border: 1px solid var(--border);
-    font-size: .78rem; font-weight: 600; color: var(--ink-2);
+    font-size: .8rem; font-weight: 600; color: var(--ink-2);
+    box-shadow: 0 2px 10px rgba(11,29,62,.04);
   }
-  .shop-show-trust svg { color: var(--blue); flex-shrink: 0; }
-  .shop-show-cta {
+  .store-trust svg { color: var(--blue); flex-shrink: 0; }
+
+  .store-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem; margin-bottom: 2.75rem;
+  }
+  .store-card {
+    display: flex; flex-direction: column;
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 18px; overflow: hidden;
+    box-shadow: 0 10px 32px rgba(11,29,62,.06);
+    transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+  }
+  .store-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 22px 50px rgba(11,29,62,.13);
+    border-color: rgba(30,80,212,.28);
+  }
+  .store-card-vis {
+    position: relative; height: 180px;
+    display: flex; align-items: center; justify-content: center;
+    padding: 1.1rem; background: var(--off-white);
+    border-bottom: 1px solid var(--border);
+  }
+  .store-card-vis img, .store-card-vis picture { max-width: 100%; max-height: 158px; object-fit: contain; }
+  .store-card-cat {
+    position: absolute; top: .7rem; left: .7rem;
+    padding: .28rem .65rem; border-radius: 100px;
+    background: var(--blue-pale); color: var(--blue);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: .62rem; font-weight: 600; letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+  .store-card-body { padding: 1rem 1.1rem 1.2rem; display: flex; flex-direction: column; flex: 1; }
+  .store-card-brand {
+    font-family: 'Space Grotesk', sans-serif; font-size: .68rem;
+    font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--ink-3); margin-bottom: .25rem;
+  }
+  .store-card-name {
+    font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700;
+    font-size: .92rem; line-height: 1.3; color: var(--ink);
+    margin-bottom: .9rem;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .store-card-foot {
+    margin-top: auto; display: flex; align-items: center;
+    justify-content: space-between; gap: .5rem;
+  }
+  .store-card-price {
+    font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800;
+    font-size: 1rem; color: var(--ink);
+  }
+  .store-card-go {
+    display: inline-flex; align-items: center; gap: .3rem;
+    font-size: .76rem; font-weight: 700; color: var(--blue);
+  }
+  .store-card-go svg { transition: transform .25s; }
+  .store-card:hover .store-card-go svg { transform: translateX(3px); }
+
+  .store-cta-wrap { text-align: center; }
+  .store-cta {
     display: inline-flex; align-items: center; gap: .55rem;
-    padding: .9rem 1.8rem; border-radius: 100px;
+    padding: .95rem 2rem; border-radius: 100px;
     background: var(--blue); color: var(--white);
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: .92rem; font-weight: 700;
+    font-size: .95rem; font-weight: 700;
     box-shadow: var(--shadow-blue);
     transition: transform .25s, box-shadow .25s;
   }
-  .shop-show-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 38px rgba(30,80,212,.32); }
-  .shop-show-sub {
-    display: flex; align-items: center; gap: .9rem; margin-top: 1.5rem;
-    font-size: .78rem; color: var(--ink-3);
+  .store-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 38px rgba(30,80,212,.32); }
+  .store-cta-sub {
+    margin-top: 1rem; font-size: .78rem; color: var(--ink-3);
+    display: inline-flex; align-items: center; justify-content: center; gap: .55rem; flex-wrap: wrap;
   }
-  .shop-show-sub-logos { display: inline-flex; align-items: center; gap: .7rem; }
-  .shop-show-sub-logos img { height: 20px; width: auto; object-fit: contain; opacity: .7; }
-  .shop-show-sub-logos .sep { width: 1px; height: 14px; background: var(--border); }
+  .store-cta-sub img { height: 18px; width: auto; object-fit: contain; opacity: .7; }
+  .store-cta-sub .sep { width: 1px; height: 12px; background: var(--border); }
 
-  .shop-show-visual {
-    position: relative; display: flex; justify-content: center;
-    padding: 1.5rem;
-  }
-  .shop-show-card {
-    width: 100%; max-width: 420px;
-    background: var(--white); border: 1px solid var(--border);
-    border-radius: 20px; padding: 1.75rem;
-    box-shadow: 0 18px 50px rgba(11,29,62,.08);
-    position: relative;
-  }
-  .shop-show-card-head {
-    display: flex; align-items: center; gap: .7rem; margin-bottom: 1.25rem;
-    padding-bottom: 1.25rem; border-bottom: 1px solid var(--border);
-  }
-  .shop-show-card-mark {
-    width: 40px; height: 40px; border-radius: 10px;
-    background: var(--white);
-    padding: 5px; display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 14px rgba(20,71,255,.22);
-  }
-  .shop-show-card-mark img { width: 100%; height: 100%; object-fit: contain; }
-  .shop-show-card-brand { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: .95rem; color: var(--ink); }
-  .shop-show-card-sub { font-size: .72rem; color: var(--ink-3); }
-
-  .shop-show-cats { display: grid; grid-template-columns: 1fr 1fr; gap: .55rem; }
-  .shop-show-cats a {
-    display: flex; align-items: center; gap: .6rem;
-    padding: .8rem .9rem; border-radius: 12px;
-    background: var(--off-white); border: 1px solid var(--border);
-    font-size: .82rem; font-weight: 600; color: var(--ink);
-    transition: background .2s, border-color .2s, transform .2s;
-  }
-  .shop-show-cats a:hover { background: var(--blue-pale); border-color: rgba(30,80,212,.25); transform: translateX(2px); }
-  .shop-show-cats svg { color: var(--blue); flex-shrink: 0; }
-
-  @media (max-width: 900px) {
-    .shop-show { padding: 5rem 0; }
-    .shop-show-inner { grid-template-columns: 1fr; gap: 2.5rem; }
-    .shop-show-visual { padding: 0; }
+  @media (max-width: 1024px) { .store-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 760px) {
+    .store-sec { padding: 5rem 0; }
+    .store-grid { grid-template-columns: repeat(2, 1fr); gap: .9rem; }
+    .store-card-vis { height: 150px; }
+    .store-card-vis img, .store-card-vis picture { max-height: 128px; }
   }
 
   /* ╔══════════════════════════════════════════════════════════╗
@@ -976,7 +1003,7 @@
     <ul class="nav-links">
       <li><a href="#servicios">Servicios</a></li>
       <li><a href="#nosotros">Nosotros</a></li>
-      <li><a href="#divisiones">Divisiones</a></li>
+      <li><a href="#divisiones">Aliados</a></li>
       <li><a href="#tienda">Tienda</a></li>
       <li><a href="#contacto">Contacto</a></li>
     </ul>
@@ -992,7 +1019,7 @@
   <div class="nav-mobile" id="navMobile">
     <a href="#servicios"  onclick="closeNav()">Servicios</a>
     <a href="#nosotros"   onclick="closeNav()">Nosotros</a>
-    <a href="#divisiones" onclick="closeNav()">Divisiones</a>
+    <a href="#divisiones" onclick="closeNav()">Aliados</a>
     <a href="#tienda"     onclick="closeNav()">Tienda</a>
     <a href="#contacto"   onclick="closeNav()">Contacto</a>
   </div>
@@ -1049,7 +1076,7 @@
         <div class="stat-l">Años de Experiencia</div>
       </div>
       <div class="stat">
-        <div class="stat-n">10</div>
+        <div class="stat-n" data-count="13">13</div>
         <div class="stat-l">Servicios Especializados</div>
       </div>
       <div class="stat">
@@ -1091,6 +1118,53 @@
   </div>
 </div>
 
+<!-- ── TIENDA VIRTUAL (PRODUCTOS) ─────────────────────────── -->
+<section id="tienda" class="store-sec">
+  <div class="container">
+    <div class="store-head" data-reveal>
+      <p class="label">Tienda Virtual · Envíos a todo el país · Paga con tarjeta</p>
+      <h2 class="store-title">La misma <em>calidad</em> que instalamos,<br/>ahora en tu carrito</h2>
+      <p class="store-desc">Celulares, laptops, cámaras y más — productos originales con garantía respaldada y factura NCF. Compra en línea, paga con tarjeta y recíbelo en la puerta de tu casa o negocio.</p>
+    </div>
+
+    <div class="store-trust" data-reveal>
+      <span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        Pago con tarjeta
+      </span>
+      <span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        Envíos a todo el país
+      </span>
+      <span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Garantía respaldada
+      </span>
+      <span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Factura con NCF
+      </span>
+    </div>
+
+    <div class="store-grid" id="storeGrid" data-reveal>
+      <!-- Tarjetas de producto inyectadas por JS desde el catálogo del shop -->
+    </div>
+
+    <div class="store-cta-wrap" data-reveal>
+      <a href="shop/index.html" class="store-cta js-magnetic">
+        Ver toda la tienda
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <div class="store-cta-sub">
+        <span>Productos oficiales de</span>
+        <img src="images/logo-platatech.webp" alt="Plata Tech Security"/>
+        <span class="sep"></span>
+        <img src="images/logo-ug.webp" alt="UltimoGadget"/>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ── SERVICES ──────────────────────────────────────────── -->
 <section id="servicios" class="services">
   <div class="container">
@@ -1100,7 +1174,7 @@
         <h2 class="h2">Todo lo que necesitas<br/>en un solo lugar</h2>
         <p class="svc-hint" style="margin-top:.25rem;">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 15l6 6m-11-4a7 7 0 1 1 0-14 7 7 0 0 1 0 14z"/></svg>
-          Toca un servicio para personalizar tu mensaje de WhatsApp
+          Toca un servicio para ver el área y solicitar tu cotización
         </p>
       </div>
     </div>
@@ -1115,13 +1189,13 @@
 
       <!-- 1. Electricidad -->
       <div class="gl4-slide">
-        <div class="gl4-card" data-msg="Hola, me interesa una instalación eléctrica (residencial o comercial). ¿Pueden darme más información y un presupuesto?">
+        <div class="gl4-card" data-href="energia.html">
           <img class="gl4-img" src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=800&q=80&auto=format&fit=crop" alt="Electricidad"/>
           <div class="gl4-overlay"></div>
           <div class="gl4-body">
             <div class="gl4-body-title">Electricidad Residencial y Comercial</div>
             <div class="gl4-body-desc">Instalaciónes eléctricas completas para casas, negocios y edificios. Tableros, cableado, tomas y emergencias.</div>
-            <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+            <div class="gl4-body-more">Ver servicios <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
             <a class="gl4-div-link" href="energia.html" onclick="event.stopPropagation()">División Energía →</a>
           </div>
         </div>
@@ -1129,13 +1203,13 @@
 
       <!-- 2. A/C -->
       <div class="gl4-slide">
-        <div class="gl4-card" data-msg="Hola, necesito información sobre instalación o mantenimiento de aire acondicionado. ¿Me pueden ayudar con un presupuesto?">
+        <div class="gl4-card" data-href="energia.html">
           <img class="gl4-img" src="https://images.unsplash.com/photo-1453749024858-4bca89bd9edc?w=800&q=80&auto=format&fit=crop" alt="Aire Acondicionado"/>
           <div class="gl4-overlay"></div>
           <div class="gl4-body">
             <div class="gl4-body-title">Aire Acondicionado</div>
             <div class="gl4-body-desc">Instalación, mantenimiento y reparación de sistemas split, cassette y central para cualquier espacio.</div>
-            <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+            <div class="gl4-body-more">Ver servicios <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
             <a class="gl4-div-link" href="energia.html" onclick="event.stopPropagation()">División Energía →</a>
           </div>
         </div>
@@ -1143,13 +1217,13 @@
 
       <!-- 3. Inversores -->
       <div class="gl4-slide">
-        <div class="gl4-card" data-msg="Hola, me interesa instalar un inversor o sistema de baterías en mi hogar o negocio. ¿Cuánto cuesta y qué marcas manejan?">
+        <div class="gl4-card" data-href="energia.html">
           <img class="gl4-img" src="https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&q=80&auto=format&fit=crop" alt="Inversores Solar"/>
           <div class="gl4-overlay"></div>
           <div class="gl4-body">
             <div class="gl4-body-title">Instalación de Inversores</div>
             <div class="gl4-body-desc">Energia sin interrupciones. Instalamos inversores y sistemas de baterias de todas las marcas para hogar y negocio.</div>
-            <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+            <div class="gl4-body-more">Ver servicios <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
             <a class="gl4-div-link" href="energia.html" onclick="event.stopPropagation()">División Energía →</a>
           </div>
         </div>
@@ -1157,13 +1231,13 @@
 
       <!-- 4. Redes -->
       <div class="gl4-slide">
-        <div class="gl4-card" data-msg="Hola, necesito instalar o mejorar la red WiFi/LAN de mi hogar o empresa. ¿Pueden ayudarme con un presupuesto?">
+        <div class="gl4-card" data-href="redes.html">
           <img class="gl4-img" src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80&auto=format&fit=crop" alt="Redes Privadas"/>
           <div class="gl4-overlay"></div>
           <div class="gl4-body">
             <div class="gl4-body-title">Redes Privadas</div>
             <div class="gl4-body-desc">Redes LAN/WiFi para hogares y empresas. Configuración de VPN, routers, switches y puntos de acceso profesionales.</div>
-            <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+            <div class="gl4-body-more">Ver servicios <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
             <a class="gl4-div-link" href="redes.html" onclick="event.stopPropagation()">División Redes →</a>
           </div>
         </div>
@@ -1171,13 +1245,13 @@
 
       <!-- 5. Portones -->
       <div class="gl4-slide">
-        <div class="gl4-card" data-msg="Hola, me interesa instalar un portón eléctrico. ¿Qué opciones manejan (corredizo, abatible) y cuánto cuesta?">
+        <div class="gl4-card" data-href="automatizacion.html">
           <img class="gl4-img" src="https://images.unsplash.com/photo-1645005049035-c35644b627ba?w=800&q=80&auto=format&fit=crop" alt="Portones Electricos"/>
           <div class="gl4-overlay"></div>
           <div class="gl4-body">
             <div class="gl4-body-title">Portones Electricos</div>
             <div class="gl4-body-desc">Portones corredizos y abatibles con control por mando, app móvil o huella digital. Instalación y automatización.</div>
-            <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+            <div class="gl4-body-more">Ver servicios <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
             <a class="gl4-div-link" href="automatizacion.html" onclick="event.stopPropagation()">División Automatización →</a>
           </div>
         </div>
@@ -1185,13 +1259,13 @@
 
       <!-- 6. Domótica -->
       <div class="gl4-slide">
-        <div class="gl4-card" data-msg="Hola, me interesa automatizar mi hogar con domótica (luces, climatización, seguridad). ¿Qué sistemas tienen disponibles?">
+        <div class="gl4-card" data-href="automatizacion.html">
           <img class="gl4-img" src="https://images.unsplash.com/photo-1750744688299-c7a459ab3855?w=800&q=80&auto=format&fit=crop" alt="Domótica"/>
           <div class="gl4-overlay"></div>
           <div class="gl4-body">
             <div class="gl4-body-title">Domótica y Automatización</div>
             <div class="gl4-body-desc">Control inteligente desde tu celular. Luces, climatizacion, seguridad y mas integrados en un solo sistema Smart Home.</div>
-            <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+            <div class="gl4-body-more">Ver servicios <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
             <a class="gl4-div-link" href="automatizacion.html" onclick="event.stopPropagation()">División Automatización →</a>
           </div>
         </div>
@@ -1199,13 +1273,13 @@
 
       <!-- 7. Remodelación -->
       <div class="gl4-slide">
-        <div class="gl4-card" data-msg="Hola, necesito información sobre remodelación de interiores (PVC, sheetrock, drywall, cielos rasos). ¿Pueden cotizarme?">
+        <div class="gl4-card" data-href="remodelacion.html">
           <img class="gl4-img" src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&q=80&auto=format&fit=crop" alt="Remodelación"/>
           <div class="gl4-overlay"></div>
           <div class="gl4-body">
             <div class="gl4-body-title">Remodelación de Interiores</div>
             <div class="gl4-body-desc">Espacios transformados con PVC, sheetrock y drywall. Cielos rasos, divisiones y acabados de alta calidad.</div>
-            <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+            <div class="gl4-body-more">Ver servicios <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
             <a class="gl4-div-link" href="remodelacion.html" onclick="event.stopPropagation()">División Remodelación →</a>
           </div>
         </div>
@@ -1213,13 +1287,13 @@
 
       <!-- 8. Web y Software -->
       <div class="gl4-slide">
-        <div class="gl4-card" data-msg="Hola, necesito una página web, tienda en línea o solución de software para mi negocio. ¿Pueden ayudarme?">
+        <div class="gl4-card" data-href="digital.html">
           <img class="gl4-img" src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&q=80&auto=format&fit=crop" alt="Paginas Web y Software"/>
           <div class="gl4-overlay"></div>
           <div class="gl4-body">
             <div class="gl4-body-title">Paginas Web y Software</div>
             <div class="gl4-body-desc">Sitios web profesionales, tiendas en linea y aplicaciones a medida que hacen crecer tu negocio.</div>
-            <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+            <div class="gl4-body-more">Ver servicios <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
             <a class="gl4-div-link" href="digital.html" onclick="event.stopPropagation()">División Digital →</a>
           </div>
         </div>
@@ -1227,13 +1301,13 @@
 
       <!-- 9. Servidores -->
       <div class="gl4-slide">
-        <div class="gl4-card" data-msg="Hola, necesito instalar o configurar servidores para mi empresa. ¿Qué servicios de infraestructura IT ofrecen?">
+        <div class="gl4-card" data-href="digital.html">
           <img class="gl4-img" src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=800&q=80&auto=format&fit=crop" alt="Servidores"/>
           <div class="gl4-overlay"></div>
           <div class="gl4-body">
             <div class="gl4-body-title">Servidores e Infraestructura IT</div>
             <div class="gl4-body-desc">Instalación y administración de servidores físicos y virtuales. Infraestructura IT completa para empresas.</div>
-            <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+            <div class="gl4-body-more">Ver servicios <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
             <a class="gl4-div-link" href="digital.html" onclick="event.stopPropagation()">División Digital →</a>
           </div>
         </div>
@@ -1241,13 +1315,13 @@
 
       <!-- 10. IA -->
       <div class="gl4-slide">
-        <div class="gl4-card" data-msg="Hola, me interesa implementar Inteligencia Artificial en mi negocio (chatbots, automatización, análisis de datos). ¿Qué soluciones tienen?">
+        <div class="gl4-card" data-href="digital.html">
           <img class="gl4-img" src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80&auto=format&fit=crop" alt="Inteligencia Artificial"/>
           <div class="gl4-overlay"></div>
           <div class="gl4-body">
             <div class="gl4-body-title">Inteligencia Artificial para tu Negocio</div>
             <div class="gl4-body-desc">Chatbots 24/7, automatización de procesos y análisis de datos para generar ventajas competitivas reales.</div>
-            <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+            <div class="gl4-body-more">Ver servicios <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
             <a class="gl4-div-link" href="digital.html" onclick="event.stopPropagation()">División Digital →</a>
           </div>
         </div>
@@ -1255,13 +1329,13 @@
 
       <!-- 11. Sheetrock y Drywall -->
       <div class="gl4-slide">
-        <div class="gl4-card" data-msg="Hola, necesito información sobre instalación de sheetrock y drywall (divisiones, tabiques, cielos rasos). ¿Pueden cotizarme?">
+        <div class="gl4-card" data-href="remodelacion.html">
           <img class="gl4-img" src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80&auto=format&fit=crop" alt="Sheetrock y Drywall"/>
           <div class="gl4-overlay"></div>
           <div class="gl4-body">
             <div class="gl4-body-title">Sheetrock y Drywall</div>
             <div class="gl4-body-desc">Divisiones, tabiques y cielos rasos en sistema drywall para casas, locales y edificios. Acabados limpios, rápidos y de larga duración.</div>
-            <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+            <div class="gl4-body-more">Ver servicios <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
             <a class="gl4-div-link" href="remodelacion.html" onclick="event.stopPropagation()">División Remodelación →</a>
           </div>
         </div>
@@ -1269,14 +1343,28 @@
 
       <!-- 12. Pintura Profesional -->
       <div class="gl4-slide">
-        <div class="gl4-card" data-msg="Hola, me interesa el servicio de pintura profesional (interior o exterior). ¿Cuánto cuesta y qué tipo de acabados ofrecen?">
+        <div class="gl4-card" data-href="remodelacion.html">
           <img class="gl4-img" src="https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=800&q=80&auto=format&fit=crop" alt="Pintura Profesional"/>
           <div class="gl4-overlay"></div>
           <div class="gl4-body">
             <div class="gl4-body-title">Pintura Profesional</div>
             <div class="gl4-body-desc">Pintura de interiores y exteriores para casas, locales y edificios. Maquinaria de última generación para aplicación con pistola y acabados impecables.</div>
-            <div class="gl4-body-more">Solicitar cotización <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+            <div class="gl4-body-more">Ver servicios <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
             <a class="gl4-div-link" href="remodelacion.html" onclick="event.stopPropagation()">División Remodelación →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 13. Seguridad -->
+      <div class="gl4-slide">
+        <div class="gl4-card" data-href="security.html">
+          <img class="gl4-img" src="https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=800&q=80&auto=format&fit=crop" alt="Cámaras y Seguridad"/>
+          <div class="gl4-overlay"></div>
+          <div class="gl4-body">
+            <div class="gl4-body-title">Cámaras y Seguridad</div>
+            <div class="gl4-body-desc">Cámaras Hikvision ColorVu, alarmas, CCTV y control de acceso. Instalación certificada para hogares y negocios.</div>
+            <div class="gl4-body-more">Ver servicios <svg class="gl4-arrow-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+            <a class="gl4-div-link" href="security.html" onclick="event.stopPropagation()">División Seguridad →</a>
           </div>
         </div>
       </div>
@@ -1448,155 +1536,12 @@
 <section id="divisiones" class="divisions">
   <div class="container">
     <div class="section-header" data-reveal>
-      <p class="label">Nuestras Divisiones</p>
-      <h2 class="h2">Seis divisiones, un solo equipo</h2>
-      <p class="section-sub">Tecnología Digital es nuestra especialidad principal. Las demás divisiones completan la oferta integral de Plata Tech — todas bajo la misma empresa registrada con garantía incluida.</p>
+      <p class="label">Ecosistema Plata Tech</p>
+      <h2 class="h2">Marcas que forman parte<br/>de nuestro grupo</h2>
+      <p class="section-sub">Más allá de nuestras áreas de servicio, impulsamos marcas propias que amplían lo que podemos ofrecerte — todas bajo el mismo estándar de calidad y responsabilidad de Plata Tech.</p>
     </div>
 
-    <!-- 6 Plata Tech service divisions -->
-    <div class="div-grid">
-
-      <!-- Tecnología Digital — PRIMERO (fuerte principal) -->
-      <div class="div-card js-tilt" data-href="digital.html">
-        <div class="div-stripe" style="background:linear-gradient(90deg,#059669,#10b981);"></div>
-        <div class="div-body">
-          <div class="div-head">
-            <div class="div-icon" style="background:rgba(5,150,105,.12);border:1px solid rgba(5,150,105,.28);">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-            </div>
-            <span class="div-badge" style="background:rgba(5,150,105,.15);color:#059669;border-color:rgba(5,150,105,.35);">Nuestro Fuerte</span>
-          </div>
-          <div class="div-name">Tecnología Digital</div>
-          <div class="div-tagline" style="color:#059669;">Web · Software · IA · Servidores</div>
-          <p class="div-desc">Páginas web, sistemas a medida e inteligencia artificial para negocios en Santo Domingo. Tu código, tu dominio, soporte incluido.</p>
-          <div class="div-btns">
-            <a href="digital.html" class="div-btn" style="background:#059669;">
-              Ver servicios
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Remodelación -->
-      <div class="div-card js-tilt" data-href="remodelacion.html">
-        <div class="div-stripe" style="background:linear-gradient(90deg,#c8922a,#e6aa3c);"></div>
-        <div class="div-body">
-          <div class="div-head">
-            <div class="div-icon" style="background:rgba(200,146,42,.12);border:1px solid rgba(200,146,42,.28);">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c8922a" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-            </div>
-            <span class="div-badge">Activo</span>
-          </div>
-          <div class="div-name">Remodelación</div>
-          <div class="div-tagline" style="color:#c8922a;">Pintura · Cielos Rasos · Sheetrock</div>
-          <p class="div-desc">La única pintura a pistola profesional en Santo Domingo. Interiores, exteriores, cielos rasos y PVC. Entrega limpia, siempre.</p>
-          <div class="div-btns">
-            <a href="remodelacion.html" class="div-btn" style="background:#c8922a;">
-              Ver servicios
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Energía -->
-      <div class="div-card js-tilt" data-href="energia.html">
-        <div class="div-stripe" style="background:linear-gradient(90deg,#e07b14,#f59e3a);"></div>
-        <div class="div-body">
-          <div class="div-head">
-            <div class="div-icon" style="background:rgba(224,123,20,.12);border:1px solid rgba(224,123,20,.28);">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e07b14" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-            </div>
-            <span class="div-badge">Activo</span>
-          </div>
-          <div class="div-name">Energía</div>
-          <div class="div-tagline" style="color:#e07b14;">Eléctrica · Inversores · A/C</div>
-          <p class="div-desc">Electricidad residencial y comercial, instalación de inversores y baterías, aire acondicionado y emergencias eléctricas.</p>
-          <div class="div-btns">
-            <a href="energia.html" class="div-btn" style="background:#e07b14;">
-              Ver servicios
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Automatización -->
-      <div class="div-card js-tilt" data-href="automatizacion.html">
-        <div class="div-stripe" style="background:linear-gradient(90deg,#7c3aed,#a78bfa);"></div>
-        <div class="div-body">
-          <div class="div-head">
-            <div class="div-icon" style="background:rgba(124,58,237,.12);border:1px solid rgba(124,58,237,.28);">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M8.46 8.46a5 5 0 0 0 0 7.07"/></svg>
-            </div>
-            <span class="div-badge">Activo</span>
-          </div>
-          <div class="div-name">Automatización</div>
-          <div class="div-tagline" style="color:#7c3aed;">Portones · Domótica · Smart Home</div>
-          <p class="div-desc">Portones automáticos, domótica y control inteligente del hogar. Controla tu propiedad desde el celular, con o sin internet.</p>
-          <div class="div-btns">
-            <a href="automatizacion.html" class="div-btn" style="background:#7c3aed;">
-              Ver servicios
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Seguridad -->
-      <div class="div-card js-tilt" data-href="security.html">
-        <div class="div-stripe" style="background:linear-gradient(90deg,#1e50d4,#3b6ef6);"></div>
-        <div class="div-body">
-          <div class="div-head">
-            <div class="div-icon" style="background:rgba(30,80,212,.12);border:1px solid rgba(30,80,212,.28);">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1e50d4" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            </div>
-            <span class="div-badge">Activo</span>
-          </div>
-          <div class="div-name">Seguridad</div>
-          <div class="div-tagline" style="color:#1e50d4;">Cámaras · Alarmas · Control de Acceso</div>
-          <p class="div-desc">Cámaras Hikvision ColorVu, alarmas, CCTV, portones y control de acceso. Instalación certificada para hogares y negocios.</p>
-          <div class="div-btns">
-            <a href="security.html" class="div-btn" style="background:#1e50d4;">
-              Ver servicios
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Redes -->
-      <div class="div-card js-tilt" data-href="redes.html">
-        <div class="div-stripe" style="background:linear-gradient(90deg,#0891b2,#22d3ee);"></div>
-        <div class="div-body">
-          <div class="div-head">
-            <div class="div-icon" style="background:rgba(8,145,178,.12);border:1px solid rgba(8,145,178,.28);">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0891b2" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20" stroke-linecap="round" stroke-width="3"/></svg>
-            </div>
-            <span class="div-badge">Activo</span>
-          </div>
-          <div class="div-name">Redes & Conectividad</div>
-          <div class="div-tagline" style="color:#0891b2;">WiFi · Cableado · CCTV IP</div>
-          <p class="div-desc">Redes WiFi empresariales, cableado estructurado, puntos de acceso y conectividad confiable para negocios y residencias.</p>
-          <div class="div-btns">
-            <a href="redes.html" class="div-btn" style="background:#0891b2;">
-              Ver servicios
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-          </div>
-        </div>
-      </div>
-
-
-    </div>
-
-    <!-- Marcas del ecosistema -->
-    <div class="div-brands-sep">
-      <div class="div-brands-label">Marcas del ecosistema</div>
-    </div>
-
-    <div class="div-grid div-grid-brands">
+    <div class="div-grid div-grid-brands" style="margin-inline:auto;">
 
       <!-- MekaFix -->
       <div class="div-card js-tilt" data-href="https://mekafix.com">
@@ -1650,80 +1595,6 @@
   </div>
 </section>
 
-<!-- ── SHOP SHOWCASE ─────────────────────────────────────── -->
-<section id="tienda" class="shop-show">
-  <div class="container">
-    <div class="shop-show-inner">
-
-      <div class="shop-show-text" data-reveal>
-        <p class="label">Tienda Oficial</p>
-        <h2 class="shop-show-title">Compra con la misma<br/><em>confianza</em> con la que instalamos</h2>
-        <p class="shop-show-desc">Celulares, cámaras, laptops y accesorios oficiales de Plata Tech Security y UltimoGadget — con factura NCF, garantía respaldada y un equipo que responde cuando lo necesitas. No solo te vendemos el equipo: te acompañamos.</p>
-
-        <div class="shop-show-trust">
-          <span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            Garantía respaldada
-          </span>
-          <span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-            Factura con NCF
-          </span>
-          <span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            Acompañamiento post-venta
-          </span>
-        </div>
-
-        <a href="shop/index.html" class="shop-show-cta js-magnetic">
-          Ir a la tienda
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-
-        <div class="shop-show-sub">
-          <span>Productos oficiales de</span>
-          <div class="shop-show-sub-logos">
-            <img src="images/logo-platatech.webp" alt="Plata Tech Security"/>
-            <span class="sep"></span>
-            <img src="images/logo-ug.webp" alt="UltimoGadget"/>
-          </div>
-        </div>
-      </div>
-
-      <div class="shop-show-visual" data-reveal>
-        <div class="shop-show-card">
-          <div class="shop-show-card-head">
-            <div class="shop-show-card-mark"><img src="images/logo-platatech.webp" alt="Plata Tech"/></div>
-            <div>
-              <div class="shop-show-card-brand">Plata Tech Store</div>
-              <div class="shop-show-card-sub">Tienda oficial · RNC · NCF</div>
-            </div>
-          </div>
-          <div class="shop-show-cats">
-            <a href="shop/index.html?cat=celulares">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke-width="2.5" stroke-linecap="round"/></svg>
-              Celulares
-            </a>
-            <a href="shop/index.html?cat=camaras">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-              Cámaras
-            </a>
-            <a href="shop/index.html?cat=laptops">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-              Laptops
-            </a>
-            <a href="shop/index.html?cat=accesorios">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-              Accesorios
-            </a>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
 <!-- ── CTA ───────────────────────────────────────────────── -->
 <section id="contacto" class="cta-sec">
   <div class="cta-orb cta-orb-1"></div>
@@ -1766,7 +1637,7 @@
     <div class="footer-links">
       <a href="#inicio">Inicio</a>
       <a href="#servicios">Servicios</a>
-      <a href="#divisiones">Divisiones</a>
+      <a href="#divisiones">Aliados</a>
       <a href="shop/index.html">Tienda</a>
       <a href="security.html">Security</a>
       <a href="digital.html">Digital</a>
@@ -1939,17 +1810,13 @@ document.querySelectorAll('.js-magnetic').forEach(btn => {
 });
 
 
-/* ── Service selection → WhatsApp preload ───────────── */
-const WA_BASE = 'https://wa.me/18494950959?text=';
-const waBtn   = document.getElementById('waBtn');
-const waBtnTx = document.getElementById('waBtnText');
-document.querySelectorAll('.gl4-card[data-msg]').forEach(card => {
-  card.addEventListener('click', () => {
-    document.querySelectorAll('.gl4-card.selected').forEach(c => c.classList.remove('selected'));
-    card.classList.add('selected');
-    waBtn.href = WA_BASE + encodeURIComponent(card.dataset.msg);
-    waBtnTx.textContent = 'Preguntar por ' + card.querySelector('.gl4-body-title').textContent;
-    document.getElementById('contacto').scrollIntoView({ behavior: 'smooth', block: 'center' });
+/* ── Service cards: toda la card navega a su área ───── */
+document.querySelectorAll('.gl4-card[data-href]').forEach(card => {
+  card.addEventListener('click', e => {
+    if (e.target.closest('a')) return;
+    const href = card.dataset.href;
+    if (href.startsWith('http')) window.open(href, '_blank');
+    else window.location.href = href;
   });
 });
 
@@ -2236,6 +2103,96 @@ document.querySelectorAll('.gl4-card[data-msg]').forEach(card => {
     requestAnimationFrame(frame);
   }
   frame();
+})();
+</script>
+
+<!-- ── Catálogo de la tienda (mismo origen que /shop) ─────── -->
+<script src="shop/assets/products.js"></script>
+<script src="shop/assets/products-static.js"></script>
+<script>
+/* ── Render de muestra variada de productos en #tienda ──── */
+(function () {
+  var grid = document.getElementById('storeGrid');
+  if (!grid || !window.PRODUCTS || !window.PRODUCTS.length) return;
+
+  var CAT_LABELS = {};
+  (window.CATEGORIES || []).forEach(function (c) { CAT_LABELS[c.id] = c.name; });
+
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  // Solo productos con precio y (preferiblemente) imagen.
+  var pool = window.PRODUCTS.filter(function (p) {
+    return p && p.slug && typeof p.price === 'number' && p.price > 0;
+  });
+
+  // Agrupar por categoría y barajar dentro de cada una.
+  var byCat = {};
+  pool.forEach(function (p) {
+    var c = p.category || 'otros';
+    (byCat[c] = byCat[c] || []).push(p);
+  });
+  var cats = shuffle(Object.keys(byCat));
+
+  // Tomar 1 de cada categoría (round-robin) hasta llenar 8 tarjetas
+  // -> garantiza variedad de categorías diferentes.
+  var picked = [];
+  var TARGET = 8;
+  var round = 0;
+  while (picked.length < TARGET) {
+    var added = false;
+    for (var k = 0; k < cats.length && picked.length < TARGET; k++) {
+      var list = byCat[cats[k]];
+      if (list && list[round]) { picked.push(list[round]); added = true; }
+    }
+    if (!added) break;
+    round++;
+  }
+  picked = shuffle(picked);
+
+  function esc(s) {
+    return (window.escapeHtml ? window.escapeHtml(s) :
+      String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'));
+  }
+  function fmt(n) {
+    return window.formatPrice ? window.formatPrice(n) : ('RD$' + Number(n).toLocaleString('en-US'));
+  }
+  // Las imágenes del catálogo son relativas a /shop; desde la raíz necesitan prefijo.
+  function imgHtml(p) {
+    var pp = { name: p.name, brand: p.brand, category: p.category, slug: p.slug, gradient: p.gradient };
+    if (p.image) pp.image = 'shop/' + p.image;
+    return window.renderProductMock ? window.renderProductMock(pp, 158)
+      : (pp.image ? '<img src="' + esc(pp.image) + '" alt="' + esc(p.name) + '" loading="lazy"/>' : '');
+  }
+
+  var html = picked.map(function (p) {
+    var catName = CAT_LABELS[p.category] || p.category || '';
+    return '' +
+      '<a class="store-card" href="shop/product.html?p=' + esc(p.slug) + '">' +
+        '<div class="store-card-vis">' +
+          (catName ? '<span class="store-card-cat">' + esc(catName) + '</span>' : '') +
+          imgHtml(p) +
+        '</div>' +
+        '<div class="store-card-body">' +
+          (p.brand ? '<div class="store-card-brand">' + esc(p.brand) + '</div>' : '') +
+          '<div class="store-card-name">' + esc(p.name) + '</div>' +
+          '<div class="store-card-foot">' +
+            '<span class="store-card-price">' + fmt(p.price) + '</span>' +
+            '<span class="store-card-go">Ver ' +
+              '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>' +
+            '</span>' +
+          '</div>' +
+        '</div>' +
+      '</a>';
+  }).join('');
+
+  grid.innerHTML = html;
 })();
 </script>
 
