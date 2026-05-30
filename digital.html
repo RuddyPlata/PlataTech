@@ -8,20 +8,7 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-3L0THHV7FQ');
-  // Google Ads — reemplaza AW-XXXXXXXXX con tu Conversion ID cuando lo tengas
-  gtag('config', 'AW-XXXXXXXXX');
 </script>
-<!-- Meta Pixel — reemplaza 1948580359106753 con tu Pixel ID cuando lo tengas -->
-<script>
-!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-document,'script','https://connect.facebook.net/en_US/fbevents.js');
-fbq('init','1948580359106753');
-fbq('track','PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1948580359106753&ev=PageView&noscript=1"/></noscript>
   <!-- Plata Tech: tracking de leads (clic WhatsApp = conversión) -->
   <script defer src="lead-tracking.js"></script>
   <meta charset="UTF-8"/>
@@ -1178,19 +1165,6 @@ document.querySelectorAll('.faq-item').forEach(item => {
   });
 });
 
-/* ── GA4: track WhatsApp clicks with sector */
-document.querySelectorAll('.wa-tracked, a[href*="wa.me"]').forEach(el => {
-  el.addEventListener('click', () => {
-    if (typeof gtag !== 'undefined') {
-      gtag('event', 'whatsapp_click', {
-        sector: 'digital',
-        page_location: window.location.href
-      });
-    }
-    if (typeof fbq !== 'undefined') fbq('track', 'Lead');
-    if (typeof gtag !== 'undefined') gtag('event', 'conversion', { send_to: 'AW-XXXXXXXXX/LABEL_PLACEHOLDER' });
-  });
-});
 </script>
 </body>
 </html>
