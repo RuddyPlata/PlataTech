@@ -1806,7 +1806,7 @@ document.querySelectorAll('.div-card[data-href]').forEach(card => {
   card.addEventListener('click', e => {
     if (!e.target.closest('a')) {
       const href = card.dataset.href;
-      if (href.startsWith('http')) window.open(href, '_blank');
+      if (href.startsWith('http')) window.open(href, '_blank', 'noopener');
       else window.location.href = href;
     }
   });
@@ -1844,7 +1844,7 @@ document.querySelectorAll('.gl4-card[data-href]').forEach(card => {
   card.addEventListener('click', e => {
     if (e.target.closest('a')) return;
     const href = card.dataset.href;
-    if (href.startsWith('http')) window.open(href, '_blank');
+    if (href.startsWith('http')) window.open(href, '_blank', 'noopener');
     else window.location.href = href;
   });
 });
@@ -2195,7 +2195,7 @@ document.querySelectorAll('.gl4-card[data-href]').forEach(card => {
   // Las imágenes del catálogo son relativas a /shop; desde la raíz necesitan prefijo.
   function imgHtml(p) {
     var pp = { name: p.name, brand: p.brand, category: p.category, slug: p.slug, gradient: p.gradient };
-    if (p.image) pp.image = 'shop/' + p.image;
+    if (p.image) pp.image = /^https?:\/\//.test(p.image) ? p.image : 'shop/' + p.image;
     return window.renderProductMock ? window.renderProductMock(pp, 158)
       : (pp.image ? '<img src="' + esc(pp.image) + '" alt="' + esc(p.name) + '" loading="lazy"/>' : '');
   }
@@ -2203,7 +2203,7 @@ document.querySelectorAll('.gl4-card[data-href]').forEach(card => {
   var html = picked.map(function (p) {
     var catName = CAT_LABELS[p.category] || p.category || '';
     return '' +
-      '<a class="store-card" href="shop/product.html?p=' + esc(p.slug) + '">' +
+      '<a class="store-card" href="shop/product.html?p=' + encodeURIComponent(p.slug) + '">' +
         '<div class="store-card-vis">' +
           (catName ? '<span class="store-card-cat">' + esc(catName) + '</span>' : '') +
           imgHtml(p) +
