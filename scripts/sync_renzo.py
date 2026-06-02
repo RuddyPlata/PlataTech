@@ -655,6 +655,28 @@ def write_js(products, out: Path):
     out.write_text("\n".join(lines), encoding="utf-8")
     print(f"[renzo] {len(products)} productos -> {out}")
 
+def write_costs_js(products, out: Path):
+    """Genera shop/assets/costs-static.js: mapa id -> costo de suplidor (R.ENZO).
+
+    PRIVADO: solo lo carga /admin (admin.html). Se combina con costs.js (YDC)
+    via Object.assign para calcular ganancia en cotizaciones. NO publicar.
+    """
+    lines = []
+    lines.append("/* ════════════════════════════════════════════════════════")
+    lines.append("   Plata Tech Solutions S.R.L. - Costos de suplidor (R.ENZO)")
+    lines.append("   AUTO-GENERADO. NO EDITAR A MANO. Regenerar: python scripts/sync_renzo.py")
+    lines.append("   PRIVADO: solo lo carga /admin. NO referenciar en paginas publicas.")
+    lines.append("   ════════════════════════════════════════════════════════ */")
+    lines.append("window.PRODUCT_COSTS = Object.assign(window.PRODUCT_COSTS || {}, {")
+    for p in products:
+        if p.get("_cost"):
+            lines.append(f"  {p['id']}: {p['_cost']},")
+    lines.append("});")
+    lines.append("")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text("\n".join(lines), encoding="utf-8")
+    print(f"[renzo] costos -> {out}")
+
 def main():
     if "--no-download" in sys.argv and XLSX_PATH.exists():
         print(f"[renzo] Usando cache: {XLSX_PATH}")
@@ -675,6 +697,7 @@ def main():
     for cat, n in sorted(by_cat.items(), key=lambda x: -x[1]):
         print(f"   {cat:15s} {n:4d}")
     write_js(products, OUT_FILE)
+    write_costs_js(products, ROOT / "shop" / "assets" / "costs-static.js")
     print("[renzo] Listo.")
 
 if __name__ == "__main__":

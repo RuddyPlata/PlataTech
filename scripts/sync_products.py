@@ -665,6 +665,30 @@ window.renderProductMock = function(product, size) {
     out.write_text('\n'.join(lines), encoding='utf-8')
     print(f"[sync] {len(products)} productos escritos a {out}")
 
+def write_costs_js(products: list, out: Path):
+    """Genera shop/assets/costs.js: mapa id -> costo de suplidor.
+
+    PRIVADO: este archivo solo lo carga el panel /admin (admin.html), NUNCA las
+    paginas publicas de la tienda. Sirve para calcular ganancia en cotizaciones.
+    Usa Object.assign para combinarse con costs-static.js (R.ENZO) sin importar
+    el orden de carga.
+    """
+    lines = []
+    lines.append('/* ════════════════════════════════════════════════════════')
+    lines.append('   Plata Tech Solutions S.R.L. - Costos de suplidor (YDC)')
+    lines.append('   AUTO-GENERADO. NO EDITAR A MANO. Regenerar: python scripts/sync_products.py')
+    lines.append('   PRIVADO: solo lo carga /admin. NO referenciar en paginas publicas.')
+    lines.append('   ════════════════════════════════════════════════════════ */')
+    lines.append('window.PRODUCT_COSTS = Object.assign(window.PRODUCT_COSTS || {}, {')
+    for p in products:
+        if p.get("cost"):
+            lines.append(f'  {p["id"]}: {p["cost"]},')
+    lines.append('});')
+    lines.append('')
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text('\n'.join(lines), encoding='utf-8')
+    print(f"[sync] costos escritos a {out}")
+
 def _now_iso():
     from datetime import datetime, timezone, timedelta
     # DR timezone UTC-4
@@ -701,6 +725,7 @@ def main():
         print(f"   {cat:15s} {n:4d}")
 
     write_products_js(products, OUT_FILE)
+    write_costs_js(products, ROOT / "shop" / "assets" / "costs.js")
     print("[sync] Listo.")
 
 if __name__ == "__main__":
