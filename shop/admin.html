@@ -1054,6 +1054,16 @@ function calcQItems(){
   set('qMarginVal',revWithCost>0?Math.round(profit/revWithCost*100)+'%':'—');
 }
 
+function qMoveRow(tr,dir){
+  // Reordena solo dentro del mismo grupo: artículos entre artículos, descuentos
+  // entre descuentos. Así los artículos siempre quedan arriba y los descuentos al final.
+  const type=tr.dataset.type;
+  const sib=dir<0?tr.previousElementSibling:tr.nextElementSibling;
+  if(!sib||sib.dataset.type!==type) return;
+  if(dir<0) tr.parentNode.insertBefore(tr,sib); else tr.parentNode.insertBefore(sib,tr);
+  calcQItems();
+}
+
 function addItemRow(desc,qty,up,cost){
   qRowIdx++;
   const tbody=document.getElementById('qItemsTbody'); if(!tbody) return;
@@ -1068,11 +1078,19 @@ function addItemRow(desc,qty,up,cost){
       <input class="q-item-num q-cost" type="number" value="${cost!=null&&cost!==''?cost:''}" min="0" step="any" placeholder="—" style="width:95px" title="Costo unitario al suplidor (solo visible aqui, no se imprime)"/>
       <div class="q-margin" style="font-size:.62rem;text-align:right;margin-top:2px;color:var(--ink-3)">&nbsp;</div>
     </td>
-    <td style="padding:.3rem"><button type="button" class="act-btn del q-del-btn" style="padding:.2rem .48rem;font-size:.72rem">&#x2715;</button></td>`;
-  tbody.appendChild(tr);
+    <td style="padding:.3rem;white-space:nowrap"><span style="display:inline-flex;gap:.15rem">
+      <button type="button" class="act-btn q-mv-up" title="Subir" style="padding:.2rem .38rem;font-size:.68rem;line-height:1">&#x25B2;</button>
+      <button type="button" class="act-btn q-mv-dn" title="Bajar" style="padding:.2rem .38rem;font-size:.68rem;line-height:1">&#x25BC;</button>
+      <button type="button" class="act-btn del q-del-btn" style="padding:.2rem .48rem;font-size:.72rem">&#x2715;</button>
+    </span></td>`;
+  // Artículos siempre por encima de los descuentos.
+  const firstDisc=tbody.querySelector('.q-row[data-type="discount"]');
+  if(firstDisc) tbody.insertBefore(tr,firstDisc); else tbody.appendChild(tr);
   tr.querySelector('.q-qty').addEventListener('input',calcQItems);
   tr.querySelector('.q-up').addEventListener('input',calcQItems);
   tr.querySelector('.q-cost').addEventListener('input',calcQItems);
+  tr.querySelector('.q-mv-up').addEventListener('click',()=>qMoveRow(tr,-1));
+  tr.querySelector('.q-mv-dn').addEventListener('click',()=>qMoveRow(tr,1));
   tr.querySelector('.q-del-btn').addEventListener('click',()=>{ tr.remove(); calcQItems(); });
   calcQItems();
 }
@@ -1097,10 +1115,17 @@ function addDiscountRow(desc,amount,dtype){
     <td style="padding:.3rem"><input class="q-item-num q-up" type="number" value="${amount!=null&&amount!==''?amount:''}" min="0" step="any" placeholder="0" style="width:88px"/></td>
     <td class="q-tot" style="padding:.3rem .55rem;text-align:right;font-weight:700;white-space:nowrap;color:#b91c1c;min-width:90px">—</td>
     <td class="no-print-col" style="padding:.3rem;background:#f0fdf4"></td>
-    <td style="padding:.3rem"><button type="button" class="act-btn del q-del-btn" style="padding:.2rem .48rem;font-size:.72rem">&#x2715;</button></td>`;
+    <td style="padding:.3rem;white-space:nowrap"><span style="display:inline-flex;gap:.15rem">
+      <button type="button" class="act-btn q-mv-up" title="Subir" style="padding:.2rem .38rem;font-size:.68rem;line-height:1">&#x25B2;</button>
+      <button type="button" class="act-btn q-mv-dn" title="Bajar" style="padding:.2rem .38rem;font-size:.68rem;line-height:1">&#x25BC;</button>
+      <button type="button" class="act-btn del q-del-btn" style="padding:.2rem .48rem;font-size:.72rem">&#x2715;</button>
+    </span></td>`;
+  // Descuentos siempre al final.
   tbody.appendChild(tr);
   tr.querySelector('.q-up').addEventListener('input',calcQItems);
   tr.querySelector('.q-disc-type').addEventListener('change',calcQItems);
+  tr.querySelector('.q-mv-up').addEventListener('click',()=>qMoveRow(tr,-1));
+  tr.querySelector('.q-mv-dn').addEventListener('click',()=>qMoveRow(tr,1));
   tr.querySelector('.q-del-btn').addEventListener('click',()=>{ tr.remove(); calcQItems(); });
   calcQItems();
 }
@@ -1310,7 +1335,7 @@ function openQuoteDrawer(q){
             <th style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-3);padding:.5rem .4rem;border-bottom:2px solid var(--border);text-align:right;width:120px">Precio / Desc.</th>
             <th style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-3);padding:.5rem .4rem;border-bottom:2px solid var(--border);text-align:right;width:95px">Total</th>
             <th style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:#15803d;padding:.5rem .4rem;border-bottom:2px solid #86efac;background:#f0fdf4;text-align:right;width:115px" title="Solo visible aqui. No se imprime.">Costo suplidor</th>
-            <th style="width:36px;border-bottom:2px solid var(--border)"></th>
+            <th style="width:96px;border-bottom:2px solid var(--border)"></th>
           </tr></thead>
           <tbody id="qItemsTbody"></tbody>
         </table>
