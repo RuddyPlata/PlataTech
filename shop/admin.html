@@ -1068,14 +1068,19 @@ function qDragStart(e,tr){
   if(e.dataTransfer){ e.dataTransfer.effectAllowed='move'; try{ e.dataTransfer.setData('text/plain',''); }catch(_){} }
 }
 function qDragEnd(tr){ tr.style.opacity=''; qDragRow=null; qNormalizeOrder(); calcQItems(); }
+function qReorderAgainst(tr,clientY){
+  // Coloca qDragRow antes/después de tr según el punto Y. Solo dentro del mismo grupo.
+  if(!qDragRow||qDragRow===tr||!tr) return;
+  if(tr.dataset.type!==qDragRow.dataset.type) return;
+  const rect=tr.getBoundingClientRect();
+  const before=(clientY-rect.top)/rect.height<.5;
+  if(before) tr.parentNode.insertBefore(qDragRow,tr);
+  else tr.parentNode.insertBefore(qDragRow,tr.nextSibling);
+}
 function qDragOver(e,tr){
   if(!qDragRow||qDragRow===tr) return;
   e.preventDefault();
-  if(tr.dataset.type!==qDragRow.dataset.type) return; // no cruzar grupos
-  const rect=tr.getBoundingClientRect();
-  const before=(e.clientY-rect.top)/rect.height<.5;
-  if(before) tr.parentNode.insertBefore(qDragRow,tr);
-  else tr.parentNode.insertBefore(qDragRow,tr.nextSibling);
+  qReorderAgainst(tr,e.clientY);
 }
 function qWireDnd(tr){
   const grip=tr.querySelector('.q-drag'); if(!grip) return;
@@ -1088,6 +1093,22 @@ function qWireDnd(tr){
   tr.addEventListener('dragstart',e=>qDragStart(e,tr));
   tr.addEventListener('dragend',()=>{ tr.removeAttribute('draggable'); qDragEnd(tr); });
   tr.addEventListener('dragover',e=>qDragOver(e,tr));
+  // ── Táctil (móvil): el drag nativo no funciona en touch ──
+  grip.addEventListener('touchstart',e=>{
+    qDragRow=tr; tr.style.opacity='.4';
+    e.preventDefault();              // evita scroll/selección mientras se arrastra
+  },{passive:false});
+  grip.addEventListener('touchmove',e=>{
+    if(!qDragRow) return;
+    e.preventDefault();
+    const t=e.touches&&e.touches[0]; if(!t) return;
+    const el=document.elementFromPoint(t.clientX,t.clientY);
+    const row=el&&el.closest?el.closest('.q-row'):null;
+    if(row&&row!==qDragRow) qReorderAgainst(row,t.clientY);
+  },{passive:false});
+  const touchDone=()=>{ if(qDragRow) qDragEnd(qDragRow); };
+  grip.addEventListener('touchend',touchDone);
+  grip.addEventListener('touchcancel',touchDone);
 }
 
 function addItemRow(desc,qty,up,cost){
@@ -1105,7 +1126,7 @@ function addItemRow(desc,qty,up,cost){
       <div class="q-margin" style="font-size:.62rem;text-align:right;margin-top:2px;color:var(--ink-3)">&nbsp;</div>
     </td>
     <td style="padding:.3rem;white-space:nowrap"><span style="display:inline-flex;align-items:center;gap:.25rem">
-      <span class="q-drag" title="Arrastra para reordenar" style="cursor:grab;user-select:none;padding:.1rem .3rem;font-size:.95rem;color:var(--ink-3);line-height:1">&#x2630;</span>
+      <span class="q-drag" title="Arrastra para reordenar" style="cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none;padding:.25rem .5rem;font-size:1rem;color:var(--ink-3);line-height:1">&#x2630;</span>
       <button type="button" class="act-btn del q-del-btn" style="padding:.2rem .48rem;font-size:.72rem">&#x2715;</button>
     </span></td>`;
   // Artículos siempre por encima de los descuentos.
@@ -1140,7 +1161,7 @@ function addDiscountRow(desc,amount,dtype){
     <td class="q-tot" style="padding:.3rem .55rem;text-align:right;font-weight:700;white-space:nowrap;color:#b91c1c;min-width:90px">—</td>
     <td class="no-print-col" style="padding:.3rem;background:#f0fdf4"></td>
     <td style="padding:.3rem;white-space:nowrap"><span style="display:inline-flex;align-items:center;gap:.25rem">
-      <span class="q-drag" title="Arrastra para reordenar" style="cursor:grab;user-select:none;padding:.1rem .3rem;font-size:.95rem;color:var(--ink-3);line-height:1">&#x2630;</span>
+      <span class="q-drag" title="Arrastra para reordenar" style="cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none;padding:.25rem .5rem;font-size:1rem;color:var(--ink-3);line-height:1">&#x2630;</span>
       <button type="button" class="act-btn del q-del-btn" style="padding:.2rem .48rem;font-size:.72rem">&#x2715;</button>
     </span></td>`;
   // Descuentos siempre al final.
