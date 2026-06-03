@@ -1054,14 +1054,40 @@ function calcQItems(){
   set('qMarginVal',revWithCost>0?Math.round(profit/revWithCost*100)+'%':'—');
 }
 
-function qMoveRow(tr,dir){
-  // Reordena solo dentro del mismo grupo: artículos entre artículos, descuentos
-  // entre descuentos. Así los artículos siempre quedan arriba y los descuentos al final.
-  const type=tr.dataset.type;
-  const sib=dir<0?tr.previousElementSibling:tr.nextElementSibling;
-  if(!sib||sib.dataset.type!==type) return;
-  if(dir<0) tr.parentNode.insertBefore(tr,sib); else tr.parentNode.insertBefore(sib,tr);
-  calcQItems();
+/* ── Arrastrar y soltar filas de la cotización ──────────────
+   Solo se reordena dentro del mismo grupo (artículos entre artículos,
+   descuentos entre descuentos), así los descuentos siempre quedan al final. */
+let qDragRow=null;
+function qNormalizeOrder(){
+  // Refuerza la regla: todos los descuentos al final (orden relativo estable).
+  const tbody=document.getElementById('qItemsTbody'); if(!tbody) return;
+  tbody.querySelectorAll('.q-row[data-type="discount"]').forEach(d=>tbody.appendChild(d));
+}
+function qDragStart(e,tr){
+  qDragRow=tr; tr.style.opacity='.4';
+  if(e.dataTransfer){ e.dataTransfer.effectAllowed='move'; try{ e.dataTransfer.setData('text/plain',''); }catch(_){} }
+}
+function qDragEnd(tr){ tr.style.opacity=''; qDragRow=null; qNormalizeOrder(); calcQItems(); }
+function qDragOver(e,tr){
+  if(!qDragRow||qDragRow===tr) return;
+  e.preventDefault();
+  if(tr.dataset.type!==qDragRow.dataset.type) return; // no cruzar grupos
+  const rect=tr.getBoundingClientRect();
+  const before=(e.clientY-rect.top)/rect.height<.5;
+  if(before) tr.parentNode.insertBefore(qDragRow,tr);
+  else tr.parentNode.insertBefore(qDragRow,tr.nextSibling);
+}
+function qWireDnd(tr){
+  const grip=tr.querySelector('.q-drag'); if(!grip) return;
+  // Solo se vuelve arrastrable al agarrar el grip (no al seleccionar texto en inputs).
+  grip.addEventListener('mousedown',()=>{
+    tr.setAttribute('draggable','true');
+    const off=()=>{ tr.removeAttribute('draggable'); window.removeEventListener('mouseup',off); };
+    window.addEventListener('mouseup',off);
+  });
+  tr.addEventListener('dragstart',e=>qDragStart(e,tr));
+  tr.addEventListener('dragend',()=>{ tr.removeAttribute('draggable'); qDragEnd(tr); });
+  tr.addEventListener('dragover',e=>qDragOver(e,tr));
 }
 
 function addItemRow(desc,qty,up,cost){
@@ -1078,9 +1104,8 @@ function addItemRow(desc,qty,up,cost){
       <input class="q-item-num q-cost" type="number" value="${cost!=null&&cost!==''?cost:''}" min="0" step="any" placeholder="—" style="width:95px" title="Costo unitario al suplidor (solo visible aqui, no se imprime)"/>
       <div class="q-margin" style="font-size:.62rem;text-align:right;margin-top:2px;color:var(--ink-3)">&nbsp;</div>
     </td>
-    <td style="padding:.3rem;white-space:nowrap"><span style="display:inline-flex;gap:.15rem">
-      <button type="button" class="act-btn q-mv-up" title="Subir" style="padding:.2rem .38rem;font-size:.68rem;line-height:1">&#x25B2;</button>
-      <button type="button" class="act-btn q-mv-dn" title="Bajar" style="padding:.2rem .38rem;font-size:.68rem;line-height:1">&#x25BC;</button>
+    <td style="padding:.3rem;white-space:nowrap"><span style="display:inline-flex;align-items:center;gap:.25rem">
+      <span class="q-drag" title="Arrastra para reordenar" style="cursor:grab;user-select:none;padding:.1rem .3rem;font-size:.95rem;color:var(--ink-3);line-height:1">&#x2630;</span>
       <button type="button" class="act-btn del q-del-btn" style="padding:.2rem .48rem;font-size:.72rem">&#x2715;</button>
     </span></td>`;
   // Artículos siempre por encima de los descuentos.
@@ -1089,9 +1114,8 @@ function addItemRow(desc,qty,up,cost){
   tr.querySelector('.q-qty').addEventListener('input',calcQItems);
   tr.querySelector('.q-up').addEventListener('input',calcQItems);
   tr.querySelector('.q-cost').addEventListener('input',calcQItems);
-  tr.querySelector('.q-mv-up').addEventListener('click',()=>qMoveRow(tr,-1));
-  tr.querySelector('.q-mv-dn').addEventListener('click',()=>qMoveRow(tr,1));
   tr.querySelector('.q-del-btn').addEventListener('click',()=>{ tr.remove(); calcQItems(); });
+  qWireDnd(tr);
   calcQItems();
 }
 
@@ -1115,18 +1139,16 @@ function addDiscountRow(desc,amount,dtype){
     <td style="padding:.3rem"><input class="q-item-num q-up" type="number" value="${amount!=null&&amount!==''?amount:''}" min="0" step="any" placeholder="0" style="width:88px"/></td>
     <td class="q-tot" style="padding:.3rem .55rem;text-align:right;font-weight:700;white-space:nowrap;color:#b91c1c;min-width:90px">—</td>
     <td class="no-print-col" style="padding:.3rem;background:#f0fdf4"></td>
-    <td style="padding:.3rem;white-space:nowrap"><span style="display:inline-flex;gap:.15rem">
-      <button type="button" class="act-btn q-mv-up" title="Subir" style="padding:.2rem .38rem;font-size:.68rem;line-height:1">&#x25B2;</button>
-      <button type="button" class="act-btn q-mv-dn" title="Bajar" style="padding:.2rem .38rem;font-size:.68rem;line-height:1">&#x25BC;</button>
+    <td style="padding:.3rem;white-space:nowrap"><span style="display:inline-flex;align-items:center;gap:.25rem">
+      <span class="q-drag" title="Arrastra para reordenar" style="cursor:grab;user-select:none;padding:.1rem .3rem;font-size:.95rem;color:var(--ink-3);line-height:1">&#x2630;</span>
       <button type="button" class="act-btn del q-del-btn" style="padding:.2rem .48rem;font-size:.72rem">&#x2715;</button>
     </span></td>`;
   // Descuentos siempre al final.
   tbody.appendChild(tr);
   tr.querySelector('.q-up').addEventListener('input',calcQItems);
   tr.querySelector('.q-disc-type').addEventListener('change',calcQItems);
-  tr.querySelector('.q-mv-up').addEventListener('click',()=>qMoveRow(tr,-1));
-  tr.querySelector('.q-mv-dn').addEventListener('click',()=>qMoveRow(tr,1));
   tr.querySelector('.q-del-btn').addEventListener('click',()=>{ tr.remove(); calcQItems(); });
+  qWireDnd(tr);
   calcQItems();
 }
 
