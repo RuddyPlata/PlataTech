@@ -1046,12 +1046,16 @@ function calcQItems(){
       if(marginEl){ marginEl.textContent=(unit>=0?'+':'')+fmtPrice(unit)+'/u'; marginEl.style.color=unit>=0?'#15803d':'#b91c1c'; }
     } else if(marginEl){ marginEl.innerHTML='&nbsp;'; marginEl.style.color='var(--ink-3)'; }
   });
-  const profit=revWithCost-costTotal;
+  // Los descuentos (totalDisc, calculado arriba) salen de tu margen: se restan.
+  const profit=revWithCost-costTotal-totalDisc;
   set('qCostVal',fmtPrice(costTotal));
   set('qRevCostVal',fmtPrice(revWithCost));
+  set('qProfitDiscVal',totalDisc>0?'- '+fmtPrice(totalDisc):'—');
+  const pdr=document.getElementById('qProfitDiscRow'); if(pdr) pdr.style.opacity=totalDisc>0?'1':'.4';
   set('qProfitVal',fmtPrice(profit));
   const profEl=document.getElementById('qProfitVal'); if(profEl) profEl.style.color=profit>=0?'#15803d':'#b91c1c';
-  set('qMarginVal',revWithCost>0?Math.round(profit/revWithCost*100)+'%':'—');
+  const netRev=revWithCost-totalDisc;
+  set('qMarginVal',netRev>0?Math.round(profit/netRev*100)+'%':'—');
 }
 
 /* ── Arrastrar y soltar filas de la cotización ──────────────
@@ -1409,9 +1413,10 @@ function openQuoteDrawer(q){
         </div>
         <div style="display:flex;justify-content:space-between;font-size:.84rem;color:var(--ink-2);padding:.2rem 0"><span>Costo a suplidores</span><span id="qCostVal" style="font-weight:600">RD$0</span></div>
         <div style="display:flex;justify-content:space-between;font-size:.84rem;color:var(--ink-2);padding:.2rem 0"><span>Venta (items con costo)</span><span id="qRevCostVal" style="font-weight:600">RD$0</span></div>
+        <div id="qProfitDiscRow" style="display:flex;justify-content:space-between;font-size:.84rem;color:#b91c1c;padding:.2rem 0;opacity:.4"><span>Descuentos</span><span id="qProfitDiscVal" style="font-weight:600">&mdash;</span></div>
         <div style="display:flex;justify-content:space-between;font-size:.98rem;font-weight:800;color:#15803d;border-top:1px solid #bbf7d0;padding:.45rem 0 .1rem;margin-top:.2rem"><span>Ganancia estimada</span><span id="qProfitVal">RD$0</span></div>
         <div style="display:flex;justify-content:space-between;font-size:.76rem;color:var(--ink-3);padding:.15rem 0"><span>Margen</span><span id="qMarginVal" style="font-weight:600">&mdash;</span></div>
-        <div style="font-size:.64rem;color:var(--ink-3);margin-top:.4rem;line-height:1.4">Items manuales sin costo no se incluyen. No descuenta rebajas ni ITBIS.</div>
+        <div style="font-size:.64rem;color:var(--ink-3);margin-top:.4rem;line-height:1.4">Items manuales sin costo no se incluyen en la venta. Los descuentos s&iacute; se restan. No incluye ITBIS.</div>
       </div>
       <div class="form-field full" style="margin-top:1.25rem">
         <label>Notas / Condiciones</label>
