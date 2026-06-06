@@ -49,7 +49,6 @@ window.PRODUCT_COSTS = Object.assign(window.PRODUCT_COSTS || {}, {
   293: 4199,
   294: 4599,
   299: 5499,
-  302: 6799,
   314: 1199,
   315: 1599,
   316: 1599,

@@ -5,7 +5,7 @@
    Regenerar: python scripts/sync_products.py
    ════════════════════════════════════════════════════════ */
 
-window.PRODUCTS_LAST_SYNC = "2026-06-03 02:37:23 -0400";
+window.PRODUCTS_LAST_SYNC = "2026-06-06 13:44:52 -0400";
 
 window.PRODUCTS = [
   {
@@ -635,20 +635,6 @@ window.PRODUCTS = [
     short: "128GB / 12GB RAM / 6.75\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con factura NCF y soporte real cuando lo necesites.",
     specs: ["128GB", "6.75\" HD+", "12GB RAM 4+8", "50MP"],
     image: "assets/img/ydc/r299.jpg",
-    gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 3
-  },
-  {
-    id: 302,
-    slug: "zte-nubia-v80-max-buds-256gb-6-9-120hz-14gb-ram-4",
-    category: "celulares",
-    brand: "ZTE",
-    name: "NUBIA V80 MAX + BUDS",
-    variant: "256GB, 6.9\" 120HZ, 14GB RAM 4+10, 6000 MAH",
-    price: 8299, oldPrice: null,
-    short: "256GB / 14GB RAM / 6.9\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con factura NCF y soporte real cuando lo necesites.",
-    specs: ["256GB", "6.9\" 120HZ", "14GB RAM 4+10", "6000 MAH"],
-    image: "assets/img/ydc/r302.jpg",
     gradient: ["#2d2d35", "#0a0a0c"],
     stock: 3
   },
