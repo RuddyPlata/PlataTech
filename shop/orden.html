@@ -350,6 +350,20 @@
 const ORDERS_KEY = 'platatech_orders_v1';
 const WA_NUMBER = '18494950959';
 
+/* Datos fiscales/legales del comercio — requeridos por AZUL (dirección+país, tel, correo). */
+const BIZ = {
+  legal:   'PLATA TECH SOLUTIONS, SRL',
+  rnc:     '133-66822-1',
+  address: 'Pdte. Antonio Guzmán Fernández #8, Santo Domingo Este 11802, República Dominicana',
+  tel:     '+1 (849) 495-0959',
+  email:   'ruddy.plata@gmail.com',
+};
+
+/* ¿La orden se cobró por tarjeta vía AZUL (RD$)? */
+function isAzul(order) { return order.paymentMethod === 'azul' || order.paymentMethod === 'tarjeta'; }
+/* ¿Lleva ITBIS y es un cobro prepagado (PayPal online o tarjeta AZUL)? */
+function chargesItbis(order) { return (order.paymentMethod === 'online' || isAzul(order)) && order.totals.itbis; }
+
 function rowToOrder(r) {
   return {
     id: r.id,
@@ -362,7 +376,9 @@ function rowToOrder(r) {
     codeliveryMode: r.codelivery_mode,
     customer: r.customer,
     items: r.items,
-    totals: r.totals
+    totals: r.totals,
+    ncf: r.ncf,
+    azul: r.azul
   };
 }
 
@@ -391,6 +407,7 @@ function fmtDate(iso) {
 }
 
 function modeLabel(order) {
+  if (isAzul(order)) return 'Tarjeta Visa / MasterCard · AZUL (pagado)';
   if (order.paymentMethod === 'online') return 'PayPal / Tarjeta (pagado)';
   return order.codeliveryMode === 'transferencia'
     ? 'Transferencia bancaria al recibir'
@@ -398,6 +415,7 @@ function modeLabel(order) {
 }
 
 function deliveryLabel(order) {
+  if (isAzul(order)) return 'Se despacha al confirmar el pago (hasta 24h)';
   if (order.paymentMethod === 'online') return '1 a 3 días laborables';
   return 'El mismo día · máx 24 horas';
 }
@@ -410,19 +428,23 @@ function buildSendOrderMessage(order) {
 
   const totalsBlock = [
     `Subtotal: ${window.formatPrice(order.totals.subtotal)}`,
-    order.paymentMethod === 'online' && order.totals.itbis ? `ITBIS (18%): ${window.formatPrice(order.totals.itbis)}` : null,
+    chargesItbis(order) ? `ITBIS (18%): ${window.formatPrice(order.totals.itbis)}` : null,
     `Total: ${window.formatPrice(order.totals.total)}`
   ].filter(Boolean).join('\n');
 
   const cust = order.customer;
-  const modeText = order.paymentMethod === 'online'
-    ? 'Pagado por PayPal / tarjeta'
-    : (order.codeliveryMode === 'transferencia'
-      ? 'Pago contra entrega - TRANSFERENCIA al recibir'
-      : 'Pago contra entrega - EFECTIVO al recibir');
-  const slaText = order.paymentMethod === 'online'
-    ? 'Entrega: 1 a 3 días laborables'
-    : 'Entrega: el mismo día (máximo 24 horas)';
+  const modeText = isAzul(order)
+    ? 'Pagado con tarjeta Visa/MasterCard vía AZUL'
+    : (order.paymentMethod === 'online'
+      ? 'Pagado por PayPal / tarjeta'
+      : (order.codeliveryMode === 'transferencia'
+        ? 'Pago contra entrega - TRANSFERENCIA al recibir'
+        : 'Pago contra entrega - EFECTIVO al recibir'));
+  const slaText = isAzul(order)
+    ? 'Entrega: se despacha al confirmar el pago (hasta 24h)'
+    : (order.paymentMethod === 'online'
+      ? 'Entrega: 1 a 3 días laborables'
+      : 'Entrega: el mismo día (máximo 24 horas)');
 
   return `Hola, acabo de colocar el pedido ${order.id} en Plata Tech Store.\n\n`
     + `Artículos:\n${lines}\n\n`
@@ -470,16 +492,19 @@ async function render() {
   const askMsg    = encodeURIComponent(buildInquiryMessage(order));
 
   const isPaid = order.status === 'pagado';
+  const azul   = isAzul(order);
 
   root.innerHTML = `
     <div class="order-hero">
       <div class="order-check">
         <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
       </div>
-      <h1>${isPaid ? 'Pago recibido' : 'Recibimos tu orden'}</h1>
-      <p>${isPaid
-        ? 'Tu pago fue procesado exitosamente por PayPal. Un representante de <strong>Plata Tech Solutions</strong> te contactará por WhatsApp para coordinar la entrega en <strong>1 a 3 días laborables</strong>.'
-        : 'Guardamos todos los detalles. Un representante de <strong>Plata Tech Solutions</strong> te llamará o escribirá por WhatsApp para confirmar disponibilidad, coordinar la entrega y asegurar que cada detalle salga bien.'
+      <h1>${azul ? 'Pago autorizado' : (isPaid ? 'Pago recibido' : 'Recibimos tu orden')}</h1>
+      <p>${azul
+        ? 'Tu pago con tarjeta fue autorizado por <strong>AZUL</strong>. Verificamos y confirmamos el pago en un plazo de <strong>hasta 24 horas</strong>; una vez acreditado, despachamos tu pedido y te enviamos el <strong>comprobante de pago</strong> por correo y WhatsApp.'
+        : (isPaid
+          ? 'Tu pago fue procesado exitosamente por PayPal. Un representante de <strong>Plata Tech Solutions</strong> te contactará por WhatsApp para coordinar la entrega en <strong>1 a 3 días laborables</strong>.'
+          : 'Guardamos todos los detalles. Un representante de <strong>Plata Tech Solutions</strong> te llamará o escribirá por WhatsApp para confirmar disponibilidad, coordinar la entrega y asegurar que cada detalle salga bien.')
       }</p>
       <div class="order-number-box">
         <span class="order-number-label">Nº de orden</span>
@@ -513,8 +538,8 @@ async function render() {
           <div class="totals-row">
             <span>Subtotal</span><span>${window.formatPrice(order.totals.subtotal)}</span>
           </div>
-          ${order.paymentMethod === 'online' && order.totals.itbis ? `<div class="totals-row"><span>ITBIS (18%)</span><span>${window.formatPrice(order.totals.itbis)}</span></div>` : ''}
-          <div class="totals-row${order.paymentMethod !== 'online' ? ' discount' : ''}">
+          ${chargesItbis(order) ? `<div class="totals-row"><span>ITBIS (18%)</span><span>${window.formatPrice(order.totals.itbis)}</span></div>` : ''}
+          <div class="totals-row${(order.paymentMethod !== 'online' && !azul) ? ' discount' : ''}">
             <span>Entrega</span><span>${deliveryLabel(order)}</span>
           </div>
           <div class="totals-row total">
@@ -589,11 +614,22 @@ async function render() {
     </div>
 
     <div id="thermalReceipt">
-      ${order.paymentMethod === 'online' && order.totals.itbis ? `
-      <div class="t-center t-bold" style="font-size:12pt">PLATA TECH SOLUTIONS S.R.L.</div>
-      <div class="t-center t-small">RNC: 133-66822-1</div>
-      <div class="t-center t-small">Santo Domingo, República Dominicana</div>
-      <div class="t-center t-small">Tel: +1 (849) 495-0959</div>
+      ${azul ? `
+      <div class="t-center t-bold" style="font-size:12pt">${BIZ.legal}</div>
+      <div class="t-center t-small">RNC: ${BIZ.rnc}</div>
+      <div class="t-center t-small">${BIZ.address}</div>
+      <div class="t-center t-small">Tel: ${BIZ.tel}</div>
+      <div class="t-center t-small">${BIZ.email}</div>
+      <hr class="t-divider"/>
+      <div class="t-center t-bold">COMPROBANTE DE PAGO</div>
+      ${order.ncf
+        ? `<div class="t-center t-small">NCF: <b>${escapeHtml(order.ncf)}</b></div>`
+        : `<div class="t-center t-small" style="color:#333">Comprobante no fiscal. ¿Necesitas factura con NCF? Escríbenos a ${BIZ.email}</div>`}
+      ` : (order.paymentMethod === 'online' && order.totals.itbis ? `
+      <div class="t-center t-bold" style="font-size:12pt">${BIZ.legal}</div>
+      <div class="t-center t-small">RNC: ${BIZ.rnc}</div>
+      <div class="t-center t-small">${BIZ.address}</div>
+      <div class="t-center t-small">Tel: ${BIZ.tel}</div>
       <hr class="t-divider"/>
       <div class="t-center t-bold">FACTURA DE CONSUMIDOR FINAL</div>
       ` : `
@@ -601,7 +637,7 @@ async function render() {
       <div class="t-center t-small">Santo Domingo · +1 (849) 495-0959</div>
       <hr class="t-divider"/>
       <div class="t-center t-bold">COMPROBANTE DE COMPRA</div>
-      `}
+      `)}
       <div class="t-center t-small">Orden: <b>${escapeHtml(order.id)}</b></div>
       <div class="t-center t-small">${fmtDate(order.createdAt)}</div>
       <hr class="t-divider"/>
@@ -622,9 +658,16 @@ async function render() {
       </div>`).join('')}
       <hr class="t-divider"/>
       <div class="t-row t-small"><span>Subtotal</span><span>${window.formatPrice(order.totals.subtotal)}</span></div>
-      ${order.paymentMethod === 'online' && order.totals.itbis ? `<div class="t-row t-small"><span>ITBIS (18%)</span><span>${window.formatPrice(order.totals.itbis)}</span></div>` : ''}
+      ${chargesItbis(order) ? `<div class="t-row t-small"><span>ITBIS (18%)</span><span>${window.formatPrice(order.totals.itbis)}</span></div>` : ''}
       <div class="t-row t-total" style="margin-top:4px;padding-top:4px;border-top:1px solid #000"><span>TOTAL</span><span>${window.formatPrice(order.totals.total)}</span></div>
       <div class="t-small" style="margin-top:4px">Pago: ${modeLabel(order)}</div>
+      ${azul ? `
+      <div class="t-small">Moneda: RD$ (DOP)</div>
+      ${order.azul && order.azul.auth      ? `<div class="t-small">Autorización: <b>${escapeHtml(order.azul.auth)}</b></div>` : ''}
+      ${order.azul && order.azul.reference ? `<div class="t-small">Referencia: ${escapeHtml(order.azul.reference)}</div>` : ''}
+      ${order.azul && order.azul.last4     ? `<div class="t-small">Tarjeta: ${escapeHtml((order.azul.brand || '') + ' ****' + order.azul.last4)}</div>` : ''}
+      <div class="t-small" style="margin-top:4px;color:#333">El pago se verifica en un plazo de hasta 24 horas. Tu pedido se despacha una vez confirmado el pago.</div>
+      ` : ''}
       <hr class="t-divider"/>
       <div class="t-warranty">
         <b>GARANTÍA:</b> Este producto tiene garantía de 25 días a partir de la fecha de compra contra defectos de fabricación. No aplica en casos de daños por humedad, golpes, caídas, pantalla rota, quemaduras eléctricas por alto voltaje, mal uso, modificaciones o reparaciones no autorizadas.
@@ -654,5 +697,6 @@ render().then(() => {
 <a href="https://wa.me/18494950959" target="_blank" rel="noopener" class="wa-float" aria-label="WhatsApp">
   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.001 2C6.479 2 2.001 6.477 2.001 12c0 1.821.487 3.53 1.338 5.014L2 22l5.084-1.332A9.96 9.96 0 0012.001 22c5.523 0 10-4.477 10-10S17.524 2 12.001 2zm0 18.153a8.145 8.145 0 01-4.159-1.141l-.298-.178-3.077.806.824-2.996-.196-.31A8.144 8.144 0 013.856 12c0-4.494 3.654-8.15 8.145-8.15 4.493 0 8.148 3.656 8.148 8.15 0 4.493-3.655 8.153-8.148 8.153z"/></svg>
 </a>
+<script src="assets/compliance.js"></script>
 </body>
 </html>

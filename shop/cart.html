@@ -333,6 +333,10 @@
 .checkout-auth-sub { font-size: .8rem; color: var(--ink-2); line-height: 1.5; margin-bottom: 1rem; }
 .checkout-auth-error { background: rgba(231,76,60,.07); border: 1px solid rgba(231,76,60,.25); border-radius: 8px; padding: .55rem .8rem; font-size: .8rem; color: #c0392b; margin-bottom: .75rem; display: none; }
 .checkout-auth-error.show { display: block; }
+.checkout-badges { margin-top: 1rem; padding: 1rem; background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; }
+.checkout-badges-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: .6rem; }
+.checkout-badges-note { font-size: .78rem; color: var(--ink-2); line-height: 1.55; margin: .35rem 0 0; }
+.checkout-badges-note a { color: var(--blue); text-decoration: underline; }
 .btn-google { display: flex; align-items: center; justify-content: center; gap: .6rem; width: 100%; padding: .75rem 1rem; border-radius: 100px; background: var(--white); border: 1.5px solid var(--border-2); font-family: 'Plus Jakarta Sans', sans-serif; font-size: .88rem; font-weight: 600; color: var(--ink); cursor: pointer; transition: border-color .2s, background .2s; margin-bottom: .85rem; }
 .btn-google:hover { border-color: var(--blue); background: var(--blue-tint); }
 .auth-sep { display: flex; align-items: center; gap: .75rem; margin: .75rem 0; color: var(--ink-3); font-size: .78rem; }
@@ -663,10 +667,22 @@ function render() {
             </div>
           </form>` : ''}
 
+        <div class="checkout-badges">
+          <div class="checkout-badges-row" data-pay-badges="3ds"></div>
+          <p class="checkout-badges-note">
+            Aceptamos <strong>Visa</strong> y <strong>MasterCard</strong>. Pagos con tarjeta protegidos con <strong>3D Secure</strong> y procesados de forma segura por <strong>AZUL</strong>. Todos los precios están en <strong>Pesos Dominicanos (RD$)</strong>.
+          </p>
+          <p class="checkout-badges-note">
+            Al completar la compra aceptas nuestras
+            <a href="politicas.html" target="_blank">políticas de devolución y entrega</a>
+            y la <a href="seguridad-pagos.html" target="_blank">seguridad en pagos</a>.
+          </p>
+        </div>
+
         <div id="payAction"></div>
 
         <div class="summary-note">
-          <strong>Pago contra entrega</strong> (efectivo o transferencia) → entregamos <strong>el mismo día (máx 24h)</strong> dentro del GSD. <strong>Pago online</strong> (PayPal/tarjeta en USD) → <strong>1 a 3 días laborables</strong>. Entregas fuera del GSD coordinamos por WhatsApp.
+          <strong>Pago con tarjeta</strong> (Visa/MasterCard vía AZUL) → el pago se verifica en <strong>hasta 24h</strong> y despachamos al confirmarse. <strong>Pago contra entrega</strong> (efectivo o transferencia) → entregamos <strong>el mismo día (máx 24h)</strong> dentro del GSD. Entregas fuera del GSD coordinamos por WhatsApp.
         </div>
 
         <div class="summary-actions">
@@ -1322,5 +1338,6 @@ function updatePinLabel(loc, status, accuracy) {
 <a href="https://wa.me/18494950959" target="_blank" rel="noopener" class="wa-float" aria-label="WhatsApp">
   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.001 2C6.479 2 2.001 6.477 2.001 12c0 1.821.487 3.53 1.338 5.014L2 22l5.084-1.332A9.96 9.96 0 0012.001 22c5.523 0 10-4.477 10-10S17.524 2 12.001 2zm0 18.153a8.145 8.145 0 01-4.159-1.141l-.298-.178-3.077.806.824-2.996-.196-.31A8.144 8.144 0 013.856 12c0-4.494 3.654-8.15 8.145-8.15 4.493 0 8.148 3.656 8.148 8.15 0 4.493-3.655 8.153-8.148 8.153z"/></svg>
 </a>
+<script src="assets/compliance.js"></script>
 </body>
 </html>
