@@ -60,18 +60,28 @@ Tarjetas de prueba del correo de AZUL, expiración `12/34`, cualquier CVV de 3 d
 Flujo: agrega un producto → "Tarjeta (AZUL)" → llena datos → "Pagar" → paga en AZUL →
 vuelves al comprobante con estado **Pagado**.
 
-## ⚠️ Puntos a verificar contra el manual/PDF de AZUL antes de producción
-1. **AuthHash**: hoy se calcula como **HMAC-SHA512** sobre la concatenación de los campos en
-   `HASH_FIELDS` (ver `azul-create-payment`). Confirmar el **orden exacto** y el conjunto de
-   campos con el PDF de AZUL. Si su Payment Page usa el método legacy (SHA-512 de
-   `valores + llave` en UTF-16LE), ajustar la función.
-2. **Hash de respuesta**: la verificación en `azul-callback` es *best-effort*. Confirmar el orden
-   de campos de la respuesta y activar `AZUL_STRICT_HASH=1` para rechazo estricto en producción.
-3. **OrderNumber**: se envía el id de la orden con guiones (`PT-YYMMDD-XXXXXX`). Si AZUL exige
-   alfanumérico sin guiones, cambiar `generateOrderNumber()` en `cart.html`.
-4. **CurrencyCode**: se envía `$` para RD$/DOP (override con `AZUL_CURRENCY`).
-5. **ITBIS**: se envía `0` (informativo; no cambia lo cobrado). El total ya incluye el 18%
-   como antes. Para desglosar, cambiar `itbisCents` en `azul-create-payment`.
+## Especificación del hash (verificada contra los documentos de AZUL)
+- **Request AuthHash** (`azul-create-payment`): `mensaje = MerchantId + MerchantName +
+  MerchantType + CurrencyCode + OrderNumber + Amount + ITBIS + ApprovedUrl + DeclinedUrl +
+  CancelUrl + UseCustomField1 + CustomField1Label + CustomField1Value + UseCustomField2 +
+  CustomField2Label + CustomField2Value + AuthKey`, codificado en **UTF-8**, luego
+  **HMAC-SHA512** con clave = AuthKey. Reproducido byte a byte contra el ejemplo oficial
+  "Ejemplo Calculo Hash SALE" → **coincide exacto**.
+- **Response AuthHash** (`azul-callback`): `OrderNumber + Amount + AuthorizationCode +
+  DateTime + ResponseCode + IsoCode + ResponseMessage + ErrorDescription + RRN + AuthKey`,
+  en **UTF-16LE** (con fallback UTF-8), HMAC-SHA512. Es la frontera de seguridad: sin firma
+  válida no se marca `pagado`.
+- Campos que se POSTean pero **no** entran en el hash: `TrxType=Sale`, `SaveToDataVault=0`.
+- `MerchantType=ECommerce`, `CurrencyCode=$` (RD$/DOP), `Amount`/`ITBIS` en centavos
+  (`toFixed(2)` sin punto; ITBIS=`000`).
+- URL Payment Page: `https://pruebas.azul.com.do/PaymentPage/` (test) ·
+  `https://pagos.azul.com.do/PaymentPage/` (prod).
+
+## Punto menor a verificar en pruebas
+- **OrderNumber**: se envía el id con guiones (`PT-YYMMDD-XXXXXX`). Si AZUL lo rechaza por
+  formato, cambiar `generateOrderNumber()` en `cart.html` a alfanumérico sin guiones.
+- **ITBIS = `000`** (informativo; no cambia lo cobrado). El total ya incluye el 18% como antes.
+  Para desglosar, cambiar el valor en `azul-create-payment`.
 
 ## Webhook de correos
 Verificar que el Database Webhook de la tabla `orders` dispara `notify-order` en **INSERT y
