@@ -10,7 +10,7 @@
   gtag('config', 'G-3L0THHV7FQ');
 </script>
 <meta charset="UTF-8"/>
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.paypal.com https://maps.googleapis.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://*.supabase.co https://open.er-api.com https://maps.googleapis.com https://maps.gstatic.com https://www.paypal.com https://*.paypal.com https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com; frame-src https://www.paypal.com https://*.paypal.com https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com; object-src 'none'; base-uri 'self';"/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://maps.googleapis.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://*.supabase.co https://maps.googleapis.com https://maps.gstatic.com https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com; frame-src https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com; form-action 'self' https://pruebas.azul.com.do https://pagos.azul.com.do; object-src 'none'; base-uri 'self';"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>Carrito - Plata Tech Store</title>
 <link rel="icon" type="image/x-icon" href="../images/pt.ico"/>
@@ -419,43 +419,17 @@
 <!-- Clickjacking protection (frame-busting) -->
 <script>if (self !== top) { top.location = self.location; }</script>
 
-<!-- PayPal SDK -->
-<script src="https://www.paypal.com/sdk/js?client-id=Aawkw19CboHF0mf8LQKMpu8qsdxx_Lue-ioCF-2KhBmZGhDOSgCXCSU7xDG6D_j09tELCWeVZ8w7y1ME&currency=USD&components=buttons"></script>
-
 <script>
 const root = document.getElementById('cartRoot');
-/* Contra-entrega: sin ITBIS en UI. Online: 18% ITBIS incluido. */
-const RATE_FALLBACK = 60;       // Tasa fallback RD$/USD
-
-/* ── Tasa de cambio dinámica USD→DOP ───────────────── */
-let usdToDop = RATE_FALLBACK;
-let rateSource = 'fallback';
-
-(async function fetchRate() {
-  try {
-    const res = await fetch('https://open.er-api.com/v6/latest/USD');
-    if (!res.ok) throw new Error(res.status);
-    const data = await res.json();
-    if (data.result === 'success' && data.rates && data.rates.DOP) {
-      usdToDop = data.rates.DOP;
-      rateSource = 'open.er-api';
-      render(); // re-render con tasa actualizada
-    }
-  } catch (e) {
-    console.warn('No se pudo obtener tasa USD/DOP, usando fallback', RATE_FALLBACK, e);
-  }
-})();
-
-function rdToUsd(rdp) { return +(rdp / usdToDop).toFixed(2); }
-function fmtUsd(n) { return 'US$' + n.toFixed(2); }
+/* Contra-entrega: sin ITBIS en UI. Tarjeta (AZUL): 18% ITBIS incluido, cobro en RD$. */
 
 /* Métodos de pago principales */
 const PAYMENT_METHODS = [
   {
-    id: 'online',
-    name: 'Pago en línea',
-    sub: 'PayPal o tarjeta en USD · Entrega 1 a 3 días',
-    badge: null,
+    id: 'azul',
+    name: 'Tarjeta de crédito/débito',
+    sub: 'Visa o MasterCard en RD$ · Pago seguro con AZUL',
+    badge: '3D SECURE',
     icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>'
   },
   {
@@ -481,7 +455,7 @@ function deliverySLA() {
   return { text: '1 a 3 días laborables', fast: false };
 }
 
-let paymentMethod  = 'online';       // 'online' | 'contra-entrega'
+let paymentMethod  = 'azul';         // 'azul' (tarjeta) | 'contra-entrega'
 let codeliveryMode = 'efectivo';     // 'efectivo' | 'transferencia' (solo aplica si contra-entrega)
 
 /* Estado del formulario (persistido entre re-renders) */
@@ -505,7 +479,7 @@ function restoreFormState() {
   });
 }
 
-/* Calcular totales — contra-entrega exonerado de ITBIS, online incluye 18% ITBIS */
+/* Calcular totales — contra-entrega exonerado de ITBIS; tarjeta (AZUL) incluye 18% ITBIS */
 function computeTotals() {
   const items = window.Cart.get();
   let subtotal = 0;
@@ -584,12 +558,6 @@ function render() {
           <span>Total</span>
           <b>${window.formatPrice(totals.total)}</b>
         </div>
-        ${paymentMethod === 'online' ? `
-        <div class="summary-row" style="padding-top:0">
-          <span style="font-size:.75rem;color:var(--ink-3)">Equivalente PayPal <small>(${usdToDop.toFixed(2)} DOP/USD)</small></span>
-          <b style="color:var(--blue);font-size:1rem">${fmtUsd(rdToUsd(totals.total))}</b>
-        </div>` : ''}
-
         <div class="pay-section-title">Método de pago</div>
         <div class="pay-methods">
           ${PAYMENT_METHODS.map(m => `
@@ -617,8 +585,9 @@ function render() {
                   <div class="pay-submode-sub">${m.sub}</div>
                 </div>
               </label>`).join('')}
-          </div>
+          </div>` : ''}
 
+        ${(paymentMethod === 'contra-entrega' || paymentMethod === 'azul') ? `
           <div class="pay-section-title" style="margin-top:1.1rem">Tus datos de entrega</div>
           <form class="order-form" id="orderForm" novalidate>
             <div>
@@ -870,10 +839,21 @@ function renderAction(totals) {
       </div>`
     : '';
 
-  /* Pago online → PayPal */
-  if (paymentMethod === 'online') {
-    box.innerHTML = pendingNotice + `<div id="paypalButtonsCart"></div>`;
-    renderPayPal(totals);
+  /* Tarjeta (AZUL) → botón que crea la orden y redirige a la Payment Page */
+  if (paymentMethod === 'azul') {
+    box.innerHTML = pendingNotice + `
+      <div class="pay-instructions">
+        <strong>Pago con tarjeta Visa / MasterCard en RD$.</strong> Al continuar te llevamos a la página segura de <strong>AZUL</strong> para completar el pago con autenticación <strong>3D Secure</strong>. No almacenamos los datos de tu tarjeta.
+      </div>
+      <button type="button" id="payAzulBtn" class="btn btn-primary btn-lg btn-block" style="margin-top:1rem;">
+        Pagar ${window.formatPrice(totals.total)} con tarjeta
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </button>
+      <p style="margin-top:.75rem; font-size:.72rem; color:var(--ink-3); line-height:1.5; text-align:center;">
+        Serás redirigido a AZUL (Servicios Digitales Popular) para completar el pago de forma segura.
+      </p>`;
+    const azBtn = document.getElementById('payAzulBtn');
+    if (azBtn) azBtn.addEventListener('click', () => payWithAzul(totals));
     return;
   }
 
@@ -1016,139 +996,102 @@ async function placeOrder(totals) {
   location.href = `orden.html?n=${encodeURIComponent(order.id)}`;
 }
 
-let ppRendering = false;
-async function renderPayPal(totals) {
-  const container = document.getElementById('paypalButtonsCart');
-  if (!container || ppRendering) return;
-  ppRendering = true;
-
-  container.innerHTML = '';
-
-  if (typeof paypal === 'undefined' || !window.paypal || !window.paypal.Buttons) {
-    // SDK still loading — retry up to 5 times every 800ms
-    let tries = 0;
-    const wait = setInterval(() => {
-      tries++;
-      if (window.paypal && window.paypal.Buttons) {
-        clearInterval(wait);
-        ppRendering = false;
-        renderPayPal(totals);
-      } else if (tries >= 5) {
-        clearInterval(wait);
-        ppRendering = false;
-        container.innerHTML = `<div class="paypal-placeholder">
-          <b>No se pudo cargar PayPal.</b> Verifica tu conexión o <a href="https://wa.me/18494950959" target="_blank">coordina por WhatsApp</a>.
-        </div>`;
-      }
-    }, 800);
+/* ── Pago con tarjeta vía AZUL Payment Page ───────────────
+   Crea la orden (pendiente) y redirige a la página segura de AZUL.
+   El AuthHash se calcula en el backend (Edge Function azul-create-payment)
+   porque usa la llave secreta; nunca en el navegador. */
+async function payWithAzul(totals) {
+  const customer = validateOrderForm();
+  if (!customer) {
+    document.getElementById('orderForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
   }
 
+  const btn = document.getElementById('payAzulBtn');
+  const setErr = (msg) => {
+    if (btn) { btn.disabled = false; btn.innerHTML = 'Reintentar pago con tarjeta'; }
+    const box = document.createElement('div');
+    box.style.cssText = 'background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:.75rem 1rem;font-size:.85rem;color:#991b1b;margin-top:.75rem;line-height:1.5';
+    box.innerHTML = msg + ' O <a href="https://wa.me/18494950959" target="_blank" style="color:#991b1b;text-decoration:underline">coordina por WhatsApp</a>.';
+    btn?.parentNode?.insertBefore(box, btn.nextSibling);
+  };
+  if (btn) { btn.disabled = true; btn.textContent = 'Preparando pago seguro…'; }
+
+  const items = window.Cart.get().map(i => {
+    const p = window.getProductBySlug(i.slug);
+    return p ? { slug: p.slug, name: p.name, variant: p.variant || '', qty: i.qty, price: p.price, subtotal: p.price * i.qty } : null;
+  }).filter(Boolean);
+
+  const order = {
+    id: generateOrderNumber(),
+    createdAt: new Date().toISOString(),
+    status: 'pendiente',
+    paymentMethod: 'azul',
+    codeliveryMode: null,
+    customer: customer,
+    items: items,
+    totals: {
+      subtotal: totals.subtotal,
+      discount: 0,
+      subtotalNet: totals.subtotal,
+      itbis: totals.itbis,
+      total: totals.total,
+      itemCount: totals.itemCount
+    },
+    lat: pinLocation ? pinLocation.lat : null,
+    lng: pinLocation ? pinLocation.lng : null
+  };
+
+  const saved = await saveOrder(order);
+  if (!saved.ok) { setErr('No se pudo guardar tu orden. Intenta de nuevo.'); return; }
+
+  // Pedir al backend los campos firmados de la Payment Page.
+  let payload;
   try {
-    paypal.Buttons({
-      style: { layout: 'vertical', color: 'gold', shape: 'pill', label: 'checkout', height: 48 },
-
-      createOrder: function(data, actions) {
-        const cartItems = window.Cart.get();
-        const items = cartItems.map(function(it) {
-          const p = window.getProductBySlug(it.slug);
-          if (!p) return null;
-          return {
-            name: (p.name + ' ' + (p.variant || '')).substring(0, 127),
-            quantity: String(it.qty),
-            unit_amount: { value: rdToUsd(p.price).toFixed(2), currency_code: 'USD' },
-            sku: p.slug
-          };
-        }).filter(Boolean);
-
-        // Apply silent 6% margin buffer on USD amount to cover PayPal fees + min margin
-        const subTotUsd = +(items.reduce(function(s, i) { return s + (+i.unit_amount.value * +i.quantity); }, 0) * 1.06).toFixed(2);
-        const taxUsd    = +(subTotUsd * 0.18).toFixed(2);
-
-        return actions.order.create({
-          purchase_units: [{
-            description: 'Pedido Plata Tech Store',
-            soft_descriptor: 'PlataTech',
-            items: items,
-            amount: {
-              value: (subTotUsd + taxUsd).toFixed(2),
-              currency_code: 'USD',
-              breakdown: {
-                item_total: { value: subTotUsd.toFixed(2), currency_code: 'USD' },
-                tax_total:  { value: taxUsd.toFixed(2),    currency_code: 'USD' }
-              }
-            }
-          }]
-        });
-      },
-
-      onApprove: function(data, actions) {
-        return actions.order.capture().then(async function(details) {
-          /* Crear orden local igual que contra-entrega */
-          var cartItems = window.Cart.get().map(function(i) {
-            var p = window.getProductBySlug(i.slug);
-            return p ? {
-              slug: p.slug, name: p.name, variant: p.variant || '',
-              qty: i.qty, price: p.price, subtotal: p.price * i.qty
-            } : null;
-          }).filter(Boolean);
-
-          var order = {
-            id: generateOrderNumber(),
-            createdAt: new Date().toISOString(),
-            status: 'pagado',
-            paymentMethod: 'online',
-            paypalOrderId: details.id,
-            paypalPayer: (details.payer && details.payer.email_address) || '',
-            paypalAmountUsd: details.purchase_units[0].amount.value,
-            exchangeRate: usdToDop,
-            rateSource: rateSource,
-            codeliveryMode: null,
-            customer: {
-              name: details.payer ? (details.payer.name.given_name + ' ' + details.payer.name.surname) : '',
-              email: (details.payer && details.payer.email_address) || '',
-              phone: '',
-              address: '',
-              sector: '',
-              notes: ''
-            },
-            items: cartItems,
-            totals: {
-              subtotal: totals.subtotal,
-              discount: 0,
-              subtotalNet: totals.subtotal,
-              itbis: totals.itbis,
-              total: totals.total,
-              itemCount: totals.itemCount
-            }
-          };
-
-          saveOrder(order);
-          window.Cart.clear();
-          location.href = 'orden.html?n=' + encodeURIComponent(order.id) + '&paid=1';
-        });
-      },
-
-      onCancel: function() {
-        // User closed the PayPal popup — nothing to do.
-      },
-
-      onError: function(err) {
-        console.error('PayPal error:', err);
-        alert('Hubo un problema con PayPal. Reintenta en unos segundos o usa contra-entrega.');
-      }
-    }).render('#paypalButtonsCart').then(() => { ppRendering = false; });
+    const { data, error } = await window.SB.functions.invoke('azul-create-payment', {
+      body: { orderId: order.id }
+    });
+    if (error) throw error;
+    payload = data;
   } catch (e) {
-    ppRendering = false;
-    console.error('PayPal render error:', e);
-    container.innerHTML = `<div class="paypal-placeholder">
-      <b>Error al cargar PayPal.</b> Verifica tu conexión o <a href="https://wa.me/18494950959" target="_blank">coordina por WhatsApp</a>.
-    </div>`;
+    console.error('azul-create-payment error:', e);
+    setErr('No se pudo iniciar el pago con tarjeta.');
+    return;
   }
+  if (!payload || !payload.url || !payload.fields) {
+    setErr('Respuesta inválida del servidor de pago.');
+    return;
+  }
+
+  // Construir y enviar el formulario oculto a AZUL (POST top-level).
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = payload.url;
+  Object.keys(payload.fields).forEach(k => {
+    const inp = document.createElement('input');
+    inp.type = 'hidden';
+    inp.name = k;
+    inp.value = payload.fields[k];
+    form.appendChild(inp);
+  });
+  document.body.appendChild(form);
+  window.Cart.clear();
+  form.submit();
 }
 
 render();
 window.addEventListener('cart:change', render);
+
+/* Aviso al volver de AZUL con pago rechazado o cancelado */
+if (new URLSearchParams(location.search).get('declined') === '1') {
+  const note = document.createElement('div');
+  note.className = 'container';
+  note.style.cssText = 'margin:1rem auto 0;';
+  note.innerHTML = `<div style="background:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:.9rem 1.1rem;font-size:.9rem;color:#991b1b;line-height:1.55">
+    <strong>El pago no se completó.</strong> Tu tarjeta fue rechazada o cancelaste el pago. Puedes intentar de nuevo o elegir <strong>contra entrega</strong>. Si el problema persiste, <a href="https://wa.me/18494950959" target="_blank" style="color:#991b1b;text-decoration:underline">escríbenos por WhatsApp</a>.
+  </div>`;
+  root.parentNode.insertBefore(note, root);
+}
 
 function fillFormFromUser(user) {
   const meta = user.user_metadata || {};

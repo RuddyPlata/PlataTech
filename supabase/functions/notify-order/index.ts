@@ -105,6 +105,12 @@ serve(async (req: Request) => {
     const newStatus = r.status as string;
     const oldStatus = old?.status as string | undefined;
 
+    // Tarjeta (AZUL): el pago se confirma en el UPDATE a 'pagado' → correos completos
+    // (dueño + cliente con artículos), no solo el aviso genérico de estado.
+    if ((r.payment_method as string) === 'azul' && newStatus === 'pagado' && oldStatus !== 'pagado') {
+      return await sendFullOrderEmails(r, sendEmail, ownerEmail);
+    }
+
     // Solo actuar si el status cambió y hay info para ese estado
     if (!newStatus || newStatus === oldStatus || !STATUS_INFO[newStatus]) {
       return new Response(JSON.stringify({ ok: true, skipped: true }), { headers: { 'Content-Type': 'application/json' } });
@@ -145,14 +151,31 @@ serve(async (req: Request) => {
   }
 
   // ── INSERT — nueva orden ──────────────────────────────────────────────────
+  const insMethod = r.payment_method as string | undefined;
+  if (insMethod === 'azul') {
+    // Orden de tarjeta creada como 'pendiente'. Esperamos la confirmación de pago
+    // (UPDATE a 'pagado' desde azul-callback) para enviar los correos completos.
+    return new Response(JSON.stringify({ ok: true, skipped: 'azul_pending' }), { headers: { 'Content-Type': 'application/json' } });
+  }
+  return await sendFullOrderEmails(r, sendEmail, ownerEmail);
+});
+
+// Correos completos de orden (dueño + cliente con artículos y totales).
+// Se envían: al INSERT para contra-entrega, y al confirmarse el pago con tarjeta (AZUL).
+async function sendFullOrderEmails(
+  r: Record<string, unknown>,
+  sendEmail: (to: string, subject: string, html: string) => Promise<boolean>,
+  ownerEmail: string,
+): Promise<Response> {
   const customer = r.customer  as { name?: string; email?: string; phone?: string; address?: string; sector?: string; notes?: string } | undefined;
   const items    = r.items     as Array<{ name: string; qty: number; subtotal: number; variant?: string }> | undefined;
   const totals   = r.totals    as { subtotal?: number; itbis?: number; total?: number } | undefined;
   const method   = r.payment_method as string | undefined;
   const mode     = r.codelivery_mode as string | undefined;
+  const paidOnline = method === 'online' || method === 'azul';
 
-  const payLabel = method === 'online' ? 'PayPal / Tarjeta (pagado online)' : mode === 'transferencia' ? 'Transferencia al recibir' : 'Efectivo al recibir';
-  const sla      = method === 'online' ? '1 a 3 días laborables' : 'El mismo día (máx 24 h)';
+  const payLabel = method === 'azul' ? 'Tarjeta Visa/MasterCard (pagado con AZUL)' : method === 'online' ? 'PayPal / Tarjeta (pagado online)' : mode === 'transferencia' ? 'Transferencia al recibir' : 'Efectivo al recibir';
+  const sla      = paidOnline ? 'Despacho al confirmar el pago (máx 24 h)' : 'El mismo día (máx 24 h)';
 
   const itemsHtml = (items ?? []).map(i =>
     `<tr>
@@ -167,6 +190,11 @@ serve(async (req: Request) => {
 
   const paypalRow = r.paypal_order_id
     ? `<p style="margin:12px 0 0;font-size:13px;color:#666">PayPal ID: <code style="background:#f0f0f0;padding:2px 6px;border-radius:4px">${esc(r.paypal_order_id)}</code> · Cobrado: US$${esc(r.paypal_amount_usd)}</p>`
+    : '';
+
+  const azul = r.azul as { auth?: string; reference?: string; last4?: string; brand?: string } | undefined;
+  const azulRow = (method === 'azul' && azul)
+    ? `<p style="margin:12px 0 0;font-size:13px;color:#666">Tarjeta vía AZUL${azul.last4 ? ` · ****${esc(azul.last4)}` : ''}${azul.auth ? ` · Autorización <code style="background:#f0f0f0;padding:2px 6px;border-radius:4px">${esc(azul.auth)}</code>` : ''}${azul.reference ? ` · Ref ${esc(azul.reference)}` : ''}</p>`
     : '';
 
   const ownerHtml = wrap(`
@@ -189,6 +217,7 @@ serve(async (req: Request) => {
         <tr style="font-weight:800;font-size:17px"><td style="padding-top:10px">Total</td><td style="padding-top:10px;text-align:right;color:${C_BLUE}">${fmt(totals?.total ?? 0)}</td></tr>
       </table>
       ${paypalRow}
+      ${azulRow}
       <div style="margin-top:28px;text-align:center">
         <a href="https://platatechs.com/shop/ordenes.html" style="display:inline-block;background:${C_BLUE};color:#fff;text-decoration:none;padding:12px 28px;border-radius:10px;font-weight:700;font-size:14px">Ver panel de órdenes</a>
       </div>
@@ -197,7 +226,7 @@ serve(async (req: Request) => {
   const firstName = esc(customer?.name?.split(' ')[0] ?? '');
   const customerHtml = wrap(`
     ${brandHeader(
-      method === 'online' ? '¡Pago recibido!' : '¡Orden confirmada!',
+      paidOnline ? '¡Pago recibido!' : '¡Orden confirmada!',
       `Hola ${firstName}, gracias por tu compra.`
     )}
     <tr><td style="padding:28px 32px">
@@ -206,8 +235,8 @@ serve(async (req: Request) => {
         <p style="margin:4px 0 0;font-size:22px;font-weight:800;color:${C_BLUE};letter-spacing:.02em">${esc(r.id)}</p>
       </div>
       <p style="color:#444;line-height:1.6;margin:0 0 24px">
-        ${method === 'online'
-          ? 'Tu pago fue procesado exitosamente. Un representante te contactará por WhatsApp para coordinar la entrega en <strong>1 a 3 días laborables</strong>.'
+        ${paidOnline
+          ? 'Tu pago con tarjeta fue autorizado por <strong>AZUL</strong>. Verificamos el pago (máx 24h) y despachamos tu pedido; te contactaremos por WhatsApp para coordinar la entrega.'
           : 'Recibimos tu pedido. Un representante te contactará por WhatsApp al <strong>' + esc(customer?.phone) + '</strong> para confirmar y coordinar la entrega <strong>hoy mismo</strong> (máx 24h).'}
       </p>
       <h2 style="font-size:15px;font-weight:700;margin:0 0 12px;padding-bottom:8px;border-bottom:2px solid #f0f0f0">Tu pedido</h2>
@@ -238,7 +267,7 @@ serve(async (req: Request) => {
     customer?.email
       ? sendEmail(
           customer.email,
-          `Tu orden ${r.id} en Plata Tech — ${method === 'online' ? 'Pago confirmado' : 'Recibida'}`,
+          `Tu orden ${r.id} en Plata Tech — ${paidOnline ? 'Pago confirmado' : 'Recibida'}`,
           customerHtml
         )
       : Promise.resolve(true)
@@ -247,4 +276,4 @@ serve(async (req: Request) => {
   return new Response(JSON.stringify({ ok: true, ownerOk, customerOk, order: r.id }), {
     headers: { 'Content-Type': 'application/json' }
   });
-});
+}
