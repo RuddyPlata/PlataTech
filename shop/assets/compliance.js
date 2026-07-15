@@ -26,39 +26,17 @@
   var inShop = /\/shop\//.test(location.pathname) || /\/shop$/.test(location.pathname.replace(/\/$/, ''));
   var P = inShop ? '' : 'shop/';
 
-  /* ── Logos (SVG en línea, sin dependencias externas) ── */
-  var VISA =
-    '<svg viewBox="0 0 64 40" role="img" aria-label="Visa" width="52" height="33">' +
-    '<rect width="64" height="40" rx="5" fill="#fff" stroke="#e5e7eb"/>' +
-    '<text x="32" y="27" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" ' +
-    'font-size="18" font-style="italic" font-weight="700" letter-spacing="1" fill="#1434CB">VISA</text></svg>';
-
-  var MC =
-    '<svg viewBox="0 0 64 40" role="img" aria-label="MasterCard" width="52" height="33">' +
-    '<rect width="64" height="40" rx="5" fill="#fff" stroke="#e5e7eb"/>' +
-    '<circle cx="27" cy="20" r="10" fill="#EB001B"/>' +
-    '<circle cx="37" cy="20" r="10" fill="#F79E1B" fill-opacity="0.9"/>' +
-    '<path d="M32 12.5a10 10 0 0 0 0 15 10 10 0 0 0 0-15z" fill="#FF5F00"/></svg>';
-
-  var VBV =
-    '<svg viewBox="0 0 108 40" role="img" aria-label="Verified by Visa" width="86" height="32">' +
-    '<rect width="108" height="40" rx="5" fill="#fff" stroke="#e5e7eb"/>' +
-    '<text x="8" y="18" font-family="Arial,Helvetica,sans-serif" font-size="9" font-weight="700" fill="#3b3b3b">Verified by</text>' +
-    '<text x="8" y="32" font-family="Arial,Helvetica,sans-serif" font-size="13" font-style="italic" font-weight="700" letter-spacing="0.5" fill="#1434CB">VISA</text>' +
-    '<path d="M92 8l10 0 0 24-10 0z" fill="#F7B600"/><path d="M92 8l-4 12 4 12 6-12z" fill="#1434CB"/></svg>';
-
-  var MCIDC =
-    '<svg viewBox="0 0 120 40" role="img" aria-label="MasterCard ID Check" width="96" height="32">' +
-    '<rect width="120" height="40" rx="5" fill="#fff" stroke="#e5e7eb"/>' +
-    '<circle cx="18" cy="20" r="9" fill="#EB001B"/>' +
-    '<circle cx="27" cy="20" r="9" fill="#F79E1B" fill-opacity="0.9"/>' +
-    '<path d="M22.5 13a9 9 0 0 0 0 14 9 9 0 0 0 0-14z" fill="#FF5F00"/>' +
-    '<text x="42" y="17" font-family="Arial,Helvetica,sans-serif" font-size="10" font-weight="700" fill="#3b3b3b">Identity</text>' +
-    '<text x="42" y="30" font-family="Arial,Helvetica,sans-serif" font-size="10" font-weight="700" fill="#3b3b3b">Check</text></svg>';
+  /* ── Logos oficiales de marca (provistos por AZUL) ── */
+  function payImg(file, alt) {
+    return '<img src="' + P + 'assets/img/pay/' + file + '" alt="' + alt + '" loading="lazy"/>';
+  }
 
   function badgeSet(mode) {
-    var set = VISA + MC;
-    if (mode === '3ds') set += VBV + MCIDC;
+    var set = payImg('visa.png', 'Visa') + payImg('mastercard.png', 'MasterCard');
+    if (mode === '3ds') {
+      set += payImg('visa-secure.png', 'Visa Secure (Verified by Visa)') +
+             payImg('mc-idcheck.png', 'Mastercard ID Check');
+    }
     return set;
   }
 
@@ -108,7 +86,7 @@
     s.id = 'compliance-css';
     s.textContent =
       '.pay-badges{display:inline-flex;flex-wrap:wrap;gap:8px;align-items:center;vertical-align:middle}' +
-      '.pay-badges svg{display:block}' +
+      '.pay-badges img{height:32px;width:auto;display:block;background:#fff;border:1px solid #e5e7eb;border-radius:6px;padding:4px 7px;box-sizing:border-box}' +
       '.compliance-bar{width:100%;margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,.14);' +
         'display:flex;flex-direction:column;gap:.6rem;font-size:.8rem;line-height:1.55;color:rgba(255,255,255,.72)}' +
       '.compliance-bar .cb-badges{display:flex;gap:8px;flex-wrap:wrap}' +
