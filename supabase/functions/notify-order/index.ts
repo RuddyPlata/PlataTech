@@ -236,7 +236,9 @@ async function sendFullOrderEmails(
       </div>
       <p style="color:#444;line-height:1.6;margin:0 0 24px">
         ${paidOnline
-          ? 'Tu pago con tarjeta fue autorizado por <strong>AZUL</strong>. Verificamos el pago (máx 24h) y despachamos tu pedido; te contactaremos por WhatsApp para coordinar la entrega.'
+          ? (method === 'azul'
+              ? 'Tu pago con tarjeta fue autorizado por <strong>AZUL</strong>. Verificamos el pago (máx 24h) y despachamos tu pedido; te contactaremos por WhatsApp para coordinar la entrega.'
+              : 'Tu pago fue procesado exitosamente. Verificamos el pago (máx 24h) y despachamos tu pedido; te contactaremos por WhatsApp para coordinar la entrega.')
           : 'Recibimos tu pedido. Un representante te contactará por WhatsApp al <strong>' + esc(customer?.phone) + '</strong> para confirmar y coordinar la entrega <strong>hoy mismo</strong> (máx 24h).'}
       </p>
       <h2 style="font-size:15px;font-weight:700;margin:0 0 12px;padding-bottom:8px;border-bottom:2px solid #f0f0f0">Tu pedido</h2>
