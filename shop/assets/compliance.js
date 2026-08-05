@@ -25,6 +25,8 @@
      pero este archivo también se usa desde la raíz del sitio. */
   var inShop = /\/shop\//.test(location.pathname) || /\/shop$/.test(location.pathname.replace(/\/$/, ''));
   var P = inShop ? '' : 'shop/';
+  /* Páginas legales que viven en la raíz del sitio (no en /shop/). */
+  var R = inShop ? '../' : '';
 
   /* ── Logos oficiales de marca (provistos por AZUL) ── */
   function payImg(file, alt) {
@@ -52,11 +54,25 @@
   }
 
   /* ── Barra legal en el footer ── */
+  /* Contenedores donde cuelga la barra legal. La tienda usa footer.shop-foot;
+     las páginas de la raíz usan footer.footer. En ambos casos preferimos el
+     .container interno, y si no existe, el propio <footer>. */
+  function footerHosts() {
+    var out = [];
+    var foots = document.querySelectorAll('footer.shop-foot, footer.footer');
+    for (var i = 0; i < foots.length; i++) {
+      out.push(foots[i].querySelector('.container') || foots[i]);
+    }
+    return out;
+  }
+
   function injectFooterBar() {
-    var foots = document.querySelectorAll('footer.shop-foot .container');
+    var foots = footerHosts();
     for (var i = 0; i < foots.length; i++) {
       var c = foots[i];
-      if (c.querySelector('.compliance-bar')) continue;
+      /* .footer-pay es la barra equivalente escrita a mano en index.html;
+         si ya está, no duplicamos los datos del comercio. */
+      if (c.querySelector('.compliance-bar, .footer-pay')) continue;
       var bar = document.createElement('div');
       bar.className = 'compliance-bar';
       bar.innerHTML =
@@ -71,7 +87,7 @@
         '<div class="cb-links">' +
           '<a href="' + P + 'politicas.html">Devoluciones y entrega</a>' +
           '<a href="' + P + 'seguridad-pagos.html">Seguridad en pagos</a>' +
-          '<a href="' + P + 'politicas.html#privacidad">Privacidad</a>' +
+          '<a href="' + R + 'privacidad.html">Privacidad</a>' +
         '</div>' +
         '<div class="cb-currency">Precios en Pesos Dominicanos (RD$ / DOP). Pagos con tarjeta procesados de forma segura por AZUL.</div>';
       c.appendChild(bar);
