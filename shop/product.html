@@ -10,7 +10,7 @@
   gtag('config', 'G-3L0THHV7FQ');
 </script>
 <meta charset="UTF-8"/>
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.paypal.com https://maps.googleapis.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://*.supabase.co https://open.er-api.com https://maps.googleapis.com https://maps.gstatic.com https://www.paypal.com https://*.paypal.com https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com; frame-src https://www.paypal.com https://*.paypal.com https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com; object-src 'none'; base-uri 'self';"/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://maps.googleapis.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://*.supabase.co https://maps.googleapis.com https://maps.gstatic.com https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com; frame-src https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com; object-src 'none'; base-uri 'self';"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>Producto - Plata Tech Store</title>
 <meta name="description" content="Tecnología original con garantía y soporte. Plata Tech Solutions S.R.L. - Tienda oficial en Santo Domingo, RD."/>
@@ -248,6 +248,7 @@
 <script src="assets/products-static.js"></script>
 <script src="assets/products-overrides.js"></script>
 <script src="assets/cart.js"></script>
+<script src="assets/payments-config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="assets/sb.js"></script>
 <script src="assets/custom-products.js"></script>
@@ -365,14 +366,11 @@ if (!product) {
             </div>
 
             <div class="pay-methods-row" style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.75rem">
-              <button type="button" class="pay-badge" data-pay="paypal" style="display:inline-flex;align-items:center;gap:.4rem;padding:.45rem .85rem;border-radius:100px;border:1.5px solid var(--border);background:var(--off-white);font:inherit;font-size:.78rem;font-weight:600;color:var(--ink-2);cursor:pointer;transition:border-color .2s,background .2s">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="#003087"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 2.23A.773.773 0 0 1 5.706 1.6h6.874c2.279 0 3.961.469 4.994 1.396.515.463.862 1.01 1.032 1.626.18.65.224 1.428.13 2.313-.398 3.672-2.826 5.578-6.558 5.578H9.578a.77.77 0 0 0-.762.648l-.93 5.887a.641.641 0 0 1-.633.54h-.177z"/></svg>
-                PayPal
-              </button>
+              ${window.AZUL_ENABLED ? `
               <button type="button" class="pay-badge" data-pay="card" style="display:inline-flex;align-items:center;gap:.4rem;padding:.45rem .85rem;border-radius:100px;border:1.5px solid var(--border);background:var(--off-white);font:inherit;font-size:.78rem;font-weight:600;color:var(--ink-2);cursor:pointer;transition:border-color .2s,background .2s">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
                 Tarjeta
-              </button>
+              </button>` : ''}
               <button type="button" class="pay-badge" data-pay="cash" style="display:inline-flex;align-items:center;gap:.4rem;padding:.45rem .85rem;border-radius:100px;border:1.5px solid var(--border);background:var(--off-white);font:inherit;font-size:.78rem;font-weight:600;color:var(--ink-2);cursor:pointer;transition:border-color .2s,background .2s">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M8 21H3v-5M21 3l-7 7M3 21l7-7"/></svg>
                 Contra entrega
@@ -479,8 +477,7 @@ if (!product) {
 
   /* Payment method info badges */
   const payInfo = {
-    paypal: '<strong>PayPal</strong> — Aceptamos pagos vía PayPal en USD. Al proceder al checkout en el carrito, podrás pagar con tu cuenta PayPal de forma segura. El monto se convierte automáticamente de RD$ a USD.',
-    card: '<strong>Tarjeta de crédito o débito</strong> — Visa, Mastercard, American Express. El pago se procesa a través de PayPal (no necesitas cuenta PayPal). Selecciona "Pago online" en el carrito y elige la opción de tarjeta.',
+    card: '<strong>Tarjeta de crédito o débito</strong> — Visa y MasterCard, cobrado en Pesos Dominicanos (RD$). Al confirmar la compra te llevamos a la página de pago de AZUL, donde digitas los datos de tu tarjeta con autenticación 3D Secure. Esos datos no pasan por nuestro sitio.',
     cash: '<strong>Contra entrega</strong> — Pagás al recibir tu pedido en efectivo (RD$) o por transferencia bancaria. Entrega el mismo día dentro del Gran Santo Domingo. Al confirmar, te contactamos por WhatsApp para coordinar.'
   };
   const popup = document.getElementById('payInfoPopup');

@@ -1,0 +1,22 @@
+# Configuracion del proyecto Supabase (PTS).
+# Lo unico que fija este archivo hoy es la verificacion de JWT por funcion,
+# para que no dependa de acordarse de pasar un flag en cada despliegue.
+
+project_id = "ieltuoriwgfckdfbwziu"
+
+# Recibe el POST de AZUL cuando el cliente termina de pagar. AZUL no manda un
+# JWT de Supabase, asi que con verify_jwt activo la llamada se rechazaria antes
+# de llegar al codigo. No queda desprotegida: la funcion valida el AuthHash
+# (HMAC-SHA512 con la AuthKey del comercio) y descarta lo que no cuadre.
+[functions.azul-callback]
+verify_jwt = false
+
+# La llama el navegador con supabase-js, que ya envia la anon key como JWT.
+[functions.azul-create-payment]
+verify_jwt = true
+
+[functions.notify-order]
+verify_jwt = true
+
+[functions.notify-status]
+verify_jwt = true
