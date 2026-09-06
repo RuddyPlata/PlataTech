@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(git branch:*)",
+      "Bash(grep:*)",
+      "Bash(rg:*)",
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(wc:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(sed -n:*)",
+      "Bash(python scripts/sync_products.py:*)",
+      "Bash(python scripts/sync_renzo.py:*)",
+      "Bash(python scripts/gen_costs.py:*)",
+      "Read(./**)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./**/.env*)",
+      "Read(./supabase/.temp/**)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)"
+    ]
+  }
+}
