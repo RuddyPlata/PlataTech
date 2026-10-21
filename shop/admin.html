@@ -518,6 +518,10 @@ async function showAdmin(){
   await Promise.all([loadAll(), preloadLogos()]);
   setupShell();
   go('resumen');
+  // El CRM abre cotizaciones aqui con ?quote=<id>
+  const qid=new URLSearchParams(location.search).get('quote');
+  const q=qid&&allQuotes.find(x=>x.id===qid);
+  if(q){ go('cotizaciones'); openQuoteDrawer(q); }
 }
 
 function setupShell(){

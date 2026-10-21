@@ -20,3 +20,8 @@ verify_jwt = true
 
 [functions.notify-status]
 verify_jwt = true
+
+# Lo llama un Database Webhook (INSERT en crm_opportunities), configurado
+# igual que el de notify-order.
+[functions.notify-lead]
+verify_jwt = true
