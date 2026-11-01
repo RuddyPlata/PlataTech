@@ -75,3 +75,20 @@ WhatsApp con un saludo listo.
 - Factura electrónica e-CF (Fase 3), con la librería `dgii-ecf` y el
   certificado digital .p12.
 - WhatsApp Business API y agentes con IA (Fase 2).
+
+## Usar el CRM desde Claude Code (también por voz)
+
+`scripts/crm.mjs` deja que Claude Code consulte y actualice el CRM:
+"¿quién me escribió hoy?", "anota que Juan pagó 10 mil", "¿cuánto me deben?".
+Las instrucciones para Claude están en `.claude/skills/crm/SKILL.md`.
+
+1. Crea en Supabase una cuenta admin para Claude (Authentication → Add user,
+   y en su `app_metadata` pon `{"is_admin": true}`), así queda registrado
+   aparte de la tuya y la puedes desactivar cuando quieras.
+2. En la computadora o el entorno donde corre Claude Code, define
+   `CRM_EMAIL` y `CRM_PASSWORD` con esa cuenta (y `CRM_SUPABASE_URL` /
+   `CRM_SUPABASE_ANON_KEY` si el CRM está en otro proyecto).
+3. Prueba: `node scripts/crm.mjs resumen`.
+
+Facturar desde Claude siempre muestra una vista previa y pide tu "sí"
+antes de emitir el NCF.
