@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="robots" content="noindex,nofollow"/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co; object-src 'none'; base-uri 'self';"/>
+<title>CRM — Plata Tech</title>
+<link rel="icon" type="image/x-icon" href="../images/pt.ico"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --navy:#0b1d3e;--blue:#1e50d4;--blue-t:#eef3ff;--gold:#c8922a;
+  --ink:#0b1d3e;--ink-2:#475569;--ink-3:#94a3b8;--border:#dde5f0;--off:#f7f9fc;--white:#fff;
+  --ok:#059669;--ok-t:#ecfdf5;--warn:#b45309;--warn-t:#fef3c7;--bad:#b91c1c;--bad-t:#fee2e2;
+  --l-seguridad:#1e50d4;--l-software:#7c3aed;--l-celulares:#0891b2;--l-aliado:#64748b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,sans-serif;font-size:14px;color:var(--ink);background:var(--off);line-height:1.5}
+h1,h2,h3{font-family:'Plus Jakarta Sans',sans-serif;line-height:1.2}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--blue)}
+[hidden]{display:none!important}
+
+/* Gate */
+.gate{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0f172a,#1e3a8a);padding:1.5rem}
+.gate-card{background:var(--white);border-radius:18px;padding:2.25rem 2rem;width:100%;max-width:380px;display:grid;gap:1rem}
+.gate-card h1{font-size:1.5rem}
+.gate-card p{color:var(--ink-2)}
+.gate-err{color:var(--bad);font-size:.85rem;min-height:1.2em}
+
+/* Shell */
+.top{position:sticky;top:0;z-index:20;background:var(--navy);color:var(--white)}
+.top-in{max-width:1280px;margin:0 auto;padding:.7rem 1rem;display:flex;align-items:center;gap:1rem}
+.brand{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:1rem;white-space:nowrap}
+.brand span{color:var(--gold)}
+.nav{display:flex;gap:.25rem;overflow-x:auto;flex:1;scrollbar-width:none}
+.nav button{background:0;border:0;color:rgba(255,255,255,.6);padding:.45rem .8rem;border-radius:8px;cursor:pointer;white-space:nowrap;font-weight:500}
+.nav button:hover{color:var(--white);background:rgba(255,255,255,.07)}
+.nav button.on{color:var(--white);background:rgba(30,80,212,.45)}
+.nav .badge{display:inline-block;min-width:18px;padding:0 5px;margin-left:4px;border-radius:9px;background:var(--gold);color:var(--navy);font-size:.7rem;font-weight:700;text-align:center}
+.top-act{display:flex;gap:.4rem}
+.top-act button{background:rgba(255,255,255,.08);border:0;color:var(--white);padding:.4rem .7rem;border-radius:8px;cursor:pointer;font-size:.8rem}
+.top-act button:hover{background:rgba(255,255,255,.16)}
+main{max-width:1280px;margin:0 auto;padding:1.25rem 1rem 4rem}
+.head{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1rem}
+.head h2{font-size:1.25rem}
+.head p{color:var(--ink-2);font-size:.85rem}
+
+/* Bits */
+.btn{display:inline-flex;align-items:center;gap:.35rem;border:1px solid var(--border);background:var(--white);padding:.45rem .85rem;border-radius:9px;cursor:pointer;font-weight:600;font-size:.82rem;text-decoration:none;color:var(--ink);white-space:nowrap}
+.btn:hover{border-color:var(--blue)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:var(--white)}
+.btn.wa{background:#25d366;border-color:#25d366;color:var(--white)}
+.btn.danger{color:var(--bad)}
+.btn.sm{padding:.25rem .55rem;font-size:.75rem}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn:focus-visible,.nav button:focus-visible,.card:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.chips{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem}
+.chip{border:1px solid var(--border);background:var(--white);padding:.3rem .75rem;border-radius:999px;cursor:pointer;font-size:.8rem;font-weight:500}
+.chip.on{background:var(--ink);border-color:var(--ink);color:var(--white)}
+.pill{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;font-weight:600;padding:.12rem .55rem;border-radius:999px;white-space:nowrap;background:var(--off);color:var(--ink-2)}
+.pill.ok{background:var(--ok-t);color:var(--ok)}
+.pill.warn{background:var(--warn-t);color:var(--warn)}
+.pill.bad{background:var(--bad-t);color:var(--bad)}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex-shrink:0}
+.muted{color:var(--ink-3)}
+.money{font-variant-numeric:tabular-nums;white-space:nowrap}
+.empty{padding:2rem;text-align:center;color:var(--ink-2)}
+
+/* Tiles */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.75rem;margin-bottom:1.25rem}
+.tile{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1rem;display:grid;gap:.2rem}
+.tile b{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.5rem;font-variant-numeric:tabular-nums}
+.tile span{font-size:.78rem;color:var(--ink-2)}
+.tile.alert{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1rem}
+.panel{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.panel h3{font-size:.9rem;padding:.8rem 1rem;border-bottom:1px solid var(--border)}
+
+/* Tables */
+.tbl-wrap{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);text-align:left;padding:.6rem .8rem;border-bottom:1px solid var(--border);white-space:nowrap;font-weight:700}
+td{padding:.6rem .8rem;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+tr.click{cursor:pointer}
+tr.click:hover td{background:var(--blue-t)}
+td.r,th.r{text-align:right}
+
+/* Kanban */
+.board{display:grid;grid-template-columns:repeat(6,minmax(210px,1fr));gap:.75rem;overflow-x:auto;padding-bottom:.5rem}
+.col{background:#eef2f8;border-radius:12px;padding:.6rem;display:flex;flex-direction:column;gap:.5rem;min-height:120px}
+.col-h{display:flex;justify-content:space-between;align-items:baseline;padding:.15rem .25rem}
+.col-h b{font-size:.8rem}
+.col-h span{font-size:.72rem;color:var(--ink-2)}
+.card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:.65rem .7rem;cursor:pointer;display:grid;gap:.25rem;text-align:left}
+.card:hover{border-color:var(--blue)}
+.card .c-top{display:flex;align-items:center;gap:.4rem;font-weight:600;font-size:.85rem}
+.card .c-title{font-size:.8rem;color:var(--ink-2)}
+.card .c-foot{display:flex;justify-content:space-between;font-size:.72rem;color:var(--ink-3)}
+.card.stale{border-left:3px solid var(--gold)}
+
+/* Modal */
+.modal{position:fixed;inset:0;background:rgba(11,29,62,.45);z-index:50;display:flex;justify-content:flex-end}
+.sheet{background:var(--white);width:min(720px,100%);height:100%;overflow-y:auto;padding:1.25rem 1.25rem 3rem;display:grid;gap:1.1rem;align-content:start}
+.sheet-h{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem}
+.sheet-h h2{font-size:1.2rem}
+.sheet-h .x{background:0;border:0;font-size:1.5rem;line-height:1;cursor:pointer;color:var(--ink-2)}
+.sec-t{font-size:.7rem;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-3);font-weight:700}
+.form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem}
+.form .full{grid-column:1/-1}
+.f{display:grid;gap:.25rem}
+.f label{font-size:.72rem;font-weight:600;color:var(--ink-2)}
+.f input,.f select,.f textarea{border:1px solid var(--border);border-radius:8px;padding:.5rem .65rem;background:var(--white);width:100%}
+.f input:focus,.f select:focus,.f textarea:focus{outline:2px solid var(--blue-t);border-color:var(--blue)}
+.f textarea{min-height:70px;resize:vertical}
+.f .hint{font-size:.72rem;color:var(--ink-3)}
+.actions{display:flex;gap:.5rem;flex-wrap:wrap}
+.note-box{background:var(--blue-t);border-radius:10px;padding:.7rem .85rem;font-size:.82rem;color:var(--ink-2)}
+.note-box.warn{background:var(--warn-t);color:var(--warn)}
+.timeline{display:grid;gap:.6rem}
+.tl{display:grid;grid-template-columns:auto 1fr;gap:.6rem;font-size:.84rem}
+.tl .k{font-size:.68rem;font-weight:700;text-transform:uppercase;color:var(--ink-3);padding-top:.1rem;min-width:62px}
+.tl .w{color:var(--ink-3);font-size:.72rem}
+.mini{display:grid;gap:.4rem}
+.mini-row{display:flex;justify-content:space-between;align-items:center;gap:.75rem;padding:.55rem .7rem;border:1px solid var(--border);border-radius:9px;font-size:.84rem;flex-wrap:wrap}
+.toast{position:fixed;bottom:1.25rem;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--white);padding:.6rem 1rem;border-radius:10px;z-index:60;font-size:.85rem;max-width:90vw}
+.toast.err{background:var(--bad)}
+
+@media (max-width:640px){
+  .form{grid-template-columns:1fr}
+  .brand{display:none}
+  .top-act button span{display:none}
+}
+@media (prefers-reduced-motion:no-preference){ .card,.btn,.chip{transition:border-color .15s,background .15s} }
+</style>
+</head>
+<body>
+
+<div id="gate" class="gate" hidden>
+  <form class="gate-card" id="gateForm">
+    <h1>CRM Plata Tech</h1>
+    <p>Entra con tu cuenta de administrador, la misma del admin de la tienda.</p>
+    <div class="f"><label for="gEmail">Correo</label><input type="email" id="gEmail" autocomplete="email" required/></div>
+    <div class="f"><label for="gPass">Contraseña</label><input type="password" id="gPass" autocomplete="current-password" required/></div>
+    <button class="btn primary" id="gBtn" type="submit" style="justify-content:center;padding:.7rem">Entrar</button>
+    <div class="gate-err" id="gErr"></div>
+  </form>
+</div>
+
+<div id="app" hidden>
+  <header class="top">
+    <div class="top-in">
+      <div class="brand">Plata<span>Tech</span> CRM</div>
+      <nav class="nav" id="nav">
+        <button data-v="resumen">Resumen</button>
+        <button data-v="embudo">Embudo</button>
+        <button data-v="clientes">Clientes</button>
+        <button data-v="facturas">Facturas</button>
+        <button data-v="cobros">Por cobrar</button>
+        <button data-v="ajustes">Ajustes</button>
+      </nav>
+      <div class="top-act">
+        <button id="refreshBtn" title="Actualizar">↻ <span>Actualizar</span></button>
+        <button id="logoutBtn" title="Salir">⏻ <span>Salir</span></button>
+      </div>
+    </div>
+  </header>
+  <main id="view"></main>
+</div>
+
+<div id="modal" class="modal" hidden></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="../shop/assets/sb.js"></script>
+<script src="crm.js"></script>
+</body>
+</html>

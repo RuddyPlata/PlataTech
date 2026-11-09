@@ -619,6 +619,37 @@
   }
   .cta-btns { display: flex; gap: .85rem; justify-content: center; flex-wrap: wrap; }
 
+  /* Cotizador rapido (guarda el cliente en el CRM y abre WhatsApp) */
+  .cz { text-align: left; display: grid; gap: 1rem; margin: 1.75rem 0 2rem; }
+  .cz-row { display: grid; grid-template-columns: 1fr 1fr; gap: .85rem; }
+  .cz-f { display: grid; gap: .35rem; }
+  .cz-f > span, .cz-q { font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--text-mid); }
+  .cz input[type=text], .cz input[type=tel], .cz select {
+    width: 100%; padding: .75rem .9rem; border-radius: 10px; font: inherit; font-size: .92rem;
+    background: rgba(255,255,255,.06); border: 1px solid var(--border-b); color: var(--white);
+  }
+  .cz select option { color: #0b1d3e; }
+  .cz input:focus, .cz select:focus { outline: none; border-color: var(--gold-l); }
+  .cz-opts { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .cz-opts label { position: relative; }
+  .cz-opts input { position: absolute; opacity: 0; inset: 0; }
+  .cz-opts span {
+    display: inline-block; padding: .5rem .9rem; border-radius: 999px; font-size: .85rem;
+    border: 1px solid var(--border-b); color: var(--text-mid); transition: all .2s;
+  }
+  .cz-opts input:checked + span { background: var(--gold-pale); border-color: var(--gold-l); color: var(--white); }
+  .cz-opts input:focus-visible + span { outline: 2px solid var(--gold-l); outline-offset: 2px; }
+  .cz-est {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap;
+    padding: 1rem 1.1rem; border-radius: 12px; background: rgba(30,80,212,.18); border: 1px solid var(--blue-border);
+  }
+  .cz-est b { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.6rem; color: var(--gold-l); }
+  .cz-est small { color: var(--text-mid); font-size: .78rem; flex-basis: 100%; }
+  .cz-err { color: #fca5a5; font-size: .85rem; min-height: 1.1em; }
+  .cz button[type=submit] { width: 100%; justify-content: center; border: 0; font: inherit; font-weight: 700; }
+  .cz-alt { color: var(--text-dim); font-size: .82rem; margin-bottom: .75rem; }
+  @media (max-width: 560px) { .cz-row { grid-template-columns: 1fr; } .cta-inner { padding: 2rem 1.25rem; } }
+
   /* ╔══════════════════════════════════════════════════════════╗
      ║  FOOTER                                                  ║
      ╚══════════════════════════════════════════════════════════╝ */
@@ -1476,6 +1507,36 @@
       <p class="label cta-label">Contacto</p>
       <h2 class="cta-title">Solicita tu cotizacion<br/>sin compromiso</h2>
       <p class="cta-desc">Cuentanos que necesitas proteger y te preparamos un presupuesto detallado el mismo dia.</p>
+      <form class="cz" id="cotizador" novalidate>
+        <div class="cz-f"><span class="cz-q">¿Qué necesitas?</span>
+          <div class="cz-opts">
+            <label><input type="checkbox" name="need" value="camaras" checked/><span>Cámaras</span></label>
+            <label><input type="checkbox" name="need" value="alarma"/><span>Alarma</span></label>
+            <label><input type="checkbox" name="need" value="porton"/><span>Portón automático</span></label>
+            <label><input type="checkbox" name="need" value="acceso"/><span>Control de acceso</span></label>
+          </div>
+        </div>
+        <div class="cz-row">
+          <label class="cz-f"><span>Es para</span>
+            <select name="place"><option value="casa">Mi casa</option><option value="negocio">Mi negocio</option></select></label>
+          <label class="cz-f" id="czCamsWrap"><span>Cuántas cámaras</span>
+            <select name="cams"><option value="4">4 cámaras</option><option value="8">8 cámaras</option><option value="mas">Más de 8</option></select></label>
+        </div>
+        <div class="cz-est" aria-live="polite"><span>Kits desde</span><b id="czPrice">RD$15,990</b>
+          <small>Precio de referencia de nuestros kits. El precio final lo confirmamos en la visita, sin compromiso.</small></div>
+        <div class="cz-row">
+          <label class="cz-f"><span>Tu nombre</span><input type="text" name="name" autocomplete="name" required maxlength="80"/></label>
+          <label class="cz-f"><span>Tu WhatsApp</span><input type="tel" name="phone" autocomplete="tel" required placeholder="809-000-0000" maxlength="20"/></label>
+        </div>
+        <div class="cz-row">
+          <label class="cz-f"><span>Sector o ciudad</span><input type="text" name="sector" placeholder="Los Prados, Santiago..." maxlength="60"/></label>
+          <label class="cz-f"><span>¿Para cuándo?</span>
+            <select name="when"><option value="esta semana">Esta semana</option><option value="este mes">Este mes</option><option value="solo cotizando">Solo estoy cotizando</option></select></label>
+        </div>
+        <div class="cz-err" id="czErr"></div>
+        <button type="submit" class="btn btn-wa">Enviar y seguir por WhatsApp</button>
+      </form>
+      <p class="cz-alt">¿Prefieres escribir directo o llamar?</p>
       <a href="tel:8494950959" class="cta-phone">849-495-0959</a>
       <div class="cta-btns">
         <a id="waBtn" href="https://wa.me/18494950959?text=Hola%2C%20quiero%20cotizar%20un%20sistema%20de%20seguridad" target="_blank" class="btn btn-wa js-magnetic">
@@ -1750,6 +1811,66 @@ document.querySelectorAll('.pcard[data-type="camera"] .price-row').forEach(row =
 })();
 </script>
 
+<script src="lead-capture.js"></script>
+<script>
+/* ── Cotizador: precio de referencia + envio al CRM ───── */
+(function () {
+  var form = document.getElementById('cotizador');
+  if (!form) return;
+  // Precios "desde" de los kits publicados arriba en esta misma pagina.
+  var KITS = {
+    camaras: { 4: 15990, 8: 28990, mas: null },
+    alarma:  { casa: 17990, negocio: 29490 },
+    porton:  21990,
+    acceso:  6990
+  };
+  var LABELS = { camaras: 'cámaras', alarma: 'alarma', porton: 'portón automático', acceso: 'control de acceso' };
+  var fmt = function (n) { return 'RD$' + n.toLocaleString('es-DO'); };
+
+  function quote() {
+    var needs = [].slice.call(form.querySelectorAll('input[name=need]:checked')).map(function (i) { return i.value; });
+    var total = 0, open = false;
+    needs.forEach(function (n) {
+      var v = n === 'camaras' ? KITS.camaras[form.cams.value] : n === 'alarma' ? KITS.alarma[form.place.value] : KITS[n];
+      if (v == null) open = true; else total += v;
+    });
+    return { needs: needs, total: total, open: open };
+  }
+
+  function update() {
+    var q = quote();
+    document.getElementById('czCamsWrap').hidden = q.needs.indexOf('camaras') < 0;
+    document.getElementById('czPrice').textContent = !q.needs.length ? '—' : q.open && !q.total ? 'A cotizar' : fmt(q.total) + (q.open ? ' +' : '');
+  }
+  form.addEventListener('change', update);
+  update();
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var err = document.getElementById('czErr');
+    var q = quote();
+    var name = form.elements.name.value.trim(), phone = form.phone.value.trim();
+    if (!q.needs.length) { err.textContent = 'Elige al menos un servicio.'; return; }
+    if (name.length < 2) { err.textContent = 'Escribe tu nombre.'; form.elements.name.focus(); return; }
+    if (phone.replace(/\D/g, '').length < 10) { err.textContent = 'Escribe tu WhatsApp con los 10 dígitos.'; form.phone.focus(); return; }
+    err.textContent = '';
+    var what = q.needs.map(function (n) { return n === 'camaras' ? (form.cams.value === 'mas' ? 'más de 8' : form.cams.value) + ' cámaras' : LABELS[n]; }).join(', ');
+    var place = form.place.value === 'negocio' ? 'negocio' : 'casa';
+    var btn = form.querySelector('button[type=submit]');
+    btn.disabled = true; btn.textContent = 'Enviando…';
+    window.PTLead.send({
+      line: 'seguridad',
+      title: what.charAt(0).toUpperCase() + what.slice(1) + ' para ' + place,
+      value: q.total || null,
+      name: name, phone: phone, sector: form.sector.value.trim(),
+      details: { servicios: what, lugar: place, para_cuando: form.when.value, precio_referencia: q.total ? fmt(q.total) : 'a cotizar' },
+      waText: 'Hola, soy ' + name + '. Quiero cotizar ' + what + ' para mi ' + place +
+        (form.sector.value.trim() ? ' en ' + form.sector.value.trim() : '') + ', ' + form.when.value + '.' +
+        (q.total ? ' Vi en la web kits desde ' + fmt(q.total) + '.' : '')
+    });
+  });
+})();
+</script>
 <script src="shop/assets/compliance.js"></script>
 </body>
 </html>
