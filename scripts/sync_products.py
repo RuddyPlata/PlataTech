@@ -2,11 +2,13 @@
 """
 sync_products.py - Plata Tech Solutions S.R.L.
 
-Descarga el catalogo de Google Sheets (YDC), aplica el margen de Plata Tech,
-y regenera shop/assets/products.js con productos REALES.
+Descarga la lista de precios de YDC / GT Tech (ydctechnology.com/precios),
+aplica el margen de Plata Tech y regenera shop/assets/products.js.
+Solo entra lo visible y con existencia. Las fotos se bajan a
+shop/assets/img/ydc/.
 
-NOTA: products-static.js (catalogo manual R.ENZO TECH) es independiente y NO
-se sobreescribe por este sync. Para regenerarlo: python scripts/static_catalog.py
+    python scripts/sync_products.py           # desde la API (normal)
+    python scripts/sync_products.py --sheet   # fuente vieja: Google Sheet
 
 Uso:
     python scripts/sync_products.py
@@ -42,7 +44,11 @@ import xml.etree.ElementTree as ET
 sys.stdout.reconfigure(encoding='utf-8')
 
 # ── Configuracion ────────────────────────────────────────────
-SHEET_ID_YDC = "1EtOwxNRGq0WFgGaRXtJgibUqzxIgcAUeRkJlr1wPsLc"
+SHEET_ID_YDC = "1EtOwxNRGq0WFgGaRXtJgibUqzxIgcAUeRkJlr1wPsLc"  # fuente vieja (--sheet)
+# Fuente actual: la lista de precios de ydctechnology.com/precios (GT Tech).
+# Esa pagina carga este JSON con todos los productos visibles.
+API_YDC = "https://ydctechnology.com/api/getPrecios2?visible=1"
+WEB_YDC = "https://ydctechnology.com/public"  # fotos: /public + urlFoto
 ROOT = Path(__file__).resolve().parent.parent
 OUT_FILE = ROOT / "shop" / "assets" / "products.js"
 IMG_DIR = ROOT / "shop" / "assets" / "img" / "ydc"
@@ -397,6 +403,72 @@ def extract_images_by_row(xlsx_path: Path, out_dir: Path) -> dict:
     print(f"[sync] {len(row_to_path)} imagenes embebidas extraidas a {out_dir}")
     return row_to_path
 
+# ── Fuente: API de ydctechnology.com/precios ────────────────
+def _get(url: str) -> bytes:
+    req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (PlataTech sync)'})
+    with urllib.request.urlopen(req, timeout=60) as r:
+        return r.read()
+
+def fetch_api_catalog() -> list:
+    """Lee la lista de precios de YDC. Devuelve filas crudas con la misma
+    forma que parse_workbook(). 'row' = id del producto en YDC (estable).
+    Descarta lo oculto, lo agotado y lo que esta en camino."""
+    print(f"[sync] Descargando {API_YDC}")
+    data = json.loads(_get(API_YDC).decode('utf-8'))
+    if data.get('error') or not isinstance(data.get('catalogo'), list):
+        raise RuntimeError(f"La API de YDC respondio con error: {data.get('error_message')}")
+    raw, agotados = [], 0
+    for cat in data['catalogo']:
+        if str(cat.get('visible')) != '1':
+            continue
+        section = str(cat.get('descripcion') or '').strip().upper()
+        for p in cat.get('productos') or []:
+            if str(p.get('visible')) != '1' or str(p.get('isEnCaminoPrecios')) == '1':
+                continue
+            try:
+                qty = float(p.get('cantarticulo') or 0)
+            except ValueError:
+                qty = 0
+            if qty <= 0:
+                agotados += 1
+                continue
+            raw.append({
+                "row": int(p['id']),
+                "section": section,
+                "emoji": "",
+                "name_raw": str(p.get('descripcion') or '').strip(),
+                "vip_price": parse_price(p.get('precio')),
+                "reg_price": parse_price(p.get('precio1')),
+                "hyperlink": p.get('urlFotoExterna') or None,
+                "foto": p.get('urlFoto') or None,
+            })
+    print(f"[sync] {len(raw)} productos con existencia ({agotados} agotados descartados)")
+    return raw
+
+def download_api_images(raw: list, out_dir: Path) -> dict:
+    """Baja la foto de cada producto, la achica y la guarda en out_dir.
+    Devuelve {id: 'assets/img/ydc/yID.jpg'}."""
+    from concurrent.futures import ThreadPoolExecutor
+    if out_dir.exists():
+        shutil.rmtree(out_dir, ignore_errors=True)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    def one(p):
+        if not p.get("foto"):
+            return None
+        out_path = out_dir / f"y{p['row']}.jpg"
+        try:
+            _save_resized(_get(WEB_YDC + p["foto"]), out_path)
+        except Exception as e:
+            print(f"[sync] sin foto para {p['row']} ({e})")
+            return None
+        return p["row"], out_path.relative_to(ROOT / "shop").as_posix()
+
+    with ThreadPoolExecutor(max_workers=8) as ex:
+        found = dict(r for r in ex.map(one, raw) if r)
+    print(f"[sync] {len(found)} fotos guardadas en {out_dir}")
+    return found
+
 # ── Main flow ────────────────────────────────────────────────
 def download_xlsx(sheet_id: str, dest: Path):
     """Descarga el Sheet como xlsx."""
@@ -697,6 +769,13 @@ def _now_iso():
 
 # ── Main ─────────────────────────────────────────────────────
 def main():
+    if "--sheet" not in sys.argv:
+        raw = fetch_api_catalog()
+        if len(raw) < 50:
+            raise RuntimeError(f"Catalogo sospechoso: solo {len(raw)} productos. No se toca products.js")
+        products = build_products(raw, download_api_images(raw, IMG_DIR))
+        return finish(products)
+
     xlsx_path = TMP_DIR / "ydc.xlsx"
     # Use cached xlsx if --no-download or if exists and < 12h old
     if "--no-download" in sys.argv and xlsx_path.exists():
@@ -715,6 +794,9 @@ def main():
 
     row_to_image = extract_images_by_row(xlsx_path, IMG_DIR)
     products = build_products(raw, row_to_image)
+    return finish(products)
+
+def finish(products: list):
     print(f"[sync] {len(products)} productos validos despues de filtros")
 
     by_cat = defaultdict(int)

@@ -8,7 +8,7 @@ echo.
 
 set ERRORS=0
 
-echo [1/2] Sincronizando GT Tech (YDC)...
+echo [1/1] Sincronizando GT Tech (YDC, ydctechnology.com/precios)...
 python scripts\sync_products.py
 if %ERRORLEVEL% NEQ 0 (
     echo   ERROR: sync_products.py fallo con codigo %ERRORLEVEL%
@@ -18,20 +18,11 @@ if %ERRORLEVEL% NEQ 0 (
 )
 
 echo.
-echo [2/2] Sincronizando Renzo Tech...
-python scripts\sync_renzo.py
-if %ERRORLEVEL% NEQ 0 (
-    echo   ERROR: sync_renzo.py fallo con codigo %ERRORLEVEL%
-    set ERRORS=1
-) else (
-    echo   OK - Renzo Tech sincronizado
-)
-
-echo.
+REM R.ENZO se quito del catalogo el 2026-11-10 (sync_renzo.py ya no corre).
 
 if %ERRORS% EQU 0 (
     echo Haciendo push a GitHub...
-    git add shop\assets\products.js shop\assets\products-static.js shop\assets\img\renzo\
+    git add -A shop\assets\products.js shop\assets\costs.js shop\assets\img\ydc\
     git diff --cached --quiet
     if %ERRORLEVEL% EQU 0 (
         echo   Sin cambios nuevos - catalogo ya estaba al dia.
