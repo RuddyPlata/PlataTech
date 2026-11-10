@@ -25,3 +25,8 @@ verify_jwt = true
 # igual que el de notify-order.
 [functions.notify-lead]
 verify_jwt = true
+
+# Lo llama un Database Webhook (INSERT en crm_discount_codes): envia el
+# codigo de 5% al correo del visitante.
+[functions.send-discount-code]
+verify_jwt = true

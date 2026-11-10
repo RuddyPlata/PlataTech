@@ -55,7 +55,7 @@
   /* ── Estado ────────────────────────────────────────────── */
   const S = {
     view: 'resumen', lineFilter: 'todas', clientSearch: '', invFilter: 'todas',
-    clients: [], opps: [], acts: [], quotes: [], invoices: [], payments: [], ncf: [], settings: {}
+    clients: [], opps: [], acts: [], quotes: [], invoices: [], payments: [], ncf: [], codes: [], settings: {}
   };
   const byId = (list, id) => list.find(x => x.id === id);
   const clientOf = id => byId(S.clients, id) || { name: '(cliente borrado)' };
@@ -94,7 +94,7 @@
   /* ── Datos ─────────────────────────────────────────────── */
   async function loadAll() {
     const q = (t, sel = '*', order = 'created_at') => SB.from(t).select(sel).order(order, { ascending: false });
-    const [cl, op, ac, qu, inv, pay, ncf, st] = await Promise.all([
+    const [cl, op, ac, qu, inv, pay, ncf, st, dc] = await Promise.all([
       q('crm_clients'),
       q('crm_opportunities'),
       q('crm_activities').limit(1000),
@@ -102,7 +102,8 @@
       q('crm_invoice_balances'),
       q('crm_payments'),
       q('crm_ncf_sequences'),
-      SB.from('crm_settings').select('*')
+      SB.from('crm_settings').select('*'),
+      q('crm_discount_codes')
     ]);
     const firstErr = [cl, op, ac, qu, inv, pay, ncf, st].find(r => r.error);
     if (firstErr) {
@@ -115,6 +116,8 @@
     S.clients = cl.data || []; S.opps = op.data || []; S.acts = ac.data || [];
     S.quotes = qu.data || []; S.invoices = inv.data || []; S.payments = pay.data || [];
     S.ncf = ncf.data || [];
+    // Si la tabla de codigos aun no existe, el CRM sigue funcionando sin ella.
+    S.codes = dc.error ? [] : (dc.data || []);
     S.settings = Object.fromEntries((st.data || []).map(r => [r.key, r.value || {}]));
     return true;
   }
@@ -572,6 +575,7 @@
     const invs = S.invoices.filter(i => i.client_id === id);
     const acts = S.acts.filter(a => a.client_id === id);
     const debt = invs.filter(i => i.status !== 'anulada').reduce((s, i) => s + Number(i.balance), 0);
+    const codes = S.codes.filter(d => d.client_id === id);
     const src = c.source || {};
     const sh = openSheet(esc(c.name), [c.company, c.sector, src.utm_source && `vino de ${src.utm_source}${src.utm_campaign ? ' · ' + src.utm_campaign : ''}`].filter(Boolean).map(esc).join(' · '), `
       <div class="tiles" style="margin:0">
@@ -600,6 +604,10 @@
       <div class="mini">${invs.map(i => `<div class="mini-row"><div><b>${esc(i.number)}</b> <span class="muted money">${esc(i.ncf || '')}</span> ${payPill(i.pay_status)}</div>
         <div class="actions"><span class="money">${fmtMoney(i.total)}</span><button class="btn sm" data-print="${i.id}">Imprimir</button>
         ${i.status !== 'anulada' && Number(i.balance) > 0 ? `<button class="btn sm primary" data-pay="${i.id}">Pago</button>` : ''}</div></div>`).join('') || '<div class="muted">Ninguna.</div>'}</div>
+      ${codes.length ? `<div class="sec-t">Código de descuento</div>
+      <div class="mini">${codes.map(d => `<div class="mini-row"><div><b class="money">${esc(d.code)}</b> ${Number(d.percent)}%</div>
+        <div class="actions">${codePill(d)}</div></div>`).join('')}</div>` : ''}
+      ${c.marketing_consent_at ? `<p class="muted" style="font-size:.8rem">Aceptó recibir ofertas el ${fmtDate(c.marketing_consent_at)}.</p>` : ''}
       <div class="sec-t">Historial</div>
       ${activityForm()}
       <div class="timeline">${acts.map(actRow).join('') || '<div class="muted">Sin actividad.</div>'}</div>`);
@@ -619,6 +627,14 @@
     bindQuoteRows(sh);
     bindActivityForm(sh, c.id, null, () => openClient(c.id));
   }
+
+  function codePill(d) {
+    if (d.redeemed_at) return `<span class="pill ok">Usado ${fmtDate(d.redeemed_at)} · ${d.redeemed_channel === 'tienda' ? 'pedido ' + esc(d.redeemed_ref || '') : 'factura'}</span>`;
+    if (new Date(d.expires_at) < new Date()) return '<span class="pill">Vencido</span>';
+    return `<span class="pill">Vigente hasta ${fmtDate(d.expires_at)}</span>`;
+  }
+  // Codigo vigente (sin usar y sin vencer) por su texto, o null.
+  const liveCode = code => S.codes.find(d => d.code === code && !d.redeemed_at && new Date(d.expires_at) >= new Date()) || null;
 
   /* ── Facturar ──────────────────────────────────────────── */
   function openPickQuote() {
@@ -669,14 +685,41 @@
         <div class="f"><label for="iDue">Vence el pago</label><input id="iDue" name="due_date" type="date" value="${addDaysISO(15)}"/></div>
         <div class="f"><label for="iRnc">RNC del cliente</label><input id="iRnc" name="rnc" value="${esc(c.rnc || '')}" placeholder="Obligatorio para B01"/></div>
         <div class="f full"><label for="iNotes">Nota en la factura</label><input id="iNotes" name="notes" value="${esc(q.notes || '')}"/></div>
+        <div class="f full"><label for="iCode">Código de descuento (opcional)</label><input id="iCode" name="discount_code" autocomplete="off" placeholder="PT5-XXXXXX" style="text-transform:uppercase"/>
+          <span class="hint" id="iCodeHint">${(() => { const mine = S.codes.find(d => d.client_id === c.id && liveCode(d.code)); return mine ? `Este cliente tiene el código <b>${esc(mine.code)}</b> vigente. <button type="button" class="btn sm" id="iUseCode">Usarlo</button>` : ''; })()}</span></div>
         <div class="actions full"><button class="btn primary" type="submit">Emitir factura</button></div>
       </form>`);
     const form = sh.querySelector('#iForm');
+    // Aplica el % del codigo sobre el subtotal; el ITBIS baja en la misma proporcion.
+    const withCode = () => {
+      const code = (form.discount_code.value || '').trim().toUpperCase();
+      if (!code) return { ok: true, code: '', t };
+      const d = liveCode(code);
+      if (!d) return { ok: false, msg: S.codes.some(x => x.code === code) ? 'Ese código ya se usó o venció.' : 'Ese código no existe.' };
+      const disc = Math.round(Number(t.subtotal || 0) * Number(d.percent) / 100);
+      const baseOld = Number(t.subtotal || 0) - Number(t.discounts || 0);
+      const baseNew = baseOld - disc;
+      const itbis = baseOld > 0 && Number(t.itbis) ? Math.round(Number(t.itbis) * baseNew / baseOld) : 0;
+      return { ok: true, code, disc, percent: Number(d.percent), t: { ...t, discounts: Number(t.discounts || 0) + disc, itbis, total: baseNew + itbis } };
+    };
+    const codeHint = sh.querySelector('#iCodeHint');
+    const showCode = () => {
+      const r = withCode();
+      if (!form.discount_code.value.trim()) return;
+      codeHint.innerHTML = r.ok ? `Descuento ${r.percent}%: −${fmtMoney(r.disc)} · nuevo total <b>${fmtMoney(r.t.total)}</b>` : `<span style="color:#b42318">${r.msg}</span>`;
+    };
+    form.discount_code.oninput = showCode;
+    const useBtn = sh.querySelector('#iUseCode');
+    if (useBtn) useBtn.onclick = () => { form.discount_code.value = S.codes.find(d => d.client_id === c.id && liveCode(d.code)).code; showCode(); };
     const hint = () => { sh.querySelector('#iHint').textContent = form.ncf_type.value === 'B01' ? 'Para empresas o personas que necesitan crédito fiscal. Requiere RNC.' : form.ncf_type.value === 'B02' ? 'Para consumidor final.' : ''; };
     form.ncf_type.onchange = hint; hint();
     form.onsubmit = async e => {
       e.preventDefault();
       const fd = Object.fromEntries(new FormData(form).entries());
+      const dc = withCode();
+      if (!dc.ok) return toast(dc.msg, true);
+      const tt = dc.t;
+      const items = dc.code ? [...(q.items || []), { type: 'discount', description: `Código ${dc.code} (${dc.percent}%)`, discount_amount: dc.disc }] : (q.items || []);
       const btn = form.querySelector('button[type=submit]'); btn.disabled = true;
       if ((fd.rnc || '').trim() !== (c.rnc || '')) {
         const { error } = await SB.from('crm_clients').update({ rnc: fd.rnc.trim() || null }).eq('id', c.id);
@@ -685,8 +728,8 @@
       const { data: invId, error } = await SB.rpc('crm_create_invoice', { p: {
         client_id: c.id, opportunity_id: q.opportunity_id || '', quote_id: q.id,
         emitter: fd.emitter, ncf_type: fd.ncf_type, due_date: fd.due_date,
-        items: q.items || [], subtotal: t.subtotal || 0, discounts: t.discounts || 0, itbis: t.itbis || 0, total: t.total || 0,
-        notes: fd.notes
+        items, subtotal: tt.subtotal || 0, discounts: tt.discounts || 0, itbis: tt.itbis || 0, total: tt.total || 0,
+        notes: fd.notes, discount_code: dc.code
       } });
       if (error) { btn.disabled = false; return fail('No se emitió la factura', error); }
       if (q.status !== 'aceptada') await SB.from('quotations').update({ status: 'aceptada' }).eq('id', q.id);
