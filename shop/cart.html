@@ -198,6 +198,15 @@
   border-radius: 8px;
   font-weight: 600;
 }
+.promo-box { margin: .9rem 0 .2rem; display: grid; gap: .45rem; }
+.promo-box label { font-size: .82rem; font-weight: 600; }
+.promo-row { display: flex; gap: .5rem; }
+.promo-row input { flex: 1; min-width: 0; font: inherit; font-size: 16px; text-transform: uppercase; letter-spacing: .06em; padding: .6rem .75rem; border: 1.5px solid var(--border, #d4dcea); border-radius: 10px; }
+.promo-row .btn { white-space: nowrap; }
+.promo-box.ok { display: flex; align-items: center; justify-content: space-between; gap: .5rem; background: rgba(5,150,105,.08); color: #065f46; border-radius: 10px; padding: .6rem .75rem; font-size: .86rem; }
+.promo-link { background: none; border: 0; padding: 0; font: inherit; font-size: .82rem; font-weight: 700; color: var(--blue, #1e50d4); text-decoration: underline; cursor: pointer; justify-self: start; }
+.promo-msg { font-size: .82rem; color: #065f46; }
+.promo-msg.err { color: #b42318; }
 .pay-instructions {
   margin-top: 1rem; padding: .9rem 1rem; border-radius: 10px;
   background: var(--off-white); border: 1px solid var(--border);
@@ -484,10 +493,71 @@ function computeTotals() {
     if (p) subtotal += p.price * i.qty;
   });
   const noItbis = (paymentMethod === 'contra-entrega');
-  const itbis   = noItbis ? 0 : Math.round(subtotal * 0.18);
-  const total   = subtotal + itbis;
+  const discount = promo.code ? Math.round(subtotal * promo.percent / 100) : 0;
+  const subtotalNet = subtotal - discount;
+  const itbis   = noItbis ? 0 : Math.round(subtotalNet * 0.18);
+  const total   = subtotalNet + itbis;
   const itemCount = items.reduce((s, i) => s + i.qty, 0);
-  return { subtotal, itbis, total, itemCount, noItbis };
+  return { subtotal, discount, subtotalNet, discountCode: promo.code || null, itbis, total, itemCount, noItbis };
+}
+
+/* ── Código de descuento (5%, un uso). Supabase lo valida al crear el pedido. ── */
+let promo = { code: null, percent: 0, msg: '', err: false };
+function savedPromoCode() {
+  try { const s = JSON.parse(localStorage.getItem('pt_promo5') || '{}'); return s.code && !s.used ? s.code : null; }
+  catch (e) { return null; }
+}
+async function applyPromo(raw) {
+  const code = String(raw || '').trim().toUpperCase();
+  if (!code) { promo = { code: null, percent: 0, msg: 'Escribe tu código.', err: true }; render(); return; }
+  if (!window.SB) { promo = { code: null, percent: 0, msg: 'No hay conexión. Intenta de nuevo.', err: true }; render(); return; }
+  const { data, error } = await window.SB.rpc('crm_check_discount', { p_code: code });
+  if (error || !data) { promo = { code: null, percent: 0, msg: 'No pudimos revisar el código. Intenta de nuevo.', err: true }; }
+  else if (!data.valid) { promo = { code: null, percent: 0, msg: data.reason || 'Código no válido.', err: true }; }
+  else { promo = { code, percent: Number(data.percent) || 5, msg: '', err: false }; }
+  render();
+}
+function promoBoxHTML(totals) {
+  const esc = window.escapeHtml;
+  if (promo.code) {
+    return `<div class="promo-box ok">
+      <span>Código <b>${esc(promo.code)}</b> aplicado · −${window.formatPrice(totals.discount)}</span>
+      <button type="button" class="promo-link" id="promoRemove">Quitar</button></div>`;
+  }
+  const mine = savedPromoCode();
+  return `<div class="promo-box">
+    <label for="promoInput">¿Tienes un código de descuento?</label>
+    <div class="promo-row">
+      <input id="promoInput" type="text" autocomplete="off" spellcheck="false" placeholder="PT5-XXXXXX" maxlength="20"/>
+      <button type="button" class="btn btn-ghost" id="promoApply">Aplicar</button>
+    </div>
+    ${mine ? `<button type="button" class="promo-link" id="promoMine">Usar mi código ${esc(mine)}</button>` : ''}
+    ${promo.msg ? `<div class="promo-msg${promo.err ? ' err' : ''}" role="alert">${esc(promo.msg)}</div>` : ''}
+  </div>`;
+}
+function wirePromo() {
+  const inp = document.getElementById('promoInput');
+  const ap = document.getElementById('promoApply');
+  if (ap) ap.onclick = () => { captureFormState(); applyPromo(inp.value); };
+  if (inp) inp.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); captureFormState(); applyPromo(inp.value); } };
+  const mine = document.getElementById('promoMine');
+  if (mine) mine.onclick = () => { captureFormState(); applyPromo(savedPromoCode()); };
+  const rm = document.getElementById('promoRemove');
+  if (rm) rm.onclick = () => { captureFormState(); promo = { code: null, percent: 0, msg: '', err: false }; render(); };
+}
+function markPromoUsed() {
+  try {
+    const s = JSON.parse(localStorage.getItem('pt_promo5') || '{}');
+    if (s.code && s.code === promo.code) { s.used = true; localStorage.setItem('pt_promo5', JSON.stringify(s)); }
+  } catch (e) {}
+}
+/* Si Supabase rechazó el pedido por el código, se quita y se explica. */
+function promoErrorFrom(error) {
+  const m = String(error && error.message || '');
+  if (!/codigo|descuento/i.test(m)) return null;
+  promo = { code: null, percent: 0, msg: m.replace('codigo', 'código').replace('se uso', 'se usó').replace('vencio', 'venció') + '. Quitamos el descuento; revisa el total.', err: true };
+  render();
+  return promo.msg;
 }
 
 function render() {
@@ -542,6 +612,10 @@ function render() {
           <span>Subtotal (${totals.itemCount} ${totals.itemCount === 1 ? 'artículo' : 'artículos'})</span>
           <b>${window.formatPrice(totals.subtotal)}</b>
         </div>
+        ${totals.discount ? `<div class="summary-row discount">
+          <span>Descuento ${promo.percent}%</span>
+          <b>−${window.formatPrice(totals.discount)}</b>
+        </div>` : ''}
         ${!totals.noItbis ? `<div class="summary-row">
           <span>ITBIS (18%)</span>
           <b>${window.formatPrice(totals.itbis)}</b>
@@ -554,6 +628,7 @@ function render() {
           <span>Total</span>
           <b>${window.formatPrice(totals.total)}</b>
         </div>
+        ${promoBoxHTML(totals)}
         <div class="pay-section-title">Método de pago</div>
         <div class="pay-methods">
           ${PAYMENT_METHODS.map(m => `
@@ -658,6 +733,7 @@ function render() {
 
   wireItemControls();
   wirePaymentMethods();
+  wirePromo();
   renderAction(totals);
   restoreFormState();
 }
@@ -971,6 +1047,7 @@ async function placeOrder(totals) {
       subtotal: totals.subtotal,
       discount: totals.discount,
       subtotalNet: totals.subtotalNet,
+      discountCode: totals.discountCode,
       itbis: totals.itbis,
       total: totals.total,
       itemCount: totals.itemCount
@@ -981,6 +1058,7 @@ async function placeOrder(totals) {
 
   const result = await saveOrder(order);
   if (!result.ok) {
+    if (promoErrorFrom(result.error)) return;
     if (btn) { btn.disabled = false; btn.textContent = 'Colocar pedido'; }
     const errBox = document.createElement('div');
     errBox.style.cssText = 'background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:.75rem 1rem;font-size:.85rem;color:#991b1b;margin-top:.75rem;line-height:1.5';
@@ -988,6 +1066,7 @@ async function placeOrder(totals) {
     btn?.parentNode?.insertBefore(errBox, btn.nextSibling);
     return;
   }
+  markPromoUsed();
   window.Cart.clear();
   location.href = `orden.html?n=${encodeURIComponent(order.id)}`;
 }
@@ -1028,8 +1107,9 @@ async function payWithAzul(totals) {
     items: items,
     totals: {
       subtotal: totals.subtotal,
-      discount: 0,
-      subtotalNet: totals.subtotal,
+      discount: totals.discount,
+      subtotalNet: totals.subtotalNet,
+      discountCode: totals.discountCode,
       itbis: totals.itbis,
       total: totals.total,
       itemCount: totals.itemCount
@@ -1039,7 +1119,8 @@ async function payWithAzul(totals) {
   };
 
   const saved = await saveOrder(order);
-  if (!saved.ok) { setErr('No se pudo guardar tu orden. Intenta de nuevo.'); return; }
+  if (!saved.ok) { if (promoErrorFrom(saved.error)) return; setErr('No se pudo guardar tu orden. Intenta de nuevo.'); return; }
+  markPromoUsed();
 
   // Pedir al backend los campos firmados de la Payment Page.
   let payload;

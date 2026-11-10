@@ -169,7 +169,7 @@ async function sendFullOrderEmails(
 ): Promise<Response> {
   const customer = r.customer  as { name?: string; email?: string; phone?: string; address?: string; sector?: string; notes?: string } | undefined;
   const items    = r.items     as Array<{ name: string; qty: number; subtotal: number; variant?: string }> | undefined;
-  const totals   = r.totals    as { subtotal?: number; itbis?: number; total?: number } | undefined;
+  const totals   = r.totals    as { subtotal?: number; discount?: number; discountCode?: string; itbis?: number; total?: number } | undefined;
   const method   = r.payment_method as string | undefined;
   const mode     = r.codelivery_mode as string | undefined;
   const paidOnline = method === 'online' || method === 'azul';
@@ -183,6 +183,10 @@ async function sendFullOrderEmails(
       <td style="padding:6px 0;border-bottom:1px solid #f0f0f0;text-align:right;white-space:nowrap">${fmt(i.subtotal)}</td>
     </tr>`
   ).join('');
+
+  const discountRow = (totals?.discount ?? 0) > 0
+    ? `<tr><td>Descuento${totals?.discountCode ? ' (' + esc(totals.discountCode) + ')' : ''}</td><td style="text-align:right;color:#059669">-${fmt(totals!.discount!)}</td></tr>`
+    : '';
 
   const itbisRow = (totals?.itbis ?? 0) > 0
     ? `<tr><td>ITBIS (18%)</td><td style="text-align:right">${fmt(totals!.itbis!)}</td></tr>`
@@ -213,6 +217,7 @@ async function sendFullOrderEmails(
       <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px">${itemsHtml}</table>
       <table width="100%" cellpadding="0" cellspacing="0" style="background:#f6f8fb;border-radius:10px;padding:14px 16px">
         <tr><td>Subtotal</td><td style="text-align:right">${fmt(totals?.subtotal ?? 0)}</td></tr>
+        ${discountRow}
         ${itbisRow}
         <tr style="font-weight:800;font-size:17px"><td style="padding-top:10px">Total</td><td style="padding-top:10px;text-align:right;color:${C_BLUE}">${fmt(totals?.total ?? 0)}</td></tr>
       </table>
@@ -245,6 +250,7 @@ async function sendFullOrderEmails(
       <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px">${itemsHtml}</table>
       <table width="100%" cellpadding="0" cellspacing="0" style="background:#f6f8fb;border-radius:10px;padding:14px 16px;margin-bottom:24px">
         <tr><td style="color:#666">Subtotal</td><td style="text-align:right;color:#666">${fmt(totals?.subtotal ?? 0)}</td></tr>
+        ${discountRow}
         ${itbisRow}
         <tr style="font-weight:800;font-size:17px"><td style="padding-top:10px">Total</td><td style="padding-top:10px;text-align:right;color:${C_BLUE}">${fmt(totals?.total ?? 0)}</td></tr>
       </table>

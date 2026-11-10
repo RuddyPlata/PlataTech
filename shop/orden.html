@@ -428,6 +428,7 @@ function buildSendOrderMessage(order) {
 
   const totalsBlock = [
     `Subtotal: ${window.formatPrice(order.totals.subtotal)}`,
+    order.totals.discount ? `Descuento${order.totals.discountCode ? ' (' + order.totals.discountCode + ')' : ''}: −${window.formatPrice(order.totals.discount)}` : null,
     chargesItbis(order) ? `ITBIS (18%): ${window.formatPrice(order.totals.itbis)}` : null,
     `Total: ${window.formatPrice(order.totals.total)}`
   ].filter(Boolean).join('\n');
@@ -538,6 +539,7 @@ async function render() {
           <div class="totals-row">
             <span>Subtotal</span><span>${window.formatPrice(order.totals.subtotal)}</span>
           </div>
+          ${order.totals.discount ? `<div class="totals-row discount"><span>Descuento${order.totals.discountCode ? ' · ' + escapeHtml(order.totals.discountCode) : ''}</span><span>−${window.formatPrice(order.totals.discount)}</span></div>` : ''}
           ${chargesItbis(order) ? `<div class="totals-row"><span>ITBIS (18%)</span><span>${window.formatPrice(order.totals.itbis)}</span></div>` : ''}
           <div class="totals-row${(order.paymentMethod !== 'online' && !azul) ? ' discount' : ''}">
             <span>Entrega</span><span>${deliveryLabel(order)}</span>
@@ -658,6 +660,7 @@ async function render() {
       </div>`).join('')}
       <hr class="t-divider"/>
       <div class="t-row t-small"><span>Subtotal</span><span>${window.formatPrice(order.totals.subtotal)}</span></div>
+      ${order.totals.discount ? `<div class="t-row t-small"><span>Descuento</span><span>−${window.formatPrice(order.totals.discount)}</span></div>` : ''}
       ${chargesItbis(order) ? `<div class="t-row t-small"><span>ITBIS (18%)</span><span>${window.formatPrice(order.totals.itbis)}</span></div>` : ''}
       <div class="t-row t-total" style="margin-top:4px;padding-top:4px;border-top:1px solid #000"><span>TOTAL</span><span>${window.formatPrice(order.totals.total)}</span></div>
       <div class="t-small" style="margin-top:4px">Pago: ${modeLabel(order)}</div>
