@@ -487,21 +487,26 @@ function restoreFormState() {
 /* Calcular totales — contra-entrega exonerado de ITBIS; tarjeta (AZUL) incluye 18% ITBIS */
 function computeTotals() {
   const items = window.Cart.get();
-  let subtotal = 0;
+  let subtotal = 0, eligible = 0;
   items.forEach(i => {
     const p = window.getProductBySlug(i.slug);
-    if (p) subtotal += p.price * i.qty;
+    if (!p) return;
+    subtotal += p.price * i.qty;
+    if (p.price < PROMO_MAX_PRICE) eligible += p.price * i.qty;
   });
   const noItbis = (paymentMethod === 'contra-entrega');
-  const discount = promo.code ? Math.round(subtotal * promo.percent / 100) : 0;
+  /* El codigo solo descuenta articulos de menos de RD$15,000 (igual que Supabase) */
+  const discount = promo.code ? Math.round(eligible * promo.percent / 100) : 0;
   const subtotalNet = subtotal - discount;
   const itbis   = noItbis ? 0 : Math.round(subtotalNet * 0.18);
   const total   = subtotalNet + itbis;
   const itemCount = items.reduce((s, i) => s + i.qty, 0);
-  return { subtotal, discount, subtotalNet, discountCode: promo.code || null, itbis, total, itemCount, noItbis };
+  return { subtotal, eligible, discount, subtotalNet, discountCode: discount > 0 ? promo.code : null, itbis, total, itemCount, noItbis };
 }
 
-/* ── Código de descuento (5%, un uso). Supabase lo valida al crear el pedido. ── */
+/* ── Código de descuento (5%, un uso, solo artículos de menos de RD$15,000).
+   Supabase lo valida al crear el pedido. ── */
+const PROMO_MAX_PRICE = 15000;
 let promo = { code: null, percent: 0, msg: '', err: false };
 function savedPromoCode() {
   try { const s = JSON.parse(localStorage.getItem('pt_promo5') || '{}'); return s.code && !s.used ? s.code : null; }
@@ -520,9 +525,13 @@ async function applyPromo(raw) {
 function promoBoxHTML(totals) {
   const esc = window.escapeHtml;
   if (promo.code) {
+    const partial = totals.eligible < totals.subtotal;
+    const note = totals.discount === 0
+      ? `<div style="font-size:.75rem;margin-top:.35rem;line-height:1.4">El 5% aplica a artículos de menos de RD$15,000. Este carrito no tiene ninguno, así que tu código sigue guardado.</div>`
+      : (partial ? `<div style="font-size:.75rem;margin-top:.35rem;line-height:1.4">El 5% aplica solo a los artículos de menos de RD$15,000.</div>` : '');
     return `<div class="promo-box ok">
-      <span>Código <b>${esc(promo.code)}</b> aplicado · −${window.formatPrice(totals.discount)}</span>
-      <button type="button" class="promo-link" id="promoRemove">Quitar</button></div>`;
+      <span>Código <b>${esc(promo.code)}</b> ${totals.discount > 0 ? 'aplicado · −' + window.formatPrice(totals.discount) : 'sin artículos que descontar'}</span>
+      <button type="button" class="promo-link" id="promoRemove">Quitar</button></div>${note}`;
   }
   const mine = savedPromoCode();
   return `<div class="promo-box">
@@ -1087,7 +1096,7 @@ async function placeOrder(totals) {
     btn?.parentNode?.insertBefore(errBox, btn.nextSibling);
     return;
   }
-  markPromoUsed();
+  if (order.totals.discount > 0) markPromoUsed();
   window.Cart.clear();
   location.href = `orden.html?n=${encodeURIComponent(order.id)}`;
 }
@@ -1141,7 +1150,7 @@ async function payWithAzul(totals) {
 
   const saved = await saveOrder(order);
   if (!saved.ok) { if (promoErrorFrom(saved.error)) return; if (priceErrorFrom(saved.error, btn)) return; setErr('No se pudo guardar tu orden. Intenta de nuevo.'); return; }
-  markPromoUsed();
+  if (order.totals.discount > 0) markPromoUsed();
 
   // Pedir al backend los campos firmados de la Payment Page.
   let payload;
