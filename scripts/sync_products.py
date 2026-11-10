@@ -16,9 +16,8 @@ Uso:
 Programacion (Windows Task Scheduler / cron):
     08:00 todos los dias.
 
-Reglas de margen:
-    - Productos < RD$2,500           -> +RD$1,000
-    - Productos < RD$15,000          -> +RD$1,500
+Reglas de margen (ganancia minima RD$1,500):
+    - Productos < RD$15,000          -> +RD$1,800
     - Productos < RD$33,334          -> +RD$2,000
     - Productos >= RD$33,334         -> +6%
     - Categoria 'seguridad'          -> +25% sobre costo
@@ -196,23 +195,22 @@ def parse_price(val) -> int:
         return None
 
 def apply_margin(cost: int, category: str) -> int:
-    """Reglas de margen Plata Tech.
-    < RD$2,500          -> +RD$1,000
-    < RD$15,000         -> +RD$1,500
+    """Reglas de margen Plata Tech (desde 2026-11-10).
+    < RD$15,000         -> +RD$1,800
     < RD$33,334         -> +RD$2,000
     >= RD$33,334        -> +6%  (punto donde 6% >= RD$2,000)
-    Categoria seguridad -> +25%
+    Categoria seguridad -> +25% (< RD$10,000) / +15%
+    Siempre se gana al menos RD$1,500 por articulo.
     """
+    MIN_GAIN = 1500
     if category == 'seguridad':
         rate = 1.25 if cost < 10000 else 1.15
-        return int(round(cost * rate))
-    if cost < 2500:
-        return cost + 1000
+        return max(int(round(cost * rate)), cost + MIN_GAIN)
     if cost < 15000:
-        return cost + 1500
+        return cost + 1800
     if cost < 33334:
         return cost + 2000
-    return int(round(cost * 1.06))
+    return max(int(round(cost * 1.06)), cost + MIN_GAIN)
 
 def detect_brand(name: str, section: str) -> str:
     name_u = name.upper()
