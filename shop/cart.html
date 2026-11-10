@@ -728,10 +728,12 @@ function render() {
           </form>` : ''}
 
         <div class="checkout-badges">
-          <div class="checkout-badges-row" data-pay-badges="3ds"></div>
+          ${AZUL_ENABLED ? `<div class="checkout-badges-row" data-pay-badges="3ds"></div>
           <p class="checkout-badges-note">
             Aceptamos <strong>Visa</strong> y <strong>MasterCard</strong>. Pagos con tarjeta protegidos con <strong>3D Secure</strong> y procesados de forma segura por <strong>AZUL</strong>. Todos los precios están en <strong>Pesos Dominicanos (RD$)</strong>.
-          </p>
+          </p>` : `<p class="checkout-badges-note">
+            Por ahora pagas <strong>al recibir</strong>: en <strong>efectivo</strong> o por <strong>transferencia</strong>. Todos los precios están en <strong>Pesos Dominicanos (RD$)</strong>.
+          </p>`}
           <p class="checkout-badges-note">
             Al completar la compra aceptas nuestras
             <a href="politicas.html" target="_blank">políticas de devolución y entrega</a>
