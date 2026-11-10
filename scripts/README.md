@@ -88,3 +88,18 @@ Logs en `scripts/sync.log`. Para R.ENZO no hay cron por defecto — correr manua
   stock: 10
 }
 ```
+
+## sync_prices.mjs (precios para Supabase)
+
+Supabase vuelve a calcular el total de cada pedido con la tabla `product_prices`
+(trigger `orders_00_check_totals`) y rechaza los pedidos con totales alterados.
+`sync_prices.mjs` llena esa tabla con lo mismo que ve el cliente
+(`products.js` + `products-static.js` + `products-overrides.js`).
+
+Corre solo: el GitHub Action `sync-prices` lo lanza cada vez que esos archivos
+cambian en `main` (usa el secreto `SUPABASE_SERVICE_ROLE_KEY`). Tambien se puede
+lanzar a mano desde GitHub → Actions → "Sincronizar precios con Supabase".
+
+```bash
+node scripts/sync_prices.mjs --check   # valida el catalogo sin subir nada
+```
