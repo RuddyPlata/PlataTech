@@ -160,6 +160,42 @@ serve(async (req: Request) => {
   return await sendFullOrderEmails(r, sendEmail, ownerEmail);
 });
 
+// ── Cuenta automática ────────────────────────────────────────────────────────
+// Si el correo del pedido no tiene cuenta, la crea (sin contraseña) y devuelve
+// un enlace para que el cliente ponga su contraseña. Si ya tiene cuenta, null.
+// Antes revisa que la orden exista en la base con ese mismo correo, porque esta
+// función se puede llamar con un registro inventado.
+async function inviteLinkFor(r: Record<string, unknown>): Promise<string | null> {
+  const url = Deno.env.get('SUPABASE_URL');
+  const key = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+  const c = r.customer as { name?: string; email?: string; phone?: string; address?: string; sector?: string } | undefined;
+  const email = (c?.email ?? '').trim().toLowerCase();
+  if (!url || !key || !email || !r.id) return null;
+  const h = { apikey: key, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' };
+  try {
+    const chk = await fetch(`${url}/rest/v1/orders?id=eq.${encodeURIComponent(String(r.id))}&select=customer`, { headers: h });
+    const rows = chk.ok ? await chk.json() : [];
+    if (String(rows?.[0]?.customer?.email ?? '').trim().toLowerCase() !== email) return null;
+
+    const res = await fetch(`${url}/auth/v1/admin/generate_link`, {
+      method: 'POST',
+      headers: h,
+      body: JSON.stringify({
+        type: 'invite',
+        email,
+        data: { name: c?.name ?? '', phone: c?.phone ?? '', address: c?.address ?? '', sector: c?.sector ?? '' },
+        redirect_to: 'https://platatechs.com/shop/reset-password.html',
+      }),
+    });
+    if (!res.ok) return null; // ya tiene cuenta (u otro error): el pedido sigue igual
+    const j = await res.json();
+    return j.action_link ?? j.properties?.action_link ?? null;
+  } catch (e) {
+    console.error('[notify-order] inviteLinkFor', e);
+    return null;
+  }
+}
+
 // Correos completos de orden (dueño + cliente con artículos y totales).
 // Se envían: al INSERT para contra-entrega, y al confirmarse el pago con tarjeta (AZUL).
 async function sendFullOrderEmails(
@@ -229,6 +265,15 @@ async function sendFullOrderEmails(
     </td></tr>`);
 
   const firstName = esc(customer?.name?.split(' ')[0] ?? '');
+  const invite = customer?.email ? await inviteLinkFor(r) : null;
+  const accountBlock = invite
+    ? `<div style="background:#fffbe6;border:1px solid rgba(212,162,74,.45);border-radius:10px;padding:16px 18px;margin-bottom:24px">
+        <p style="margin:0 0 6px;font-weight:700;color:#1a1a2e">Tu cuenta Plata Tech ya está creada</p>
+        <p style="margin:0 0 14px;font-size:14px;color:#444;line-height:1.55">La hicimos con este correo y tus datos de entrega. Crea tu contraseña para ver tus pedidos y comprar más rápido la próxima vez.</p>
+        <a href="${esc(invite)}" style="display:inline-block;background:${C_GOLD};color:${C_NAVY};text-decoration:none;padding:11px 24px;border-radius:10px;font-weight:700;font-size:14px">Crear mi contraseña</a>
+        <p style="margin:12px 0 0;font-size:12px;color:#888;line-height:1.5">Si el enlace venció, entra a <a href="https://platatechs.com/shop/cuenta.html" style="color:${C_BLUE}">platatechs.com/shop/cuenta.html</a> y usa "¿Olvidaste tu contraseña?" con este correo.</p>
+      </div>`
+    : '';
   const customerHtml = wrap(`
     ${brandHeader(
       paidOnline ? '¡Pago recibido!' : '¡Orden confirmada!',
@@ -263,6 +308,7 @@ async function sendFullOrderEmails(
       <div style="text-align:center;margin-bottom:24px">
         <a href="https://platatechs.com/shop/orden.html?n=${esc(r.id)}" style="display:inline-block;background:${C_BLUE};color:#fff;text-decoration:none;padding:13px 32px;border-radius:10px;font-weight:700;font-size:15px">Ver mi orden</a>
       </div>
+      ${accountBlock}
       <p style="font-size:13px;color:#888;text-align:center;line-height:1.6">¿Tienes alguna pregunta? Escríbenos por <a href="https://wa.me/18494950959" style="color:${C_BLUE}">WhatsApp</a> mencionando tu número de orden <strong>${esc(r.id)}</strong>.</p>
     </td></tr>`);
 
