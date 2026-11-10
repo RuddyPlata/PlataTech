@@ -559,6 +559,26 @@ function promoErrorFrom(error) {
   render();
   return promo.msg;
 }
+/* Supabase recalcula el total con sus precios. Si no coincide (la página
+   quedó con precios viejos o un producto ya no está), pide recargar. */
+function priceErrorFrom(error, btn) {
+  const m = String(error && error.message || '');
+  if (!/precios cambiaron|ya no esta disponible/i.test(m)) return null;
+  const box = document.createElement('div');
+  box.style.cssText = 'background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:.75rem 1rem;font-size:.85rem;color:#92400e;margin-top:.75rem;line-height:1.5';
+  box.textContent = /disponible/i.test(m)
+    ? 'Un producto de tu carrito ya no está disponible. Recarga la página para ver tu carrito actualizado.'
+    : 'Los precios se actualizaron. Recarga la página para ver el total correcto.';
+  const again = document.createElement('button');
+  again.type = 'button';
+  again.textContent = 'Recargar página';
+  again.style.cssText = 'display:block;margin-top:.5rem;background:#92400e;color:#fff;border:0;border-radius:8px;padding:.45rem .9rem;font-weight:600;cursor:pointer';
+  again.addEventListener('click', () => location.reload());
+  box.appendChild(again);
+  if (btn) { btn.disabled = false; btn.textContent = 'Recarga la página para continuar'; btn.disabled = true; }
+  btn?.parentNode?.insertBefore(box, btn.nextSibling);
+  return m;
+}
 
 function render() {
   captureFormState();
@@ -1059,6 +1079,7 @@ async function placeOrder(totals) {
   const result = await saveOrder(order);
   if (!result.ok) {
     if (promoErrorFrom(result.error)) return;
+    if (priceErrorFrom(result.error, btn)) return;
     if (btn) { btn.disabled = false; btn.textContent = 'Colocar pedido'; }
     const errBox = document.createElement('div');
     errBox.style.cssText = 'background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:.75rem 1rem;font-size:.85rem;color:#991b1b;margin-top:.75rem;line-height:1.5';
@@ -1119,7 +1140,7 @@ async function payWithAzul(totals) {
   };
 
   const saved = await saveOrder(order);
-  if (!saved.ok) { if (promoErrorFrom(saved.error)) return; setErr('No se pudo guardar tu orden. Intenta de nuevo.'); return; }
+  if (!saved.ok) { if (promoErrorFrom(saved.error)) return; if (priceErrorFrom(saved.error, btn)) return; setErr('No se pudo guardar tu orden. Intenta de nuevo.'); return; }
   markPromoUsed();
 
   // Pedir al backend los campos firmados de la Payment Page.

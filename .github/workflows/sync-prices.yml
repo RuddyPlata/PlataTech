@@ -1,0 +1,36 @@
+# Copia los precios del catalogo a Supabase (tabla product_prices).
+# Supabase usa esa tabla para recalcular el total de cada pedido y
+# rechazar los que vengan alterados desde el navegador.
+name: Sincronizar precios con Supabase
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'shop/assets/products.js'
+      - 'shop/assets/products-static.js'
+      - 'shop/assets/products-overrides.js'
+      - 'scripts/sync_prices.mjs'
+      - '.github/workflows/sync-prices.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: sync-prices
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Subir precios
+        env:
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/sync_prices.mjs
