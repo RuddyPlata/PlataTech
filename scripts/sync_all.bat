@@ -18,11 +18,13 @@ if %ERRORLEVEL% NEQ 0 (
 )
 
 echo.
-REM R.ENZO se quito del catalogo el 2026-11-10 (sync_renzo.py ya no corre).
+echo Sincronizando JM Security (seguridad)...
+python scripts\sync_jm.py
+if %ERRORLEVEL% NEQ 0 set ERRORS=1
 
 if %ERRORS% EQU 0 (
     echo Haciendo push a GitHub...
-    git add -A shop\assets\products.js shop\assets\costs.js shop\assets\img\ydc\
+    git add -A shop\assets\products.js shop\assets\costs.js shop\assets\img\ydc\ shop\assets\products-static.js shop\assets\costs-static.js shop\assets\img\jm\
     git diff --cached --quiet
     if %ERRORLEVEL% EQU 0 (
         echo   Sin cambios nuevos - catalogo ya estaba al dia.
