@@ -285,7 +285,7 @@ def short_description(name: str, variant: str, category: str, brand: str) -> str
         if bits:
             parts.append(' / '.join(bits))
     descs = {
-        "celulares":    "Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con factura NCF y soporte real cuando lo necesites.",
+        "celulares":    "Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
         "laptops":      "Laptop nueva con garantia de fabrica. Configuracion inicial y entrega lista para trabajar desde el dia uno.",
         "tablets":      "Tablet nueva con garantia. Configurada y probada antes de salir de nuestras manos.",
         "audio":        "Audio original con garantia y respaldo Plata Tech. Si algo falla, respondemos.",
@@ -294,7 +294,7 @@ def short_description(name: str, variant: str, category: str, brand: str) -> str
         "conectividad": "Equipo de red original con garantia. Orientacion y configuracion incluidas para que funcione bien desde el principio.",
         "gaming":       "Equipo gaming original con garantia de fabrica. Probado, configurado y respaldado por Plata Tech.",
         "seguridad":    "Equipo de seguridad original con instalacion profesional y soporte continuo. Sin trabajos a medias.",
-        "varios":       "Producto original con factura NCF y respaldo Plata Tech Solutions S.R.L.",
+        "varios":       "Producto original con garantía y respaldo Plata Tech Solutions S.R.L.",
     }
     base = descs.get(category, descs["varios"])
     if parts:

@@ -321,7 +321,7 @@
       <img src="../images/logo-platatech.webp" class="shop-foot-logo" alt="Plata Tech Solutions"/>
       <div>
         Plata Tech Solutions S.R.L.
-        <small>Tienda oficial · RNC formal · Facturas con NCF</small>
+        <small>Tienda oficial · Empresa formal con RNC</small>
       </div>
     </div>
     <div class="shop-foot-divs">
@@ -626,7 +626,7 @@ async function render() {
       <div class="t-center t-bold">COMPROBANTE DE PAGO</div>
       ${order.ncf
         ? `<div class="t-center t-small">NCF: <b>${escapeHtml(order.ncf)}</b></div>`
-        : `<div class="t-center t-small" style="color:#333">Comprobante no fiscal. ¿Necesitas factura con NCF? Escríbenos a ${BIZ.email}</div>`}
+        : `<div class="t-center t-small" style="color:#333">Comprobante no fiscal.</div>`}
       ` : (order.paymentMethod === 'online' && order.totals.itbis ? `
       <div class="t-center t-bold" style="font-size:12pt">${BIZ.legal}</div>
       <div class="t-center t-small">RNC: ${BIZ.rnc}</div>
