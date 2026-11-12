@@ -100,7 +100,7 @@
   function openForm() {
     var o = frame(
       '<div class="pt5-top"><small>Regalo de bienvenida</small><h2 id="pt5-t">5% de descuento en tu próxima compra</h2>' +
-      '<p>Déjanos tu WhatsApp o tu correo y te damos tu código al instante. Sirve en la tienda y en cualquier servicio.</p></div>' +
+      '<p>Déjanos tu WhatsApp o tu correo y te damos tu código al instante. Sirve en la tienda (artículos de menos de RD$15,000) y en cualquier servicio.</p></div>' +
       '<form class="pt5-body" novalidate>' +
       '<input class="pt5-in" name="name" autocomplete="name" placeholder="Tu nombre" aria-label="Tu nombre" required/>' +
       '<input class="pt5-in" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="WhatsApp (809-000-0000)" aria-label="WhatsApp"/>' +
@@ -144,7 +144,7 @@
     var used = s.used;
     var o = frame(
       '<div class="pt5-top"><small>' + (used ? 'Tu código' : '¡Listo!') + '</small><h2 id="pt5-t">' + (used ? 'Ya usaste tu 5%' : 'Este es tu 5% de descuento') + '</h2>' +
-      '<p>' + (used ? 'Gracias por comprarnos. Pronto te enviaremos más ofertas.' : 'Úsalo en tu próxima compra en la tienda o al cotizar un servicio.') + '</p></div>' +
+      '<p>' + (used ? 'Gracias por comprarnos. Pronto te enviaremos más ofertas.' : 'Úsalo en tu próxima compra en la tienda (artículos de menos de RD$15,000) o al cotizar un servicio.') + '</p></div>' +
       '<div class="pt5-body">' +
       '<div class="pt5-code"><span>' + esc(s.code) + '</span></div>' +
       '<p class="pt5-note">' + (used ? 'Este código ya se usó.' : 'Vale hasta el <b>' + esc(fmtDate(s.expires_at)) + '</b> · un solo uso' + (s.email ? '<br/>También te lo enviamos a tu correo.' : '')) + '</p>' +

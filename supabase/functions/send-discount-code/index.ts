@@ -51,7 +51,7 @@ serve(async (req: Request) => {
     <h1 style="margin:6px 0 0;color:#fff;font-size:20px">${first ? esc(first) + ', aquí' : 'Aquí'} está tu ${esc(rec.percent ?? 5)}% de descuento</h1>
   </td></tr>
   <tr><td style="padding:24px 26px;color:#111827;font-size:15px;line-height:1.6">
-    <p style="margin:0 0 14px">Usa este código en tu próxima compra en la tienda o en cualquier servicio de Plata Tech (cámaras, alarmas, portones, software o reparación de celulares):</p>
+    <p style="margin:0 0 14px">Usa este código en tu próxima compra en la tienda (artículos de menos de RD$15,000) o en cualquier servicio de Plata Tech (cámaras, alarmas, portones, software o reparación de celulares):</p>
     <p style="margin:0 0 6px;text-align:center"><span style="display:inline-block;font-family:Consolas,monospace;font-size:26px;font-weight:700;letter-spacing:.12em;color:${C_NAVY};background:#eef2ff;border:2px dashed ${C_BLUE};border-radius:10px;padding:12px 22px">${esc(rec.code)}</span></p>
     <p style="margin:0 0 20px;text-align:center;color:#6b7280;font-size:13px">Vale hasta el ${esc(fmtDate(rec.expires_at))} · un solo uso</p>
     <table cellpadding="0" cellspacing="0" style="margin:0 auto"><tr>
