@@ -110,7 +110,20 @@ async function api(method, pathQ, body, extraHeaders = {}) {
   }
   return data;
 }
-const get = q => api('GET', q);
+// Supabase devuelve máximo 1000 filas por pedido: se piden por páginas,
+// con el id como desempate para que ninguna fila se repita ni se salte.
+async function get(q) {
+  if (/[?&](limit|offset)=/.test(q)) return api('GET', q);
+  let ordered;
+  if (!/[?&]order=/.test(q)) ordered = `${q}${q.includes('?') ? '&' : '?'}order=id`;
+  else ordered = q.replace(/([?&]order=)([^&]*)/, (m, k, v) => /(^|,)id(\.|,|$)/.test(v) ? m : `${k}${v},id`);
+  const out = [];
+  for (let from = 0; ; from += 1000) {
+    const page = await api('GET', `${ordered}&limit=1000&offset=${from}`);
+    out.push(...page);
+    if (page.length < 1000) return out;
+  }
+}
 
 /* ── Busquedas ───────────────────────────────────────────── */
 async function findClient(ref) {
