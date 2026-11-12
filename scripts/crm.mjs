@@ -21,7 +21,9 @@ const URL_ = process.env.CRM_SUPABASE_URL || 'https://ieltuoriwgfckdfbwziu.supab
 const KEY = process.env.CRM_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImllbHR1b3Jpd2dmY2tkZmJ3eml1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0Mjk2MjYsImV4cCI6MjA5MzAwNTYyNn0.HfytGHemYOiRu4NMD0Majzy91vB1fJX_wUURpq-qORk';
 const CACHE = path.join(os.homedir(), '.cache', 'platatech-crm', 'session.json');
 
-const LINES = ['seguridad', 'software', 'celulares', 'aliado'];
+const LINES = ['seguridad', 'software', 'celulares', 'aliado', 'mekafix'];
+// Prospectos importados de una lista: no son clientes esperando respuesta.
+const isProspect = o => (o.details || {}).origen === 'prospeccion';
 const STAGES = ['nuevo', 'contactado', 'visita', 'cotizado', 'ganado', 'perdido'];
 const KINDS = ['nota', 'whatsapp', 'llamada', 'visita'];
 const METHODS = ['transferencia', 'efectivo', 'tarjeta', 'cheque', 'otro'];
@@ -50,6 +52,26 @@ function parseArgs(argv) {
     } else pos.push(a);
   }
   return { pos, opt };
+}
+
+function parseCsv(text) {
+  // CSV con comillas (RFC 4180): devuelve una lista de objetos por encabezado.
+  const rows = []; let row = [], cell = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (q) {
+      if (ch === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; }
+      else cell += ch;
+    } else if (ch === '"') q = true;
+    else if (ch === ',') { row.push(cell); cell = ''; }
+    else if (ch === '\n' || ch === '\r') {
+      if (ch === '\r' && text[i + 1] === '\n') i++;
+      row.push(cell); cell = ''; if (row.some(c => c !== '')) rows.push(row); row = [];
+    } else cell += ch;
+  }
+  if (cell !== '' || row.length) { row.push(cell); if (row.some(c => c !== '')) rows.push(row); }
+  const [head, ...body] = rows;
+  return body.map(r => Object.fromEntries(head.map((h, k) => [h.trim(), (r[k] || '').trim()])));
 }
 
 /* ── Sesion (login admin, se guarda hasta que vence) ─────── */
@@ -129,11 +151,13 @@ const logAct = (client_id, opportunity_id, kind, body) =>
 /* ── Comandos ────────────────────────────────────────────── */
 const commands = {
   async resumen() {
-    const [opps, inv] = await Promise.all([get('crm_opportunities?select=line,stage,value'), get('crm_invoice_balances?select=status,balance,due_date')]);
+    const [opps, inv] = await Promise.all([get('crm_opportunities?select=line,stage,value,details'), get('crm_invoice_balances?select=status,balance,due_date')]);
     const open = opps.filter(o => !['ganado', 'perdido'].includes(o.stage));
     const today = new Date().toISOString().slice(0, 10);
     const due = inv.filter(i => i.status !== 'anulada' && Number(i.balance) > 0);
-    console.log(`Nuevos sin contactar: ${opps.filter(o => o.stage === 'nuevo').length}`);
+    console.log(`Nuevos sin contactar: ${opps.filter(o => o.stage === 'nuevo' && !isProspect(o)).length}`);
+    const cold = opps.filter(o => o.stage === 'nuevo' && isProspect(o)).length;
+    if (cold) console.log(`Prospectos de lista sin contactar: ${cold} (ver: prospectos)`);
     console.log(`Abiertas: ${open.length} · ${money(open.reduce((s, o) => s + Number(o.value || 0), 0))}`);
     for (const l of LINES) {
       const lo = open.filter(o => o.line === l);
@@ -143,7 +167,7 @@ const commands = {
   },
 
   async nuevos() {
-    const opps = await get('crm_opportunities?select=*,crm_clients(name,phone,sector)&stage=eq.nuevo&order=created_at');
+    const opps = (await get('crm_opportunities?select=*,crm_clients(name,phone,sector)&stage=eq.nuevo&order=created_at')).filter(o => !isProspect(o));
     if (!opps.length) return console.log('Nadie esperando respuesta.');
     for (const o of opps) console.log(`${short(o.id)}  hace ${ago(o.created_at).padEnd(8)} ${o.line.padEnd(10)} ${o.crm_clients?.name} (${o.crm_clients?.phone || 'sin tel.'}) · ${o.title}${o.value ? ' · ' + money(o.value) : ''}`);
   },
@@ -282,6 +306,100 @@ const commands = {
     console.log(`Factura ${inv.number} emitida${inv.ncf ? ' con NCF ' + inv.ncf : ''} por ${money(inv.total)}. Imprímela desde /crm/ → Facturas.`);
   },
 
+  async prospectos({ opt }) {
+    // Siguientes prospectos por llamar, de mejor a peor (puntos de la lista).
+    const q = `crm_opportunities?select=*,crm_clients(name,phone,sector,notes)&line=eq.${encodeURIComponent(opt.linea || 'mekafix')}&stage=eq.${encodeURIComponent(opt.etapa || 'nuevo')}&details->>origen=eq.prospeccion`;
+    let list = await get(q);
+    const has = (v, t) => !t || String(v || '').toLowerCase().includes(String(t).toLowerCase());
+    list = list.filter(o => has(o.details?.tipo_negocio, opt.tipo) && has(`${o.crm_clients?.sector} ${o.details?.region}`, opt.zona));
+    list.sort((a, b) => Number(b.details?.puntos || 0) - Number(a.details?.puntos || 0));
+    const n = Number(opt.limite || 20);
+    for (const o of list.slice(0, n)) {
+      const d = o.details || {};
+      console.log(`${short(o.id)}  ${(d.prioridad || ' ')} ${String(d.puntos || '').padStart(3)}  ${o.crm_clients?.name} · ${d.tipo_negocio || ''} · ${o.crm_clients?.sector || ''} · ${o.crm_clients?.phone || 'sin tel.'}${d.rating ? ` · ${d.rating}★ (${d.resenas || 0})` : ''}`);
+    }
+    console.log(`${Math.min(n, list.length)} de ${list.length}.`);
+  },
+
+  async importar({ opt }) {
+    // Carga prospectos de prospectos/talleres-rd-maestra.csv a la linea MekaFix.
+    // Sin --confirmar solo muestra lo que haria. No avisa por correo (origen: prospeccion).
+    const file = opt.archivo, line = opt.linea || 'mekafix';
+    if (!file) die('Uso: importar --archivo talleres-rd-maestra.csv [--prioridad A] [--region "Gran Santo Domingo"] [--tipo Gomera] [--limite 100] [--confirmar]');
+    if (!LINES.includes(line)) die(`Línea inválida. Usa: ${LINES.join(', ')}`);
+    const rows = parseCsv(fs.readFileSync(file, 'utf8').replace(/^﻿/, ''));
+    const pick = (r, k, v) => !v || String(r[k] || '').toLowerCase() === String(v).toLowerCase();
+    let want = rows.filter(r => pick(r, 'prioridad', opt.prioridad) && pick(r, 'region', opt.region) && pick(r, 'tipo_negocio', opt.tipo))
+      .filter(r => !['cerrado', 'no contactar', 'numero malo'].includes((r.estado || '').toLowerCase()));
+    // Si el negocio tiene WhatsApp, ese es el número principal (el panel abre WhatsApp con él).
+    const phonesOf = t => (String(t || '').match(/\d[\d\s().-]{8,}\d/g) || []).map(digits).filter(d => d.length === 10 && /^8[024]9/.test(d));
+    const firstPhone = t => {
+      const all = phonesOf(t), txt = String(t || '');
+      if (!all.length) return '';
+      const wa = txt.toLowerCase().indexOf('whatsapp');
+      if (wa >= 0) return phonesOf(txt.slice(wa))[0] || all[0];
+      if (/\[wa\]/i.test(txt)) return all[all.length - 1];
+      return all[0];
+    };
+    const noPhone = want.filter(r => !firstPhone(r.telefono)).length;
+    want = want.filter(r => firstPhone(r.telefono));
+    if (opt.limite) want = want.slice(0, Number(opt.limite));
+
+    const clients = await get('crm_clients?select=id,phone_norm');
+    const byPhone = new Map(clients.filter(c => c.phone_norm).map(c => [c.phone_norm, c.id]));
+    const opps = await get(`crm_opportunities?select=client_id,line,stage&line=eq.${line}`);
+    const withOpp = new Set(opps.filter(o => o.stage !== 'perdido').map(o => o.client_id));
+
+    const seen = new Set(), plan = [];
+    let already = 0;
+    for (const r of want) {
+      const ph = firstPhone(r.telefono);
+      if (seen.has(ph)) continue;
+      seen.add(ph);
+      const cid = byPhone.get(ph);
+      if (cid && withOpp.has(cid)) { already++; continue; }
+      plan.push({ r, ph, cid });
+    }
+    console.log(`En el archivo: ${rows.length} · con el filtro: ${want.length + noPhone} · sin teléfono (no se cargan): ${noPhone}`);
+    console.log(`Ya están en ${line}: ${already} · por cargar: ${plan.length} (${plan.filter(p => p.cid).length} ya eran clientes)`);
+    if (!opt.confirmar) {
+      plan.slice(0, 10).forEach(({ r }) => console.log(`  ${r.prioridad} ${r.tipo_negocio} · ${r.nombre} · ${r.municipio} · ${r.telefono}`));
+      return console.log('Vista previa: no se cargó nada. Repite con --confirmar.');
+    }
+
+    const clean = o => Object.fromEntries(Object.entries(o).filter(([, v]) => v !== '' && v !== null && v !== undefined));
+    const notesOf = r => [
+      r.contacto_nombre && `Contacto: ${r.contacto_nombre}${r.contacto_cargo ? ' (' + r.contacto_cargo + ')' : ''}`,
+      r.web && `Web: ${r.web}`, r.facebook && `Facebook: ${r.facebook}`, r.instagram && `Instagram: ${r.instagram}`,
+      r.otras_redes && `Otras redes: ${r.otras_redes}`, phonesOf(r.telefono).length > 1 && `Teléfonos: ${r.telefono}`, r.notas
+    ].filter(Boolean).join('\n') || null;
+    let done = 0;
+    for (let i = 0; i < plan.length; i += 100) {
+      const chunk = plan.slice(i, i + 100);
+      const fresh = chunk.filter(p => !p.cid);
+      if (fresh.length) {
+        const made = await api('POST', 'crm_clients', fresh.map(({ r, ph }) => ({
+          name: r.nombre, company: r.nombre, phone: ph, email: r.correo || null,
+          sector: [r.sector, r.municipio].filter(Boolean).join(', ').slice(0, 200) || null,
+          notes: notesOf(r), source: clean({ utm_source: 'prospeccion', lista: 'talleres-rd-maestra', lista_id: r.id })
+        })));
+        made.forEach((c, k) => { fresh[k].cid = c.id; });
+      }
+      const madeOpps = await api('POST', 'crm_opportunities', chunk.map(({ r, cid }) => ({
+        client_id: cid, line, stage: 'nuevo', title: `Fundador MekaFix · ${r.tipo_negocio || 'negocio de vehículos'}`,
+        details: clean({
+          origen: 'prospeccion', lista_id: r.id, prioridad: r.prioridad, puntos: Number(r.puntos) || null, tipo_negocio: r.tipo_negocio,
+          region: r.region, provincia: r.provincia, servicios: r.servicios, whatsapp: r.whatsapp, rating: r.rating, resenas: r.num_resenas,
+          lo_que_destacan: r.temas_resenas, web: r.web, facebook: r.facebook, instagram: r.instagram, google_maps: r.maps_url
+        })
+      })));
+      await api('POST', 'crm_activities', madeOpps.map(o => ({ client_id: o.client_id, opportunity_id: o.id, kind: 'sistema', body: 'Importado de la lista de prospectos MekaFix' })));
+      done += chunk.length;
+      console.log(`  cargados ${done} de ${plan.length}`);
+    }
+    console.log(`Listo: ${done} prospectos en ${line}. Para ver a quién llamar: prospectos --limite 20`);
+  },
+
   ayuda() {
     console.log(`CRM Plata Tech desde la terminal
 
@@ -291,6 +409,8 @@ const commands = {
   buscar <texto>                  Buscar cliente por nombre, teléfono, RNC o sector
   cliente <nombre|tel|id>         Ficha completa
   nuevo --nombre --telefono --linea --que [--valor --sector --nota]
+  prospectos [--tipo Gomera] [--zona Santiago] [--limite 20]   Siguientes prospectos por llamar
+  importar --archivo <csv> [--prioridad A] [--region ...] [--tipo ...] [--limite N] [--confirmar]
   etapa <opp-id|cliente> <etapa> [--motivo]   ${STAGES.join(', ')}
   nota <cliente> "texto" [--tipo whatsapp|llamada|visita] [--opp id]
   cotizaciones [--estado enviada]

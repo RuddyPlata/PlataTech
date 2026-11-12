@@ -17,7 +17,8 @@
     seguridad: { label: 'Seguridad',  color: 'var(--l-seguridad)' },
     software:  { label: 'Software',   color: 'var(--l-software)' },
     celulares: { label: 'Celulares',  color: 'var(--l-celulares)' },
-    aliado:    { label: 'Con aliado', color: 'var(--l-aliado)' }
+    aliado:    { label: 'Con aliado', color: 'var(--l-aliado)' },
+    mekafix:   { label: 'MekaFix',    color: 'var(--l-mekafix)' }
   };
   const STAGES = [
     { id: 'nuevo',      label: 'Nuevo' },
@@ -28,6 +29,10 @@
     { id: 'perdido',    label: 'Perdido' }
   ];
   const OPEN_STAGES = ['nuevo', 'contactado', 'visita', 'cotizado'];
+  // Prospectos importados de una lista (no escribieron ellos): no cuentan como
+  // "clientes esperando respuesta" mientras sigan en "nuevo".
+  const isColdProspect = o => o.stage === 'nuevo' && (o.details || {}).origen === 'prospeccion';
+  const PROSPECT_CARDS = 60; // tarjetas de prospectos que se pintan por columna
   const ACT_KINDS = { nota: 'Nota', whatsapp: 'WhatsApp', llamada: 'Llamada', visita: 'Visita', sistema: 'Sistema' };
   const NCF_TYPES = {
     B01: 'Crédito fiscal (B01)',
@@ -94,9 +99,20 @@
   /* ── Datos ─────────────────────────────────────────────── */
   async function loadAll() {
     const q = (t, sel = '*', order = 'created_at') => SB.from(t).select(sel).order(order, { ascending: false });
+    // Supabase devuelve como mucho 1,000 filas por consulta: clientes y oportunidades
+    // pueden pasar de eso con los prospectos, asi que se traen por paginas.
+    const qAll = async t => {
+      const rows = [];
+      for (let from = 0; ; from += 1000) {
+        const r = await q(t).order('id').range(from, from + 999);
+        if (r.error) return r;
+        rows.push(...r.data);
+        if (r.data.length < 1000) return { data: rows, error: null };
+      }
+    };
     const [cl, op, ac, qu, inv, pay, ncf, st, dc] = await Promise.all([
-      q('crm_clients'),
-      q('crm_opportunities'),
+      qAll('crm_clients'),
+      qAll('crm_opportunities'),
       q('crm_activities').limit(1000),
       q('quotations', 'id,number,created_at,status,client,items,totals,notes,client_id,opportunity_id'),
       q('crm_invoice_balances'),
@@ -151,7 +167,7 @@
   }
 
   function updateBadges() {
-    const nuevos = S.opps.filter(o => o.stage === 'nuevo').length;
+    const nuevos = S.opps.filter(o => o.stage === 'nuevo' && !isColdProspect(o)).length;
     const b = document.querySelector('#nav button[data-v="embudo"]');
     if (b) b.innerHTML = 'Embudo' + (nuevos ? `<span class="badge">${nuevos}</span>` : '');
   }
@@ -170,7 +186,7 @@
     const today = todayISO();
     const monthStart = today.slice(0, 8) + '01';
     const open = S.opps.filter(o => OPEN_STAGES.includes(o.stage));
-    const nuevos = S.opps.filter(o => o.stage === 'nuevo').sort((a, b) => a.created_at.localeCompare(b.created_at));
+    const nuevos = S.opps.filter(o => o.stage === 'nuevo' && !isColdProspect(o)).sort((a, b) => a.created_at.localeCompare(b.created_at));
     const live = S.invoices.filter(i => i.status !== 'anulada');
     const due = live.filter(i => Number(i.balance) > 0);
     const overdue = due.filter(i => i.due_date && i.due_date < today);
@@ -218,26 +234,32 @@
 
   /* ── Embudo ────────────────────────────────────────────── */
   function renderEmbudo() {
-    const opps = S.opps.filter(o => S.lineFilter === 'todas' || o.line === S.lineFilter);
+    // En "Todas" no se pintan los prospectos fríos (pueden ser cientos); se ven en su línea.
+    const opps = S.opps.filter(o => S.lineFilter === 'todas' ? !isColdProspect(o) : o.line === S.lineFilter);
+    const cold = S.opps.filter(isColdProspect).length;
     const chips = [['todas', 'Todas']].concat(Object.entries(LINES).map(([k, l]) => [k, l.label]))
       .map(([k, l]) => `<button class="chip ${S.lineFilter === k ? 'on' : ''}" data-lf="${k}">${l} (${k === 'todas' ? S.opps.length : S.opps.filter(o => o.line === k).length})</button>`).join('');
     const cols = STAGES.map(st => {
-      const list = opps.filter(o => o.stage === st.id);
-      const total = list.reduce((s, o) => s + Number(o.value || 0), 0);
-      return `<div class="col"><div class="col-h"><b>${st.label} · ${list.length}</b><span class="money">${total ? fmtMoney(total) : ''}</span></div>
+      const all = opps.filter(o => o.stage === st.id);
+      const prospects = all.filter(isColdProspect);
+      const list = all.filter(o => !isColdProspect(o)).concat(prospects.slice(0, PROSPECT_CARDS));
+      const hidden = all.length - list.length;
+      const total = all.reduce((s, o) => s + Number(o.value || 0), 0);
+      return `<div class="col"><div class="col-h"><b>${st.label} · ${all.length}</b><span class="money">${total ? fmtMoney(total) : ''}</span></div>
         ${list.map(o => {
-          const stale = o.stage === 'nuevo' && Date.now() - new Date(o.created_at) > 3600e3;
+          const stale = o.stage === 'nuevo' && !isColdProspect(o) && Date.now() - new Date(o.created_at) > 3600e3;
           return `<button class="card ${stale ? 'stale' : ''}" data-opp="${o.id}">
             <div class="c-top">${lineDot(o.line)}${esc(clientOf(o.client_id).name)}</div>
             <div class="c-title">${esc(o.title)}</div>
             <div class="c-foot"><span class="money">${o.value ? fmtMoney(o.value) : ''}</span><span>${ago(o.updated_at || o.created_at)}</span></div>
           </button>`;
-        }).join('')}</div>`;
+        }).join('')}${hidden ? `<p class="muted" style="font-size:.78rem;padding:.3rem">y ${hidden} prospectos más. Búscalos en Clientes.</p>` : ''}</div>`;
     }).join('');
     view.innerHTML = `
       <div class="head"><div><h2>Embudo</h2><p>Toca una tarjeta para moverla de etapa, escribir por WhatsApp o cotizar. Borde dorado: lleva más de una hora sin respuesta.</p></div>
         <button class="btn primary" id="newOppBtn">+ Nuevo cliente</button></div>
       <div class="chips">${chips}</div>
+      ${S.lineFilter === 'todas' && cold ? `<p class="muted" style="font-size:.8rem;margin:.2rem 0 .6rem">${cold} prospectos de lista sin contactar no se muestran aquí. Toca su línea para verlos.</p>` : ''}
       <div class="board">${cols}</div>`;
     view.querySelector('#newOppBtn').onclick = () => openNewOpp(S.lineFilter !== 'todas' ? S.lineFilter : null);
     view.querySelectorAll('[data-lf]').forEach(b => b.onclick = () => { S.lineFilter = b.dataset.lf; renderEmbudo(); });

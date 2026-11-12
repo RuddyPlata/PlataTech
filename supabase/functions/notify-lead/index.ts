@@ -20,6 +20,7 @@ const LINE_LABELS: Record<string, string> = {
   software:  'Software a medida',
   celulares: 'Celulares · UltimoGadget',
   aliado:    'Servicio con aliado',
+  mekafix:   'MekaFix',
 };
 
 const fmt = (n: unknown) => `RD$${Number(n).toLocaleString('es-DO', { maximumFractionDigits: 0 })}`;
@@ -44,6 +45,8 @@ serve(async (req: Request) => {
 
   const opp = body.record;
   if (body.type !== 'INSERT' || !opp?.client_id) return new Response('ignored', { status: 200 });
+  // Prospectos importados de una lista: no son clientes que escribieron, no se avisa por correo.
+  if ((opp.details as Record<string, unknown> | undefined)?.origen === 'prospeccion') return new Response('ignored', { status: 200 });
 
   const resendKey  = Deno.env.get('RESEND_API_KEY');
   const ownerEmail = Deno.env.get('OWNER_EMAIL');
