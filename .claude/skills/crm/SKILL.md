@@ -33,9 +33,14 @@ Ruddy suele hablar por voz y en dominicano. Interpreta la intención:
 | "¿Quién me debe?" | `por-cobrar` |
 | "Juan pagó 10 mil por transferencia" | `pago FAC-00001 10000 --metodo transferencia` |
 | "Factúrale a Juan la cotización 110 con crédito fiscal" | `facturar COT-2026-110 --ncf B01` (vista previa) |
+| "¿A quién de MekaFix llamo hoy?" / "dame 20 gomeras de Santiago" | `prospectos --limite 20` / `prospectos --tipo Gomera --zona Santiago` |
+| "Carga los prospectos A de MekaFix" | `importar --archivo "D:\projects\Serv Cliente\prospectos\talleres-rd-maestra.csv" --prioridad A` (vista previa) |
 
 Líneas: `seguridad`, `software`, `celulares`, `aliado` (energía, redes,
-domótica, remodelación los ejecuta un tercero). Etapas: `nuevo`, `contactado`,
+domótica, remodelación los ejecuta un tercero) y `mekafix` (talleres y negocios
+de vehículos que prospectamos para MekaFix; "ganado" = se registró como fundador).
+Los prospectos importados llevan `origen: prospeccion`: no mandan correo ni
+cuentan como "clientes esperando respuesta" mientras sigan en `nuevo`. Etapas: `nuevo`, `contactado`,
 `visita`, `cotizado`, `ganado`, `perdido`.
 
 ## Reglas
@@ -48,6 +53,9 @@ domótica, remodelación los ejecuta un tercero). Etapas: `nuevo`, `contactado`,
 - **Pagos:** repite monto y factura antes de registrarlos si Ruddy no los dijo
   claros. Un pago mal registrado descuadra las cuentas por cobrar.
 - No inventes precios ni plazos para los clientes; eso lo da Ruddy.
+- **Importar** carga cientos de filas: corre primero sin `--confirmar`, di a
+  Ruddy cuántos se van a cargar y solo con su "sí" repite con `--confirmar`.
+  Si se corre dos veces no duplica (salta los que ya están por teléfono).
 - Responde corto, como para leerse en el celular: lo que pasó y, si aplica,
   qué sigue ("Juan pasó a contactado. ¿Le preparo la cotización?").
 - Las cotizaciones se crean y editan en `/shop/admin.html` (tienen PDF).
