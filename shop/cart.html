@@ -464,7 +464,7 @@ let paymentMethod  = AZUL_ENABLED ? 'azul' : 'contra-entrega';  // 'azul' (tarje
 let codeliveryMode = 'efectivo';     // 'efectivo' | 'transferencia' (solo aplica si contra-entrega)
 
 /* Estado del formulario (persistido entre re-renders) */
-let formState = { name: '', email: '', phone: '', address: '', sector: '', notes: '' };
+let formState = { name: '', email: '', phone: '', address: '', sector: '', notes: '', password: '' };
 let pinLocation = null; // { lat, lng } set by map picker
 let currentUser = null; // set by initAuth()
 function captureFormState() {
@@ -715,6 +715,13 @@ function render() {
               <input type="text" id="of-sector" name="sector" placeholder="Ej: Piantini, Santo Domingo" required/>
               <div class="ff-error" data-err="sector">Requerido</div>
             </div>
+            ${!currentUser ? `
+            <div>
+              <label for="of-password">Crea una contraseña (opcional)</label>
+              <input type="password" id="of-password" name="password" placeholder="Mínimo 8 caracteres" autocomplete="new-password"/>
+              <div class="ff-error" data-err="password">La contraseña debe tener al menos 8 caracteres.</div>
+              <div style="font-size:.72rem;color:var(--ink-3);margin-top:.3rem;line-height:1.45">Tu cuenta se crea sola con estos datos. Si no pones contraseña, te la pedimos por correo.</div>
+            </div>` : ''}
             <div>
               <label for="of-notes">Referencia o notas (opcional)</label>
               <textarea id="of-notes" name="notes" placeholder="Punto de referencia, horario preferido, etc."></textarea>
@@ -826,15 +833,15 @@ function wirePaymentMethods() {
 function renderAuthStep() {
   return `
     <div class="checkout-auth">
-      <div class="checkout-auth-title">Crea tu cuenta para continuar</div>
-      <p class="checkout-auth-sub">Necesitamos una cuenta para enviarte actualizaciones de tu pedido y guardar tu historial de compras.</p>
+      <div class="checkout-auth-title">Inicia sesión</div>
+      <p class="checkout-auth-sub">Llenamos tus datos y guardamos el pedido en tu historial. <button type="button" id="caBack" style="background:none;border:none;color:var(--blue);cursor:pointer;font:inherit;text-decoration:underline;padding:0">Pedir sin iniciar sesión</button></p>
       <button type="button" id="caGoogleBtn" class="btn-google">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
         Continuar con Google
       </button>
       <div class="auth-sep"><span>o crea tu cuenta</span></div>
       <div class="checkout-auth-error" id="caError"></div>
-      <div id="caRegisterPanel">
+      <div id="caRegisterPanel" style="display:none">
         <div class="order-form" style="margin-top:0">
           <div>
             <label for="caEmail">Correo electrónico</label>
@@ -848,7 +855,7 @@ function renderAuthStep() {
         <button type="button" id="caRegisterBtn" class="btn btn-primary btn-lg btn-block" style="margin-top:.75rem">Crear cuenta y continuar</button>
         <p class="ca-switch">¿Ya tienes cuenta? <button type="button" id="caShowLogin">Iniciar sesión</button></p>
       </div>
-      <div id="caLoginPanel" style="display:none">
+      <div id="caLoginPanel">
         <div class="order-form" style="margin-top:0">
           <div>
             <label for="caLoginEmail">Correo electrónico</label>
@@ -863,6 +870,39 @@ function renderAuthStep() {
         <p class="ca-switch">¿No tienes cuenta? <button type="button" id="caShowRegister">Crear una</button></p>
       </div>
     </div>`;
+}
+
+document.addEventListener('click', e => {
+  if (e.target.closest('.ca-open-login')) { captureFormState(); window._showCheckoutLogin = true; render(); }
+  else if (e.target.closest('#caBack'))  { window._showCheckoutLogin = false; render(); }
+});
+
+/* Sin sesion: la contrasena es opcional. Vacia -> la cuenta la crea
+   notify-order y le manda al cliente un enlace para crearla.
+   Si la escribe, se crea aqui mismo. Nunca bloquea el pedido. */
+function checkoutPassword() {
+  const el = document.getElementById('of-password');
+  if (!el) return '';
+  const pw = el.value || '';
+  const errEl = document.querySelector('[data-err="password"]');
+  const bad = pw.length > 0 && pw.length < 8;
+  el.classList.toggle('err', bad);
+  if (errEl) errEl.classList.toggle('show', bad);
+  return bad ? null : pw;
+}
+
+async function createAccountIfAsked(customer, pw) {
+  if (currentUser || !pw || !window.SB) return;
+  try {
+    await window.SB.auth.signUp({
+      email: customer.email,
+      password: pw,
+      options: {
+        data: { name: customer.name, phone: customer.phone, address: customer.address, sector: customer.sector },
+        emailRedirectTo: 'https://platatechs.com/shop/cuenta.html'
+      }
+    });
+  } catch (e) { console.warn('signUp', e); }
 }
 
 function wireAuthStep() {
@@ -903,6 +943,7 @@ function wireAuthStep() {
     } else if (!data.session) {
       // Email confirmation required — allow 1 order without confirming
       window._pendingCheckoutEmail = email;
+      window._showCheckoutLogin = false;
       if (!formState.email) formState.email = email;
       render();
     }
@@ -928,8 +969,8 @@ function renderAction(totals) {
   const box = document.getElementById('payAction');
   if (!box) return;
 
-  /* Require auth before payment */
-  if (!currentUser && !window._pendingCheckoutEmail) {
+  /* Iniciar sesion es opcional: solo si el cliente lo pide */
+  if (!currentUser && window._showCheckoutLogin) {
     box.innerHTML = renderAuthStep();
     wireAuthStep();
     return;
@@ -940,7 +981,9 @@ function renderAction(totals) {
     ? `<div style="background:#fffbe6;border:1px solid rgba(212,162,74,.35);border-radius:10px;padding:.7rem 1rem;font-size:.8rem;color:#8a6d10;margin-bottom:.85rem;line-height:1.5">
         <strong>Revisa tu correo</strong> — te enviamos un link de confirmación. Puedes hacer tu primer pedido ahora; para futuras compras necesitas confirmar tu email.
       </div>`
-    : '';
+    : (!currentUser
+      ? `<p class="ca-switch" style="margin:0 0 .75rem">¿Ya tienes cuenta? <button type="button" class="ca-open-login">Inicia sesión</button></p>`
+      : '');
 
   /* Tarjeta (AZUL) → botón que crea la orden y redirige a la Payment Page */
   if (paymentMethod === 'azul') {
@@ -1050,7 +1093,8 @@ function validateOrderForm() {
 
 async function placeOrder(totals) {
   const customer = validateOrderForm();
-  if (!customer) {
+  const pw = checkoutPassword();
+  if (!customer || pw === null) {
     document.getElementById('orderForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
   }
@@ -1087,6 +1131,7 @@ async function placeOrder(totals) {
     lng: pinLocation ? pinLocation.lng : null
   };
 
+  await createAccountIfAsked(customer, pw);
   const result = await saveOrder(order);
   if (!result.ok) {
     if (promoErrorFrom(result.error)) return;
@@ -1109,7 +1154,8 @@ async function placeOrder(totals) {
    porque usa la llave secreta; nunca en el navegador. */
 async function payWithAzul(totals) {
   const customer = validateOrderForm();
-  if (!customer) {
+  const pw = checkoutPassword();
+  if (!customer || pw === null) {
     document.getElementById('orderForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
   }
@@ -1150,6 +1196,7 @@ async function payWithAzul(totals) {
     lng: pinLocation ? pinLocation.lng : null
   };
 
+  await createAccountIfAsked(customer, pw);
   const saved = await saveOrder(order);
   if (!saved.ok) { if (promoErrorFrom(saved.error)) return; if (priceErrorFrom(saved.error, btn)) return; setErr('No se pudo guardar tu orden. Intenta de nuevo.'); return; }
   if (order.totals.discount > 0) markPromoUsed();
