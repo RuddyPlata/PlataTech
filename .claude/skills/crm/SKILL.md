@@ -34,7 +34,7 @@ Ruddy suele hablar por voz y en dominicano. Interpreta la intención:
 | "Juan pagó 10 mil por transferencia" | `pago FAC-00001 10000 --metodo transferencia` |
 | "Factúrale a Juan la cotización 110 con crédito fiscal" | `facturar COT-2026-110 --ncf B01` (vista previa) |
 | "¿A quién de MekaFix llamo hoy?" / "dame 20 gomeras de Santiago" | `prospectos --limite 20` / `prospectos --tipo Gomera --zona Santiago` |
-| "Carga los prospectos A de MekaFix" | `importar --archivo "D:\projects\Serv Cliente\prospectos	alleres-rd-maestra.csv" --prioridad A` (vista previa) |
+| "Carga los prospectos A de MekaFix" | `importar --archivo "D:\projects\Serv Cliente\prospectos\talleres-rd-maestra.csv" --prioridad A` (vista previa) |
 
 Líneas: `seguridad`, `software`, `celulares`, `aliado` (energía, redes,
 domótica, remodelación los ejecuta un tercero) y `mekafix` (talleres y negocios
