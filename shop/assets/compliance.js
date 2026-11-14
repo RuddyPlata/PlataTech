@@ -15,7 +15,7 @@
   var BIZ = {
     legal:   'PLATA TECH SOLUTIONS, SRL',
     rnc:     '133-66822-1',
-    address: 'Pdte. Antonio Guzmán Fernández #8, Santo Domingo Este 11802, República Dominicana',
+    address: 'Calle Pte. Ant. Guzmán #4693, No. 9, sector Invivienda, Santo Domingo Este 11802, República Dominicana',
     tel:     '+1 (849) 495-0959',
     telHref: '18494950959',
     email:   'ruddy.plata@gmail.com'
