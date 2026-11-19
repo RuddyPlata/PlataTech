@@ -271,7 +271,7 @@ function renderCategories() {
       ? window.PRODUCTS.length
       : window.PRODUCTS.filter(p => p.category === cat.id).length;
     return { cat, count };
-  });
+  }).filter(({ cat, count }) => count > 0 || cat.id === 'todos' || cat.id === activeCategory);
 
   // Pill buttons (desktop)
   root.innerHTML = items.map(({ cat, count }) =>

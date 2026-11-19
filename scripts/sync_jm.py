@@ -36,6 +36,10 @@ OUT_PRODUCTS = ROOT / "shop" / "assets" / "products-static.js"
 OUT_COSTS = ROOT / "shop" / "assets" / "costs-static.js"
 IMG_DIR = ROOT / "shop" / "assets" / "img" / "jm"
 ID_BASE = 70000  # id = 70000 + id del producto en jmsecuritysystem.com
+# True = los articulos de JM se generan pero NO salen en la tienda (ni en el
+# carrito ni en product_prices). Se puso el 2026-11-19 porque los precios de JM
+# no estaban al dia. Para volver a mostrarlos: False y correr el script.
+OCULTO = True
 
 LINEAS = {
     "CCTV y Videovigilancia",
@@ -165,6 +169,9 @@ def write(products: list):
         "(function () {\n"
         "  if (!window.PRODUCTS) window.PRODUCTS = [];\n"
         "  var STATIC = [\n    " + ",\n    ".join(rows) + "\n  ];\n"
+        "  // OCULTO: los articulos estan aqui pero no se muestran en la tienda.\n"
+        "  var OCULTO = " + ("true" if OCULTO else "false") + ";\n"
+        "  if (OCULTO) { window.JM_OCULTOS = STATIC; return; }\n"
         "  Array.prototype.push.apply(window.PRODUCTS, STATIC);\n"
         "})();\n", encoding='utf-8')
     costs = ",\n".join(f"  {p['id']}: {p['cost']}" for p in products)
