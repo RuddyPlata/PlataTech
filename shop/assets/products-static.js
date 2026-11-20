@@ -123,5 +123,8 @@
     {"id": 75052, "slug": "linseg-letrero-de-advertencia-doble-cara-lts-136", "category": "seguridad", "brand": "Linseg", "name": "Linseg Letrero de Advertencia Doble Cara", "variant": "LTS-136", "price": 74, "oldPrice": null, "short": "Protección perimetral que disuade el acceso no autorizado. La instalamos y te damos soporte.", "specs": [], "image": "assets/img/jm/j5052.jpg", "gradient": ["#1a2f4a", "#0a1525"], "stock": 5},
     {"id": 75075, "slug": "anviz-tarjeta-de-proximidad-mifare-13-56-mhz-pvc-mifare-card-anviz", "category": "seguridad", "brand": "Anviz", "name": "Anviz Tarjeta de Proximidad Mifare 13.56 MHz / PVC", "variant": "MIFARE CARD-ANVIZ", "price": 59, "oldPrice": null, "short": "Controla quién entra y lleva el registro de los accesos. La instalamos y te damos soporte.", "specs": ["PVC"], "image": "assets/img/jm/j5075.jpg", "gradient": ["#1a2f4a", "#0a1525"], "stock": 5}
   ];
+  // OCULTO: los articulos estan aqui pero no se muestran en la tienda.
+  var OCULTO = true;
+  if (OCULTO) { window.JM_OCULTOS = STATIC; return; }
   Array.prototype.push.apply(window.PRODUCTS, STATIC);
 })();
