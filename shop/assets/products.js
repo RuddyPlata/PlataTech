@@ -5,7 +5,7 @@
    Regenerar: python scripts/sync_products.py
    ════════════════════════════════════════════════════════ */
 
-window.PRODUCTS_LAST_SYNC = "2026-11-23 08:00:14 -0400";
+window.PRODUCTS_LAST_SYNC = "2026-11-24 08:00:13 -0400";
 
 window.PRODUCTS = [
   {
@@ -243,6 +243,20 @@ window.PRODUCTS = [
     short: "32GB / 3GB RAM / 10.1\". Tablet nueva con garantia. Configurada y probada antes de salir de nuestras manos.",
     specs: ["32GB", "10.1\"", "3GB RAM", "COVER", "4G LTE", "HACE LLAMADAS"],
     image: null,
+    gradient: ["#1f3a4a", "#0a1a25"],
+    stock: 3
+  },
+  {
+    id: 243,
+    slug: "generic-m-horse-pad-17-pro-128gb-10-1-hd-12gb-ram-6-6",
+    category: "tablets",
+    brand: "Generic",
+    name: "M-HORSE PAD 17 PRO",
+    variant: "128GB, 10.1 HD, 12GB RAM, 6+6, 4G LTE, HACE LLAMADAS, COVER TIPO LIBRO + TECLADO + MOUSE + LAPIZ TACTIL",
+    price: 8599, oldPrice: null,
+    short: "128GB / 12GB RAM. Tablet nueva con garantia. Configurada y probada antes de salir de nuestras manos.",
+    specs: ["128GB", "10.1 HD", "12GB RAM", "6+6", "4G LTE", "HACE LLAMADAS", "COVER TIPO LIBRO + TECLADO + MOUSE + LAPIZ TACTIL"],
+    image: "https://drive.google.com/thumbnail?id=1_wkrzSPC0WBqewtWt6WQw96fG-4u045L&sz=w800",
     gradient: ["#1f3a4a", "#0a1a25"],
     stock: 3
   },
@@ -807,20 +821,6 @@ window.PRODUCTS = [
     stock: 3
   },
   {
-    id: 1272,
-    slug: "oukitel-estacion-de-carga-p2001-plus-2048-wh",
-    category: "celulares",
-    brand: "OUKITEL",
-    name: "ESTACION DE CARGA P2001 PLUS 2048 WH",
-    variant: "",
-    price: 46639, oldPrice: null,
-    short: "Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
-    specs: [],
-    image: "https://drive.google.com/thumbnail?id=1iKA0lIAhCaKPILVTk4gu3rrsdDcjaq-W&sz=w800",
-    gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 3
-  },
-  {
     id: 248,
     slug: "oukitel-c1-pro-256gb-6-52-4gb-ram-4-12",
     category: "celulares",
@@ -1121,7 +1121,7 @@ window.PRODUCTS = [
     brand: "OUKITEL",
     name: "WP100 TITAN 5G",
     variant: "512GB, 6.8\" 120HZ, 36GB RAM 12+24, 200MP,33000 LINTERNA Y PROYECTOR",
-    price: 31999, oldPrice: null,
+    price: 39219, oldPrice: null,
     short: "512GB / 36GB RAM / 6.8\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
     specs: ["512GB", "6.8\" 120HZ", "36GB RAM 12+24", "200MP", "33000 LINTERNA Y PROYECTOR"],
     image: null,
@@ -1451,20 +1451,6 @@ window.PRODUCTS = [
     stock: 3
   },
   {
-    id: 260,
-    slug: "xiaomi-redmi-watch-6-active",
-    category: "celulares",
-    brand: "XIAOMI",
-    name: "REDMI WATCH 6 ACTIVE",
-    variant: "",
-    price: 4599, oldPrice: null,
-    short: "Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
-    specs: [],
-    image: "https://drive.google.com/thumbnail?id=1g6_gXRCAoR8WvukRV6Zte3Jwku0Xt7Z6&sz=w800",
-    gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 3
-  },
-  {
     id: 259,
     slug: "xiaomi-redmi-watch-6-lite",
     category: "celulares",
@@ -1517,20 +1503,6 @@ window.PRODUCTS = [
     short: "64GB / 8GB RAM / 6.9\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
     specs: ["64GB", "6.9\" 120HZ", "8GB RAM 4+4", "6000 MAH"],
     image: "https://ydctechnology.com/public/imagenes/ydctechnology/149/16650155006981983737.webp",
-    gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 3
-  },
-  {
-    id: 1288,
-    slug: "xiaomi-redmi-14c-256gb-6-88-16gb-ram-8-8",
-    category: "celulares",
-    brand: "XIAOMI",
-    name: "REDMI 14C",
-    variant: "256GB, 6.88\", 16GB RAM 8+8",
-    price: 10099, oldPrice: null,
-    short: "256GB / 16GB RAM / 6.88\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
-    specs: ["256GB", "6.88\"", "16GB RAM 8+8"],
-    image: "https://drive.google.com/thumbnail?id=1V8P3z_P_jhxmMafYjnNefBY4pi787I9Q&sz=w800",
     gradient: ["#2d2d35", "#0a0a0c"],
     stock: 3
   },
