@@ -5,7 +5,7 @@
    Regenerar: python scripts/sync_products.py
    ════════════════════════════════════════════════════════ */
 
-window.PRODUCTS_LAST_SYNC = "2026-11-24 08:00:13 -0400";
+window.PRODUCTS_LAST_SYNC = "2026-11-25 08:00:14 -0400";
 
 window.PRODUCTS = [
   {
@@ -243,20 +243,6 @@ window.PRODUCTS = [
     short: "32GB / 3GB RAM / 10.1\". Tablet nueva con garantia. Configurada y probada antes de salir de nuestras manos.",
     specs: ["32GB", "10.1\"", "3GB RAM", "COVER", "4G LTE", "HACE LLAMADAS"],
     image: null,
-    gradient: ["#1f3a4a", "#0a1a25"],
-    stock: 3
-  },
-  {
-    id: 243,
-    slug: "generic-m-horse-pad-17-pro-128gb-10-1-hd-12gb-ram-6-6",
-    category: "tablets",
-    brand: "Generic",
-    name: "M-HORSE PAD 17 PRO",
-    variant: "128GB, 10.1 HD, 12GB RAM, 6+6, 4G LTE, HACE LLAMADAS, COVER TIPO LIBRO + TECLADO + MOUSE + LAPIZ TACTIL",
-    price: 8599, oldPrice: null,
-    short: "128GB / 12GB RAM. Tablet nueva con garantia. Configurada y probada antes de salir de nuestras manos.",
-    specs: ["128GB", "10.1 HD", "12GB RAM", "6+6", "4G LTE", "HACE LLAMADAS", "COVER TIPO LIBRO + TECLADO + MOUSE + LAPIZ TACTIL"],
-    image: "https://drive.google.com/thumbnail?id=1_wkrzSPC0WBqewtWt6WQw96fG-4u045L&sz=w800",
     gradient: ["#1f3a4a", "#0a1a25"],
     stock: 3
   },
@@ -719,20 +705,6 @@ window.PRODUCTS = [
     short: "64GB / 9GB RAM / 6.52\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
     specs: ["64GB", "6.52\"", "9GB RAM 3+6"],
     image: "https://drive.google.com/thumbnail?id=1wkYp5vzuI19XXIIb2cPA63xLoAFUEhtZ&sz=w800",
-    gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 3
-  },
-  {
-    id: 56,
-    slug: "tcl-605-128gb-6-7-90hz-12gb-ram-4-8",
-    category: "celulares",
-    brand: "TCL",
-    name: "TCL 605",
-    variant: "128GB, 6.7\" 90HZ, 12GB RAM 4+8, 50MP",
-    price: 7699, oldPrice: null,
-    short: "128GB / 12GB RAM / 6.7\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
-    specs: ["128GB", "6.7\" 90HZ", "12GB RAM 4+8", "50MP"],
-    image: null,
     gradient: ["#2d2d35", "#0a0a0c"],
     stock: 3
   },
@@ -1507,6 +1479,20 @@ window.PRODUCTS = [
     stock: 3
   },
   {
+    id: 1288,
+    slug: "xiaomi-redmi-14c-256gb-6-88-16gb-ram-8-8",
+    category: "celulares",
+    brand: "XIAOMI",
+    name: "REDMI 14C",
+    variant: "256GB, 6.88\", 16GB RAM 8+8",
+    price: 10099, oldPrice: null,
+    short: "256GB / 16GB RAM / 6.88\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
+    specs: ["256GB", "6.88\"", "16GB RAM 8+8"],
+    image: "https://drive.google.com/thumbnail?id=1V8P3z_P_jhxmMafYjnNefBY4pi787I9Q&sz=w800",
+    gradient: ["#2d2d35", "#0a0a0c"],
+    stock: 3
+  },
+  {
     id: 219,
     slug: "xiaomi-redmi-17-128gb-6-9-fhd-120hz-8gb-r",
     category: "celulares",
@@ -1853,20 +1839,6 @@ window.PRODUCTS = [
     short: "128GB / 4GB RAM / 6.7\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
     specs: ["128GB", "6.7\" AMOLED 90HZ", "4GB RAM"],
     image: "https://drive.google.com/thumbnail?id=1JuylII65MXOqcq6iqnmaMIb5ZaFKpkv7&sz=w800",
-    gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 3
-  },
-  {
-    id: 187,
-    slug: "samsung-galaxy-a27-5g-tpa-gto-128gb-6-7-amoled-120hz-6gb",
-    category: "celulares",
-    brand: "SAMSUNG",
-    name: "GALAXY A27 5G TPA/GTO",
-    variant: "128GB, 6.7\" AMOLED 120HZ, 6GB RAM",
-    price: 16599, oldPrice: null,
-    short: "128GB / 6GB RAM / 6.7\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
-    specs: ["128GB", "6.7\" AMOLED 120HZ", "6GB RAM"],
-    image: null,
     gradient: ["#2d2d35", "#0a0a0c"],
     stock: 3
   },
