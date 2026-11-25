@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<title>Procesando pago… | Plata Tech Solutions</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none';">
+</head>
+<body style="font-family:system-ui,sans-serif;text-align:center;margin-top:3rem;color:#334155">
+<p>Procesando tu pago…</p>
+<script>
+/* Retorno de la Página de Pagos de AZUL en nuestro dominio. Solo se usa si
+   AZUL_RETURN_BASE apunta aquí (cuando Azul exige que ApprovedUrl/DeclinedUrl/
+   CancelUrl empiecen con platatechs.com). Reenvía el querystring INTACTO a la
+   Edge Function azul-callback, que verifica el AuthHash y marca la orden. Esta
+   página no decide nada ni guarda nada. */
+location.replace('https://ieltuoriwgfckdfbwziu.supabase.co/functions/v1/azul-callback' + location.search);
+</script>
+</body>
+</html>

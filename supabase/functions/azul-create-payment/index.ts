@@ -13,24 +13,14 @@
 //   AZUL_CURRENCY         — Código de moneda (default '$' para RD$/DOP)
 //   SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY — inyectados por la plataforma
 //
-// AuthHash (verificado contra el ejemplo oficial de AZUL, "Ejemplo Calculo Hash SALE"):
-//   mensaje = concatenación de HASH_FIELDS (en orden) + AuthKey (la llave NO viaja
-//   en el POST), codificado en UTF-8, y luego HMAC-SHA512 con clave = AuthKey.
+//   AZUL_RETURN_BASE      — opcional; ver abajo
+//   AZUL_LOGO_URL         — opcional; logo publicado en nuestro dominio
+//
+// AuthHash: ver _shared/azul-page.ts ("Documento técnico - Página de Pago AZUL
+// 2026"). Probado en el ambiente de pruebas el 25-nov-2026 (AzulOrderId 44958408).
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts';
-
-const PAGE_URLS: Record<string, string> = {
-  test: 'https://pruebas.azul.com.do/PaymentPage/',
-  prod: 'https://pagos.azul.com.do/PaymentPage/',
-};
-
-// Orden EXACTO de los campos que entran en el AuthHash (Payment Page).
-const HASH_FIELDS = [
-  'MerchantId', 'MerchantName', 'MerchantType', 'CurrencyCode', 'OrderNumber',
-  'Amount', 'ITBIS', 'ApprovedUrl', 'DeclinedUrl', 'CancelUrl',
-  'UseCustomField1', 'CustomField1Label', 'CustomField1Value',
-  'UseCustomField2', 'CustomField2Label', 'CustomField2Value',
-];
+import { buildSaleFields, PAGE_URLS } from '../_shared/azul-page.ts';
 
 const cors = {
   'Access-Control-Allow-Origin': '*',
@@ -38,21 +28,7 @@ const cors = {
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };
 
-const toHex = (buf: ArrayBuffer) =>
-  Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, '0')).join('');
-
-// HMAC-SHA512 hex. La clave siempre en UTF-8; el mensaje se pasa ya en bytes.
-async function hmacSha512Hex(keyStr: string, msgBytes: Uint8Array): Promise<string> {
-  const key = await crypto.subtle.importKey(
-    'raw', new TextEncoder().encode(keyStr), { name: 'HMAC', hash: 'SHA-512' }, false, ['sign'],
-  );
-  return toHex(await crypto.subtle.sign('HMAC', key, msgBytes));
-}
-
-// AZUL: montos como entero de centavos (toFixed(2) sin el punto). 150.00 -> "15000", 0 -> "000".
-const fixedString = (n: number) => n.toFixed(2).replace('.', '');
-
-serve(async (req: Request) => {
+export async function handler(req: Request): Promise<Response> {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });
   if (req.method !== 'POST') return new Response('Method not allowed', { status: 405, headers: cors });
 
@@ -86,41 +62,40 @@ serve(async (req: Request) => {
   const order = Array.isArray(rows) ? rows[0] : null;
   if (!order) return json({ error: 'Orden no encontrada' }, 404);
 
+  if (order.status === 'pagado') return json({ error: 'La orden ya está pagada' }, 409);
+
   const total = Number(order?.totals?.total || 0);
   if (!(total > 0)) return json({ error: 'Total inválido' }, 400);
 
-  const fnBase = `${supaUrl}/functions/v1/azul-callback`;
-  const params: Record<string, string> = {
-    MerchantId:        merchantId,
-    MerchantName:      merchantName,
-    MerchantType:      merchantType,
-    CurrencyCode:      currency,
-    OrderNumber:       orderId,
-    Amount:            fixedString(total),
-    ITBIS:             '000', // Informativo; no cambia lo cobrado (comprobante no fiscal).
-    ApprovedUrl:       `${fnBase}?src=approved&n=${encodeURIComponent(orderId)}`,
-    DeclinedUrl:       `${fnBase}?src=declined&n=${encodeURIComponent(orderId)}`,
-    CancelUrl:         `${fnBase}?src=cancel&n=${encodeURIComponent(orderId)}`,
-    UseCustomField1:   '0',
-    CustomField1Label: '',
-    CustomField1Value: '',
-    UseCustomField2:   '0',
-    CustomField2Label: '',
-    CustomField2Value: '',
-    // Campos que se POSTean pero NO entran en el AuthHash:
-    TrxType:           'Sale',
-    SaveToDataVault:   '0',
-  };
+  // A dónde vuelve el cliente. Por defecto, directo a la Edge Function
+  // azul-callback. Si Azul exige que las URLs de retorno empiecen con nuestro
+  // dominio (como el logo), poner AZUL_RETURN_BASE=https://platatechs.com/shop/azul-retorno.html:
+  // esa página reenvía el querystring tal cual a azul-callback.
+  const returnBase = Deno.env.get('AZUL_RETURN_BASE') || `${supaUrl}/functions/v1/azul-callback`;
+  const sep = returnBase.includes('?') ? '&' : '?';
+  const back = (src: string) => `${returnBase}${sep}src=${src}&n=${encodeURIComponent(orderId)}`;
 
-  // mensaje = valores de HASH_FIELDS + AuthKey (UTF-8) → HMAC-SHA512(clave=AuthKey)
-  const msg = HASH_FIELDS.map((f) => params[f] ?? '').join('') + authKey;
-  params.AuthHash = await hmacSha512Hex(authKey, new TextEncoder().encode(msg));
+  const fields = await buildSaleFields({
+    merchantId, merchantName, merchantType, currency,
+    orderNumber: orderId,
+    total,
+    // ITBIS incluido en el total (el carrito lo calcula al 18% para tarjeta).
+    itbis: Number(order?.totals?.itbis || 0),
+    approvedUrl: back('approved'),
+    declinedUrl: back('declined'),
+    cancelUrl: back('cancel'),
+    // Azul (23-nov-2026): el logo debe estar publicado en nuestro dominio.
+    logoUrl: Deno.env.get('AZUL_LOGO_URL') || 'https://platatechs.com/images/logo-platatech.png',
+    saveToDataVault: false, // la tienda no guarda tarjetas
+  }, authKey);
 
-  return json({ url: PAGE_URLS[env] || PAGE_URLS.test, fields: params });
+  return json({ url: PAGE_URLS[env] || PAGE_URLS.test, fields });
 
   function json(obj: unknown, status = 200) {
     return new Response(JSON.stringify(obj), {
       status, headers: { ...cors, 'Content-Type': 'application/json' },
     });
   }
-});
+}
+
+if (import.meta.main) serve(handler);
