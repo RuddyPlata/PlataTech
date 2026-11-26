@@ -5,7 +5,7 @@
    Regenerar: python scripts/sync_products.py
    ════════════════════════════════════════════════════════ */
 
-window.PRODUCTS_LAST_SYNC = "2026-11-25 08:00:14 -0400";
+window.PRODUCTS_LAST_SYNC = "2026-11-26 08:00:14 -0400";
 
 window.PRODUCTS = [
   {
@@ -37,20 +37,6 @@ window.PRODUCTS = [
     stock: 3
   },
   {
-    id: 1279,
-    slug: "dell-inspiron-15-15250-7427-512gb-ssd-15-6-fhd-2k-120hz",
-    category: "laptops",
-    brand: "DELL",
-    name: "DELL INSPIRON 15 15250-7427",
-    variant: "512GB SSD, 15.6\" FHD 2K 120HZ TOUCH, 16GB RAM DDR5-4800MHZ, INTEL CORE I7-1355U 13VA GEN. 5.0GHZ, WIFI 6, BT 5.3, WINDOWS 11",
-    price: 45049, oldPrice: null,
-    short: "512GB / 16GB RAM / 15.6\". Laptop nueva con garantia de fabrica. Configuracion inicial y entrega lista para trabajar desde el dia uno.",
-    specs: ["512GB SSD", "15.6\" FHD 2K 120HZ TOUCH", "16GB RAM DDR5-4800MHZ", "INTEL CORE I7-1355U 13VA GEN. 5.0GHZ", "WIFI 6", "BT 5.3", "WINDOWS 11"],
-    image: "https://drive.google.com/thumbnail?id=1v6XjUeTc3VOPkm4mf6Qj9OFiNfpeiils&sz=w800",
-    gradient: ["#2a2d3a", "#0f1218"],
-    stock: 3
-  },
-  {
     id: 5,
     slug: "dell-inspiron-15-15250-5315-512gb-ssd-15-6-fhd-2k-120hz",
     category: "laptops",
@@ -60,6 +46,20 @@ window.PRODUCTS = [
     price: 34499, oldPrice: null,
     short: "512GB / 8GB RAM / 15.6\". Laptop nueva con garantia de fabrica. Configuracion inicial y entrega lista para trabajar desde el dia uno.",
     specs: ["512GB SSD", "15.6\" FHD 2K 120HZ TOUCH", "8GB RAM DDR4-2666MHZ", "INTEL CORE I5-1334U 13VA GEN. 4.6GHZ", "WIFI 6", "BT 5.3", "WINDOWS 11"],
+    image: "https://drive.google.com/thumbnail?id=1v6XjUeTc3VOPkm4mf6Qj9OFiNfpeiils&sz=w800",
+    gradient: ["#2a2d3a", "#0f1218"],
+    stock: 3
+  },
+  {
+    id: 1279,
+    slug: "dell-inspiron-15-15250-7427-512gb-ssd-15-6-fhd-2k-120hz",
+    category: "laptops",
+    brand: "DELL",
+    name: "DELL INSPIRON 15 15250-7427",
+    variant: "512GB SSD, 15.6\" FHD 2K 120HZ TOUCH, 16GB RAM DDR5-4800MHZ, INTEL CORE I7-1355U 13VA GEN. 5.0GHZ, WIFI 6, BT 5.3, WINDOWS 11",
+    price: 45049, oldPrice: null,
+    short: "512GB / 16GB RAM / 15.6\". Laptop nueva con garantia de fabrica. Configuracion inicial y entrega lista para trabajar desde el dia uno.",
+    specs: ["512GB SSD", "15.6\" FHD 2K 120HZ TOUCH", "16GB RAM DDR5-4800MHZ", "INTEL CORE I7-1355U 13VA GEN. 5.0GHZ", "WIFI 6", "BT 5.3", "WINDOWS 11"],
     image: "https://drive.google.com/thumbnail?id=1v6XjUeTc3VOPkm4mf6Qj9OFiNfpeiils&sz=w800",
     gradient: ["#2a2d3a", "#0f1218"],
     stock: 3
@@ -855,9 +855,51 @@ window.PRODUCTS = [
     brand: "OUKITEL",
     name: "C61 GT GAMING",
     variant: "128GB, 6.88\". 16GB RAM 4+12",
-    price: 8399, oldPrice: null,
+    price: 8499, oldPrice: null,
     short: "128GB / 16GB RAM / 6.88\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
     specs: ["128GB", "6.88\". 16GB RAM 4+12"],
+    image: null,
+    gradient: ["#2d2d35", "#0a0a0c"],
+    stock: 3
+  },
+  {
+    id: 82,
+    slug: "oukitel-c61-128gb-6-88-16gb-ram-4-12",
+    category: "celulares",
+    brand: "OUKITEL",
+    name: "C61",
+    variant: "128GB, 6.88\". 16GB RAM 4+12",
+    price: 8499, oldPrice: null,
+    short: "128GB / 16GB RAM / 6.88\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
+    specs: ["128GB", "6.88\". 16GB RAM 4+12"],
+    image: null,
+    gradient: ["#2d2d35", "#0a0a0c"],
+    stock: 3
+  },
+  {
+    id: 86,
+    slug: "oukitel-c62-gt-gaming-128gb-6-88-16gb-ram-4-12-d",
+    category: "celulares",
+    brand: "OUKITEL",
+    name: "C62 GT GAMING",
+    variant: "128GB, 6.88\". 16GB RAM 4+12, DOBLE PANTALLA",
+    price: 8999, oldPrice: null,
+    short: "128GB / 16GB RAM / 6.88\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
+    specs: ["128GB", "6.88\". 16GB RAM 4+12", "DOBLE PANTALLA"],
+    image: null,
+    gradient: ["#2d2d35", "#0a0a0c"],
+    stock: 3
+  },
+  {
+    id: 85,
+    slug: "oukitel-c62-128gb-6-88-16gb-ram-4-12-d",
+    category: "celulares",
+    brand: "OUKITEL",
+    name: "C62",
+    variant: "128GB, 6.88\". 16GB RAM 4+12, DOBLE PANTALLA",
+    price: 8999, oldPrice: null,
+    short: "128GB / 16GB RAM / 6.88\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
+    specs: ["128GB", "6.88\". 16GB RAM 4+12", "DOBLE PANTALLA"],
     image: null,
     gradient: ["#2d2d35", "#0a0a0c"],
     stock: 3
@@ -869,7 +911,7 @@ window.PRODUCTS = [
     brand: "OUKITEL",
     name: "C62 PRO",
     variant: "256GB, 6.88\", 24GB RAM 6+18, DOBLE PANTALLA",
-    price: 11099, oldPrice: null,
+    price: 10999, oldPrice: null,
     short: "256GB / 24GB RAM / 6.88\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
     specs: ["256GB", "6.88\"", "24GB RAM 6+18", "DOBLE PANTALLA"],
     image: "https://drive.google.com/thumbnail?id=1xjJ6ojLlstSJ3oXmIoEq4TJC4FST-T_T&sz=w800",
@@ -975,6 +1017,20 @@ window.PRODUCTS = [
     stock: 3
   },
   {
+    id: 100,
+    slug: "oukitel-wp53s-128gb-6-52-16gb-ram-4-12-i",
+    category: "celulares",
+    brand: "OUKITEL",
+    name: "WP53S",
+    variant: "128GB, 6.52\", 16GB RAM 4+12, INCL. BOCINA Y LINTERNA",
+    price: 11199, oldPrice: null,
+    short: "128GB / 16GB RAM / 6.52\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
+    specs: ["128GB", "6.52\"", "16GB RAM 4+12", "INCL. BOCINA Y LINTERNA"],
+    image: null,
+    gradient: ["#2d2d35", "#0a0a0c"],
+    stock: 3
+  },
+  {
     id: 101,
     slug: "oukitel-wp53-pro-256gb-6-52-24gb-ram-8-16-i",
     category: "celulares",
@@ -998,20 +1054,6 @@ window.PRODUCTS = [
     price: 15499, oldPrice: null,
     short: "256GB / 24GB RAM / 6.52\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
     specs: ["256GB", "6.52\"", "24GB RAM 6+18"],
-    image: null,
-    gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 3
-  },
-  {
-    id: 109,
-    slug: "oukitel-wp60-gt-5g-256gb-7-2-120hz-24gb-ram-8",
-    category: "celulares",
-    brand: "OUKITEL",
-    name: "WP60 GT 5G",
-    variant: "256GB, 7.2\" 120HZ, 24GB RAM 8+16, 108MP, 10000 MAH",
-    price: 17799, oldPrice: null,
-    short: "256GB / 24GB RAM / 7.2\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
-    specs: ["256GB", "7.2\" 120HZ", "24GB RAM 8+16", "108MP", "10000 MAH"],
     image: null,
     gradient: ["#2d2d35", "#0a0a0c"],
     stock: 3
@@ -1269,6 +1311,20 @@ window.PRODUCTS = [
     stock: 3
   },
   {
+    id: 272,
+    slug: "motorola-moto-g86-power-5g-256gb-6-67-p-oled-120hz-6-7",
+    category: "celulares",
+    brand: "MOTOROLA",
+    name: "MOTO G86 POWER 5G",
+    variant: "256GB, 6.67\" P-OLED 120HZ, 6,720 MAH",
+    price: 16299, oldPrice: null,
+    short: "256GB / 6.67\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
+    specs: ["256GB", "6.67\" P-OLED 120HZ", "6", "720 MAH"],
+    image: "https://drive.google.com/thumbnail?id=162G-alJsgTFQTzpKsA9jclFGcghShDIA&sz=w800",
+    gradient: ["#2d2d35", "#0a0a0c"],
+    stock: 3
+  },
+  {
     id: 270,
     slug: "motorola-moto-g77-256gb-6-7-amoled-120hz-16gb",
     category: "celulares",
@@ -1283,16 +1339,16 @@ window.PRODUCTS = [
     stock: 3
   },
   {
-    id: 272,
-    slug: "motorola-moto-g86-power-5g-256gb-6-67-p-oled-120hz-6-7",
+    id: 1290,
+    slug: "motorola-moto-g15-512gb-6-72-120hz-12gb-ram-4",
     category: "celulares",
     brand: "MOTOROLA",
-    name: "MOTO G86 POWER 5G",
-    variant: "256GB, 6.67\" P-OLED 120HZ, 6,720 MAH",
-    price: 16299, oldPrice: null,
-    short: "256GB / 6.67\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
-    specs: ["256GB", "6.67\" P-OLED 120HZ", "6", "720 MAH"],
-    image: "https://drive.google.com/thumbnail?id=162G-alJsgTFQTzpKsA9jclFGcghShDIA&sz=w800",
+    name: "MOTO G15",
+    variant: "512GB, 6.72\" 120HZ, 12GB RAM 4+8, 50MP, 5200MAH",
+    price: 10499, oldPrice: null,
+    short: "512GB / 12GB RAM / 6.72\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
+    specs: ["512GB", "6.72\" 120HZ", "12GB RAM 4+8", "50MP", "5200MAH"],
+    image: "https://drive.google.com/thumbnail?id=1plLI16sduuOmQxl-v001pmZ1gJ2eyvEu&sz=w800",
     gradient: ["#2d2d35", "#0a0a0c"],
     stock: 3
   },
@@ -1545,20 +1601,6 @@ window.PRODUCTS = [
     short: "256GB / 12GB RAM / 6.99\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
     specs: ["256GB", "6.99\" AMOLED 120HZ", "12GB RAM 6+6"],
     image: "https://drive.google.com/thumbnail?id=1oKdceiOQQ0VXqYqEDmA93_FNLMO5PHBW&sz=w800",
-    gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 3
-  },
-  {
-    id: 1289,
-    slug: "xiaomi-note-13-pro-256gb-6-67-120hz-8gb-ram-2",
-    category: "celulares",
-    brand: "XIAOMI",
-    name: "NOTE 13 PRO",
-    variant: "256GB, 6.67\" 120HZ, 8GB RAM, 200MP",
-    price: 14099, oldPrice: null,
-    short: "256GB / 8GB RAM / 6.67\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
-    specs: ["256GB", "6.67\" 120HZ", "8GB RAM", "200MP"],
-    image: "https://drive.google.com/thumbnail?id=1glN2z2zVPHCkFizPQV7R6Om0ONNIvv2U&sz=w800",
     gradient: ["#2d2d35", "#0a0a0c"],
     stock: 3
   },
