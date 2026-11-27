@@ -5,7 +5,7 @@
    Regenerar: python scripts/sync_products.py
    ════════════════════════════════════════════════════════ */
 
-window.PRODUCTS_LAST_SYNC = "2026-11-26 08:00:14 -0400";
+window.PRODUCTS_LAST_SYNC = "2026-11-27 08:00:15 -0400";
 
 window.PRODUCTS = [
   {
@@ -243,6 +243,20 @@ window.PRODUCTS = [
     short: "32GB / 3GB RAM / 10.1\". Tablet nueva con garantia. Configurada y probada antes de salir de nuestras manos.",
     specs: ["32GB", "10.1\"", "3GB RAM", "COVER", "4G LTE", "HACE LLAMADAS"],
     image: null,
+    gradient: ["#1f3a4a", "#0a1a25"],
+    stock: 3
+  },
+  {
+    id: 243,
+    slug: "generic-m-horse-pad-17-pro-128gb-10-1-hd-12gb-ram-6-6",
+    category: "tablets",
+    brand: "Generic",
+    name: "M-HORSE PAD 17 PRO",
+    variant: "128GB, 10.1 HD, 12GB RAM, 6+6, 4G LTE, HACE LLAMADAS, COVER TIPO LIBRO + TECLADO + MOUSE + LAPIZ TACTIL",
+    price: 8599, oldPrice: null,
+    short: "128GB / 12GB RAM. Tablet nueva con garantia. Configurada y probada antes de salir de nuestras manos.",
+    specs: ["128GB", "10.1 HD", "12GB RAM", "6+6", "4G LTE", "HACE LLAMADAS", "COVER TIPO LIBRO + TECLADO + MOUSE + LAPIZ TACTIL"],
+    image: "https://drive.google.com/thumbnail?id=1_wkrzSPC0WBqewtWt6WQw96fG-4u045L&sz=w800",
     gradient: ["#1f3a4a", "#0a1a25"],
     stock: 3
   },
@@ -569,20 +583,6 @@ window.PRODUCTS = [
     stock: 3
   },
   {
-    id: 1276,
-    slug: "m-horse-m18-pro-max-4g-128gb-6-8-hd-12gb-ram-aud",
-    category: "celulares",
-    brand: "M-HORSE",
-    name: "M18 PRO MAX+ 4G",
-    variant: "128GB, 6.8 HD+ 12GB RAM, + AUD. INALÁMBRICO",
-    price: 8099, oldPrice: null,
-    short: "128GB / 12GB RAM. Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
-    specs: ["128GB", "6.8 HD+ 12GB RAM", "+ AUD. INALÁMBRICO"],
-    image: "https://drive.google.com/thumbnail?id=1JimfC87V_68JLwm0dpUh85n_erNLnOFu&sz=w800",
-    gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 3
-  },
-  {
     id: 224,
     slug: "m-horse-s26-32gb-6-6-hd-4gb-ram",
     category: "celulares",
@@ -849,11 +849,11 @@ window.PRODUCTS = [
     stock: 3
   },
   {
-    id: 83,
-    slug: "oukitel-c61-gt-gaming-128gb-6-88-16gb-ram-4-12",
+    id: 82,
+    slug: "oukitel-c61-128gb-6-88-16gb-ram-4-12",
     category: "celulares",
     brand: "OUKITEL",
-    name: "C61 GT GAMING",
+    name: "C61",
     variant: "128GB, 6.88\". 16GB RAM 4+12",
     price: 8499, oldPrice: null,
     short: "128GB / 16GB RAM / 6.88\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
@@ -863,11 +863,11 @@ window.PRODUCTS = [
     stock: 3
   },
   {
-    id: 82,
-    slug: "oukitel-c61-128gb-6-88-16gb-ram-4-12",
+    id: 83,
+    slug: "oukitel-c61-gt-gaming-128gb-6-88-16gb-ram-4-12",
     category: "celulares",
     brand: "OUKITEL",
-    name: "C61",
+    name: "C61 GT GAMING",
     variant: "128GB, 6.88\". 16GB RAM 4+12",
     price: 8499, oldPrice: null,
     short: "128GB / 16GB RAM / 6.88\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
@@ -1045,16 +1045,16 @@ window.PRODUCTS = [
     stock: 3
   },
   {
-    id: 104,
-    slug: "oukitel-wp39-5g-256gb-6-52-24gb-ram-6-18",
+    id: 106,
+    slug: "oukitel-wp55-pro-512gb-6-6-fhd-120hz-48gb-r",
     category: "celulares",
     brand: "OUKITEL",
-    name: "WP39 5G",
-    variant: "256GB, 6.52\", 24GB RAM 6+18",
-    price: 15499, oldPrice: null,
-    short: "256GB / 24GB RAM / 6.52\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
-    specs: ["256GB", "6.52\"", "24GB RAM 6+18"],
-    image: null,
+    name: "WP55 PRO",
+    variant: "512GB, 6.6\" FHD+ 120HZ, 48GB RAM 16+32, 11000MAH",
+    price: 19699, oldPrice: null,
+    short: "512GB / 48GB RAM / 6.6\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
+    specs: ["512GB", "6.6\" FHD+ 120HZ", "48GB RAM 16+32", "11000MAH"],
+    image: "https://drive.google.com/thumbnail?id=1DmNQSyq3din4WygO6U8pHVfTCpKHYoJy&sz=w800",
     gradient: ["#2d2d35", "#0a0a0c"],
     stock: 3
   },
@@ -1269,6 +1269,20 @@ window.PRODUCTS = [
     stock: 3
   },
   {
+    id: 1290,
+    slug: "motorola-moto-g15-512gb-6-72-120hz-12gb-ram-4",
+    category: "celulares",
+    brand: "MOTOROLA",
+    name: "MOTO G15",
+    variant: "512GB, 6.72\" 120HZ, 12GB RAM 4+8, 50MP, 5200MAH",
+    price: 10499, oldPrice: null,
+    short: "512GB / 12GB RAM / 6.72\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
+    specs: ["512GB", "6.72\" 120HZ", "12GB RAM 4+8", "50MP", "5200MAH"],
+    image: "https://drive.google.com/thumbnail?id=1plLI16sduuOmQxl-v001pmZ1gJ2eyvEu&sz=w800",
+    gradient: ["#2d2d35", "#0a0a0c"],
+    stock: 3
+  },
+  {
     id: 254,
     slug: "motorola-moto-g17-128gb-6-72-fhd-12gb-ram-4",
     category: "celulares",
@@ -1335,20 +1349,6 @@ window.PRODUCTS = [
     short: "256GB / 16GB RAM / 6.7\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
     specs: ["256GB", "6.7\" AMOLED 120HZ", "16GB RAM 8+8", "108MP SENSOR SONY LYTIA"],
     image: "https://drive.google.com/thumbnail?id=1oj9xaVVks350PwDgtAOfhn9lQl72-2EO&sz=w800",
-    gradient: ["#2d2d35", "#0a0a0c"],
-    stock: 3
-  },
-  {
-    id: 1290,
-    slug: "motorola-moto-g15-512gb-6-72-120hz-12gb-ram-4",
-    category: "celulares",
-    brand: "MOTOROLA",
-    name: "MOTO G15",
-    variant: "512GB, 6.72\" 120HZ, 12GB RAM 4+8, 50MP, 5200MAH",
-    price: 10499, oldPrice: null,
-    short: "512GB / 12GB RAM / 6.72\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
-    specs: ["512GB", "6.72\" 120HZ", "12GB RAM 4+8", "50MP", "5200MAH"],
-    image: "https://drive.google.com/thumbnail?id=1plLI16sduuOmQxl-v001pmZ1gJ2eyvEu&sz=w800",
     gradient: ["#2d2d35", "#0a0a0c"],
     stock: 3
   },
@@ -1601,6 +1601,20 @@ window.PRODUCTS = [
     short: "256GB / 12GB RAM / 6.99\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
     specs: ["256GB", "6.99\" AMOLED 120HZ", "12GB RAM 6+6"],
     image: "https://drive.google.com/thumbnail?id=1oKdceiOQQ0VXqYqEDmA93_FNLMO5PHBW&sz=w800",
+    gradient: ["#2d2d35", "#0a0a0c"],
+    stock: 3
+  },
+  {
+    id: 1289,
+    slug: "xiaomi-note-13-pro-256gb-6-67-120hz-8gb-ram-2",
+    category: "celulares",
+    brand: "XIAOMI",
+    name: "NOTE 13 PRO",
+    variant: "256GB, 6.67\" 120HZ, 8GB RAM, 200MP",
+    price: 14099, oldPrice: null,
+    short: "256GB / 8GB RAM / 6.67\". Celular nuevo, sellado y desbloqueado. Lo recibes listo para usar, con garantía y soporte real cuando lo necesites.",
+    specs: ["256GB", "6.67\" 120HZ", "8GB RAM", "200MP"],
+    image: "https://drive.google.com/thumbnail?id=1glN2z2zVPHCkFizPQV7R6Om0ONNIvv2U&sz=w800",
     gradient: ["#2d2d35", "#0a0a0c"],
     stock: 3
   },
