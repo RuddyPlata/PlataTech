@@ -18,24 +18,9 @@
 //          SITE_URL (default 'https://platatechs.com').
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts';
+import { fixedString, verifyResponse } from '../_shared/azul-page.ts';
 
-const toHex = (buf: ArrayBuffer) =>
-  Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, '0')).join('');
-
-const utf16le = (s: string) => {
-  const b = new Uint8Array(s.length * 2);
-  for (let i = 0; i < s.length; i++) { const c = s.charCodeAt(i); b[i * 2] = c & 0xff; b[i * 2 + 1] = (c >> 8) & 0xff; }
-  return b;
-};
-
-async function hmacSha512Hex(keyStr: string, msgBytes: Uint8Array): Promise<string> {
-  const key = await crypto.subtle.importKey(
-    'raw', new TextEncoder().encode(keyStr), { name: 'HMAC', hash: 'SHA-512' }, false, ['sign'],
-  );
-  return toHex(await crypto.subtle.sign('HMAC', key, msgBytes));
-}
-
-serve(async (req: Request) => {
+export async function handler(req: Request): Promise<Response> {
   const url = new URL(req.url);
   const src = url.searchParams.get('src') || 'approved';
   const site = Deno.env.get('SITE_URL') || 'https://platatechs.com';
@@ -47,6 +32,7 @@ serve(async (req: Request) => {
     try { new URLSearchParams(await req.text()).forEach((v, k) => { data[k] = v; }); } catch { /* sin cuerpo */ }
   }
 
+  // El OrderNumber firmado por Azul manda; `n` es solo para volver al carrito.
   const orderId = data.OrderNumber || url.searchParams.get('n') || '';
   const approved = data.IsoCode === '00';
   const redirect = (to: string) => new Response(null, { status: 302, headers: { Location: to } });
@@ -63,7 +49,9 @@ serve(async (req: Request) => {
     return redirect(`${site}/shop/cart.html?declined=1&n=${encodeURIComponent(orderId)}`);
   }
   return redirect(`${site}/shop/orden.html?n=${encodeURIComponent(orderId)}&paid=1`);
-});
+}
+
+if (import.meta.main) serve(handler);
 
 async function markPaid(orderId: string, data: Record<string, string>): Promise<boolean> {
   const supaUrl    = Deno.env.get('SUPABASE_URL');
@@ -72,15 +60,7 @@ async function markPaid(orderId: string, data: Record<string, string>): Promise<
   if (!supaUrl || !serviceKey || !authKey) { console.error('Faltan secrets'); return false; }
 
   // 1) Verificar la firma de la respuesta (frontera de seguridad).
-  const respMsg =
-    (data.OrderNumber || '') + (data.Amount || '') + (data.AuthorizationCode || '') +
-    (data.DateTime || '') + (data.ResponseCode || '') + (data.IsoCode || '') +
-    (data.ResponseMessage || '') + (data.ErrorDescription || '') + (data.RRN || '') + authKey;
-  const recv = (data.AuthHash || '').toLowerCase();
-  // Doc: UTF-16LE. Aceptamos también UTF-8 por tolerancia a variaciones de AZUL.
-  const h16 = await hmacSha512Hex(authKey, utf16le(respMsg));
-  const h8  = await hmacSha512Hex(authKey, new TextEncoder().encode(respMsg));
-  if (recv !== h16 && recv !== h8) {
+  if (!(await verifyResponse(data, authKey))) {
     console.error('AuthHash de respuesta inválido', { orderId });
     return false;
   }
@@ -95,8 +75,8 @@ async function markPaid(orderId: string, data: Record<string, string>): Promise<
   if (!order) { console.error('order not found', orderId); return false; }
   if (order.status === 'pagado') return true; // idempotente
 
-  const expected = Number(order?.totals?.total || 0).toFixed(2).replace('.', '');
-  if (data.Amount && data.Amount !== expected) {
+  const expected = fixedString(Number(order?.totals?.total || 0));
+  if (data.Amount !== expected) {
     console.error('amount mismatch', { orderId, got: data.Amount, expected });
     return false;
   }
@@ -106,6 +86,8 @@ async function markPaid(orderId: string, data: Record<string, string>): Promise<
   const azul = {
     auth:      data.AuthorizationCode || '',
     reference: data.RRN || data.AzulOrderId || '',
+    azulOrderId: data.AzulOrderId || '',
+    dateTime: data.DateTime || '',
     last4,
     brand:     data.DataVaultBrand || '',
   };

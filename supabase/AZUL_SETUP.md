@@ -43,7 +43,7 @@ supabase functions deploy notify-order                    # redeploy con soporte
 
 ### 4. Registrar el URL de respuesta en AZUL
 El checkout arma las URLs automáticamente apuntando a `azul-callback`
-(`ApprovedUrl`, `DeclinedUrl`, `CancelUrl`, `ResponsePostUrl`). Si el portal de AZUL exige
+(`ApprovedUrl`, `DeclinedUrl`, `CancelUrl`). Si el portal de AZUL exige
 declarar un dominio/URL de respuesta permitido, usar:
 ```
 https://<TU-REF>.supabase.co/functions/v1/azul-callback
@@ -56,32 +56,43 @@ git checkout main && git merge feat/azul-payments && git push origin main
 ```
 
 ## Pruebas (entorno `test` → pruebas.azul.com.do)
-Tarjetas de prueba del correo de AZUL, expiración `12/34`, cualquier CVV de 3 dígitos.
-Flujo: agrega un producto → "Tarjeta (AZUL)" → llena datos → "Pagar" → paga en AZUL →
-vuelves al comprobante con estado **Pagado**.
 
-## Especificación del hash (verificada contra los documentos de AZUL)
-- **Request AuthHash** (`azul-create-payment`): `mensaje = MerchantId + MerchantName +
-  MerchantType + CurrencyCode + OrderNumber + Amount + ITBIS + ApprovedUrl + DeclinedUrl +
-  CancelUrl + UseCustomField1 + CustomField1Label + CustomField1Value + UseCustomField2 +
-  CustomField2Label + CustomField2Value + AuthKey`, codificado en **UTF-8**, luego
-  **HMAC-SHA512** con clave = AuthKey. Reproducido byte a byte contra el ejemplo oficial
-  "Ejemplo Calculo Hash SALE" → **coincide exacto**.
-- **Response AuthHash** (`azul-callback`): `OrderNumber + Amount + AuthorizationCode +
-  DateTime + ResponseCode + IsoCode + ResponseMessage + ErrorDescription + RRN + AuthKey`,
-  en **UTF-16LE** (con fallback UTF-8), HMAC-SHA512. Es la frontera de seguridad: sin firma
-  válida no se marca `pagado`.
-- Campos que se POSTean pero **no** entran en el hash: `TrxType=Sale`, `SaveToDataVault=0`.
-- `MerchantType=ECommerce`, `CurrencyCode=$` (RD$/DOP), `Amount`/`ITBIS` en centavos
-  (`toFixed(2)` sin punto; ITBIS=`000`).
+### Arnés local (sin desplegar y sin tocar la base de datos)
+`scripts/azul-pp-sandbox.ts` corre **las mismas** Edge Functions con una tabla `orders` en
+memoria y redirige el navegador a la Payment Page de pruebas:
+```bash
+AZUL_AUTH_KEY=<llave de pruebas> deno run --allow-net --allow-env --allow-write --allow-read=. scripts/azul-pp-sandbox.ts
+# abrir http://localhost:8788/?total=1180.00&itbis=180.00
+AZUL_AUTH_KEY=<llave de pruebas> deno test --allow-env supabase/functions/_shared/azul-page.test.ts
+```
+Probado el 25-nov-2026: ventas aprobadas 44958408, 44958409 y 44958411 (esta última de punta
+a punta: orden marcada `pagado` por `azul-callback`), cancelación y callback con firma falsa
+(no marca nada). Constancias en `azul-pagina-de-pagos-pruebas-2026-11-25.md` (carpeta interna Serv Cliente).
+
+Tarjetas de prueba del correo de AZUL (23-nov-2026), expiración `12/34`, cualquier CVV. La
+página de pruebas pide correo electrónico para el comprobante y puede ofrecer conversión de
+moneda (DCC) con tarjetas extranjeras: elegir RD$.
+
+## Especificación del hash ("Documento técnico - Página de Pago AZUL 2026")
+Toda la lógica está en `supabase/functions/_shared/azul-page.ts`.
+- **Request AuthHash**: `MerchantId + MerchantName + MerchantType + CurrencyCode + OrderNumber +
+  Amount + ITBIS + ApprovedUrl + DeclinedUrl + CancelUrl + UseCustomField1 + CustomField1Label +
+  CustomField1Value + UseCustomField2 + CustomField2Label + CustomField2Value + AuthKey`, en
+  **Unicode (UTF-16LE)**, HMAC-SHA512 con clave = AuthKey. El doc admite UTF-8 o Unicode y
+  recomienda Unicode; Azul lo aceptó en las pruebas del 25-nov.
+- **Response AuthHash** (`azul-callback`): `OrderNumber + Amount + AuthorizationCode + DateTime +
+  ResponseCode + IsoCode + ResponseMessage + ErrorDescription + RRN + AuthKey`, UTF-16LE
+  (con tolerancia UTF-8). Es la frontera de seguridad: sin firma válida, o si `Amount` no es el
+  total de la orden, no se marca `pagado`.
+- Fuera del hash: `Locale=ES`, `SaveToDataVault=0`, `LogoImageUrl`.
+- `Amount`/`ITBIS` en centavos sin punto (`0` → `000`). El ITBIS va desglosado desde la orden.
+- **Logo**: `LogoImageUrl=https://platatechs.com/images/logo-platatech.png` (Azul pidió que esté
+  publicado en nuestro dominio). Se puede cambiar con el secret `AZUL_LOGO_URL`.
+- **URLs de retorno**: por defecto la Edge Function `azul-callback`. Si Azul exige que empiecen con
+  nuestro dominio, poner el secret `AZUL_RETURN_BASE=https://platatechs.com/shop/azul-retorno.html`
+  (esa página solo reenvía el querystring a `azul-callback`).
 - URL Payment Page: `https://pruebas.azul.com.do/PaymentPage/` (test) ·
-  `https://pagos.azul.com.do/PaymentPage/` (prod).
-
-## Punto menor a verificar en pruebas
-- **OrderNumber**: se envía el id con guiones (`PT-YYMMDD-XXXXXX`). Si AZUL lo rechaza por
-  formato, cambiar `generateOrderNumber()` en `cart.html` a alfanumérico sin guiones.
-- **ITBIS = `000`** (informativo; no cambia lo cobrado). El total ya incluye el 18% como antes.
-  Para desglosar, cambiar el valor en `azul-create-payment`.
+  `https://pagos.azul.com.do/PaymentPage/Default.aspx` (prod).
 
 ## Webhook de correos
 Verificar que el Database Webhook de la tabla `orders` dispara `notify-order` en **INSERT y
